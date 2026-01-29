@@ -1,0 +1,262 @@
+/**
+ * Design Tokens - Neural Constellation Theme
+ * Comprehensive design system variables
+ * 
+ * Автор: Ахмедьянов Саламат КПО 9/22-2
+ * Дата: 2026
+ */
+
+:root {
+    /* ============================================
+       COLOR PALETTE - Cosmic Theme
+       ============================================ */
+
+    /* Primary Colors - Nebula Blues */
+    --color-nebula-bright: #00c6fb;
+    --color-nebula-deep: #005bea;
+    --color-nebula-dark: #0039a6;
+
+    /* Accent Colors - Cosmic Elements */
+    --color-star-white: #f8f9fa;
+    --color-star-silver: #e1e8ed;
+    --color-galaxy-cyan: #00d4ff;
+    --color-aurora-purple: #7b68ee;
+    --color-supernova-gold: #ffd700;
+
+    /* Semantic Colors */
+    --color-success: #50c878;
+    --color-danger: #e74c3c;
+    --color-warning: #f39c12;
+    --color-info: var(--color-galaxy-cyan);
+
+    /* Dark Theme (Default) */
+    --color-space-void: #050510;
+    --color-space-deep: #0a0a1a;
+    --color-space-mid: #141428;
+    --color-space-light: #1e1e3c;
+
+    /* Light Theme Overrides */
+    --color-light-bg: #f0f2f5;
+    --color-light-surface: #ffffff;
+    --color-light-text: #2c3e50;
+
+    /* ============================================
+       SPACING SYSTEM - 4px base unit
+       ============================================ */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-20: 80px;
+    --space-24: 96px;
+
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+
+    /* Font Families */
+    --font-display: 'Space Grotesk', -apple-system, system-ui, sans-serif;
+    --font-heading: 'Space Grotesk', -apple-system, system-ui, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* Font Sizes */
+    --text-xs: 12px;
+    --text-sm: 14px;
+    --text-base: 16px;
+    --text-lg: 18px;
+    --text-xl: 20px;
+    --text-2xl: 24px;
+    --text-3xl: 28px;
+    --text-4xl: 36px;
+    --text-5xl: 48px;
+    --text-6xl: 56px;
+
+    /* Line Heights */
+    --leading-tight: 1.2;
+    --leading-snug: 1.4;
+    --leading-normal: 1.6;
+    --leading-relaxed: 1.8;
+    --leading-loose: 2.0;
+
+    /* Font Weights */
+    --weight-light: 300;
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+    --weight-extrabold: 800;
+
+    /* ============================================
+       SHADOWS & ELEVATION
+       ============================================ */
+
+    /* Elevation Levels */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.18);
+    --shadow-2xl: 0 20px 40px rgba(0, 0, 0, 0.22);
+
+    /* Glow Effects */
+    --glow-primary: 0 0 20px rgba(0, 198, 251, 0.4);
+    --glow-secondary: 0 0 20px rgba(123, 104, 238, 0.4);
+    --glow-success: 0 0 20px rgba(80, 200, 120, 0.4);
+    --glow-intense: 0 0 30px rgba(0, 198, 251, 0.6);
+
+    /* ============================================
+       BORDER RADIUS
+       ============================================ */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 24px;
+    --radius-full: 9999px;
+
+    /* ============================================
+       ANIMATIONS
+       ============================================ */
+
+    /* Duration */
+    --duration-instant: 100ms;
+    --duration-quick: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 600ms;
+    --duration-slower: 900ms;
+
+    /* Easing Functions */
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-smooth: cubic-bezier(0.25, 0.8, 0.25, 1);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* ============================================
+       GLASSMORPHISM / BLUR
+       ============================================ */
+    --blur-sm: 8px;
+    --blur-md: 12px;
+    --blur-lg: 16px;
+    --blur-xl: 20px;
+    --blur-2xl: 24px;
+
+    /* Glass Backgrounds */
+    --glass-light: rgba(255, 255, 255, 0.1);
+    --glass-medium: rgba(255, 255, 255, 0.15);
+    --glass-heavy: rgba(255, 255, 255, 0.2);
+
+    /* ============================================
+       Z-INDEX LAYERS
+       ============================================ */
+    --z-background: -1;
+    --z-base: 0;
+    --z-elevated: 10;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-overlay: 300;
+    --z-modal: 400;
+    --z-tooltip: 500;
+    --z-notification: 600;
+}
+
+/* ============================================
+   DARK THEME (Default State)
+   ============================================ */
+body.dark-theme,
+body {
+    --primary-color: var(--color-nebula-bright);
+    --secondary-color: var(--color-nebula-deep);
+    --accent-color: var(--color-galaxy-cyan);
+
+    --text-color: var(--color-star-white);
+    --text-secondary: #b8c5d6;
+    --text-tertiary: #8a94a6;
+    --text-disabled: #5a5f6b;
+
+    --bg-color: var(--color-space-void);
+    --bg-surface: var(--color-space-deep);
+    --bg-elevated: var(--color-space-mid);
+
+    --card-bg: rgba(20, 20, 35, 0.7);
+    --card-hover: rgba(30, 30, 50, 0.8);
+
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-hover: rgba(255, 255, 255, 0.2);
+    --border-focus: var(--color-nebula-bright);
+
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --input-focus: rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   LIGHT THEME
+   ============================================ */
+body:not(.dark-theme) {
+    --primary-color: var(--color-nebula-deep);
+    --secondary-color: var(--color-aurora-purple);
+    --accent-color: var(--color-nebula-bright);
+
+    --text-color: var(--color-light-text);
+    --text-secondary: #5a6c7d;
+    --text-tertiary: #7f8c9c;
+    --text-disabled: #b0b8c1;
+
+    --bg-color: var(--color-light-bg);
+    --bg-surface: var(--color-light-surface);
+    --bg-elevated: #fafbfc;
+
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --card-hover: rgba(255, 255, 255, 1);
+
+    --border-color: rgba(0, 0, 0, 0.1);
+    --border-hover: rgba(0, 0, 0, 0.15);
+    --border-focus: var(--color-nebula-bright);
+
+    --input-bg: rgba(0, 0, 0, 0.02);
+    --input-focus: rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Glass Effect Utility */
+.glass {
+    background: var(--glass-medium);
+    backdrop-filter: blur(var(--blur-lg));
+    -webkit-backdrop-filter: blur(var(--blur-lg));
+    border: 1px solid var(--border-color);
+}
+
+.glass-light {
+    background: var(--glass-light);
+    backdrop-filter: blur(var(--blur-md));
+    -webkit-backdrop-filter: blur(var(--blur-md));
+}
+
+.glass-heavy {
+    background: var(--glass-heavy);
+    backdrop-filter: blur(var(--blur-xl));
+    -webkit-backdrop-filter: blur(var(--blur-xl));
+}
+
+/* Glow Effect Utilities */
+.glow-primary {
+    box-shadow: var(--glow-primary);
+}
+
+.glow-secondary {
+    box-shadow: var(--glow-secondary);
+}
+
+.glow-intense {
+    box-shadow: var(--glow-intense);
+}

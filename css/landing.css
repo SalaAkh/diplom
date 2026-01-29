@@ -1,0 +1,393 @@
+/* 
+ * Landing Page Styles
+ * Современный дизайн главной страницы
+ * 
+ * Автор: Ахмедьянов Саламат КПО 9/22-2
+ * Дата: 2026
+ */
+
+.landing-page {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+/* Hero Section */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4rem;
+    padding: 6rem 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    min-height: 70vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>');
+    opacity: 0.3;
+}
+
+.hero-content {
+    flex: 1;
+    max-width: 600px;
+    z-index: 1;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    opacity: 0.95;
+    animation: fadeIn 1s ease-out 0.2s both;
+}
+
+.hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fadeIn 1.2s ease-out 0.4s both;
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    border-radius: 12px;
+}
+
+.btn-xl {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    border-radius: 14px;
+}
+
+/* Hero Visual */
+.hero-visual {
+    flex: 1;
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.floating-icon {
+    font-size: 4rem;
+    animation: float 3s ease-in-out infinite;
+    position: absolute;
+}
+
+.floating-icon.delay-1 {
+    animation-delay: 1s;
+    top: 20%;
+    right: 20%;
+}
+
+.floating-icon.delay-2 {
+    animation-delay: 2s;
+    bottom: 20%;
+    left: 20%;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Sections */
+.features-section,
+.how-it-works-section,
+.dimensions-section,
+.cta-section {
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    color: var(--text-color);
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--primary-color);
+}
+
+.feature-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* How It Works */
+.steps-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.step {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 280px;
+    border: 2px solid var(--primary-color);
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 auto 1rem;
+}
+
+.step h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.step p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.step-arrow {
+    font-size: 2rem;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* Dimensions Grid */
+.dimensions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.dimension-card {
+    padding: 1.5rem;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.dimension-card:hover {
+    transform: scale(1.02);
+}
+
+.dimension-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.dimension-icon {
+    font-size: 2rem;
+}
+
+.dimension-card h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.dimension-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* CTA Section */
+.cta-section {
+    background: var(--gradient-primary);
+    color: white;
+    text-align: center;
+    border-radius: 24px;
+    margin: 3rem 2rem;
+    padding: 4rem 2rem;
+}
+
+.cta-content h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.cta-content p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+}
+
+/* User Info Banner */
+.user-info-banner {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.user-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.btn-link:hover {
+    opacity: 0.8;
+}
+
+/* Footer */
+.landing-footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-color);
+}
+
+.landing-footer p {
+    margin: 0.5rem 0;
+    color: var(--text-secondary);
+}
+
+.privacy-note {
+    font-size: 0.9rem;
+}
+
+.author {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-section {
+        flex-direction: column;
+        text-align: center;
+        padding: 4rem 1.5rem;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.125rem;
+    }
+
+    .hero-cta {
+        justify-content: center;
+    }
+
+    .hero-visual {
+        height: 300px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .steps-container {
+        flex-direction: column;
+    }
+
+    .step-arrow {
+        transform: rotate(90deg);
+    }
+
+    .dimensions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .user-info-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+}

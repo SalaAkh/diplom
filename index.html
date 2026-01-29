@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<!--
+  Главная страница приложения "Система самопознания"
+  
+  Автор: Ахмедьянов Саламат КПО 9/22-2
+  Дата: 2026
+-->
+<html lang="kk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4a90e2">
+    <meta name="description" content="Цифровая система для анализа личностных предпочтений и направлений развития">
+    <title>Система самопознания - Анализ личностных предпочтений</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js для визуализации -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Three.js для 3D визуализации (ES Modules) -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module">
+        // Импортируем Three.js и OrbitControls как ES модули
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // Создаем глобальный объект для обратной совместимости с существующим кодом
+        // THREE namespace не расширяемый, поэтому создаем копию через Object.assign
+        const THREE_Global = Object.assign({}, THREE);
+        // Добавляем OrbitControls к копии
+        THREE_Global.OrbitControls = OrbitControls;
+        // Присваиваем глобальной переменной
+        window.THREE = THREE_Global;
+
+        // Уведомляем, что Three.js загружен
+        window.dispatchEvent(new CustomEvent('threejs-loaded'));
+    </script>
+
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Стили - Design System First -->
+    <link rel="stylesheet" href="css/design-tokens.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/gamification.css">
+    <link rel="stylesheet" href="css/google-auth.css">
+    <link rel="stylesheet" href="css/transitions.css">
+    <link rel="stylesheet" href="css/landing.css">
+</head>
+
+<body>
+    <div id="background-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+
+    <!-- Navigation Toggle (Mobile) -->
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
+        <div class="nav-toggle-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </button>
+
+    <!-- Cosmic Navigation -->
+    <nav class="cosmic-nav" id="cosmicNav">
+        <!-- Desktop Collapse Button -->
+        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Collapse Navigation"
+            title="Свернуть панель">
+            ◄
+        </button>
+
+        <div class="nav-header">
+            <div class="nav-logo" id="navLogo">◈</div>
+            <div class="nav-tagline" id="navTagline">Neural Constellation</div>
+        </div>
+
+        <div class="nav-items" id="navItems">
+            <a href="index.html" class="nav-item active" data-screen="intro">
+                <div class="nav-icon">🏠</div>
+                <span class="nav-text" data-i18n="navHome">Home</span>
+                <div class="nav-connector"></div>
+            </a>
+            <a href="#" class="nav-item" data-screen="test-selection">
+                <div class="nav-icon">🧪</div>
+                <span class="nav-text" data-i18n="navStartTest">Start Test</span>
+                <div class="nav-connector"></div>
+            </a>
+            <a href="profile.html" class="nav-item" data-screen="profile">
+                <div class="nav-icon">👤</div>
+                <span class="nav-text" data-i18n="navProfile">Profile</span>
+                <div class="nav-connector"></div>
+            </a>
+            <a href="#" class="nav-item" data-screen="results">
+                <div class="nav-icon">📊</div>
+                <span class="nav-text" data-i18n="navResults">Results</span>
+                <div class="nav-connector"></div>
+            </a>
+            <a href="about.html" class="nav-item" data-screen="about">
+                <div class="nav-icon">ℹ️</div>
+                <span class="nav-text" data-i18n="navAbout">About</span>
+                <div class="nav-connector"></div>
+            </a>
+        </div>
+
+        <div class="nav-footer">
+            <div class="nav-user" id="navUser" style="display: none;">
+                <div class="nav-avatar" id="navAvatar">?</div>
+                <div class="nav-user-info">
+                    <div class="nav-username" id="navUsername">Guest</div>
+                    <div class="nav-user-role" data-i18n="navGuest">Explorer</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="app-wrapper has-nav" id="appWrapper">
+        <header class="app-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-main">
+                        <h1 class="logo" id="appName"></h1>
+                        <p class="tagline" id="tagline"></p>
+                    </div>
+                    <div class="header-controls">
+                        <div class="language-selector" id="languageSelector"></div>
+                        <div class="theme-toggle" id="themeToggle" title="Тема">
+                            <span class="theme-icon">🌙</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <div class="container">
+                <div id="app">
+                    <!-- Контент приложения будет вставлен динамически -->
+                    <div class="loading">
+                        <p>Загрузка системы...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <div class="container">
+                <p id="footerText">Loading...</p>
+                <p class="footer-note" id="footerNote">Loading...</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript модули -->
+    <!-- Production-safe logger -->
+    <script src="js/logger.js"></script>
+    <!-- Google OAuth Config -->
+    <script src="js/google-auth-config.js"></script>
+
+    <!-- Критические модули (загружаются последовательно) -->
+    <script src="js/storage.js"></script>
+    <script src="js/localization.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/scenarios-data.js"></script>
+    <script src="js/advanced-scenarios-data.js"></script>
+    <script src="js/analysis.js"></script>
+    <script src="js/advanced-analysis.js"></script>
+    <script src="js/dynamic-scenarios.js"></script>
+    <script src="js/visualization.js"></script>
+    <script src="js/advanced-test-organizer.js"></script>
+
+    <!-- Refactored Modules -->
+    <script src="js/modules/ui/ui-controller.js"></script>
+    <script src="js/modules/core/test-manager.js"></script>
+    <script src="js/modules/core/results-manager.js"></script>
+
+    <!-- Опциональные модули (только необходимые) -->
+    <script src="js/evolution-tracker.js" defer></script>
+    <script src="js/3d-visualization.js" defer></script>
+    <script src="js/background-3d.js" defer></script>
+    <script src="js/gamification.js" defer></script>
+    <script src="js/report-generator.js" defer></script>
+    <script src="js/navigation-controller.js" defer></script>
+
+    <!-- Главный модуль приложения (загружается последним) -->
+    <script src="js/app.js"></script>
+</body>
+
+</html>

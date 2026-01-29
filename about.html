@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<!--
+  Страница "О проекте" - Enhanced UI/UX
+  
+  Автор: Ахмедьянов Саламат КПО 9/22-2
+  Дата: 2026
+-->
+<html lang="kk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4a90e2">
+    <title>О системе - Neural Constellation</title>
+
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+    <!-- Стили -->
+    <link rel="stylesheet" href="css/design-tokens.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+
+<body class="dark-theme">
+    <div id="background-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+
+    <!-- Navigation Toggle (Mobile) -->
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
+        <div class="nav-toggle-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </button>
+
+    <!-- Cosmic Navigation -->
+    <nav class="cosmic-nav" id="cosmicNav">
+        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Collapse Navigation"
+            title="Свернуть панель">
+            ◄
+        </button>
+
+        <div class="nav-header">
+            <div class="nav-logo" id="navLogo">◈</div>
+            <div class="nav-tagline" id="navTagline">Neural Constellation</div>
+        </div>
+
+        <div class="nav-items" id="navItems">
+            <a href="index.html" class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <span class="nav-text" data-i18n="navHome">Главная</span>
+                <div class="nav-connector"></div>
+            </a>
+            <a href="index.html" class="nav-item" onclick="localStorage.setItem('startTest', 'true')">
+                <div class="nav-icon">🧪</div>
+                <span class="nav-text" data-i18n="navStartTest">Начать тест</span>
+                <div class="nav-connector"></div>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <span class="nav-text" data-i18n="navProfile">Профиль</span>
+                <div class="nav-connector"></div>
+            </a>
+            <a href="index.html" class="nav-item" onclick="localStorage.setItem('showResults', 'true')">
+                <div class="nav-icon">📊</div>
+                <span class="nav-text" data-i18n="navResults">Результаты</span>
+                <div class="nav-connector"></div>
+            </a>
+            <a href="about.html" class="nav-item active">
+                <div class="nav-icon">ℹ️</div>
+                <span class="nav-text" data-i18n="navAbout">О системе</span>
+                <div class="nav-connector"></div>
+            </a>
+        </div>
+    </nav>
+
+    <div class="app-wrapper has-nav" id="appWrapper">
+        <main class="app-main">
+            <div class="container">
+                <div class="about-content">
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <a href="index.html" class="btn-back">
+                            <span>←</span> Назад
+                        </a>
+                        <h1 class="page-title">О системе</h1>
+                        <div style="width: 100px;"></div>
+                    </div>
+
+                    <!-- Hero Section -->
+                    <div class="cosmic-card glowing mb-8">
+                        <div class="about-hero">
+                            <h1 class="gradient-text">Neural Constellation</h1>
+                            <p>Система самопознания нового поколения, использующая когнитивный анализ и искусственный
+                                интеллект для глубокого понимания вашей личности.</p>
+                        </div>
+                    </div>
+
+                    <!-- Features Grid -->
+                    <h2 class="text-2xl font-bold mb-6 gradient-text">Что вас ждет</h2>
+                    <div class="feature-grid mb-8">
+                        <div class="feature-card">
+                            <span class="feature-icon">🎭</span>
+                            <h3>Интерактивные сценарии</h3>
+                            <p>Погрузитесь в реалистичные ситуации и принимайте решения, раскрывающие ваш
+                                психологический профиль.</p>
+                        </div>
+                        <div class="feature-card">
+                            <span class="feature-icon">🧠</span>
+                            <h3>Анализ паттернов</h3>
+                            <p>Алгоритмы ML анализируют ваши когнитивные паттерны и выявляют уникальные особенности
+                                мышления.</p>
+                        </div>
+                        <div class="feature-card">
+                            <span class="feature-icon">📊</span>
+                            <h3>3D Визуализация</h3>
+                            <p>Интерактивная 3D модель вашего психологического профиля в виде нейронной констелляции.
+                            </p>
+                        </div>
+                        <div class="feature-card">
+                            <span class="feature-icon">🤖</span>
+                            <h3>AI Анализ</h3>
+                            <p>Персональные инсайты и рекомендации от искусственного интеллекта на основе ваших
+                                результатов.</p>
+                        </div>
+                    </div>
+
+                    <!-- Dimensions Section -->
+                    <div class="cosmic-card mb-8">
+                        <div class="card-header">
+                            <h2 class="card-title gradient-text">Измерения анализа</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="dimension-grid">
+                                <div class="dimension-card">
+                                    <h4>Стратегия</h4>
+                                    <p>Способность к долгосрочному планированию и системному мышлению.</p>
+                                </div>
+                                <div class="dimension-card">
+                                    <h4>Исследование</h4>
+                                    <p>Открытость к новому опыту и желание познавать неизведанное.</p>
+                                </div>
+                                <div class="dimension-card">
+                                    <h4>Индивидуализм</h4>
+                                    <p>Баланс между независимостью и коллективным мышлением.</p>
+                                </div>
+                                <div class="dimension-card">
+                                    <h4>Рациональность</h4>
+                                    <p>Предпочтение логики и анализа в принятии решений.</p>
+                                </div>
+                                <div class="dimension-card">
+                                    <h4>Контроль</h4>
+                                    <p>Стремление управлять ситуацией и окружающей средой.</p>
+                                </div>
+                                <div class="dimension-card">
+                                    <h4>Смысл</h4>
+                                    <p>Поиск глубокого значения в действиях и событиях.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="page-footer">
+                        <p>Version 2.0.0 (Neural Constellation)</p>
+                        <p>© 2026 Self-Knowledge System • Ахмедьянов Саламат КПО 9/22-2</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/storage.js"></script>
+    <script src="js/localization.js"></script>
+    <script src="js/navigation-controller.js"></script>
+
+    <!-- Three.js for background -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+        }
+    }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        window.THREE = THREE;
+    </script>
+    <!-- Production-safe logger -->
+    <script src="js/logger.js"></script>
+    <!-- Configuration must load first -->
+    <script src="js/config.js"></script>
+    <script src="js/storage.js" defer></script>
+    <script src="js/localization.js" defer></script>
+    <script src="js/background-3d.js" defer></script>
+
+    <script>
+        // Initialize background and theme
+        document.addEventListener('DOMContentLoaded', () => {
+            // Apply saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.remove('dark-theme');
+            }
+
+            // Initialize navigation collapse state
+            const navCollapsed = localStorage.getItem('navCollapsed');
+            if (navCollapsed === 'true') {
+                document.getElementById('cosmicNav').classList.add('collapsed');
+                document.getElementById('appWrapper').classList.add('nav-collapsed');
+            }
+
+            // Init 3D background
+            setTimeout(() => {
+                if (typeof NeuralBackground !== 'undefined') {
+                    new NeuralBackground('background-canvas');
+                }
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>

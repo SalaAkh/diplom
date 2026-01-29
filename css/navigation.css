@@ -1,0 +1,475 @@
+/**
+ * Cosmic Navigation System
+ * Sidebar/Bottom navigation with constellation theme
+ * 
+ * Автор: Ахмедьянов Саламат КПО 9/22-2
+ * Дата: 2026
+ */
+
+/* ============================================
+   NAVIGATION CONTAINER
+   ============================================ */
+
+.cosmic-nav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 280px;
+    background: var(--card-bg);
+    backdrop-filter: blur(var(--blur-xl));
+    -webkit-backdrop-filter: blur(var(--blur-xl));
+    border-right: 1px solid var(--border-color);
+    z-index: var(--z-sticky);
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-6) var(--space-4);
+    transition: all var(--duration-normal) var(--ease-out);
+}
+
+.cosmic-nav.collapsed {
+    width: 80px;
+    padding: var(--space-6) var(--space-2);
+}
+
+.cosmic-nav.collapsed .nav-text,
+.cosmic-nav.collapsed .nav-tagline {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.cosmic-nav.collapsed .nav-logo {
+    font-size: var(--text-2xl);
+}
+
+/* ============================================
+   NAVIGATION COLLAPSE BUTTON (Desktop)
+   ============================================ */
+
+.nav-collapse-btn {
+    position: absolute;
+    right: -12px;
+    top: var(--space-8);
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-full);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(var(--blur-md));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all var(--duration-quick) var(--ease-out);
+    font-size: 12px;
+    color: var(--text-color);
+}
+
+.nav-collapse-btn:hover {
+    background: var(--card-hover);
+    box-shadow: var(--shadow-md);
+    transform: scale(1.1);
+}
+
+.cosmic-nav.collapsed .nav-collapse-btn {
+    transform: rotate(180deg);
+}
+
+.cosmic-nav.collapsed .nav-collapse-btn:hover {
+    transform: rotate(180deg) scale(1.1);
+}
+
+
+/* ============================================
+   NAVIGATION HEADER
+   ============================================ */
+
+.nav-header {
+    margin-bottom: var(--space-8);
+    padding: var(--space-4);
+}
+
+.nav-logo {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-bold);
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--space-2);
+    filter: drop-shadow(0 0 15px rgba(0, 198, 251, 0.3));
+}
+
+.nav-tagline {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: var(--leading-snug);
+}
+
+/* ============================================
+   NAVIGATION ITEMS
+   ============================================ */
+
+.nav-items {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    transition: all var(--duration-quick) var(--ease-out);
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.cosmic-nav.collapsed .nav-item {
+    justify-content: center;
+    padding: var(--space-3);
+}
+
+.nav-text {
+    transition: opacity var(--duration-quick) var(--ease-out);
+}
+
+.nav-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), transparent);
+    opacity: 0;
+    transition: all var(--duration-normal) var(--ease-out);
+}
+
+.nav-item:hover {
+    background: var(--input-focus);
+    color: var(--text-color);
+    transform: translateX(4px);
+}
+
+.nav-item:hover::before {
+    width: 100%;
+    opacity: 0.1;
+}
+
+.nav-item.active {
+    background: var(--input-focus);
+    color: var(--primary-color);
+    font-weight: var(--weight-semibold);
+    box-shadow: var(--glow-primary);
+}
+
+.nav-item.active::before {
+    width: 4px;
+    opacity: 1;
+    background: var(--primary-color);
+}
+
+/* ============================================
+   NAVIGATION ICONS
+   ============================================ */
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-xl);
+    position: relative;
+}
+
+.nav-item.active .nav-icon {
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 4px currentColor);
+    }
+
+    50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 8px currentColor);
+    }
+}
+
+/* ============================================
+   CONSTELLATION CONNECTOR LINES
+   ============================================ */
+
+.nav-connector {
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--primary-color), transparent);
+    opacity: 0;
+    transform: translateY(-50%);
+    transition: opacity var(--duration-normal) var(--ease-out);
+    pointer-events: none;
+}
+
+.nav-item.active .nav-connector {
+    opacity: 0.5;
+    animation: lineGlow 2s ease-in-out infinite;
+}
+
+@keyframes lineGlow {
+
+    0%,
+    100% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* ============================================
+   NAV FOOTER (User Profile / Theme Toggle)
+   ============================================ */
+
+.nav-footer {
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    background: var(--input-bg);
+}
+
+.nav-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+}
+
+.nav-user-info {
+    flex: 1;
+}
+
+.nav-username {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--text-color);
+}
+
+.nav-user-role {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+}
+
+/* ============================================
+   NAVIGATION TOGGLE BUTTON
+   ============================================ */
+
+.nav-toggle {
+    position: fixed;
+    left: var(--space-4);
+    top: var(--space-4);
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(var(--blur-md));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: var(--z-modal);
+    transition: all var(--duration-quick) var(--ease-out);
+    display: none;
+    /* Hidden by default, shown on mobile */
+}
+
+.nav-toggle:hover {
+    background: var(--card-hover);
+    box-shadow: var(--shadow-lg);
+}
+
+.nav-toggle-icon {
+    width: 20px;
+    height: 20px;
+    position: relative;
+}
+
+.nav-toggle-icon span {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: var(--text-color);
+    left: 0;
+    transition: all var(--duration-quick) var(--ease-out);
+}
+
+.nav-toggle-icon span:nth-child(1) {
+    top: 0;
+}
+
+.nav-toggle-icon span:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.nav-toggle-icon span:nth-child(3) {
+    bottom: 0;
+}
+
+.nav-toggle.active .nav-toggle-icon span:nth-child(1) {
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.nav-toggle.active .nav-toggle-icon span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle.active .nav-toggle-icon span:nth-child(3) {
+    bottom: 50%;
+    transform: translateY(50%) rotate(-45deg);
+}
+
+/* ============================================
+   MAIN CONTENT ADJUSTMENT
+   ============================================ */
+
+.app-wrapper.has-nav {
+    margin-left: 280px;
+    transition: margin-left var(--duration-normal) var(--ease-out);
+}
+
+.app-wrapper.has-nav.nav-collapsed {
+    margin-left: 80px;
+}
+
+/* ============================================
+   MOBILE NAVIGATION (Bottom Bar)
+   ============================================ */
+
+@media (max-width: 768px) {
+    .cosmic-nav {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        padding: var(--space-3) var(--space-2);
+        border-right: none;
+        border-top: 1px solid var(--border-color);
+        transform: translateY(0);
+    }
+
+    .cosmic-nav.collapsed {
+        width: 100%;
+        padding: var(--space-3) var(--space-2);
+        transform: translateY(100%);
+    }
+
+    .nav-header,
+    .nav-collapse-btn {
+        display: none;
+    }
+
+    .nav-items {
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        gap: 0;
+    }
+
+    .nav-item {
+        flex-direction: column;
+        gap: var(--space-1);
+        padding: var(--space-2);
+        flex: 1;
+        text-align: center;
+        font-size: var(--text-xs);
+    }
+
+    .nav-item:hover {
+        transform: translateY(-2px);
+    }
+
+    .nav-text {
+        display: none;
+    }
+
+    .nav-footer {
+        display: none;
+    }
+
+    .nav-toggle {
+        display: flex;
+    }
+
+    .app-wrapper.has-nav {
+        margin-left: 0;
+        padding-bottom: 80px;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+.nav-item:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .cosmic-nav,
+    .nav-item,
+    .nav-item::before,
+    .app-wrapper.has-nav {
+        transition: none;
+    }
+
+    .nav-item.active .nav-icon {
+        animation: none;
+    }
+
+    .nav-item.active .nav-connector {
+        animation: none;
+    }
+}

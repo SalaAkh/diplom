@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!--
+  Страница "Профиль"
+  
+  Автор: Ахмедьянов Саламат КПО 9/22-2
+  Дата: 2026
+-->
+<html lang="kk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4a90e2">
+    <title>Профиль - Neural Constellation</title>
+
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+    <!-- Chart.js для графиков -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Стили -->
+    <link rel="stylesheet" href="css/design-tokens.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+
+<body class="dark-theme">
+    <div id="background-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+
+    <!-- Navigation Toggle (Mobile) -->
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
+        <div class="nav-toggle-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </button>
+
+    <!-- Cosmic Navigation -->
+    <nav class="cosmic-nav" id="cosmicNav">
+        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Collapse Navigation"
+            title="Свернуть панель">
+            ◄
+        </button>
+
+        <div class="nav-header">
+            <div class="nav-logo" id="navLogo">◈</div>
+            <div class="nav-tagline" id="navTagline">Neural Constellation</div>
+        </div>
+
+        <div class="nav-items" id="navItems">
+            <a href="index.html" class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <span class="nav-text" data-i18n="navHome">Home</span>
+                <div class="nav-connector"></div>
+            </a>
+            <a href="index.html#test" class="nav-item">
+                <div class="nav-icon">🧪</div>
+                <span class="nav-text" data-i18n="navStartTest">Start Test</span>
+                <div class="nav-connector"></div>
+            </a>
+            <a href="profile.html" class="nav-item active">
+                <div class="nav-icon">👤</div>
+                <span class="nav-text" data-i18n="navProfile">Profile</span>
+                <div class="nav-connector"></div>
+            </a>
+            <a href="index.html#results" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <span class="nav-text" data-i18n="navResults">Results</span>
+                <div class="nav-connector"></div>
+            </a>
+            <a href="about.html" class="nav-item">
+                <div class="nav-icon">ℹ️</div>
+                <span class="nav-text" data-i18n="navAbout">About</span>
+                <div class="nav-connector"></div>
+            </a>
+        </div>
+    </nav>
+
+    <div class="app-wrapper has-nav" id="appWrapper">
+        <header class="app-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-main"></div>
+                    <div class="header-controls">
+                        <div class="language-selector" id="languageSelector"></div>
+                        <div class="theme-toggle" id="themeToggle" title="Тема">
+                            <span class="theme-icon">🌙</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <div class="container">
+                <div id="app">
+                    <div class="loading">
+                        <p>Загрузка профиля...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts - Full stack for app.js -->
+    <!-- Production-safe logger -->
+    <script src="js/logger.js"></script>
+    <!-- Configuration must load first -->
+    <script src="js/config.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/localization.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/scenarios-data.js"></script>
+    <script src="js/advanced-scenarios-data.js"></script>
+    <script src="js/analysis.js"></script>
+    <script src="js/advanced-analysis.js"></script>
+    <script src="js/dynamic-scenarios.js"></script>
+    <script src="js/visualization.js"></script>
+    <script src="js/evolution-tracker.js" defer></script>
+    <script src="js/navigation-controller.js" defer></script>
+    <script src="js/background-3d.js" defer></script>
+
+    <!-- Three.js Setup -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        const THREE_Global = Object.assign({}, THREE);
+        THREE_Global.OrbitControls = OrbitControls;
+        window.THREE = THREE_Global;
+        window.dispatchEvent(new CustomEvent('threejs-loaded'));
+    </script>
+
+    <!-- Main App Logic -->
+    <script src="js/app.js"></script>
+</body>
+
+</html>
