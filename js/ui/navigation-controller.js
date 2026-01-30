@@ -142,9 +142,10 @@ class NavigationController {
         });
 
         // Update footer date if needed
+        // Update footer date if needed
         const footerText = document.getElementById('footerText');
-        if (footerText) {
-            // Simple check if key exists or fallback
+
+        if (footerText && window.i18n) {
             footerText.innerHTML = `${window.i18n.t('project')} &copy; 2026`;
         }
     }

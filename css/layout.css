@@ -63,12 +63,16 @@
 }
 
 @media (max-width: 768px) {
+    .container {
+        padding: 0 var(--space-4);
+    }
 
     .card-grid,
     .card-grid-2,
     .card-grid-3,
     .card-grid-4 {
         grid-template-columns: 1fr;
+        gap: var(--space-4);
     }
 }
 

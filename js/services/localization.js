@@ -242,7 +242,7 @@ class LocalizationManager {
                 confirmDelete: "Сіз бұл тест нәтижелерін жойғыңыз келе ме?",
 
                 // Footer
-                project: "Оқу-зерттеу жобасы",
+                project: "Дипломдық жоба",
                 dataProcessed: "Барлық деректер сіздің браузеріңізде жергілікті өңделеді",
 
                 // Loading
@@ -465,7 +465,7 @@ class LocalizationManager {
                 confirmDelete: "Вы уверены, что хотите удалить этот тест?",
 
                 // Footer
-                project: "Учебно-исследовательский проект",
+                project: "Дипломный проект",
                 dataProcessed: "Все данные обрабатываются локально в вашем браузере",
 
                 // Loading
@@ -681,7 +681,7 @@ class LocalizationManager {
                 confirmDelete: "Are you sure you want to delete this test?",
 
                 // Footer
-                project: "Educational Research Project",
+                project: "Diploma Project",
                 dataProcessed: "All data is processed locally in your browser",
 
                 // Loading

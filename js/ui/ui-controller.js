@@ -657,6 +657,14 @@ class UIController {
     }
 
     showAuthSuccess(message) {
+        const formContainer = document.getElementById('authFormContainer');
+
+        // If we're not on the auth screen (e.g. easter egg trigger), use alert
+        if (!formContainer) {
+            alert(message);
+            return;
+        }
+
         const successDiv = document.createElement('div');
         successDiv.className = 'auth-success';
         successDiv.style.cssText = `
@@ -672,7 +680,6 @@ class UIController {
         `;
         successDiv.textContent = message;
 
-        const formContainer = document.getElementById('authFormContainer');
         const existingSuccess = formContainer.querySelector('.auth-success');
         if (existingSuccess) {
             existingSuccess.remove();
@@ -792,55 +799,113 @@ class UIController {
         const t = this.i18n.t.bind(this.i18n);
         const user = this.app.auth.getCurrentUser();
 
+        // Check if there is incomplete progress
+        const hasProgress = this.app.storage && this.app.storage.loadProgress() && this.app.storage.loadProgress().length > 0;
+
         container.innerHTML = `
             <div class="intro-screen">
-                <h1>${t('appName')}</h1>
-                <p class="subtitle">${t('tagline')}</p>
-                
-                <div class="intro-content">
-                    <h2>${t('aboutSystem')}</h2>
-                    <p>${t('systemDescription')}</p>
-                    
-                    <h3>${t('whatAwaits')}</h3>
-                    <ul>
-                        <li>${t('interactiveScenarios')}</li>
-                        <li>${t('patternAnalysis')}</li>
-                        <li>${t('visualProfile')}</li>
-                        <li>${t('aiAnalysis')}</li>
-                        <li>${t('personalizedRecommendations')}</li>
-                    </ul>
-                    
-                    <h3>${t('analysisDimensions')}</h3>
-                    <ul>
-                        <li><strong>${t('strategicThinking')}</strong> - ${t('strategicDesc')}</li>
-                        <li><strong>${t('explorerThinking')}</strong> - ${t('explorerDesc')}</li>
-                        <li><strong>${t('individualismThinking')}</strong> - ${t('individualismDesc')}</li>
-                        <li><strong>${t('rationalityThinking')}</strong> - ${t('rationalityDesc')}</li>
-                        <li><strong>${t('controlThinking')}</strong> - ${t('controlDesc')}</li>
-                        <li><strong>${t('meaningThinking')}</strong> - ${t('meaningDesc')}</li>
-                    </ul>
+                <!-- Hero Section matching About page style -->
+                <div class="cosmic-card glowing mb-8">
+                    <div class="about-hero text-center p-6">
+                        <h1 class="gradient-text text-3xl mb-4" data-i18n="aboutSystem">${t('aboutSystem')}</h1>
+                        <p class="text-lg text-secondary" data-i18n="systemDescription">${t('systemDescription')}</p>
+                    </div>
+                </div>
+
+                <!-- Features Grid -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold mb-6 gradient-text text-center" data-i18n="whatAwaits">${t('whatAwaits')}</h2>
+                    <div class="feature-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <div class="feature-card cosmic-card p-6 flex flex-col items-center text-center">
+                            <span class="feature-icon text-4xl mb-4">🎭</span>
+                            <h3 class="text-xl font-bold mb-2" data-i18n="featInteractive">${t('featInteractive')}</h3>
+                            <p class="text-sm text-secondary" data-i18n="featInteractiveDesc">${t('featInteractiveDesc')}</p>
+                        </div>
+                        <div class="feature-card cosmic-card p-6 flex flex-col items-center text-center">
+                            <span class="feature-icon text-4xl mb-4">🧠</span>
+                            <h3 class="text-xl font-bold mb-2" data-i18n="featPattern">${t('featPattern')}</h3>
+                            <p class="text-sm text-secondary" data-i18n="featPatternDesc">${t('featPatternDesc')}</p>
+                        </div>
+                        <div class="feature-card cosmic-card p-6 flex flex-col items-center text-center">
+                            <span class="feature-icon text-4xl mb-4">📊</span>
+                            <h3 class="text-xl font-bold mb-2" data-i18n="feat3D">${t('feat3D')}</h3>
+                            <p class="text-sm text-secondary" data-i18n="feat3DDesc">${t('feat3DDesc')}</p>
+                        </div>
+                        <div class="feature-card cosmic-card p-6 flex flex-col items-center text-center">
+                            <span class="feature-icon text-4xl mb-4">🤖</span>
+                            <h3 class="text-xl font-bold mb-2" data-i18n="featAI">${t('featAI')}</h3>
+                            <p class="text-sm text-secondary" data-i18n="featAIDesc">${t('featAIDesc')}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dimensions Grid -->
+                <div class="cosmic-card mb-8">
+                    <div class="card-header p-6 border-b border-white/10">
+                        <h2 class="card-title gradient-text text-xl m-0" data-i18n="dimensionsTitle">${t('dimensionsTitle')}</h2>
+                    </div>
+                    <div class="card-body p-6">
+                        <div class="dimension-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                            <div class="dimension-card p-4 bg-white/5 rounded-lg">
+                                <h4 class="font-bold text-primary mb-1" data-i18n="strategicName">${t('strategicName')}</h4>
+                                <p class="text-xs text-secondary" data-i18n="dimStrategyDesc">${t('dimStrategyDesc')}</p>
+                            </div>
+                            <div class="dimension-card p-4 bg-white/5 rounded-lg">
+                                <h4 class="font-bold text-primary mb-1" data-i18n="explorerName">${t('explorerName')}</h4>
+                                <p class="text-xs text-secondary" data-i18n="dimResearchDesc">${t('dimResearchDesc')}</p>
+                            </div>
+                            <div class="dimension-card p-4 bg-white/5 rounded-lg">
+                                <h4 class="font-bold text-primary mb-1" data-i18n="individualismName">${t('individualismName')}</h4>
+                                <p class="text-xs text-secondary" data-i18n="dimIndividualismDesc">${t('dimIndividualismDesc')}</p>
+                            </div>
+                            <div class="dimension-card p-4 bg-white/5 rounded-lg">
+                                <h4 class="font-bold text-primary mb-1" data-i18n="rationalityName">${t('rationalityName')}</h4>
+                                <p class="text-xs text-secondary" data-i18n="dimRationalityDesc">${t('dimRationalityDesc')}</p>
+                            </div>
+                            <div class="dimension-card p-4 bg-white/5 rounded-lg">
+                                <h4 class="font-bold text-primary mb-1" data-i18n="controlName">${t('controlName')}</h4>
+                                <p class="text-xs text-secondary" data-i18n="dimControlDesc">${t('dimControlDesc')}</p>
+                            </div>
+                            <div class="dimension-card p-4 bg-white/5 rounded-lg">
+                                <h4 class="font-bold text-primary mb-1" data-i18n="meaningName">${t('meaningName')}</h4>
+                                <p class="text-xs text-secondary" data-i18n="dimMeaningDesc">${t('dimMeaningDesc')}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="intro-actions">
-                    ${this.app.storage && this.app.storage.loadProgress() && this.app.storage.loadProgress().length > 0 ? `
-                        <button class="btn btn-secondary" onclick="app.continueTest()">${t('continueTest')}</button>
-                        <button class="btn btn-secondary" onclick="app.startNewTest()">${t('startNew')}</button>
+                <!-- Main Actions -->
+                <div class="intro-actions flex flex-col items-center gap-4 mb-12">
+                    ${hasProgress ? `
+                        <button class="btn btn-primary btn-lg w-full max-w-md pulse-animation" onclick="app.continueTest()">
+                            <span class="text-xl">▶️</span>
+                            <div class="flex flex-col items-start ml-2">
+                                <span class="font-bold">${t('continueTest')}</span>
+                                <span class="text-xs opacity-80">${this.app.storage.loadProgress().length} questions completed</span>
+                            </div>
+                        </button>
+                        <button class="btn btn-secondary w-full max-w-md" onclick="app.startNewTest()">${t('startNew')}</button>
                     ` : `
-                        <button class="btn btn-primary" onclick="app.showTestTypeSelection()">${t('startTest')}</button>
+                        <button class="btn btn-primary btn-lg w-full max-w-md pulse-animation" onclick="app.showTestTypeSelection()">
+                            <span class="text-2xl mr-2">🚀</span>
+                            <span class="text-lg font-bold">${t('startTest')}</span>
+                        </button>
                     `}
                 </div>
                 
                 ${user ? `
-                    <div class="user-info">
-                        <p>${t('loggedInAs')} <strong>${user.username}</strong></p>
-                        <button class="btn-link" onclick="app.showProfile()">${t('myProfile')}</button>
-                        <button class="btn-link" onclick="app.logout()">${t('logout')}</button>
+                    <div class="user-info text-center mt-8">
+                        <p class="mb-2 text-secondary">${t('loggedInAs')} <strong class="text-white">${user.username}</strong></p>
+                        <div class="flex justify-center gap-4">
+                            <button class="btn-link text-sm" onclick="app.showProfile()">${t('myProfile')}</button>
+                            <button class="btn-link text-sm text-red-400" onclick="app.logout()">${t('logout')}</button>
+                        </div>
                     </div>
                 ` : `
-                    <div class="user-info">
-                        <div class="auth-section">
-                            <div id="googleSignInButton" class="google-signin-container"></div>
-                            <div class="auth-divider">
+                    <div class="user-info mt-8">
+                        <div class="auth-section flex flex-col items-center">
+                            <div id="googleSignInButton" class="google-signin-container mb-4"></div>
+                            <div class="auth-divider w-full max-w-xs mb-4">
                                 <span data-i18n="or">${t('or')}</span>
                             </div>
                             <button class="btn-link" onclick="app.showAuth()">${t('loginOrRegister')}</button>
@@ -851,13 +916,13 @@ class UIController {
         `;
 
         setTimeout(() => {
-            container.style.transition = 'opacity 0.3s';
+            container.style.transition = 'opacity 0.5s ease-out';
             container.style.opacity = '1';
 
             if (!user && this.app.auth.isGoogleSignInConfigured()) {
                 this.app.auth.initGoogleSignIn();
             }
-        }, 10);
+        }, 100);
     }
 
     showTestTypeSelection() {
