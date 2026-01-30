@@ -42,6 +42,7 @@ class UIController {
         this.updateHeader();
         this.initThemeToggle();
         this.applyTheme();
+        this.initEasterEggs();
 
         // Init Google Sign-In if auth available
         if (this.app.auth && typeof this.app.auth.initGoogleSignIn === 'function') {
@@ -496,6 +497,32 @@ class UIController {
     applyTheme() {
         const savedTheme = localStorage.getItem('theme') || 'dark';
         this.setTheme(savedTheme);
+    }
+
+    /**
+     * Initialize Easter Eggs
+     */
+    initEasterEggs() {
+        const footerText = document.getElementById('footerText');
+        if (footerText) {
+            footerText.style.cursor = 'help';
+            footerText.title = 'Double click heavily advised by the developer';
+
+            let clickCount = 0;
+            let lastClickTime = 0;
+
+            footerText.addEventListener('click', (e) => {
+                const currentTime = new Date().getTime();
+                if (currentTime - lastClickTime < 500) {
+                    // Double click detected
+                    this.showAuthSuccess('Developed by Ахмедьянов Саламат КПО 9/22-2 🚀');
+                    clickCount = 0;
+                } else {
+                    clickCount = 1;
+                }
+                lastClickTime = currentTime;
+            });
+        }
     }
 
     // ================= START AUTH UI =================

@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#4a90e2">
     <meta name="description" content="Цифровая система для анализа личностных предпочтений и направлений развития">
+    <meta name="author" content="Ахмедьянов Саламат КПО 9/22-2">
     <title>Система самопознания - Анализ личностных предпочтений</title>
 
     <!-- PWA Manifest -->
@@ -89,36 +90,50 @@
             ◄
         </button>
 
-        <div class="nav-header">
+        <!-- Mobile Nav Header (Settings + Close) -->
+        <div class="nav-mobile-header show-mobile">
+            <button class="nav-close-btn" id="navCloseBtn">
+                ✕
+            </button>
+            <div class="nav-mobile-controls">
+                <!-- Language and Theme toggles moved here for mobile -->
+                <div class="language-wrapper" id="mobileLangContainer"></div>
+                <div class="theme-wrapper" id="mobileThemeContainer"></div>
+            </div>
+        </div>
+
+        <div class="nav-header hide-mobile">
             <div class="nav-logo" id="navLogo">◈</div>
             <div class="nav-tagline" id="navTagline" data-i18n="navTagline">Neural Constellation</div>
         </div>
+
+
 
         <div class="nav-items" id="navItems">
             <a href="index.html" class="nav-item active" data-screen="intro">
                 <div class="nav-icon">🏠</div>
                 <span class="nav-text" data-i18n="navHome">Home</span>
-                <div class="nav-connector"></div>
+
             </a>
             <a href="#" class="nav-item" data-screen="test-selection">
                 <div class="nav-icon">🧪</div>
                 <span class="nav-text" data-i18n="navStartTest">Start Test</span>
-                <div class="nav-connector"></div>
+
             </a>
             <a href="profile.html" class="nav-item" data-screen="profile">
                 <div class="nav-icon">👤</div>
                 <span class="nav-text" data-i18n="navProfile">Profile</span>
-                <div class="nav-connector"></div>
+
             </a>
             <a href="#" class="nav-item" data-screen="results">
                 <div class="nav-icon">📊</div>
                 <span class="nav-text" data-i18n="navResults">Results</span>
-                <div class="nav-connector"></div>
+
             </a>
             <a href="about.html" class="nav-item" data-screen="about">
                 <div class="nav-icon">ℹ️</div>
                 <span class="nav-text" data-i18n="navAbout">About</span>
-                <div class="nav-connector"></div>
+
             </a>
         </div>
 

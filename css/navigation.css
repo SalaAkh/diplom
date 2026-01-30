@@ -192,6 +192,8 @@
     justify-content: center;
     font-size: var(--text-xl);
     position: relative;
+    text-decoration: none !important;
+    border-bottom: none !important;
 }
 
 .nav-item.active .nav-icon {
@@ -382,67 +384,147 @@
    MOBILE NAVIGATION (Bottom Bar)
    ============================================ */
 
+/* ============================================
+   MOBILE NAVIGATION (Side Drawer)
+   ============================================ */
+
+.nav-mobile-header {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--text-color);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-mobile-controls {
+    display: flex;
+    gap: var(--space-3);
+}
+
+
+
 @media (max-width: 768px) {
-    .cosmic-nav {
-        top: auto;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        padding: var(--space-3) var(--space-2);
-        border-right: none;
-        border-top: 1px solid var(--border-color);
-        transform: translateY(0);
-    }
 
+    .cosmic-nav,
     .cosmic-nav.collapsed {
-        width: 100%;
-        padding: var(--space-3) var(--space-2);
-        transform: translateY(100%);
+        /* Target both to override desktop specificity */
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 100% !important;
+        /* Force full width, override 80px */
+        height: 100vh;
+        z-index: 1000;
+        transform: translateX(-100%);
+        flex-direction: column;
+        padding: var(--space-4);
+        border-right: none;
+        border-top: none;
+        background: rgba(15, 23, 42, 0.98);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        overflow-y: auto;
     }
 
-    .nav-header,
-    .nav-collapse-btn {
-        display: none;
+    .cosmic-nav.active {
+        transform: translateX(0);
+    }
+
+    /* Force content to be visible even if 'collapsed' class is present */
+    .cosmic-nav.collapsed .nav-text,
+    .cosmic-nav.collapsed .nav-tagline,
+    .cosmic-nav.collapsed .nav-header,
+    .cosmic-nav.collapsed .nav-footer,
+    .cosmic-nav.collapsed .nav-auth-card {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        display: block !important;
+    }
+
+    .cosmic-nav.collapsed .nav-item {
+        justify-content: flex-start;
+        /* Reset center alignment */
+    }
+
+    .nav-mobile-header {
+        display: flex;
+        flex-shrink: 0;
+    }
+
+    .hide-mobile {
+        display: none !important;
+    }
+
+    .show-mobile {
+        display: flex !important;
     }
 
     .nav-items {
-        flex-direction: row;
-        justify-content: space-around;
+        flex-direction: column;
+        gap: var(--space-2);
         width: 100%;
-        gap: 0;
+        flex-shrink: 0;
     }
 
     .nav-item {
-        flex-direction: column;
-        gap: var(--space-1);
-        padding: var(--space-2);
-        flex: 1;
-        text-align: center;
-        font-size: var(--text-xs);
-    }
-
-    .nav-item:hover {
-        transform: translateY(-2px);
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: var(--space-3);
+        text-align: left;
+        border-radius: var(--radius-lg);
+        width: 100%;
     }
 
     .nav-text {
-        display: none;
+        display: block !important;
+        font-size: var(--text-lg);
+        opacity: 1;
     }
 
-    .nav-footer {
-        display: none;
+    .nav-icon {
+        font-size: 24px;
+        margin-right: var(--space-3);
+        /* Restore margin */
     }
 
     .nav-toggle {
         display: flex;
+        z-index: 900;
     }
 
     .app-wrapper.has-nav {
-        margin-left: 0;
-        padding-bottom: 80px;
+        margin-left: 0 !important;
+        padding-bottom: 0;
+    }
+
+    .nav-auth-card {
+        margin-top: var(--space-2);
+        flex-shrink: 0;
+        width: 100%;
+        display: block;
+        /* Ensure visibility */
     }
 }
 

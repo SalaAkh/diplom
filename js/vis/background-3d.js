@@ -47,12 +47,12 @@ class NeuralBackground {
             this.config.lineOpacity = 0.2;
             this.config.particleSize = 2.5;
         } else {
-            // Светлая тема: ЕЩЕ БОЛЕЕ ТЕМНЫЕ цвета для контраста
-            this.config.color = 0x0022aa; // Очень темно-синий
-            this.config.secondaryColor = 0x4b0082; // Глубокий индиго
+            // Светлая тема: ТЕМНЫЕ и НАСЫЩЕННЫЕ цвета для максимального контраста
+            this.config.color = 0x0044cc; // Темно-синий
+            this.config.secondaryColor = 0x6c3483; // Темно-фиолетовый
             this.config.blending = THREE.NormalBlending;
-            this.config.lineOpacity = 0.8; // Почти непрозрачные линии
-            this.config.particleSize = 4.5; // Очень крупные частицы
+            this.config.lineOpacity = 0.6; // Значительно заметнее линии
+            this.config.particleSize = 3.5; // Частицы крупнее в светлой теме
         }
 
         this.updateMaterials();

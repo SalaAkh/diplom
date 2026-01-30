@@ -19,6 +19,9 @@ const debugWarn = DEBUG ? console.warn.bind(console) : () => { };
 const criticalError = console.error.bind(console);
 const criticalLog = console.log.bind(console);
 
+// Easter Egg Signature
+console.log('%c Developed by Ахмедьянов Саламат КПО 9/22-2 ', 'background: #222; color: #bada55; font-size: 12px; padding: 4px; border-radius: 4px;');
+
 /**
  * Функция debounce для задержки выполнения
  * @param {Function} func - Функция для выполнения
@@ -1435,6 +1438,69 @@ class PersonalityTestApp {
                     }, index * 200);
                 });
             }, 100);
+        }
+    }
+
+    /**
+     * Обработка выбора опции в сценарии (Базовый тест)
+     * @param {string} choice - Выбранная опция (A, B, C, D)
+     * @param {number} scenarioId - ID сценария
+     */
+    handleScenarioOption(choice, scenarioId) {
+        if (this.testManager) {
+            this.testManager.recordBasicAnswer(choice, scenarioId);
+        }
+    }
+
+    /**
+     * Обработка ответа на углубленный вопрос (Тип: Сценарий)
+     * @param {string} choice - Выбранная опция
+     * @param {number} questionId - ID вопроса
+     */
+    handleAdvancedAnswer(choice, questionId) {
+        if (this.testManager) {
+            this.testManager.recordAdvancedAnswer(choice, questionId);
+        }
+    }
+
+    /**
+     * Обработка ответа на шкалируемый вопрос
+     * @param {number} questionId - ID вопроса
+     */
+    handleScaleAnswer(questionId) {
+        const input = document.getElementById(`scale-input-${questionId}`);
+        if (input && this.testManager) {
+            const value = parseInt(input.value);
+            this.testManager.recordScaleAnswer(questionId, value);
+        }
+    }
+
+    /**
+     * Обработка открытого ответа
+     * @param {number} questionId - ID вопроса
+     */
+    handleOpenAnswer(questionId) {
+        const textarea = document.getElementById(`open-answer-${questionId}`);
+        if (textarea && this.testManager) {
+            const text = textarea.value.trim();
+            // Basic validation
+            if (!text) {
+                alert(this.i18n.t('pleaseEnterAnswer') || 'Пожалуйста, введите ответ');
+                return;
+            }
+            this.testManager.recordOpenAnswer(questionId, text);
+        }
+    }
+
+    /**
+     * Обработка ответа на ситуационный вопрос
+     * @param {number} questionId - ID вопроса
+     * @param {number} stepId - ID шага
+     * @param {string} choice - Выбранная опция
+     */
+    handleSituationalAnswer(questionId, stepId, choice) {
+        if (this.testManager) {
+            this.testManager.recordSituationalAnswer(questionId, stepId, choice);
         }
     }
 

@@ -20,17 +20,11 @@ class NavigationController {
     }
 
     init() {
-        // Load saved state from localStorage
-        const savedState = localStorage.getItem('navCollapsed');
-        if (savedState === 'true' && window.innerWidth > 768) {
-            this.collapseNav();
-        }
-
-        // Initialize navigation
+        // Initialize navigation listeners
         this.setupEventListeners();
         this.updateNavigation();
 
-        // Initialize UI components if they exist on the page (for about.html and profile.html)
+        // Initialize UI components if they exist on the page
         if (typeof LocalizationManager !== 'undefined' && !window.i18n) {
             window.i18n = new LocalizationManager();
         }
@@ -38,9 +32,16 @@ class NavigationController {
         this.initTheme();
         this.initLanguage();
 
-        // Handle mobile toggle
+        // Handle initial state
         if (window.innerWidth <= 768) {
-            this.navElement.classList.add('collapsed');
+            // Mobile: Ensure 'collapsed' is REMOVED so we don't get 80px width from desktop styles
+            this.navElement.classList.remove('collapsed');
+        } else {
+            // Desktop: Load saved state from localStorage
+            const savedState = localStorage.getItem('navCollapsed');
+            if (savedState === 'true') {
+                this.collapseNav();
+            }
         }
     }
 
@@ -157,6 +158,9 @@ class NavigationController {
 
                 // If it's a real link (not #), let the browser handle it
                 if (href && href !== '#' && !href.startsWith('#')) {
+                    if (window.innerWidth <= 768) {
+                        this.closeNav();
+                    }
                     return;
                 }
 
@@ -174,19 +178,29 @@ class NavigationController {
             });
         }
 
-        // Mobile toggle
+        // Mobile toggle (Hamburger)
         if (this.navToggle) {
-            this.navToggle.addEventListener('click', () => {
+            this.navToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
                 this.toggleNav();
+            });
+        }
+
+        // Close button (Inside Drawer)
+        const closeBtn = document.getElementById('navCloseBtn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.closeNav();
             });
         }
 
         // Close nav on mobile when clicking outside
         document.addEventListener('click', (e) => {
             if (window.innerWidth <= 768) {
-                if (!this.navElement.contains(e.target) &&
-                    !this.navToggle.contains(e.target) &&
-                    !this.navElement.classList.contains('collapsed')) {
+                // If nav is open (active) and click is NOT inside nav and NOT on toggle
+                if (this.navElement.classList.contains('active') &&
+                    !this.navElement.contains(e.target) &&
+                    !this.navToggle.contains(e.target)) {
                     this.closeNav();
                 }
             }
@@ -195,11 +209,89 @@ class NavigationController {
         // Handle window resize
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) {
-                this.navElement.classList.remove('collapsed');
+                this.navElement.classList.remove('active'); // Remove mobile active class
+                this.navElement.classList.remove('collapsed'); // Reset desktop collapsed if needed (optional)
                 this.navToggle.classList.remove('active');
                 this.appWrapper.classList.remove('nav-collapsed');
             }
         });
+
+
+
+        // Populate Mobile Settings if needed
+        this.populateMobileSettings();
+    }
+
+    populateMobileSettings() {
+        // Clone Language Selector to Mobile Menu if empty
+        const mobileLang = document.getElementById('mobileLangContainer');
+        const desktopLang = document.getElementById('languageSelector');
+
+        if (mobileLang && desktopLang && mobileLang.children.length === 0) {
+            // We can't just move it, because we need it in both places or specific style.
+            // For now, let's just create a simple clone of the button logic
+            // Or better, let UIController handle rendering both.
+            // But as a quick fix, let's clone the innerHTML and re-attach events? 
+            // Better: trigger UIController to render it there.
+
+            // Actually, let's rely on UIController to render to *all* .language-selector compatible containers
+            // but since ID is unique, we might need a class based approach.
+            // Let's manually trigger a re-render if window.app.ui exists
+            if (window.app && window.app.ui) {
+                // We'll add a helper in UIController or just manually invoke render here
+                // for simplicity, let's just rely on the main UIController handling 'languageSelector' 
+                // and we might need to add a new method there or just copy the HTML.
+
+                // Let's try to copy HTML and fix IDs
+                const clone = desktopLang.cloneNode(true);
+                clone.id = 'mobileLangSelectorClone';
+                mobileLang.appendChild(clone);
+
+                // Re-attach simple toggle event for the clone
+                const btn = clone.querySelector('.language-btn');
+                if (btn) {
+                    btn.onclick = (e) => {
+                        e.stopPropagation();
+                        const menu = clone.querySelector('.language-menu');
+                        if (menu) menu.classList.toggle('show');
+                    };
+                }
+
+                // Re-attach option clicks
+                const opts = clone.querySelectorAll('.language-option');
+                opts.forEach(opt => {
+                    // Extract lang code from onclick attribute string is messy.
+                    // Better: assume order is same or read from some data attribute?
+                    // The original rendered HTML has onclick="window.navigationController.changeLanguage..."
+                    // So it should work!
+                });
+            }
+        }
+
+        // Clone Theme Toggle
+        const mobileTheme = document.getElementById('mobileThemeContainer');
+        const desktopTheme = document.getElementById('themeToggle');
+
+        if (mobileTheme && desktopTheme && mobileTheme.children.length === 0) {
+            const clone = desktopTheme.cloneNode(true);
+            clone.id = 'mobileThemeToggleClone';
+            mobileTheme.appendChild(clone);
+
+            clone.onclick = () => {
+                const isDark = document.body.classList.contains('dark-theme');
+                const newTheme = isDark ? 'light' : 'dark';
+                if (window.app && window.app.ui) {
+                    window.app.ui.setTheme(newTheme);
+                }
+                // Sync original button icon manually if needed, or let UI observer handle it
+                // UIController.setTheme updates body class, so generic styling works.
+                // We just need to update icons.
+                const icon = clone.querySelector('.theme-icon');
+                if (icon) icon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                const desktopIcon = desktopTheme.querySelector('.theme-icon');
+                if (desktopIcon) desktopIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            };
+        }
     }
 
     navigateToScreen(screenName) {
@@ -233,12 +325,8 @@ class NavigationController {
                     }
                     break;
                 case 'profile':
-                    // Profile management (TODO: implement if needed)
-                    // Removed debug log
                     break;
                 case 'about':
-                    // About screen (TODO: implement if needed)
-                    // Removed debug log
                     break;
                 default:
                     console.warn(`Unknown screen: ${screenName}`);
@@ -257,21 +345,39 @@ class NavigationController {
     }
 
     toggleNav() {
-        this.navElement.classList.toggle('collapsed');
-        this.navToggle.classList.toggle('active');
-        this.appWrapper.classList.toggle('nav-collapsed');
+        if (window.innerWidth <= 768) {
+            // Mobile: Toggle 'active' class
+            this.navElement.classList.toggle('active');
+            // Toggle hamburger icon animation
+            this.navToggle.classList.toggle('active');
+        } else {
+            // Desktop: Collapse logic (keep existing)
+            this.navElement.classList.toggle('collapsed');
+            this.navToggle.classList.toggle('active');
+            this.appWrapper.classList.toggle('nav-collapsed');
+        }
     }
 
     closeNav() {
-        this.navElement.classList.add('collapsed');
-        this.navToggle.classList.remove('active');
-        this.appWrapper.classList.add('nav-collapsed');
+        if (window.innerWidth <= 768) {
+            this.navElement.classList.remove('active');
+            this.navToggle.classList.remove('active');
+        } else {
+            this.navElement.classList.add('collapsed');
+            this.navToggle.classList.remove('active');
+            this.appWrapper.classList.add('nav-collapsed');
+        }
     }
 
     openNav() {
-        this.navElement.classList.remove('collapsed');
-        this.navToggle.classList.add('active');
-        this.appWrapper.classList.remove('nav-collapsed');
+        if (window.innerWidth <= 768) {
+            this.navElement.classList.add('active');
+            this.navToggle.classList.add('active');
+        } else {
+            this.navElement.classList.remove('collapsed');
+            this.navToggle.classList.add('active');
+            this.appWrapper.classList.remove('nav-collapsed');
+        }
     }
 
 
@@ -321,13 +427,26 @@ class NavigationController {
         const navUser = document.getElementById('navUser');
         const navUsername = document.getElementById('navUsername');
         const navAvatar = document.getElementById('navAvatar');
+        const authCard = document.querySelector('.nav-auth-card');
+        const profileLink = document.querySelector('.nav-item[data-screen="profile"]');
 
         if (username) {
-            navUser.style.display = 'flex';
-            navUsername.textContent = username;
-            navAvatar.textContent = avatar || username.charAt(0).toUpperCase();
+            // User is logged in
+            if (navUser) navUser.style.display = 'flex';
+            if (navUsername) navUsername.textContent = username;
+            if (navAvatar) navAvatar.textContent = avatar || username.charAt(0).toUpperCase();
+
+            // Hide Auth Card
+            if (authCard) authCard.style.display = 'none';
+
+            // Ensure profile link is visible if needed (or keep it always visible)
+            // if (profileLink) profileLink.style.display = 'flex';
         } else {
-            navUser.style.display = 'none';
+            // User is logged out
+            if (navUser) navUser.style.display = 'none';
+
+            // Show Auth Card
+            if (authCard) authCard.style.display = 'block';
         }
     }
 

@@ -56,7 +56,8 @@ body:not(.dark-theme) #background-canvas {
     padding: 1.5rem 0;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
-    position: sticky;
+    position: relative;
+    /* Changed from sticky */
     top: 0;
     z-index: 100;
 }
@@ -597,12 +598,30 @@ body:not(.dark-theme) #background-canvas {
 
 @media (max-width: 768px) {
     .app-footer {
-        padding: 1rem 0;
-        margin-top: 2rem;
+        padding: 0.8rem 0;
+        /* Reduced padding */
+        margin-top: 1.5rem;
     }
 
     .footer-note {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
+        /* Slightly smaller */
+    }
+
+    .app-header {
+        padding: 0.8rem 0;
+        /* Reduced padding */
+        margin-bottom: 1.5rem;
+    }
+
+    .logo {
+        font-size: 1.8rem;
+        /* Smaller logo */
+    }
+
+    .tagline {
+        font-size: 0.9rem;
+        /* Smaller tagline */
     }
 }
 
@@ -674,7 +693,7 @@ h3 {
 /* Responsive Design */
 @media (max-width: 768px) {
     .logo {
-        font-size: 2rem;
+        /* font-size: 2rem; - Removed as handled above */
     }
 
     #app {
