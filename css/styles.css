@@ -38,8 +38,8 @@ body {
 }
 
 body:not(.dark-theme) #background-canvas {
-    opacity: 0.1;
-    /* Make it very faint in light mode instead of hiding */
+    opacity: 0.4;
+    /* Increased opacity to make dark particles visible */
 }
 
 .container {
