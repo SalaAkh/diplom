@@ -51,10 +51,13 @@ class NavigationController {
         if (themeToggle) {
             // Set initial state
             const currentTheme = localStorage.getItem('theme') || 'dark';
+            const icon = themeToggle.querySelector('.theme-icon');
             if (currentTheme === 'light') {
                 document.body.classList.remove('dark-theme');
-                const icon = themeToggle.querySelector('.theme-icon');
-                if (icon) icon.textContent = '🌙';
+                if (icon) icon.textContent = 'dark_mode';
+            } else {
+                document.body.classList.add('dark-theme');
+                if (icon) icon.textContent = 'light_mode';
             }
 
             themeToggle.onclick = () => {
@@ -63,12 +66,12 @@ class NavigationController {
                     document.body.classList.remove('dark-theme');
                     localStorage.setItem('theme', 'light');
                     const icon = themeToggle.querySelector('.theme-icon');
-                    if (icon) icon.textContent = '🌙';
+                    if (icon) icon.textContent = 'dark_mode';
                 } else {
                     document.body.classList.add('dark-theme');
                     localStorage.setItem('theme', 'dark');
                     const icon = themeToggle.querySelector('.theme-icon');
-                    if (icon) icon.textContent = '☀️';
+                    if (icon) icon.textContent = 'light_mode';
                 }
             };
         }
@@ -288,9 +291,9 @@ class NavigationController {
                 // UIController.setTheme updates body class, so generic styling works.
                 // We just need to update icons.
                 const icon = clone.querySelector('.theme-icon');
-                if (icon) icon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                if (icon) icon.textContent = newTheme === 'dark' ? 'light_mode' : 'dark_mode';
                 const desktopIcon = desktopTheme.querySelector('.theme-icon');
-                if (desktopIcon) desktopIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                if (desktopIcon) desktopIcon.textContent = newTheme === 'dark' ? 'light_mode' : 'dark_mode';
             };
         }
     }

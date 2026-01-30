@@ -95,13 +95,13 @@
         <!-- Desktop Collapse Button -->
         <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Collapse Navigation"
             title="Свернуть панель">
-            ◄
+            <span class="material-symbols-rounded">chevron_left</span>
         </button>
 
         <!-- Mobile Nav Header (Settings + Close) -->
         <div class="nav-mobile-header show-mobile">
             <button class="nav-close-btn" id="navCloseBtn">
-                ✕
+                <span class="material-symbols-rounded">close</span>
             </button>
             <div class="nav-mobile-controls">
                 <!-- Language and Theme toggles moved here for mobile -->
@@ -111,7 +111,7 @@
         </div>
 
         <div class="nav-header hide-mobile">
-            <div class="nav-logo" id="navLogo">◈</div>
+            <div class="nav-logo" id="navLogo"><span class="material-symbols-rounded">hub</span></div>
             <div class="nav-tagline" id="navTagline" data-i18n="navTagline">Neural Constellation</div>
         </div>
 
@@ -134,7 +134,7 @@
 
             </a>
             <a href="#" class="nav-item" data-screen="results">
-                <div class="nav-icon"><span class="material-symbols-rounded">analytics</span></div>
+                <div class="nav-icon"><span class="material-symbols-rounded">bar_chart</span></div>
                 <span class="nav-text" data-i18n="navResults">Results</span>
 
             </a>
@@ -147,7 +147,7 @@
 
         <div class="nav-footer">
             <div class="nav-user" id="navUser" style="display: none;">
-                <div class="nav-icon"><span class="material-symbols-rounded">account_circle</span></div>
+                <div class="nav-avatar" id="navAvatar">?</div>
                 <div class="nav-user-info">
                     <div class="nav-username" id="navUsername">Guest</div>
                     <div class="nav-user-role" data-i18n="navGuest">Explorer</div>
@@ -167,7 +167,7 @@
                     <div class="header-controls">
                         <div class="language-selector" id="languageSelector"></div>
                         <div class="theme-toggle" id="themeToggle" title="Тема">
-                            <span class="theme-icon">🌙</span>
+                            <span class="theme-icon material-symbols-rounded">light_mode</span>
                         </div>
                     </div>
                 </div>

@@ -62,8 +62,11 @@
     cursor: pointer;
     z-index: 10;
     transition: all var(--duration-quick) var(--ease-out);
-    font-size: 12px;
     color: var(--text-color);
+}
+
+.nav-collapse-btn .material-symbols-rounded {
+    font-size: 18px;
 }
 
 .nav-collapse-btn:hover {
@@ -92,14 +95,21 @@
 
 .nav-logo {
     font-family: var(--font-display);
-    font-size: var(--text-3xl);
+    font-size: var(--text-4xl);
     font-weight: var(--weight-bold);
     background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: var(--space-2);
-    filter: drop-shadow(0 0 15px rgba(0, 198, 251, 0.3));
+    filter: drop-shadow(0 0 15px rgba(0, 198, 251, 0.5));
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo .material-symbols-rounded {
+    font-size: 36px;
+    font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 40;
 }
 
 .nav-tagline {
@@ -158,24 +168,24 @@
 
 .nav-item:hover {
     background: var(--input-focus);
-    color: var(--text-color);
-    transform: translateX(4px);
+    color: var(--primary-color);
+    transform: translateX(8px);
 }
 
 .nav-item:hover::before {
-    width: 100%;
-    opacity: 0.1;
+    width: 6px;
+    opacity: 0.8;
 }
 
 .nav-item.active {
     background: var(--input-focus);
     color: var(--primary-color);
-    font-weight: var(--weight-semibold);
-    box-shadow: var(--glow-primary);
+    font-weight: var(--weight-bold);
+    box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.15);
 }
 
 .nav-item.active::before {
-    width: 4px;
+    width: 6px;
     opacity: 1;
     background: var(--primary-color);
 }
@@ -185,18 +195,24 @@
    ============================================ */
 
 .nav-icon {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--text-xl);
     position: relative;
     text-decoration: none !important;
     border-bottom: none !important;
+    transition: all var(--duration-quick) var(--ease-out);
 }
 
-.nav-item.active .nav-icon {
+.nav-icon .material-symbols-rounded {
+    font-size: 24px;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.nav-item.active .nav-icon .material-symbols-rounded {
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
     animation: iconPulse 2s ease-in-out infinite;
 }
 
@@ -205,12 +221,12 @@
     0%,
     100% {
         transform: scale(1);
-        filter: drop-shadow(0 0 4px currentColor);
+        filter: drop-shadow(0 0 8px var(--primary-color));
     }
 
     50% {
-        transform: scale(1.1);
-        filter: drop-shadow(0 0 8px currentColor);
+        transform: scale(1.15);
+        filter: drop-shadow(0 0 12px var(--primary-color));
     }
 }
 
@@ -426,12 +442,15 @@
     background: rgba(255, 255, 255, 0.1);
     border: none;
     color: var(--text-color);
-    font-size: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
+}
+
+.nav-close-btn .material-symbols-rounded {
+    font-size: 24px;
 }
 
 .nav-close-btn:hover {

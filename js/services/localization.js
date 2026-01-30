@@ -431,6 +431,12 @@ class LocalizationManager {
                 social: "Социальная сфера и Помощь",
 
                 // Измерения (новые 6 измерений)
+                strategicName: "Стратегическое мышление",
+                explorerName: "Исследователь",
+                individualismName: "Индивидуализм",
+                rationalityName: "Рациональность",
+                controlName: "Контроль",
+                meaningName: "Поиск смысла",
                 questionsCount: "Вопросов",
                 estimatedTime: "Время",
 
