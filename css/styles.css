@@ -696,10 +696,6 @@ h3 {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .logo {
-        /* font-size: 2rem; - Removed as handled above */
-    }
-
     #app {
         padding: 1rem;
     }
@@ -1695,8 +1691,11 @@ h3 {
 
 /* Theme Toggle */
 .theme-toggle {
-    width: 44px;
-    height: 44px;
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     background: var(--card-bg);
     border: 2px solid var(--border-color);
@@ -1704,14 +1703,19 @@ h3 {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: var(--transition);
-    font-size: 1.3rem;
+    transition: all var(--duration-normal) var(--ease-out);
+    font-size: 1.5rem;
+    z-index: 1000;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .theme-toggle:hover {
     border-color: var(--primary-color);
-    background: rgba(74, 144, 226, 0.05);
-    transform: rotate(15deg);
+    background: var(--card-hover);
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 12px 40px rgba(0, 198, 251, 0.25);
 }
 
 /* Dark Theme */

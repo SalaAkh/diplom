@@ -317,24 +317,21 @@
    ============================================ */
 
 .nav-toggle {
-    position: fixed;
-    left: var(--space-4);
-    top: var(--space-4);
-    width: 48px;
-    height: 48px;
+    position: relative;
+    width: 44px;
+    height: 44px;
     border-radius: var(--radius-full);
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid var(--border-color);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: var(--z-modal);
+    z-index: 10;
     transition: all var(--duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
-    display: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .nav-toggle:hover {
@@ -358,11 +355,11 @@
     position: absolute;
     width: 100%;
     height: 2px;
-    background: white;
+    background: var(--text-color);
     left: 0;
     border-radius: 4px;
     transition: all var(--duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .nav-toggle-icon span:nth-child(1) {
@@ -550,7 +547,6 @@
     }
 
     .nav-toggle {
-        display: flex;
         z-index: 900;
     }
 

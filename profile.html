@@ -47,14 +47,7 @@
 <body class="dark-theme">
     <div id="background-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
 
-    <!-- Navigation Toggle (Mobile) -->
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
-        <div class="nav-toggle-icon">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    </button>
+
 
     <!-- Cosmic Navigation -->
     <nav class="cosmic-nav" id="cosmicNav">
@@ -104,9 +97,14 @@
                     <div class="header-main"></div>
                     <div class="header-controls">
                         <div class="language-selector" id="languageSelector"></div>
-                        <div class="theme-toggle" id="themeToggle" title="Тема">
-                            <span class="theme-icon material-symbols-rounded">light_mode</span>
-                        </div>
+                        <!-- Navigation Toggle (Now in controls) -->
+                        <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
+                            <div class="nav-toggle-icon">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -128,6 +126,11 @@
                 <p class="footer-note" id="footerNote">Loading...</p>
             </div>
         </footer>
+    </div>
+
+    <!-- Theme Toggle (Floating) -->
+    <div class="theme-toggle" id="themeToggle" title="Тема">
+        <span class="theme-icon material-symbols-rounded">light_mode</span>
     </div>
 
     <!-- Scripts - Full stack for app.js -->
