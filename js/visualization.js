@@ -98,8 +98,24 @@ class ResultsVisualizer {
             gradient.addColorStop(0, 'rgba(0, 198, 251, 0.5)'); // Cyan
             gradient.addColorStop(1, 'rgba(0, 91, 234, 0.2)');  // Blue
 
-            // Подготовка данных
-            const labels = Object.keys(dimensions).map(key => dimensions[key].name);
+            // Определяем текущий язык
+            let currentLang = 'ru';
+            if (typeof localStorage !== 'undefined') {
+                const savedLang = localStorage.getItem('preferredLanguage');
+                if (savedLang && ['kk', 'ru', 'en'].includes(savedLang)) {
+                    currentLang = savedLang;
+                }
+            }
+
+            // Подготовка данных с локализованными метками
+            const labels = Object.keys(dimensions).map(key => {
+                const nameObj = dimensions[key].name;
+                if (typeof nameObj === 'object') {
+                    return nameObj[currentLang] || nameObj['ru'] || nameObj['en'] || key;
+                }
+                return nameObj;
+            });
+
             const dimensionKeys = Object.keys(dimensions);
 
             // Преобразуем процентные значения [-100, 100] в [0, 100] для визуализации
@@ -132,7 +148,7 @@ class ResultsVisualizer {
                         pointRadius: 6,
                         pointHoverRadius: 8,
                         pointHoverBorderWidth: 3,
-                        tension: 0.3 // Немного сглаживаем линии
+                        tension: 0 // Делаем линии прямыми (грубая форма)
                     }]
                 },
                 options: {

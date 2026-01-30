@@ -139,16 +139,16 @@ var ADVANCED_SCENARIOS_DATA = {
         }
       },
       "weights": {
-        "1": {"control": -0.9, "strategic": -0.9, "rationality": -0.8, "adaptation": 0.8, "intuition": 0.7},
-        "2": {"control": -0.7, "strategic": -0.7, "rationality": -0.6, "adaptation": 0.6, "intuition": 0.5},
-        "3": {"control": -0.5, "strategic": -0.5, "rationality": -0.4, "adaptation": 0.4, "intuition": 0.3},
-        "4": {"control": -0.3, "strategic": -0.3, "rationality": -0.2, "adaptation": 0.2, "intuition": 0.1},
-        "5": {"control": 0.0, "strategic": 0.0, "rationality": 0.0, "adaptation": 0.0, "intuition": 0.0},
-        "6": {"control": 0.3, "strategic": 0.3, "rationality": 0.2, "adaptation": -0.2, "intuition": -0.1},
-        "7": {"control": 0.5, "strategic": 0.5, "rationality": 0.4, "adaptation": -0.4, "intuition": -0.3},
-        "8": {"control": 0.7, "strategic": 0.7, "rationality": 0.6, "adaptation": -0.6, "intuition": -0.5},
-        "9": {"control": 0.9, "strategic": 0.9, "rationality": 0.8, "adaptation": -0.8, "intuition": -0.7},
-        "10": {"control": 1.0, "strategic": 1.0, "rationality": 0.9, "adaptation": -0.9, "intuition": -0.8}
+        "1": { "control": -0.9, "strategic": -0.9, "rationality": -0.8, "adaptation": 0.8, "intuition": 0.7 },
+        "2": { "control": -0.7, "strategic": -0.7, "rationality": -0.6, "adaptation": 0.6, "intuition": 0.5 },
+        "3": { "control": -0.5, "strategic": -0.5, "rationality": -0.4, "adaptation": 0.4, "intuition": 0.3 },
+        "4": { "control": -0.3, "strategic": -0.3, "rationality": -0.2, "adaptation": 0.2, "intuition": 0.1 },
+        "5": { "control": 0.0, "strategic": 0.0, "rationality": 0.0, "adaptation": 0.0, "intuition": 0.0 },
+        "6": { "control": 0.3, "strategic": 0.3, "rationality": 0.2, "adaptation": -0.2, "intuition": -0.1 },
+        "7": { "control": 0.5, "strategic": 0.5, "rationality": 0.4, "adaptation": -0.4, "intuition": -0.3 },
+        "8": { "control": 0.7, "strategic": 0.7, "rationality": 0.6, "adaptation": -0.6, "intuition": -0.5 },
+        "9": { "control": 0.9, "strategic": 0.9, "rationality": 0.8, "adaptation": -0.8, "intuition": -0.7 },
+        "10": { "control": 1.0, "strategic": 1.0, "rationality": 0.9, "adaptation": -0.9, "intuition": -0.8 }
       }
     },
     {
@@ -440,16 +440,16 @@ var ADVANCED_SCENARIOS_DATA = {
         }
       },
       "weights": {
-        "1": {"collectivism": -0.9, "individualism": 0.9},
-        "2": {"collectivism": -0.7, "individualism": 0.7},
-        "3": {"collectivism": -0.5, "individualism": 0.5},
-        "4": {"collectivism": -0.3, "individualism": 0.3},
-        "5": {"collectivism": 0.0, "individualism": 0.0},
-        "6": {"collectivism": 0.3, "individualism": -0.3},
-        "7": {"collectivism": 0.5, "individualism": -0.5},
-        "8": {"collectivism": 0.7, "individualism": -0.7},
-        "9": {"collectivism": 0.9, "individualism": -0.9},
-        "10": {"collectivism": 1.0, "individualism": -1.0}
+        "1": { "collectivism": -0.9, "individualism": 0.9 },
+        "2": { "collectivism": -0.7, "individualism": 0.7 },
+        "3": { "collectivism": -0.5, "individualism": 0.5 },
+        "4": { "collectivism": -0.3, "individualism": 0.3 },
+        "5": { "collectivism": 0.0, "individualism": 0.0 },
+        "6": { "collectivism": 0.3, "individualism": -0.3 },
+        "7": { "collectivism": 0.5, "individualism": -0.5 },
+        "8": { "collectivism": 0.7, "individualism": -0.7 },
+        "9": { "collectivism": 0.9, "individualism": -0.9 },
+        "10": { "collectivism": 1.0, "individualism": -1.0 }
       }
     },
     {
@@ -608,16 +608,16 @@ var ADVANCED_SCENARIOS_DATA = {
         }
       },
       "weights": {
-        "1": {"control": 0.9, "adaptation": -0.9, "explorer": -0.8},
-        "2": {"control": 0.7, "adaptation": -0.7, "explorer": -0.6},
-        "3": {"control": 0.5, "adaptation": -0.5, "explorer": -0.4},
-        "4": {"control": 0.3, "adaptation": -0.3, "explorer": -0.2},
-        "5": {"control": 0.0, "adaptation": 0.0, "explorer": 0.0},
-        "6": {"control": -0.3, "adaptation": 0.3, "explorer": 0.2},
-        "7": {"control": -0.5, "adaptation": 0.5, "explorer": 0.4},
-        "8": {"control": -0.7, "adaptation": 0.7, "explorer": 0.6},
-        "9": {"control": -0.9, "adaptation": 0.9, "explorer": 0.8},
-        "10": {"control": -1.0, "adaptation": 1.0, "explorer": 0.9}
+        "1": { "control": 0.9, "adaptation": -0.9, "explorer": -0.8 },
+        "2": { "control": 0.7, "adaptation": -0.7, "explorer": -0.6 },
+        "3": { "control": 0.5, "adaptation": -0.5, "explorer": -0.4 },
+        "4": { "control": 0.3, "adaptation": -0.3, "explorer": -0.2 },
+        "5": { "control": 0.0, "adaptation": 0.0, "explorer": 0.0 },
+        "6": { "control": -0.3, "adaptation": 0.3, "explorer": 0.2 },
+        "7": { "control": -0.5, "adaptation": 0.5, "explorer": 0.4 },
+        "8": { "control": -0.7, "adaptation": 0.7, "explorer": 0.6 },
+        "9": { "control": -0.9, "adaptation": 0.9, "explorer": 0.8 },
+        "10": { "control": -1.0, "adaptation": 1.0, "explorer": 0.9 }
       }
     },
     {
@@ -907,16 +907,16 @@ var ADVANCED_SCENARIOS_DATA = {
         }
       },
       "weights": {
-        "1": {"explorer": -0.9, "executor": 0.9},
-        "2": {"explorer": -0.7, "executor": 0.7},
-        "3": {"explorer": -0.5, "executor": 0.5},
-        "4": {"explorer": -0.3, "executor": 0.3},
-        "5": {"explorer": 0.0, "executor": 0.0},
-        "6": {"explorer": 0.3, "executor": -0.3},
-        "7": {"explorer": 0.5, "executor": -0.5},
-        "8": {"explorer": 0.7, "executor": -0.7},
-        "9": {"explorer": 0.9, "executor": -0.9},
-        "10": {"explorer": 1.0, "executor": -1.0}
+        "1": { "explorer": -0.9, "executor": 0.9 },
+        "2": { "explorer": -0.7, "executor": 0.7 },
+        "3": { "explorer": -0.5, "executor": 0.5 },
+        "4": { "explorer": -0.3, "executor": 0.3 },
+        "5": { "explorer": 0.0, "executor": 0.0 },
+        "6": { "explorer": 0.3, "executor": -0.3 },
+        "7": { "explorer": 0.5, "executor": -0.5 },
+        "8": { "explorer": 0.7, "executor": -0.7 },
+        "9": { "explorer": 0.9, "executor": -0.9 },
+        "10": { "explorer": 1.0, "executor": -1.0 }
       }
     },
     {
@@ -1076,16 +1076,16 @@ var ADVANCED_SCENARIOS_DATA = {
         }
       },
       "weights": {
-        "1": {"control": -0.9, "rationality": -0.8, "executor": -0.9, "adaptation": 0.8},
-        "2": {"control": -0.7, "rationality": -0.6, "executor": -0.7, "adaptation": 0.6},
-        "3": {"control": -0.5, "rationality": -0.4, "executor": -0.5, "adaptation": 0.4},
-        "4": {"control": -0.3, "rationality": -0.2, "executor": -0.3, "adaptation": 0.2},
-        "5": {"control": 0.0, "rationality": 0.0, "executor": 0.0, "adaptation": 0.0},
-        "6": {"control": 0.3, "rationality": 0.2, "executor": 0.3, "adaptation": -0.2},
-        "7": {"control": 0.5, "rationality": 0.4, "executor": 0.5, "adaptation": -0.4},
-        "8": {"control": 0.7, "rationality": 0.6, "executor": 0.7, "adaptation": -0.6},
-        "9": {"control": 0.9, "rationality": 0.8, "executor": 0.9, "adaptation": -0.8},
-        "10": {"control": 1.0, "rationality": 0.9, "executor": 1.0, "adaptation": -0.9}
+        "1": { "control": -0.9, "rationality": -0.8, "executor": -0.9, "adaptation": 0.8 },
+        "2": { "control": -0.7, "rationality": -0.6, "executor": -0.7, "adaptation": 0.6 },
+        "3": { "control": -0.5, "rationality": -0.4, "executor": -0.5, "adaptation": 0.4 },
+        "4": { "control": -0.3, "rationality": -0.2, "executor": -0.3, "adaptation": 0.2 },
+        "5": { "control": 0.0, "rationality": 0.0, "executor": 0.0, "adaptation": 0.0 },
+        "6": { "control": 0.3, "rationality": 0.2, "executor": 0.3, "adaptation": -0.2 },
+        "7": { "control": 0.5, "rationality": 0.4, "executor": 0.5, "adaptation": -0.4 },
+        "8": { "control": 0.7, "rationality": 0.6, "executor": 0.7, "adaptation": -0.6 },
+        "9": { "control": 0.9, "rationality": 0.8, "executor": 0.9, "adaptation": -0.8 },
+        "10": { "control": 1.0, "rationality": 0.9, "executor": 1.0, "adaptation": -0.9 }
       }
     },
     {
@@ -1244,16 +1244,16 @@ var ADVANCED_SCENARIOS_DATA = {
         }
       },
       "weights": {
-        "1": {"collectivism": -0.9, "meaning": -0.9, "individualism": 0.8},
-        "2": {"collectivism": -0.7, "meaning": -0.7, "individualism": 0.6},
-        "3": {"collectivism": -0.5, "meaning": -0.5, "individualism": 0.4},
-        "4": {"collectivism": -0.3, "meaning": -0.3, "individualism": 0.2},
-        "5": {"collectivism": 0.0, "meaning": 0.0, "individualism": 0.0},
-        "6": {"collectivism": 0.3, "meaning": 0.3, "individualism": -0.2},
-        "7": {"collectivism": 0.5, "meaning": 0.5, "individualism": -0.4},
-        "8": {"collectivism": 0.7, "meaning": 0.7, "individualism": -0.6},
-        "9": {"collectivism": 0.9, "meaning": 0.9, "individualism": -0.8},
-        "10": {"collectivism": 1.0, "meaning": 1.0, "individualism": -1.0}
+        "1": { "collectivism": -0.9, "meaning": -0.9, "individualism": 0.8 },
+        "2": { "collectivism": -0.7, "meaning": -0.7, "individualism": 0.6 },
+        "3": { "collectivism": -0.5, "meaning": -0.5, "individualism": 0.4 },
+        "4": { "collectivism": -0.3, "meaning": -0.3, "individualism": 0.2 },
+        "5": { "collectivism": 0.0, "meaning": 0.0, "individualism": 0.0 },
+        "6": { "collectivism": 0.3, "meaning": 0.3, "individualism": -0.2 },
+        "7": { "collectivism": 0.5, "meaning": 0.5, "individualism": -0.4 },
+        "8": { "collectivism": 0.7, "meaning": 0.7, "individualism": -0.6 },
+        "9": { "collectivism": 0.9, "meaning": 0.9, "individualism": -0.8 },
+        "10": { "collectivism": 1.0, "meaning": 1.0, "individualism": -1.0 }
       }
     },
     {
@@ -1380,16 +1380,16 @@ var ADVANCED_SCENARIOS_DATA = {
         }
       },
       "weights": {
-        "1": {"intuition": -0.9, "rationality": 0.9},
-        "2": {"intuition": -0.7, "rationality": 0.7},
-        "3": {"intuition": -0.5, "rationality": 0.5},
-        "4": {"intuition": -0.3, "rationality": 0.3},
-        "5": {"intuition": 0.0, "rationality": 0.0},
-        "6": {"intuition": 0.3, "rationality": -0.3},
-        "7": {"intuition": 0.5, "rationality": -0.5},
-        "8": {"intuition": 0.7, "rationality": -0.7},
-        "9": {"intuition": 0.9, "rationality": -0.9},
-        "10": {"intuition": 1.0, "rationality": -1.0}
+        "1": { "intuition": -0.9, "rationality": 0.9 },
+        "2": { "intuition": -0.7, "rationality": 0.7 },
+        "3": { "intuition": -0.5, "rationality": 0.5 },
+        "4": { "intuition": -0.3, "rationality": 0.3 },
+        "5": { "intuition": 0.0, "rationality": 0.0 },
+        "6": { "intuition": 0.3, "rationality": -0.3 },
+        "7": { "intuition": 0.5, "rationality": -0.5 },
+        "8": { "intuition": 0.7, "rationality": -0.7 },
+        "9": { "intuition": 0.9, "rationality": -0.9 },
+        "10": { "intuition": 1.0, "rationality": -1.0 }
       }
     },
     {
@@ -1548,16 +1548,16 @@ var ADVANCED_SCENARIOS_DATA = {
         }
       },
       "weights": {
-        "1": {"meaning": -0.9, "utility": 0.9},
-        "2": {"meaning": -0.7, "utility": 0.7},
-        "3": {"meaning": -0.5, "utility": 0.5},
-        "4": {"meaning": -0.3, "utility": 0.3},
-        "5": {"meaning": 0.0, "utility": 0.0},
-        "6": {"meaning": 0.3, "utility": -0.3},
-        "7": {"meaning": 0.5, "utility": -0.5},
-        "8": {"meaning": 0.7, "utility": -0.7},
-        "9": {"meaning": 0.9, "utility": -0.9},
-        "10": {"meaning": 1.0, "utility": -1.0}
+        "1": { "meaning": -0.9, "utility": 0.9 },
+        "2": { "meaning": -0.7, "utility": 0.7 },
+        "3": { "meaning": -0.5, "utility": 0.5 },
+        "4": { "meaning": -0.3, "utility": 0.3 },
+        "5": { "meaning": 0.0, "utility": 0.0 },
+        "6": { "meaning": 0.3, "utility": -0.3 },
+        "7": { "meaning": 0.5, "utility": -0.5 },
+        "8": { "meaning": 0.7, "utility": -0.7 },
+        "9": { "meaning": 0.9, "utility": -0.9 },
+        "10": { "meaning": 1.0, "utility": -1.0 }
       }
     },
     {
@@ -1684,16 +1684,16 @@ var ADVANCED_SCENARIOS_DATA = {
         }
       },
       "weights": {
-        "1": {"explorer": -0.9, "adaptation": -0.9, "control": 0.8},
-        "2": {"explorer": -0.7, "adaptation": -0.7, "control": 0.6},
-        "3": {"explorer": -0.5, "adaptation": -0.5, "control": 0.4},
-        "4": {"explorer": -0.3, "adaptation": -0.3, "control": 0.2},
-        "5": {"explorer": 0.0, "adaptation": 0.0, "control": 0.0},
-        "6": {"explorer": 0.3, "adaptation": 0.3, "control": -0.2},
-        "7": {"explorer": 0.5, "adaptation": 0.5, "control": -0.4},
-        "8": {"explorer": 0.7, "adaptation": 0.7, "control": -0.6},
-        "9": {"explorer": 0.9, "adaptation": 0.9, "control": -0.8},
-        "10": {"explorer": 1.0, "adaptation": 1.0, "control": -0.9}
+        "1": { "explorer": -0.9, "adaptation": -0.9, "control": 0.8 },
+        "2": { "explorer": -0.7, "adaptation": -0.7, "control": 0.6 },
+        "3": { "explorer": -0.5, "adaptation": -0.5, "control": 0.4 },
+        "4": { "explorer": -0.3, "adaptation": -0.3, "control": 0.2 },
+        "5": { "explorer": 0.0, "adaptation": 0.0, "control": 0.0 },
+        "6": { "explorer": 0.3, "adaptation": 0.3, "control": -0.2 },
+        "7": { "explorer": 0.5, "adaptation": 0.5, "control": -0.4 },
+        "8": { "explorer": 0.7, "adaptation": 0.7, "control": -0.6 },
+        "9": { "explorer": 0.9, "adaptation": 0.9, "control": -0.8 },
+        "10": { "explorer": 1.0, "adaptation": 1.0, "control": -0.9 }
       }
     },
     {
@@ -1951,16 +1951,16 @@ var ADVANCED_SCENARIOS_DATA = {
         }
       },
       "weights": {
-        "1": {"individualism": -0.9, "collectivism": 0.9},
-        "2": {"individualism": -0.7, "collectivism": 0.7},
-        "3": {"individualism": -0.5, "collectivism": 0.5},
-        "4": {"individualism": -0.3, "collectivism": 0.3},
-        "5": {"individualism": 0.0, "collectivism": 0.0},
-        "6": {"individualism": 0.3, "collectivism": -0.3},
-        "7": {"individualism": 0.5, "collectivism": -0.5},
-        "8": {"individualism": 0.7, "collectivism": -0.7},
-        "9": {"individualism": 0.9, "collectivism": -0.9},
-        "10": {"individualism": 1.0, "collectivism": -1.0}
+        "1": { "individualism": -0.9, "collectivism": 0.9 },
+        "2": { "individualism": -0.7, "collectivism": 0.7 },
+        "3": { "individualism": -0.5, "collectivism": 0.5 },
+        "4": { "individualism": -0.3, "collectivism": 0.3 },
+        "5": { "individualism": 0.0, "collectivism": 0.0 },
+        "6": { "individualism": 0.3, "collectivism": -0.3 },
+        "7": { "individualism": 0.5, "collectivism": -0.5 },
+        "8": { "individualism": 0.7, "collectivism": -0.7 },
+        "9": { "individualism": 0.9, "collectivism": -0.9 },
+        "10": { "individualism": 1.0, "collectivism": -1.0 }
       }
     },
     {
@@ -2119,16 +2119,16 @@ var ADVANCED_SCENARIOS_DATA = {
         }
       },
       "weights": {
-        "1": {"strategic": -0.9, "tactical": 0.9},
-        "2": {"strategic": -0.7, "tactical": 0.7},
-        "3": {"strategic": -0.5, "tactical": 0.5},
-        "4": {"strategic": -0.3, "tactical": 0.3},
-        "5": {"strategic": 0.0, "tactical": 0.0},
-        "6": {"strategic": 0.3, "tactical": -0.3},
-        "7": {"strategic": 0.5, "tactical": -0.5},
-        "8": {"strategic": 0.7, "tactical": -0.7},
-        "9": {"strategic": 0.9, "tactical": -0.9},
-        "10": {"strategic": 1.0, "tactical": -1.0}
+        "1": { "strategic": -0.9, "tactical": 0.9 },
+        "2": { "strategic": -0.7, "tactical": 0.7 },
+        "3": { "strategic": -0.5, "tactical": 0.5 },
+        "4": { "strategic": -0.3, "tactical": 0.3 },
+        "5": { "strategic": 0.0, "tactical": 0.0 },
+        "6": { "strategic": 0.3, "tactical": -0.3 },
+        "7": { "strategic": 0.5, "tactical": -0.5 },
+        "8": { "strategic": 0.7, "tactical": -0.7 },
+        "9": { "strategic": 0.9, "tactical": -0.9 },
+        "10": { "strategic": 1.0, "tactical": -1.0 }
       }
     },
     {
@@ -2370,16 +2370,16 @@ var ADVANCED_SCENARIOS_DATA = {
         }
       },
       "weights": {
-        "1": {"explorer": -0.9, "adaptation": -0.9, "control": 0.8},
-        "2": {"explorer": -0.7, "adaptation": -0.7, "control": 0.6},
-        "3": {"explorer": -0.5, "adaptation": -0.5, "control": 0.4},
-        "4": {"explorer": -0.3, "adaptation": -0.3, "control": 0.2},
-        "5": {"explorer": 0.0, "adaptation": 0.0, "control": 0.0},
-        "6": {"explorer": 0.3, "adaptation": 0.3, "control": -0.2},
-        "7": {"explorer": 0.5, "adaptation": 0.5, "control": -0.4},
-        "8": {"explorer": 0.7, "adaptation": 0.7, "control": -0.6},
-        "9": {"explorer": 0.9, "adaptation": 0.9, "control": -0.8},
-        "10": {"explorer": 1.0, "adaptation": 1.0, "control": -0.9}
+        "1": { "explorer": -0.9, "adaptation": -0.9, "control": 0.8 },
+        "2": { "explorer": -0.7, "adaptation": -0.7, "control": 0.6 },
+        "3": { "explorer": -0.5, "adaptation": -0.5, "control": 0.4 },
+        "4": { "explorer": -0.3, "adaptation": -0.3, "control": 0.2 },
+        "5": { "explorer": 0.0, "adaptation": 0.0, "control": 0.0 },
+        "6": { "explorer": 0.3, "adaptation": 0.3, "control": -0.2 },
+        "7": { "explorer": 0.5, "adaptation": 0.5, "control": -0.4 },
+        "8": { "explorer": 0.7, "adaptation": 0.7, "control": -0.6 },
+        "9": { "explorer": 0.9, "adaptation": 0.9, "control": -0.8 },
+        "10": { "explorer": 1.0, "adaptation": 1.0, "control": -0.9 }
       }
     }
   ],
@@ -2551,13 +2551,97 @@ var ADVANCED_SCENARIOS_DATA = {
         "ru": "Поиск смысла",
         "en": "Search for Meaning"
       }
+    },
+    "adaptation": {
+      "name": {
+        "kk": "Бейімделу",
+        "ru": "Адаптация",
+        "en": "Adaptation"
+      },
+      "description": {
+        "kk": "Өзгермелі жағдайларға тез бейімделу қабілеті",
+        "ru": "Способность быстро подстраиваться под изменяющиеся условия",
+        "en": "Ability to quickly adjust to changing conditions"
+      },
+      "opposite": {
+        "kk": "Бақылау",
+        "ru": "Контроль",
+        "en": "Control"
+      },
+      "range": [-1.0, 1.0],
+      "negativeLabel": {
+        "kk": "Бақылау",
+        "ru": "Контроль",
+        "en": "Control"
+      },
+      "positiveLabel": {
+        "kk": "Бейімделу",
+        "ru": "Адаптация",
+        "en": "Adaptation"
+      }
+    },
+    "intuition": {
+      "name": {
+        "kk": "Интуиция",
+        "ru": "Интуиция",
+        "en": "Intuition"
+      },
+      "description": {
+        "kk": "Ішкі сезімдер мен түйсікке сүйеніп шешім қабылдау",
+        "ru": "Принятие решений, опираясь на внутренние ощущения и чутьё",
+        "en": "Decision making based on inner feelings and instinct"
+      },
+      "opposite": {
+        "kk": "Рационалдылық",
+        "ru": "Рациональность",
+        "en": "Rationality"
+      },
+      "range": [-1.0, 1.0],
+      "negativeLabel": {
+        "kk": "Рационалдылық",
+        "ru": "Рациональность",
+        "en": "Rationality"
+      },
+      "positiveLabel": {
+        "kk": "Интуиция",
+        "ru": "Интуиция",
+        "en": "Intuition"
+      }
+    },
+    "utility": {
+      "name": {
+        "kk": "Пайдалылық",
+        "ru": "Практичность",
+        "en": "Utility"
+      },
+      "description": {
+        "kk": "Нақты нәтижелер мен тиімділікке бағдарлану",
+        "ru": "Ориентация на конкретные результаты и эффективность",
+        "en": "Focus on concrete results and efficiency"
+      },
+      "opposite": {
+        "kk": "Мағына",
+        "ru": "Смысл",
+        "en": "Meaning"
+      },
+      "range": [-1.0, 1.0],
+      "negativeLabel": {
+        "kk": "Мағына",
+        "ru": "Смысл",
+        "en": "Meaning"
+      },
+      "positiveLabel": {
+        "kk": "Пайдалылық",
+        "ru": "Практичность",
+        "en": "Utility"
+      }
     }
   }
 }
-;
+  ;
 
 // Уведомляем о загрузке данных
 if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('advanced-scenarios-data-loaded'));
+  window.dispatchEvent(new CustomEvent('advanced-scenarios-data-loaded'));
 }
 

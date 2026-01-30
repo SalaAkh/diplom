@@ -43,10 +43,31 @@ class NeuralBackground {
             // Темная тема: яркие цвета (голубой и фиолетовый)
             this.config.color = 0x00c6fb; // Яркий голубой
             this.config.secondaryColor = 0x9d8df1; // Яркий фиолетовый
+            this.config.blending = THREE.AdditiveBlending;
+            this.config.lineOpacity = 0.2;
+            this.config.particleSize = 2.5;
         } else {
-            // Светлая тема: темные цвета для контраста
-            this.config.color = 0x2c3e50; // Темно-синий
-            this.config.secondaryColor = 0x5a4a8a; // Темно-фиолетовый
+            // Светлая тема: ТЕМНЫЕ и НАСЫЩЕННЫЕ цвета для максимального контраста
+            this.config.color = 0x0044cc; // Темно-синий
+            this.config.secondaryColor = 0x6c3483; // Темно-фиолетовый
+            this.config.blending = THREE.NormalBlending;
+            this.config.lineOpacity = 0.6; // Значительно заметнее линии
+            this.config.particleSize = 3.5; // Частицы крупнее в светлой теме
+        }
+
+        this.updateMaterials();
+    }
+
+    updateMaterials() {
+        if (this.pointsMaterial) {
+            this.pointsMaterial.blending = this.config.blending;
+            this.pointsMaterial.size = this.config.particleSize || 2.5;
+            this.pointsMaterial.needsUpdate = true;
+        }
+        if (this.lineMaterial) {
+            this.lineMaterial.blending = this.config.blending;
+            this.lineMaterial.opacity = this.config.lineOpacity;
+            this.lineMaterial.needsUpdate = true;
         }
     }
 
@@ -196,16 +217,16 @@ class NeuralBackground {
         this.particleVelocities = velocities;
 
         // Материал для частиц
-        const material = new THREE.PointsMaterial({
+        this.pointsMaterial = new THREE.PointsMaterial({
             size: this.config.particleSize,
             vertexColors: true,
             transparent: true,
             opacity: 0.8,
-            blending: THREE.AdditiveBlending,
+            blending: this.config.blending || THREE.AdditiveBlending,
             sizeAttenuation: true
         });
 
-        this.particles = new THREE.Points(geometry, material);
+        this.particles = new THREE.Points(geometry, this.pointsMaterial);
         this.scene.add(this.particles);
 
         // Линии (будут обновляться в каждом кадре, но геометрию создаем один раз)
@@ -224,15 +245,15 @@ class NeuralBackground {
         lineGeometry.attributes.position.setUsage(THREE.DynamicDrawUsage);
         lineGeometry.attributes.color.setUsage(THREE.DynamicDrawUsage);
 
-        const lineMaterial = new THREE.LineBasicMaterial({
+        this.lineMaterial = new THREE.LineBasicMaterial({
             vertexColors: true,
             transparent: true,
-            opacity: 0.2, // Начальная прозрачность, будет меняться в шейдере или логике (тут статика)
-            blending: THREE.AdditiveBlending,
+            opacity: this.config.lineOpacity || 0.2, // Начальная прозрачность
+            blending: this.config.blending || THREE.AdditiveBlending,
             linewidth: 1
         });
 
-        this.lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+        this.lines = new THREE.LineSegments(lineGeometry, this.lineMaterial);
         this.scene.add(this.lines);
     }
 

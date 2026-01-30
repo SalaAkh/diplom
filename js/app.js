@@ -524,6 +524,14 @@ class PersonalityTestApp {
     checkSavedProgress() {
         const savedProgress = this.storage.loadProgress();
         if (savedProgress && savedProgress.length > 0) {
+            // Если тест уже завершен (количество ответов >= количеству сценариев),
+            // то не восстанавливаем его как активный, чтобы избежать дублирования в истории
+            if (this.scenarios && savedProgress.length >= this.scenarios.length) {
+                this.storage.clearAll(); // Или только удалить прогресс: localStorage.removeItem('testProgress');
+                this.currentScenarioIndex = 0;
+                return;
+            }
+
             // Восстановление прогресса
             savedProgress.forEach(choice => {
                 this.analyzer.recordChoice(choice.scenarioId, choice.choice);
@@ -950,8 +958,8 @@ class PersonalityTestApp {
      * Начать новый тест (очистить прогресс)
      */
     startNewTest() {
-        const t = window.translate || ((key) => key);
-        const confirmMessage = t('confirmStartNew') || 'Вы уверены, что хотите начать новый тест? Текущий прогресс будет удален.';
+        const t = this.i18n ? this.i18n.t.bind(this.i18n) : ((key) => key);
+        const confirmMessage = t('confirmStartNew');
 
         if (confirm(confirmMessage)) {
             // Clear all progress and results
@@ -1035,10 +1043,15 @@ class PersonalityTestApp {
     /**
      * Отображение результатов
      */
-    showResults() {
+    /**
+     * Отображение результатов
+     * @param {Object} [existingResults] - Существующие результаты (для просмотра истории)
+     */
+    showResults(existingResults = null) {
         this.state = 'results';
         if (this.resultsManager && this.ui) {
-            const results = this.resultsManager.generateResults();
+            // Если переданы результаты, используем их, иначе генерируем новые
+            const results = existingResults || this.resultsManager.generateResults();
             this.ui.showResults(results);
         }
     }
@@ -1239,9 +1252,8 @@ class PersonalityTestApp {
         const history = this.auth.getTestHistory();
         if (index >= 0 && index < history.length) {
             const test = history[index];
-            // Восстанавливаем результаты и показываем их
-            this.storage.saveResults(test.results);
-            this.showResults();
+            // Показываем результаты без повторного сохранения
+            this.showResults(test.results);
         }
     }
 
@@ -1469,6 +1481,40 @@ class PersonalityTestApp {
             const scores = this.analyzer.getPercentageScores();
             const dimensions = this.analyzer.dimensions;
             this.visualizer.createRadarChart(scores, dimensions);
+        }
+    }
+
+    /**
+     * Переименование теста
+     * @param {number} index - Индекс теста
+     */
+    renameTest(index) {
+        const history = this.auth.getTestHistory();
+        if (!history[index]) return;
+
+        const currentTitle = history[index].title || `Test #${history.length - index}`;
+        // Используем prompt для простоты и надежности. 
+        // В будущем можно сделать инлайн-редактирование.
+        const t = this.i18n.t.bind(this.i18n);
+        const newTitle = prompt(t('enterTestName') || 'Введите название теста:', currentTitle);
+
+        if (newTitle && newTitle.trim() !== '') {
+            if (this.auth.updateTestTitle(index, newTitle.trim())) {
+                this.showProfile(); // Обновляем UI
+            }
+        }
+    }
+
+    /**
+     * Удаление теста
+     * @param {number} index - Индекс теста
+     */
+    deleteTest(index) {
+        const t = this.i18n.t.bind(this.i18n);
+        if (confirm(t('confirmDelete') || 'Вы уверены, что хотите удалить этот тест?')) {
+            if (this.auth.deleteTest(index)) {
+                this.showProfile(); // Обновляем UI
+            }
         }
     }
 

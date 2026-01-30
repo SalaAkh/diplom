@@ -1144,6 +1144,118 @@ var SCENARIOS_DATA = {
         "ru": "Рациональность",
         "en": "Rationality"
       }
+    },
+    "adaptation": {
+      "name": {
+        "kk": "Бейімделгіштік",
+        "ru": "Адаптивность",
+        "en": "Adaptability"
+      },
+      "description": {
+        "kk": "Өзгерістерге тез бейімделу және икемділік",
+        "ru": "Гибкость и способность быстро подстраиваться под изменения",
+        "en": "Flexibility and ability to quickly adjust to changes"
+      },
+      "opposite": {
+        "kk": "Тұрақтылық",
+        "ru": "Устойчивость",
+        "en": "Stability"
+      },
+      "range": [-1.0, 1.0],
+      "negativeLabel": {
+        "kk": "Тұрақтылық",
+        "ru": "Устойчивость",
+        "en": "Stability"
+      },
+      "positiveLabel": {
+        "kk": "Бейімделгіштік",
+        "ru": "Адаптивность",
+        "en": "Adaptability"
+      }
+    },
+    "meaning": {
+      "name": {
+        "kk": "Мағына",
+        "ru": "Смысл",
+        "en": "Purpose"
+      },
+      "description": {
+        "kk": "Әрекеттердің терең мағынасы мен құндылығын іздеу",
+        "ru": "Поиск глубокого смысла и ценности в действиях",
+        "en": "Seeking deep meaning and value in actions"
+      },
+      "opposite": {
+        "kk": "Прагматизм",
+        "ru": "Прагматизм",
+        "en": "Pragmatism"
+      },
+      "range": [-1.0, 1.0],
+      "negativeLabel": {
+        "kk": "Прагматизм",
+        "ru": "Прагматизм",
+        "en": "Pragmatism"
+      },
+      "positiveLabel": {
+        "kk": "Мағына",
+        "ru": "Смысл",
+        "en": "Purpose"
+      }
+    },
+    "intuition": {
+      "name": {
+        "kk": "Интуиция",
+        "ru": "Интуиция",
+        "en": "Intuition"
+      },
+      "description": {
+        "kk": "Шешім қабылдауда сезімдер мен ішкі дауысқа сүйену",
+        "ru": "Опора на чувства и внутренний голос при принятии решений",
+        "en": "Relying on feelings and inner voice when making decisions"
+      },
+      "opposite": {
+        "kk": "Логика",
+        "ru": "Логика",
+        "en": "Logic"
+      },
+      "range": [-1.0, 1.0],
+      "negativeLabel": {
+        "kk": "Логика",
+        "ru": "Логика",
+        "en": "Logic"
+      },
+      "positiveLabel": {
+        "kk": "Интуиция",
+        "ru": "Интуиция",
+        "en": "Intuition"
+      }
+    },
+    "utility": {
+      "name": {
+        "kk": "Прагматизм",
+        "ru": "Прагматизм",
+        "en": "Pragmatism"
+      },
+      "description": {
+        "kk": "Практикалық пайда мен тиімділікке назар аудару",
+        "ru": "Фокус на практической пользе и эффективности",
+        "en": "Focus on practical benefit and efficiency"
+      },
+      "opposite": {
+        "kk": "Идеализм",
+        "ru": "Идеализм",
+        "en": "Idealism"
+      },
+      "range": [-1.0, 1.0],
+      "negativeLabel": {
+        "kk": "Идеализм",
+        "ru": "Идеализм",
+        "en": "Idealism"
+      },
+      "positiveLabel": {
+        "kk": "Прагматизм",
+        "ru": "Прагматизм",
+        "en": "Pragmatism"
+      }
     }
   }
 };

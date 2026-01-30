@@ -13,10 +13,10 @@ class AuthManager {
         this.sessionKey = 'currentSession';
         // Пытаемся загрузить Client ID из localStorage
         this.googleClientId = localStorage.getItem('googleClientId');
-        
+
         // Инициализируем трекер эволюции
         this.evolutionTracker = typeof EvolutionTracker !== 'undefined' ? new EvolutionTracker() : null;
-        
+
         // Инициализируем Google Sign-In после загрузки API
         if (typeof window !== 'undefined') {
             // Ждём загрузки Google API
@@ -42,12 +42,12 @@ class AuthManager {
         if (!this.googleClientId || this.googleClientId === 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
             return false;
         }
-        
+
         // Проверяем наличие Google API
         if (typeof window === 'undefined' || !window.google || !window.google.accounts) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -60,13 +60,13 @@ class AuthManager {
             debugLog('Google Sign-In не настроен или API не загружен');
             return false;
         }
-        
+
         try {
             window.google.accounts.id.initialize({
                 client_id: this.googleClientId,
                 callback: this.handleGoogleSignIn.bind(this)
             });
-            
+
             // Показываем кнопку входа, если она есть
             try {
                 window.google.accounts.id.renderButton(
@@ -76,7 +76,7 @@ class AuthManager {
             } catch (renderError) {
                 debugLog('Не удалось отобразить кнопку Google Sign-In:', renderError);
             }
-            
+
             return true;
         } catch (error) {
             console.error('Ошибка инициализации Google Sign-In:', error);
@@ -92,7 +92,7 @@ class AuthManager {
         try {
             // Декодируем JWT токен (упрощённая версия для демо)
             const payload = JSON.parse(atob(response.credential.split('.')[1]));
-            
+
             const googleUser = {
                 id: payload.sub,
                 username: payload.name || payload.email.split('@')[0],
@@ -124,7 +124,7 @@ class AuthManager {
 
             // Сохраняем сессию
             localStorage.setItem(this.sessionKey, JSON.stringify(this.currentUser));
-            
+
             // Обновляем UI
             if (typeof app !== 'undefined') {
                 app.state = 'intro';
@@ -163,7 +163,7 @@ class AuthManager {
     register(username, email = '') {
         try {
             const users = this.getAllUsers();
-            
+
             // Проверка на существующего пользователя
             if (users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
                 return {
@@ -267,7 +267,7 @@ class AuthManager {
                 const session = JSON.parse(sessionData);
                 const users = this.getAllUsers();
                 const user = users.find(u => u.id === session.userId);
-                
+
                 if (user) {
                     this.currentUser = user;
                     return user;
@@ -332,7 +332,7 @@ class AuthManager {
         const user = this.getCurrentUser();
         if (!user) return [];
 
-        return user.testHistory.sort((a, b) => 
+        return user.testHistory.sort((a, b) =>
             new Date(b.date) - new Date(a.date)
         );
     }
@@ -392,11 +392,11 @@ class AuthManager {
     updateUser(user) {
         const users = this.getAllUsers();
         const index = users.findIndex(u => u.id === user.id);
-        
+
         if (index !== -1) {
             users[index] = user;
             this.saveUsers(users);
-            
+
             if (this.currentUser && this.currentUser.id === user.id) {
                 this.currentUser = user;
             }
@@ -441,6 +441,32 @@ class AuthManager {
     userExists(username) {
         const users = this.getAllUsers();
         return users.some(u => u.username.toLowerCase() === username.toLowerCase());
+    }
+
+    /**
+     * Обновление названия теста
+     * @param {number} index - Индекс теста в истории
+     * @param {string} title - Новое название
+     */
+    updateTestTitle(index, title) {
+        const user = this.getCurrentUser();
+        if (!user || !user.testHistory || !user.testHistory[index]) return false;
+
+        user.testHistory[index].title = title;
+        this.updateUser(user);
+        return true;
+    }
+    /**
+     * Удаление теста из истории
+     * @param {number} index - Индекс теста в истории
+     */
+    deleteTest(index) {
+        const user = this.getCurrentUser();
+        if (!user || !user.testHistory || !user.testHistory[index]) return false;
+
+        user.testHistory.splice(index, 1);
+        this.updateUser(user);
+        return true;
     }
 }
 

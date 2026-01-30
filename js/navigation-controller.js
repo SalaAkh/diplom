@@ -30,9 +30,121 @@ class NavigationController {
         this.setupEventListeners();
         this.updateNavigation();
 
+        // Initialize UI components if they exist on the page (for about.html and profile.html)
+        if (typeof LocalizationManager !== 'undefined' && !window.i18n) {
+            window.i18n = new LocalizationManager();
+        }
+
+        this.initTheme();
+        this.initLanguage();
+
         // Handle mobile toggle
         if (window.innerWidth <= 768) {
             this.navElement.classList.add('collapsed');
+        }
+    }
+
+    initTheme() {
+        // Toggle theme
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            // Set initial state
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            if (currentTheme === 'light') {
+                document.body.classList.remove('dark-theme');
+                const icon = themeToggle.querySelector('.theme-icon');
+                if (icon) icon.textContent = '🌙';
+            }
+
+            themeToggle.onclick = () => {
+                const isDark = document.body.classList.contains('dark-theme');
+                if (isDark) {
+                    document.body.classList.remove('dark-theme');
+                    localStorage.setItem('theme', 'light');
+                    const icon = themeToggle.querySelector('.theme-icon');
+                    if (icon) icon.textContent = '🌙';
+                } else {
+                    document.body.classList.add('dark-theme');
+                    localStorage.setItem('theme', 'dark');
+                    const icon = themeToggle.querySelector('.theme-icon');
+                    if (icon) icon.textContent = '☀️';
+                }
+            };
+        }
+    }
+
+    initLanguage() {
+        const selector = document.getElementById('languageSelector');
+        if (selector && window.i18n) {
+            this.renderLanguageSelector(selector);
+        }
+
+        // Translate page content
+        if (window.i18n) {
+            this.translatePage();
+        }
+    }
+
+    renderLanguageSelector(container) {
+        if (!window.i18n) return;
+
+        const currentLang = window.i18n.getLanguage();
+        const languages = window.i18n.getAvailableLanguages();
+        const currentLangData = languages.find(l => l.code === currentLang) || languages[0];
+
+        container.innerHTML = `
+            <div class="language-dropdown">
+                <button class="language-btn" onclick="document.getElementById('languageMenu').classList.toggle('show')">
+                    <span class="language-flag">${currentLangData.flag}</span>
+                    <span class="language-name">${currentLangData.name}</span>
+                    <span class="language-arrow">▼</span>
+                </button>
+                <div class="language-menu" id="languageMenu">
+                    ${languages.map(lang => `
+                        <button class="language-option ${lang.code === currentLang ? 'active' : ''}" 
+                                onclick="window.navigationController.changeLanguage('${lang.code}')">
+                            <span class="language-flag">${lang.flag}</span>
+                            <span class="language-name">${lang.name}</span>
+                            ${lang.code === currentLang ? '<span class="language-check">✓</span>' : ''}
+                        </button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        // Close menu on click outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('languageMenu');
+            const dropdown = container.querySelector('.language-dropdown');
+            if (menu && dropdown && !dropdown.contains(e.target)) {
+                menu.classList.remove('show');
+            }
+        });
+    }
+
+    changeLanguage(lang) {
+        if (window.i18n && window.i18n.setLanguage(lang)) {
+            this.translatePage();
+            this.renderLanguageSelector(document.getElementById('languageSelector'));
+        }
+    }
+
+    translatePage() {
+        if (!window.i18n) return;
+
+        const elements = document.querySelectorAll('[data-i18n]');
+        elements.forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (key) {
+                el.textContent = window.i18n.t(key);
+            }
+        });
+
+        // Update footer date if needed
+        const footerText = document.getElementById('footerText');
+        if (footerText) {
+            // Simple check if key exists or fallback
+            footerText.innerHTML = `${window.i18n.t('project')} &copy; 2026`;
         }
     }
 

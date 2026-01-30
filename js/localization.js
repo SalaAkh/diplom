@@ -45,6 +45,13 @@ class LocalizationManager {
                 // Общие
                 appName: "Өзіндік тану жүйесі",
                 tagline: "Жеке басымдықтар мен даму бағыттарын талдау",
+                navTagline: "Neural Constellation",
+                navHome: "Басты бет",
+                navStartTest: "Тестті бастау",
+                navProfile: "Профиль",
+                navResults: "Нәтижелер",
+                navAbout: "Жоба туралы",
+                navGuest: "Қонақ",
 
                 // Аутентификация
                 welcome: "Қош келдіңіз",
@@ -139,10 +146,12 @@ class LocalizationManager {
                 option: "Нұсқа",
                 or: "немесе",
                 chooseOption: "💡 Сіздің басымдықтарыңызды ең жақсы көрсететін нұсқаны таңдаңыз. Дұрыс жауап жоқ.",
+                confirmStartNew: "Жаңа тестілеуді бастауға сенімдісіз бе? Ағымдағы прогресс қайтарымсыз жойылады.",
                 optional: "міндетті емес",
 
                 // Результаты
                 results: "Талдау нәтижелері",
+                resultsTitle: "Тұлғалық профиль талдауы",
                 comparison: "Орташа профильмен салыстыру",
                 developmentDirections: "Даму бағыттары",
                 detailedAnalysis: "Толық талдау",
@@ -180,15 +189,35 @@ class LocalizationManager {
 
                 // Измерения (новые 6 измерений)
                 strategicName: "Стратегиялық ойлау",
-                explorerName: "Исследователь",
-                individualismName: "Индивидуализм",
-                rationalityName: "Рациональность",
-                controlName: "Контроль",
-                meaningName: "Поиск смысла",
+                explorerName: "Зерттеуші",
+                individualismName: "Жекешілдік",
+                rationalityName: "Рационалдық",
+                controlName: "Бақылау",
+                meaningName: "Мағына іздеу",
                 // Старые названия для обратной совместимости
-                systematicName: "Рациональность",
-                peopleOrientedName: "Индивидуализм",
-                riskToleranceName: "Контроль",
+                systematicName: "Рационалдық",
+                peopleOrientedName: "Жекешілдік",
+                riskToleranceName: "Бақылау",
+
+                // Жүйе туралы
+                aboutTitle: "Жүйе туралы",
+                aboutSubtitle: "Сіздің тұлғаңызды терең түсіну үшін когнитивті талдау мен жасанды интеллектті қолданатын жаңа буынның өзін-өзі тану жүйесі.",
+                featuresTitle: "Сізді не күтеді",
+                featInteractive: "Интерактивті сценарийлер",
+                featInteractiveDesc: "Шынайы жағдайларға еніп, сіздің психологиялық профиліңізді ашатын шешімдер қабылдаңыз.",
+                featPattern: "Паттерндерді талдау",
+                featPatternDesc: "ML алгоритмдері сіздің ойлау ерекшеліктеріңізді анықтайды.",
+                feat3D: "3D Визуализация",
+                feat3DDesc: "Нейрондық шоқжұлдыз түріндегі сіздің психологиялық профиліңіздің интерактивті 3D моделі.",
+                featAI: "AI Талдау",
+                featAIDesc: "Нәтижелеріңіз бен жасанды интеллекттен жеке инсайттар мен ұсыныстар.",
+                dimensionsTitle: "Талдау өлшемдері",
+                dimStrategyDesc: "Ұзақ мерзімді жоспарлау және жүйелі ойлау қабілеті.",
+                dimResearchDesc: "Жаңа тәжірибеге ашықтық және белгісізді зерттеуге құштарлық.",
+                dimIndividualismDesc: "Тәуелсіздік пен ұжымдық ойлау арасындағы тепе-теңдік.",
+                dimRationalityDesc: "Шешім қабылдауда логика мен талдауға басымдық беру.",
+                dimControlDesc: "Жағдай мен қоршаған ортаны басқаруға ұмтылу.",
+                dimMeaningDesc: "Іс-әрекеттер мен оқиғалардан терең мағына іздеу.",
                 explorationName: "Исследователь",
                 // Эволюция
                 evolutionTitle: "Профиль эволюциясы",
@@ -208,6 +237,9 @@ class LocalizationManager {
                 colorAvatars: "Түсті аватарлар",
                 save: "Сақтау",
                 cancel: "Болдырмау",
+                enterTestName: "Тест атауын енгізіңіз:",
+                deleteTest: "Тестті жою",
+                confirmDelete: "Сіз бұл тест нәтижелерін жойғыңыз келе ме?",
 
                 // Footer
                 project: "Оқу-зерттеу жобасы",
@@ -225,6 +257,13 @@ class LocalizationManager {
                 // Общие
                 appName: "Система самопознания",
                 tagline: "Анализ личностных предпочтений и направлений развития",
+                navTagline: "Neural Constellation",
+                navHome: "Главная",
+                navStartTest: "Начать тест",
+                navProfile: "Профиль",
+                navResults: "Результаты",
+                navAbout: "О проекте",
+                navGuest: "Гость",
 
                 // Аутентификация
                 welcome: "Добро пожаловать",
@@ -314,10 +353,12 @@ class LocalizationManager {
                 option: "Вариант",
                 or: "или",
                 chooseOption: "💡 Выберите вариант, который лучше всего отражает ваши предпочтения. Правильного ответа нет.",
+                confirmStartNew: "Вы уверены, что хотите начать новое тестирование? Текущий прогресс будет безвозвратно утерян.",
                 optional: "необязательно",
 
                 // Результаты
                 results: "Результаты анализа",
+                resultsTitle: "Анализ личностного профиля",
                 visualProfile: "Визуальный профиль",
                 comparison: "Сравнение с средним профилем",
                 developmentDirections: "Направления развития",
@@ -384,6 +425,9 @@ class LocalizationManager {
                 colorAvatars: "Цветные аватары",
                 save: "Сохранить",
                 cancel: "Отмена",
+                enterTestName: "Введите название теста:",
+                deleteTest: "Удалить тест",
+                confirmDelete: "Вы уверены, что хотите удалить этот тест?",
 
                 // Footer
                 project: "Учебно-исследовательский проект",
@@ -401,6 +445,13 @@ class LocalizationManager {
                 // General
                 appName: "Self-Discovery System",
                 tagline: "Analysis of personal preferences and development directions",
+                navTagline: "Neural Constellation",
+                navHome: "Home",
+                navStartTest: "Start Test",
+                navProfile: "Profile",
+                navResults: "Results",
+                navAbout: "About Project",
+                navGuest: "Guest",
 
                 // Authentication
                 welcome: "Welcome",
@@ -498,10 +549,12 @@ class LocalizationManager {
                 option: "Option",
                 or: "or",
                 chooseOption: "💡 Choose the option that best reflects your preferences. There is no right answer.",
+                confirmStartNew: "Are you sure you want to start a new assessment? Current progress will be permanently lost.",
                 optional: "optional",
 
                 // Results
                 results: "Analysis Results",
+                resultsTitle: "Personality Profile Analysis",
                 visualProfile: "Visual Profile",
                 comparison: "Comparison with Average Profile",
                 developmentDirections: "Development Directions",
@@ -549,6 +602,26 @@ class LocalizationManager {
                 systematicName: "Rationality",
                 peopleOrientedName: "Individualism",
                 riskToleranceName: "Control",
+
+                // About System
+                aboutTitle: "About System",
+                aboutSubtitle: "A new generation self-knowledge system using cognitive analysis and AI for deep understanding of your personality.",
+                featuresTitle: "What Awaits You",
+                featInteractive: "Interactive Scenarios",
+                featInteractiveDesc: "Immerse yourself in realistic situations and make decisions that reveal your psychological profile.",
+                featPattern: "Pattern Analysis",
+                featPatternDesc: "ML algorithms analyze your cognitive patterns and identify unique thinking features.",
+                feat3D: "3D Visualization",
+                feat3DDesc: "Interactive 3D model of your psychological profile as a neural constellation.",
+                featAI: "AI Analysis",
+                featAIDesc: "Personal insights and recommendations from artificial intelligence based on your results.",
+                dimensionsTitle: "Analysis Dimensions",
+                dimStrategyDesc: "Ability for long-term planning and systems thinking.",
+                dimResearchDesc: "Openness to new experiences and desire to explore the unknown.",
+                dimIndividualismDesc: "Balance between independence and collective thinking.",
+                dimRationalityDesc: "Preference for logic and analysis in decision making.",
+                dimControlDesc: "Desire to control situations and environment.",
+                dimMeaningDesc: "Search for deep meaning in actions and events.",
                 explorationName: "Explorer",
                 // Evolution
                 evolutionTitle: "Profile Evolution",
@@ -568,6 +641,9 @@ class LocalizationManager {
                 colorAvatars: "Color Avatars",
                 save: "Save",
                 cancel: "Cancel",
+                enterTestName: "Enter test name:",
+                deleteTest: "Delete test",
+                confirmDelete: "Are you sure you want to delete this test?",
 
                 // Footer
                 project: "Educational Research Project",

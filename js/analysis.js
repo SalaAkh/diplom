@@ -45,9 +45,25 @@ class PersonalityAnalyzer {
         this.choices = [];
         this.scores = {};
 
-        // Инициализация оценок по всем измерениям
-        Object.keys(this.dimensions).forEach(dimension => {
-            this.scores[dimension] = 0;
+        // Список обязательных измерений для корректной работы
+        const requiredDimensions = [
+            'strategic', 'explorer', 'individualism', 'rationality',
+            'adaptation', 'meaning', 'intuition', 'utility', 'control'
+        ];
+
+        // Инициализация оценок из данных
+        if (this.dimensions) {
+            Object.keys(this.dimensions).forEach(dimension => {
+                this.scores[dimension] = 0;
+            });
+        }
+
+        // Доинициализация отсутствующих обязательных измерений
+        requiredDimensions.forEach(dim => {
+            if (this.scores[dim] === undefined) {
+                this.scores[dim] = 0;
+                // console.warn(`Dimension ${dim} was auto-initialized via fallback`);
+            }
         });
     }
 
@@ -117,15 +133,18 @@ class PersonalityAnalyzer {
             return { name: dimension || 'unknown', negated: false };
         }
 
-        // Список валидных измерений (4 основных)
-        const validDimensions = ['strategic', 'explorer', 'individualism', 'rationality'];
+        // Список валидных измерений (8 основных)
+        const validDimensions = [
+            'strategic', 'explorer', 'individualism', 'rationality',
+            'adaptation', 'meaning', 'intuition', 'utility'
+        ];
 
         // Если измерение уже валидное, возвращаем как есть
         if (validDimensions.includes(dimension)) {
             return { name: dimension, negated: false };
         }
 
-        // Маппинг старых и альтернативных названий на новые 4 измерений
+        // Маппинг старых и альтернативных названий на новые 8 измерений
         // Структура: 'старое_название': { name: 'новое_название', negated: true/false }
         const dimensionMap = {
             // Прямые маппинги (без инверсии)
@@ -135,16 +154,12 @@ class PersonalityAnalyzer {
             // Инвертированные маппинги (обратная сторона измерений)
             'peopleOriented': { name: 'individualism', negated: true }, // peopleOriented = -individualism
             'tactical': { name: 'strategic', negated: true }, // tactical = -strategic
-            'intuition': { name: 'rationality', negated: true }, // intuition = -rationality
             'collectivism': { name: 'individualism', negated: true }, // collectivism = -individualism
             'executor': { name: 'explorer', negated: true }, // executor = -explorer
 
-            // Игнорируемые измерения (маппим на ближайшие)
-            'control': { name: 'rationality', negated: false }, // control -> rationality
-            'adaptation': { name: 'rationality', negated: true }, // adaptation -> -rationality
-            'riskTolerance': { name: 'rationality', negated: true }, // riskTolerance -> -rationality
-            'meaning': { name: 'explorer', negated: false }, // meaning -> explorer
-            'utility': { name: 'explorer', negated: true } // utility -> -explorer
+            // Синонимы
+            'control': { name: 'rationality', negated: false },
+            'riskTolerance': { name: 'adaptation', negated: false }
         };
 
         // Проверяем маппинг
@@ -463,44 +478,55 @@ class PersonalityAnalyzer {
         const strengths = [];
         const areasForDevelopment = [];
 
-        // Рациональность ↔ Интуиция
+        // Рациональность
         if (scores.rationality > 0.3) {
-            traits.push("рациональный, логический подход к решению задач");
-            strengths.push("аналитическое мышление");
-        } else if (scores.rationality < -0.3) {
-            traits.push("интуитивный стиль принятия решений");
-            strengths.push("быстрое принятие решений");
-            areasForDevelopment.push("структурированный анализ");
+            traits.push("рациональный подход");
+            strengths.push("логическое мышление");
         }
 
-        // Индивидуализм ↔ Коллективизм
+        // Интуиция
+        if (scores.intuition > 0.3) {
+            traits.push("развитая интуиция");
+            strengths.push("интуитивное прозрение");
+        }
+
+        // Индивидуализм
         if (scores.individualism > 0.3) {
-            traits.push("предпочтение самостоятельной работы");
-            strengths.push("самостоятельность и независимость");
+            traits.push("самостоятельность");
+            strengths.push("независимость");
         } else if (scores.individualism < -0.3) {
-            traits.push("ориентация на командную работу");
-            strengths.push("коммуникативные навыки");
-            areasForDevelopment.push("самостоятельная работа");
+            traits.push("коллективизм");
+            strengths.push("командная работа");
         }
 
-        // Стратегическое ↔ Тактическое мышление
+        // Стратегическое мышление
         if (scores.strategic > 0.3) {
-            traits.push("стратегическое мышление");
+            traits.push("стратегическое видение");
             strengths.push("долгосрочное планирование");
-        } else if (scores.strategic < -0.3) {
-            traits.push("тактический подход");
-            strengths.push("оперативность");
-            areasForDevelopment.push("стратегическое видение");
         }
 
-        // Исследователь ↔ Исполнитель
+        // Адаптивность
+        if (scores.adaptation > 0.3) {
+            traits.push("высокая адаптивность");
+            strengths.push("гибкость в решениях");
+        }
+
+        // Смысл
+        if (scores.meaning > 0.3) {
+            traits.push("поиск глубинного смысла");
+            strengths.push("ценностная ориентация");
+        }
+
+        // Прагматизм (Utility)
+        if (scores.utility > 0.3) {
+            traits.push("прагматичность");
+            strengths.push("ориентация на результат");
+        }
+
+        // Исследователь
         if (scores.explorer > 0.3) {
-            traits.push("стремление к исследованию и новым знаниям");
+            traits.push("исследовательский дух");
             strengths.push("любознательность");
-        } else if (scores.explorer < -0.3) {
-            traits.push("фокус на практическом исполнении");
-            strengths.push("практичность и эффективность");
-            areasForDevelopment.push("исследовательские навыки");
         }
 
         let summary = "";
@@ -538,7 +564,7 @@ class PersonalityAnalyzer {
                     const explorerScore = Math.max(0, (s.explorer + 1) / 2);
                     const rationalityScore = Math.max(0, (s.rationality + 1) / 2);
                     const strategicScore = Math.max(0, (s.strategic + 1) / 2);
-                    return (explorerScore * 0.5 + rationalityScore * 0.3 + strategicScore * 0.2);
+                    return (explorerScore * 0.4 + rationalityScore * 0.3 + strategicScore * 0.3);
                 },
                 activities: [
                     "Научные исследования",
@@ -561,11 +587,11 @@ class PersonalityAnalyzer {
                 color: "#7b68ee",
                 description: "Дизайн, искусство, стартапы, креативные индустрии",
                 calculateMatch: (s) => {
-                    // Высокий explorer, низкий rationality (интуитивный)
+                    // Высокий explorer, intuition, adaptation
                     const explorerScore = Math.max(0, (s.explorer + 1) / 2);
-                    const intuitionBonus = Math.max(0, (1 - s.rationality) / 2); // intuition = -rationality
-                    const individualismScore = Math.max(0, (s.individualism + 1) / 2);
-                    return (explorerScore * 0.5 + intuitionBonus * 0.3 + individualismScore * 0.2);
+                    const intuitionScore = Math.max(0, (s.intuition + 1) / 2); // Используем прямую метрику
+                    const adaptationScore = Math.max(0, (s.adaptation + 1) / 2);
+                    return (explorerScore * 0.4 + intuitionScore * 0.3 + adaptationScore * 0.3);
                 },
                 activities: [
                     "Дизайн и визуальное искусство",
@@ -588,11 +614,11 @@ class PersonalityAnalyzer {
                 color: "#50c878",
                 description: "Менеджмент, HR, стратегическое планирование",
                 calculateMatch: (s) => {
-                    // Высокий collectivism (низкий individualism), strategic, rationality
-                    const collectivismScore = Math.max(0, (1 - s.individualism) / 2); // collectivism = -individualism
+                    // Высокий strategic, rationality, meaning
                     const strategicScore = Math.max(0, (s.strategic + 1) / 2);
                     const rationalityScore = Math.max(0, (s.rationality + 1) / 2);
-                    return (collectivismScore * 0.4 + strategicScore * 0.35 + rationalityScore * 0.25);
+                    const meaningScore = Math.max(0, (s.meaning + 1) / 2);
+                    return (strategicScore * 0.4 + rationalityScore * 0.3 + meaningScore * 0.3);
                 },
                 activities: [
                     "Менеджмент и руководство",
@@ -615,11 +641,11 @@ class PersonalityAnalyzer {
                 color: "#f39c12",
                 description: "Образование, социальная работа, медицина, психология",
                 calculateMatch: (s) => {
-                    // Высокий collectivism (низкий individualism), explorer, tactical (низкий strategic)
-                    const collectivismScore = Math.max(0, (1 - s.individualism) / 2); // collectivism = -individualism
-                    const explorerScore = Math.max(0, (s.explorer + 1) / 2);
-                    const tacticalScore = Math.max(0, (1 - s.strategic) / 2); // tactical = -strategic
-                    return (collectivismScore * 0.4 + explorerScore * 0.35 + tacticalScore * 0.25);
+                    // Высокий meaning, intuition, collectivism (collectivism = -individualism)
+                    const meaningScore = Math.max(0, (s.meaning + 1) / 2);
+                    const intuitionScore = Math.max(0, (s.intuition + 1) / 2);
+                    const collectivismScore = Math.max(0, (1 - s.individualism) / 2);
+                    return (meaningScore * 0.4 + intuitionScore * 0.3 + collectivismScore * 0.3);
                 },
                 activities: [
                     "Образование и преподавание",
@@ -642,11 +668,11 @@ class PersonalityAnalyzer {
                 color: "#e74c3c",
                 description: "Стартапы, бизнес, инновационные проекты",
                 calculateMatch: (s) => {
-                    // Высокий individualism, strategic, низкий rationality (гибкость)
-                    const individualismScore = Math.max(0, (s.individualism + 1) / 2);
+                    // Высокий utility, adaptation, strategic
+                    const utilityScore = Math.max(0, (s.utility + 1) / 2);
+                    const adaptationScore = Math.max(0, (s.adaptation + 1) / 2);
                     const strategicScore = Math.max(0, (s.strategic + 1) / 2);
-                    const flexibilityScore = Math.max(0, (1 - s.rationality) / 2);
-                    return (individualismScore * 0.35 + strategicScore * 0.35 + flexibilityScore * 0.3);
+                    return (utilityScore * 0.4 + adaptationScore * 0.3 + strategicScore * 0.3);
                 },
                 activities: [
                     "Создание стартапов",

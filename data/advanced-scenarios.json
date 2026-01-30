@@ -2540,6 +2540,90 @@
         "ru": "Поиск смысла",
         "en": "Search for Meaning"
       }
+    },
+    "adaptation": {
+      "name": {
+        "kk": "Бейімделу",
+        "ru": "Адаптация",
+        "en": "Adaptation"
+      },
+      "description": {
+        "kk": "Өзгермелі жағдайларға тез бейімделу қабілеті",
+        "ru": "Способность быстро подстраиваться под изменяющиеся условия",
+        "en": "Ability to quickly adjust to changing conditions"
+      },
+      "opposite": {
+        "kk": "Бақылау",
+        "ru": "Контроль",
+        "en": "Control"
+      },
+      "range": [-1.0, 1.0],
+      "negativeLabel": {
+        "kk": "Бақылау",
+        "ru": "Контроль",
+        "en": "Control"
+      },
+      "positiveLabel": {
+        "kk": "Бейімделу",
+        "ru": "Адаптация",
+        "en": "Adaptation"
+      }
+    },
+    "intuition": {
+      "name": {
+        "kk": "Интуиция",
+        "ru": "Интуиция",
+        "en": "Intuition"
+      },
+      "description": {
+        "kk": "Ішкі сезімдер мен түйсікке сүйеніп шешім қабылдау",
+        "ru": "Принятие решений, опираясь на внутренние ощущения и чутьё",
+        "en": "Decision making based on inner feelings and instinct"
+      },
+      "opposite": {
+        "kk": "Рационалдылық",
+        "ru": "Рациональность",
+        "en": "Rationality"
+      },
+      "range": [-1.0, 1.0],
+      "negativeLabel": {
+        "kk": "Рационалдылық",
+        "ru": "Рациональность",
+        "en": "Rationality"
+      },
+      "positiveLabel": {
+        "kk": "Интуиция",
+        "ru": "Интуиция",
+        "en": "Intuition"
+      }
+    },
+    "utility": {
+      "name": {
+        "kk": "Пайдалылық",
+        "ru": "Практичность",
+        "en": "Utility"
+      },
+      "description": {
+        "kk": "Нақты нәтижелер мен тиімділікке бағдарлану",
+        "ru": "Ориентация на конкретные результаты и эффективность",
+        "en": "Focus on concrete results and efficiency"
+      },
+      "opposite": {
+        "kk": "Мағына",
+        "ru": "Смысл",
+        "en": "Meaning"
+      },
+      "range": [-1.0, 1.0],
+      "negativeLabel": {
+        "kk": "Мағына",
+        "ru": "Смысл",
+        "en": "Meaning"
+      },
+      "positiveLabel": {
+        "kk": "Пайдалылық",
+        "ru": "Практичность",
+        "en": "Utility"
+      }
     }
   }
 }

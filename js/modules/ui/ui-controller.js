@@ -364,27 +364,53 @@ class UIController {
     }
 
     /**
-     * Update header elements
+     * Change application language
+     * @param {string} lang - Language code
+     */
+    changeLanguage(lang) {
+        if (this.i18n.setLanguage(lang)) {
+            this.updateStaticContent();
+            this.initLanguageSelector(); // Re-render selector to update active state
+
+            // If in intro state, re-render to update content
+            if (this.app.state === 'intro') {
+                this.app.showIntro();
+            }
+        }
+    }
+
+    /**
+     * Update all static content with data-i18n attributes
+     */
+    updateStaticContent() {
+        // Update generic data-i18n elements
+        const elements = document.querySelectorAll('[data-i18n]');
+        elements.forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (key) {
+                el.textContent = this.i18n.t(key);
+            }
+        });
+
+        // Update specific IDs if needed (legacy support)
+        const appName = document.getElementById('appName');
+        const tagline = document.getElementById('tagline');
+        const footerText = document.getElementById('footerText');
+        const footerNote = document.getElementById('footerNote');
+
+        if (appName) appName.textContent = this.i18n.t('appName');
+        if (tagline) tagline.textContent = this.i18n.t('tagline');
+        if (footerText) footerText.textContent = `${this.i18n.t('project')} © 2026`;
+        if (footerNote) footerNote.textContent = this.i18n.t('dataProcessed');
+
+        document.documentElement.lang = this.i18n.getLanguage();
+    }
+
+    /**
+     * Update header elements (Legacy alias, kept for compatibility)
      */
     updateHeader() {
-        // Debounce implementation embedded or used from utils if available
-        // For now, simple implementation or rely on app's debounce if passed, 
-        // but here we'll just execute directly or use a simple timeout lock
-
-        if (this._headerUpdateTimeout) clearTimeout(this._headerUpdateTimeout);
-        this._headerUpdateTimeout = setTimeout(() => {
-            const appName = document.getElementById('appName');
-            const tagline = document.getElementById('tagline');
-            const footerText = document.getElementById('footerText');
-            const footerNote = document.getElementById('footerNote');
-
-            if (appName) appName.textContent = this.i18n.t('appName');
-            if (tagline) tagline.textContent = this.i18n.t('tagline');
-            if (footerText) footerText.textContent = `${this.i18n.t('project')} © 2026`;
-            if (footerNote) footerNote.textContent = this.i18n.t('dataProcessed');
-
-            document.documentElement.lang = this.i18n.getLanguage();
-        }, 100);
+        this.updateStaticContent();
     }
 
     /**
@@ -951,7 +977,7 @@ class UIController {
                 <div class="results-screen animate-in">
                     <div class="results-header">
                         <button class="btn-home" onclick="app.showIntro()">🏠</button>
-                        <h1>${t('resultsTitle')}</h1>
+                        <h1 id="resultsTitle">${t('resultsTitle')}</h1>
                         <div class="results-actions-top">
                              <button class="btn btn-sm btn-secondary" onclick="app.downloadResults('json')">💾 JSON</button>
                              <button class="btn btn-sm btn-secondary" onclick="app.downloadResults('html')">📄 HTML</button>
@@ -1099,11 +1125,20 @@ class UIController {
                         </div>
                         <div class="card-body">
                             ${history.length > 0 ? `
-                                <div class="history-list">
-                                     ${history.map((test, index) => `
+                                    ${history.map((test, index) => `
                                         <div class="history-item">
                                             <div class="history-info">
-                                                <h3 class="font-bold text-lg">${t('testNumber')} ${history.length - index}</h3>
+                                                <div class="flex items-center gap-2">
+                                                    <h3 class="font-bold text-lg m-0">
+                                                        ${test.title || `${t('testNumber')} ${history.length - index}`}
+                                                    </h3>
+                                                    <button class="btn btn-ghost btn-sm p-1" onclick="app.renameTest(${index})" title="${t('rename') || 'Переименовать'}">
+                                                        ✏️
+                                                    </button>
+                                                    <button class="btn btn-ghost btn-sm p-1 text-red-500" onclick="app.deleteTest(${index})" title="${t('deleteTest') || 'Удалить'}">
+                                                        🗑️
+                                                    </button>
+                                                </div>
                                                 <span class="text-sm text-secondary">${new Date(test.date).toLocaleDateString()}</span>
                                             </div>
                                              <button class="btn btn-secondary btn-sm" onclick="app.viewTestResults(${index})">
