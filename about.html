@@ -42,8 +42,9 @@
 
     <!-- Cosmic Navigation -->
     <nav class="cosmic-nav" id="cosmicNav">
-        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Collapse Navigation"
-            title="Свернуть панель">
+        <!-- Desktop Collapse Button -->
+        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Expand Navigation"
+            title="Развернуть панель">
             <span class="material-symbols-rounded">chevron_left</span>
         </button>
 
@@ -223,7 +224,7 @@
     <!-- Scripts -->
     <script src="js/services/storage.js"></script>
     <script src="js/services/localization.js"></script>
-    <script src="js/ui/navigation-controller.js"></script>
+    <script src="js/ui/navigation-controller.js" defer></script>
 
     <!-- Three.js for background -->
     <script type="importmap">
@@ -250,13 +251,6 @@
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'light') {
                 document.body.classList.remove('dark-theme');
-            }
-
-            // Initialize navigation collapse state
-            const navCollapsed = localStorage.getItem('navCollapsed');
-            if (navCollapsed === 'true') {
-                document.getElementById('cosmicNav').classList.add('collapsed');
-                document.getElementById('appWrapper').classList.add('nav-collapsed');
             }
 
             // Init 3D background

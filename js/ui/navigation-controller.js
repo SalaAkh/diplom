@@ -32,17 +32,8 @@ class NavigationController {
         this.initTheme();
         this.initLanguage();
 
-        // Handle initial state
-        if (window.innerWidth <= 768) {
-            // Mobile: Ensure 'collapsed' is REMOVED so we don't get 80px width from desktop styles
-            this.navElement.classList.remove('collapsed');
-        } else {
-            // Desktop: Load saved state from localStorage
-            const savedState = localStorage.getItem('navCollapsed');
-            if (savedState === 'true') {
-                this.collapseNav();
-            }
-        }
+        // Initialize as hidden by default
+        this.closeNav();
     }
 
     initTheme() {
@@ -175,10 +166,10 @@ class NavigationController {
             });
         });
 
-        // Desktop collapse button
+        // Desktop collapse button (now just closes the drawer in the new model)
         if (this.navCollapseBtn) {
             this.navCollapseBtn.addEventListener('click', () => {
-                this.toggleCollapse();
+                this.closeNav();
             });
         }
 
@@ -210,13 +201,12 @@ class NavigationController {
             }
         });
 
-        // Handle window resize
+        // Handle window resize - simply ensure no weird states
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) {
-                this.navElement.classList.remove('active'); // Remove mobile active class
-                this.navElement.classList.remove('collapsed'); // Reset desktop collapsed if needed (optional)
-                this.navToggle.classList.remove('active');
-                this.appWrapper.classList.remove('nav-collapsed');
+                // Keep hidden on large resize if active was from small screen
+                // or just leave it. Let's close it to be safe.
+                this.closeNav();
             }
         });
 
@@ -349,74 +339,34 @@ class NavigationController {
     }
 
     toggleNav() {
-        if (window.innerWidth <= 768) {
-            // Mobile: Toggle 'active' class
-            this.navElement.classList.toggle('active');
-            // Toggle hamburger icon animation
-            this.navToggle.classList.toggle('active');
-        } else {
-            // Desktop: Collapse logic (keep existing)
-            this.navElement.classList.toggle('collapsed');
-            this.navToggle.classList.toggle('active');
-            this.appWrapper.classList.toggle('nav-collapsed');
-        }
+        this.toggleCollapse();
     }
 
     closeNav() {
-        if (window.innerWidth <= 768) {
-            this.navElement.classList.remove('active');
-            this.navToggle.classList.remove('active');
-        } else {
-            this.navElement.classList.add('collapsed');
-            this.navToggle.classList.remove('active');
-            this.appWrapper.classList.add('nav-collapsed');
-        }
+        if (this.navElement) this.navElement.classList.remove('active');
+        if (this.navToggle) this.navToggle.classList.remove('active');
     }
 
     openNav() {
-        if (window.innerWidth <= 768) {
-            this.navElement.classList.add('active');
-            this.navToggle.classList.add('active');
-        } else {
-            this.navElement.classList.remove('collapsed');
-            this.navToggle.classList.add('active');
-            this.appWrapper.classList.remove('nav-collapsed');
-        }
+        if (this.navElement) this.navElement.classList.add('active');
+        if (this.navToggle) this.navToggle.classList.add('active');
     }
 
 
     toggleCollapse() {
-        if (this.isCollapsed) {
-            this.expandNav();
+        if (this.navElement.classList.contains('active')) {
+            this.closeNav();
         } else {
-            this.collapseNav();
+            this.openNav();
         }
     }
 
     collapseNav() {
-        this.navElement.classList.add('collapsed');
-        this.appWrapper.classList.add('nav-collapsed');
-        this.isCollapsed = true;
-        localStorage.setItem('navCollapsed', 'true');
-
-        // Update button tooltip
-        if (this.navCollapseBtn) {
-            this.navCollapseBtn.title = 'Развернуть панель';
-            this.navCollapseBtn.setAttribute('aria-label', 'Expand Navigation');
-        }
+        this.closeNav();
     }
 
     expandNav() {
-        this.navElement.classList.remove('collapsed');
-        this.appWrapper.classList.remove('nav-collapsed');
-        this.isCollapsed = false;
-        localStorage.setItem('navCollapsed', 'false');
-
-        // Update button tooltip
-        if (this.navCollapseBtn) {
-            this.navCollapseBtn.title = 'Свернуть панель';
-            this.navCollapseBtn.setAttribute('aria-label', 'Collapse Navigation');
-        }
+        this.openNav();
     }
 
     updateNavigation() {
@@ -461,9 +411,11 @@ class NavigationController {
 
 // Initialize navigation when DOM is ready
 if (typeof window !== 'undefined') {
-    window.addEventListener('DOMContentLoaded', () => {
-        window.navigationController = new NavigationController();
-    });
+    if (!window.navigationController) {
+        window.addEventListener('DOMContentLoaded', () => {
+            window.navigationController = new NavigationController();
+        });
+    }
 }
 
 // Export for use in other modules

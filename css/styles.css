@@ -20,7 +20,8 @@
 body {
     /* Typography handled by typography.css */
     color: var(--text-color);
-    background: var(--bg-color);
+    background: transparent;
+    /* Changed from var(--bg-color) to show canvas */
     min-height: 100vh;
     overflow-x: hidden;
 }
@@ -110,8 +111,9 @@ body:not(.dark-theme) #background-canvas {
 }
 
 #app {
-    background: var(--card-bg);
-    backdrop-filter: blur(20px);
+    background: transparent !important;
+    /* Allow cards to handle background */
+    backdrop-filter: none;
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-color);
     border-radius: 20px;
@@ -156,6 +158,37 @@ body:not(.dark-theme) #background-canvas {
     line-height: 1.6;
     position: relative;
     padding-left: 0.5rem;
+}
+
+.intro-screen .cosmic-card,
+.feature-card,
+.dimension-card {
+    background-color: rgba(20, 20, 35, 0.5) !important;
+    /* 50% opacity */
+    backdrop-filter: blur(8px);
+}
+
+/* User Info and Auth Container - 20% opacity (Very transparent) */
+.user-info,
+.auth-container,
+.google-signin-container {
+    background-color: rgba(20, 20, 35, 0.2) !important;
+    backdrop-filter: blur(5px);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+body:not(.dark-theme) .intro-screen .cosmic-card,
+body:not(.dark-theme) .feature-card,
+body:not(.dark-theme) .dimension-card {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+    /* 50% opacity */
+}
+
+body:not(.dark-theme) .user-info,
+body:not(.dark-theme) .auth-container,
+body:not(.dark-theme) .google-signin-container {
+    background-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 .intro-actions {

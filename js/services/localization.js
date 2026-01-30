@@ -246,6 +246,7 @@ class LocalizationManager {
                 dataProcessed: "Барлық деректер сіздің браузеріңізде жергілікті өңделеді",
 
                 // Loading
+                systemLoading: "Жүйені жүктеу...",
                 processingResults: "Нәтижелерді өңдеу...",
 
                 // Сравнение
@@ -293,6 +294,7 @@ class LocalizationManager {
                 minUsernameLength: "Имя должно содержать минимум 3 символа",
 
                 // Вводный экран
+                aboutTitle: "О системе",
                 aboutSystem: "Интеллектуальная система самопознания",
                 systemDescription: "Ваше сознание — это целая вселенная. Наша система использует передовые алгоритмы и психологические сценарии, чтобы помочь вам исследовать глубины вашего 'Я'. Через серию интерактивных дилемм мы раскроем паттерны вашего мышления, которые обычно скрыты в повседневной рутине.",
                 whatAwaits: "В вашем путешествии вас ждёт:",
@@ -475,6 +477,7 @@ class LocalizationManager {
                 dataProcessed: "Все данные обрабатываются локально в вашем браузере",
 
                 // Loading
+                systemLoading: "Загрузка системы...",
                 processingResults: "Обработка результатов...",
 
                 // Сравнение
@@ -691,6 +694,7 @@ class LocalizationManager {
                 dataProcessed: "All data is processed locally in your browser",
 
                 // Loading
+                systemLoading: "System loading...",
                 processingResults: "Processing results...",
 
                 // Сравнение

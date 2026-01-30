@@ -12,35 +12,29 @@
 
 .cosmic-nav {
     position: fixed;
-    left: 0;
+    right: 0;
     top: 0;
     height: 100vh;
     width: 280px;
     background: var(--card-bg);
     backdrop-filter: blur(var(--blur-xl));
     -webkit-backdrop-filter: blur(var(--blur-xl));
-    border-right: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
     z-index: var(--z-sticky);
     display: flex;
     flex-direction: column;
     padding: var(--space-6) var(--space-4);
     transition: all var(--duration-normal) var(--ease-out);
+    transform: translateX(100%);
+    visibility: hidden;
 }
 
-.cosmic-nav.collapsed {
-    width: 80px;
-    padding: var(--space-6) var(--space-2);
+.cosmic-nav.active {
+    transform: translateX(0);
+    visibility: visible;
 }
 
-.cosmic-nav.collapsed .nav-text,
-.cosmic-nav.collapsed .nav-tagline {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.cosmic-nav.collapsed .nav-logo {
-    font-size: var(--text-2xl);
-}
+/* Removed desktop persistent collapse logic */
 
 /* ============================================
    NAVIGATION COLLAPSE BUTTON (Desktop)
@@ -48,7 +42,7 @@
 
 .nav-collapse-btn {
     position: absolute;
-    right: -12px;
+    left: -12px;
     top: var(--space-8);
     width: 24px;
     height: 24px;
@@ -67,6 +61,7 @@
 
 .nav-collapse-btn .material-symbols-rounded {
     font-size: 18px;
+    transform: rotate(180deg);
 }
 
 .nav-collapse-btn:hover {
@@ -76,11 +71,11 @@
 }
 
 .cosmic-nav.collapsed .nav-collapse-btn {
-    transform: rotate(180deg);
+    transform: rotate(0deg);
 }
 
 .cosmic-nav.collapsed .nav-collapse-btn:hover {
-    transform: rotate(180deg) scale(1.1);
+    transform: rotate(0deg) scale(1.1);
 }
 
 
@@ -105,6 +100,8 @@
     filter: drop-shadow(0 0 15px rgba(0, 198, 251, 0.5));
     display: flex;
     align-items: center;
+    padding-right: var(--space-2);
+    /* Prevent icon clipping */
 }
 
 .nav-logo .material-symbols-rounded {
@@ -157,11 +154,11 @@
 .nav-item::before {
     content: '';
     position: absolute;
-    left: 0;
+    right: 0;
     top: 0;
     width: 0;
     height: 100%;
-    background: linear-gradient(90deg, var(--primary-color), transparent);
+    background: linear-gradient(-90deg, var(--primary-color), transparent);
     opacity: 0;
     transition: all var(--duration-normal) var(--ease-out);
 }
@@ -169,7 +166,7 @@
 .nav-item:hover {
     background: var(--input-focus);
     color: var(--primary-color);
-    transform: translateX(8px);
+    transform: translateX(-8px);
 }
 
 .nav-item:hover::before {
@@ -236,11 +233,11 @@
 
 .nav-connector {
     position: absolute;
-    right: -1px;
+    left: -1px;
     top: 50%;
     width: 40px;
     height: 1px;
-    background: linear-gradient(90deg, var(--primary-color), transparent);
+    background: linear-gradient(-90deg, var(--primary-color), transparent);
     opacity: 0;
     transform: translateY(-50%);
     transition: opacity var(--duration-normal) var(--ease-out);
@@ -406,12 +403,14 @@
    ============================================ */
 
 .app-wrapper.has-nav {
-    margin-left: 280px;
-    transition: margin-left var(--duration-normal) var(--ease-out);
+    margin-right: 0;
+    margin-left: 0;
+    transition: margin-right var(--duration-normal) var(--ease-out);
 }
 
 .app-wrapper.has-nav.nav-collapsed {
-    margin-left: 80px;
+    margin-right: 0;
+    margin-left: 0;
 }
 
 /* ============================================
@@ -468,13 +467,14 @@
         /* Target both to override desktop specificity */
         position: fixed;
         top: 0;
-        left: 0;
+        right: 0;
+        left: auto;
         bottom: 0;
         width: 100% !important;
         /* Force full width, override 80px */
         height: 100vh;
         z-index: 1000;
-        transform: translateX(-100%);
+        transform: translateX(100%);
         flex-direction: column;
         padding: var(--space-4);
         border-right: none;
