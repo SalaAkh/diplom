@@ -831,11 +831,6 @@ class UIController {
                             <h3 class="text-xl font-bold mb-2" data-i18n="feat3D">${t('feat3D')}</h3>
                             <p class="text-sm text-secondary" data-i18n="feat3DDesc">${t('feat3DDesc')}</p>
                         </div>
-                        <div class="feature-card cosmic-card p-6 flex flex-col items-center text-center">
-                            <span class="feature-icon text-4xl mb-4">🤖</span>
-                            <h3 class="text-xl font-bold mb-2" data-i18n="featAI">${t('featAI')}</h3>
-                            <p class="text-sm text-secondary" data-i18n="featAIDesc">${t('featAIDesc')}</p>
-                        </div>
                     </div>
                 </div>
 
