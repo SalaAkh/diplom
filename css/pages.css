@@ -430,6 +430,17 @@
         padding-top: var(--space-4);
     }
 
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .dimension-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-5);
+        }
+
+        .feature-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
     /* Hide spacers or empty divs used for centering on desktop */
     .page-header>div:empty,
     .flex>div[style*="width"] {
@@ -448,7 +459,11 @@
         font-size: var(--text-3xl);
     }
 
-    .feature-grid,
+    .feature-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+
     .dimension-grid {
         grid-template-columns: 1fr;
         gap: var(--space-4);
