@@ -23,12 +23,31 @@ class NeuralBackground {
             connectionDistance: 120,
             particleSize: 2.5,
             particleSpeed: 0.3,
-            color: 0x4a90e2, // Основной цвет (голубой)
-            secondaryColor: 0x7b68ee, // Вторичный цвет (фиолетовый)
-            backgroundColor: 0x050510 // Очень темный фон (почти черный)
+            // Цвета будут установлены в зависимости от темы
+            color: 0x4a90e2,
+            secondaryColor: 0x7b68ee,
+            backgroundColor: 0x050510
         };
 
+        // Определяем текущую тему и устанавливаем цвета
+        this.updateThemeColors();
+
         this.init();
+    }
+
+    updateThemeColors() {
+        // Проверяем, какая тема активна
+        const isDarkTheme = document.body.classList.contains('dark-theme');
+
+        if (isDarkTheme) {
+            // Темная тема: яркие цвета (голубой и фиолетовый)
+            this.config.color = 0x00c6fb; // Яркий голубой
+            this.config.secondaryColor = 0x9d8df1; // Яркий фиолетовый
+        } else {
+            // Светлая тема: темные цвета для контраста
+            this.config.color = 0x2c3e50; // Темно-синий
+            this.config.secondaryColor = 0x5a4a8a; // Темно-фиолетовый
+        }
     }
 
     init() {
@@ -92,10 +111,50 @@ class NeuralBackground {
         window.addEventListener('resize', this.onWindowResize.bind(this));
         document.addEventListener('mousemove', this.onMouseMove.bind(this));
 
+        // Слушатель изменения темы
+        this.setupThemeListener();
+
         // Запуск анимации
         this.animate();
 
         if (window.logger) window.logger.info('NeuralBackground initialized');
+    }
+
+    setupThemeListener() {
+        // Наблюдаем за изменениями класса на body для отслеживания смены темы
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    // Тема изменилась, обновляем цвета
+                    this.updateThemeColors();
+                    this.updateParticleColors();
+                }
+            });
+        });
+
+        observer.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+
+        this.themeObserver = observer;
+    }
+
+    updateParticleColors() {
+        if (!this.particles) return;
+
+        const colors = this.particles.geometry.attributes.color.array;
+        const color1 = new THREE.Color(this.config.color);
+        const color2 = new THREE.Color(this.config.secondaryColor);
+
+        for (let i = 0; i < this.config.particleCount; i++) {
+            const mixedColor = color1.clone().lerp(color2, Math.random());
+            colors[i * 3] = mixedColor.r;
+            colors[i * 3 + 1] = mixedColor.g;
+            colors[i * 3 + 2] = mixedColor.b;
+        }
+
+        this.particles.geometry.attributes.color.needsUpdate = true;
     }
 
     createParticles() {

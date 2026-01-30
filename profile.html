@@ -19,12 +19,17 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <!-- Стили -->
+    <!-- Стили - Design System First -->
     <link rel="stylesheet" href="css/design-tokens.css">
     <link rel="stylesheet" href="css/typography.css">
     <link rel="stylesheet" href="css/navigation.css">
     <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/gamification.css">
+    <link rel="stylesheet" href="css/google-auth.css">
+    <link rel="stylesheet" href="css/transitions.css">
 </head>
 
 <body class="dark-theme">
@@ -120,6 +125,12 @@
     <script src="js/advanced-analysis.js"></script>
     <script src="js/dynamic-scenarios.js"></script>
     <script src="js/visualization.js"></script>
+
+    <!-- Refactored Modules - MUST load before app.js -->
+    <script src="js/modules/ui/ui-controller.js"></script>
+    <script src="js/modules/core/test-manager.js"></script>
+    <script src="js/modules/core/results-manager.js"></script>
+
     <script src="js/evolution-tracker.js" defer></script>
     <script src="js/navigation-controller.js" defer></script>
     <script src="js/background-3d.js" defer></script>

@@ -117,7 +117,7 @@ class PersonalityTestApp {
     checkDependencies() {
         const dependencies = {
             chartjs: typeof Chart !== 'undefined',
-            threejs: typeof THREE !== 'undefined' || typeof window !== 'undefined' && window.THREE,
+            threejs: typeof THREE !== 'undefined' || (typeof window !== 'undefined' && window.THREE),
             storage: typeof StorageManager !== 'undefined',
             analyzer: typeof PersonalityAnalyzer !== 'undefined',
             visualizer: typeof ResultsVisualizer !== 'undefined',
@@ -300,12 +300,53 @@ class PersonalityTestApp {
      */
     async init() {
         try {
-            // Проверяем критические зависимости
-            const depsCheck = this.checkDependencies();
+            // Function to check dependencies
+            const checkDeps = () => this.checkDependencies();
+            let depsCheck = checkDeps();
+
+            // Special handling for Three.js which loads asynchronously via ES modules
+            if (!depsCheck.allAvailable && depsCheck.missing.includes('threejs')) {
+                debugLog('Waiting for Three.js to load...');
+                try {
+                    await new Promise((resolve, reject) => {
+                        const timeout = setTimeout(() => {
+                            window.removeEventListener('threejs-loaded', onThreeLoaded);
+                            // It's optional for some views, so maybe don't reject hard if we can survive without it?
+                            // But for now, let's stick to the current strict logic but give it time
+                            resolve();
+                        }, 2000); // Wait up to 2 seconds
+
+                        const onThreeLoaded = () => {
+                            clearTimeout(timeout);
+                            window.removeEventListener('threejs-loaded', onThreeLoaded);
+                            debugLog('Three.js loaded event received');
+                            resolve();
+                        };
+
+                        if (typeof window !== 'undefined') {
+                            window.addEventListener('threejs-loaded', onThreeLoaded);
+                        } else {
+                            resolve();
+                        }
+                    });
+                    // Re-check after waiting
+                    depsCheck = checkDeps();
+                } catch (e) {
+                    debugWarn('Error waiting for Three.js:', e);
+                }
+            }
+
             if (!depsCheck.allAvailable) {
-                criticalError('КРИТИЧЕСКИЕ ЗАВИСИМОСТИ ОТСУТСТВУЮТ:', depsCheck.missing);
-                this.showDependencyError(depsCheck.missing);
-                return;
+                // If specific critical deps are missing
+                const critical = depsCheck.missing.filter(d => d !== 'visualizer' && d !== 'threejs'); // visualizer depends on threejs
+                if (critical.length > 0) {
+                    criticalError('КРИТИЧЕСКИЕ ЗАВИСИМОСТИ ОТСУТСТВУЮТ:', critical);
+                    this.showDependencyError(critical);
+                    return;
+                } else if (depsCheck.missing.includes('threejs')) {
+                    debugWarn('Three.js not loaded. 3D features will be disabled.');
+                    // We can proceed, just without 3D
+                }
             }
 
             let data = null;
@@ -925,9 +966,7 @@ class PersonalityTestApp {
 
             // Reset test manager state
             if (this.testManager) {
-                this.testManager.currentScenarioIndex = 0;
-                this.testManager.currentQuestionIndex = 0;
-                this.testManager.completedScenarios = [];
+                this.testManager.reset();
             }
 
             // Show test type selection
@@ -1199,7 +1238,7 @@ class PersonalityTestApp {
     viewTestResults(index) {
         const history = this.auth.getTestHistory();
         if (index >= 0 && index < history.length) {
-            const test = history[history.length - 1 - index];
+            const test = history[index];
             // Восстанавливаем результаты и показываем их
             this.storage.saveResults(test.results);
             this.showResults();

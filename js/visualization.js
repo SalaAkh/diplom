@@ -52,6 +52,11 @@ class ResultsVisualizer {
      * @param {Object} scores - Оценки по измерениям (процентные значения от -100 до +100)
      * @param {Object} dimensions - Описания измерений
      */
+    /**
+     * Создание радиальной диаграммы профиля
+     * @param {Object} scores - Оценки по измерениям (процентные значения от -100 до +100)
+     * @param {Object} dimensions - Описания измерений
+     */
     createRadarChart(scores, dimensions) {
         try {
             // Проверка наличия Chart.js
@@ -88,6 +93,11 @@ class ResultsVisualizer {
                 return;
             }
 
+            // Создание градиента для фона
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(0, 198, 251, 0.5)'); // Cyan
+            gradient.addColorStop(1, 'rgba(0, 91, 234, 0.2)');  // Blue
+
             // Подготовка данных
             const labels = Object.keys(dimensions).map(key => dimensions[key].name);
             const dimensionKeys = Object.keys(dimensions);
@@ -112,26 +122,24 @@ class ResultsVisualizer {
                     datasets: [{
                         label: 'Ваш профиль',
                         data: values,
-                        backgroundColor: 'rgba(0, 198, 251, 0.25)',
+                        backgroundColor: gradient,
                         borderColor: '#00c6fb',
                         borderWidth: 3,
-                        pointBackgroundColor: '#00c6fb',
-                        pointBorderColor: '#ffffff',
-                        pointHoverBackgroundColor: '#ffffff',
-                        pointHoverBorderColor: '#00c6fb',
-                        pointRadius: 5,
+                        pointBackgroundColor: '#050510',
+                        pointBorderColor: '#00c6fb',
+                        pointHoverBackgroundColor: '#00c6fb',
+                        pointHoverBorderColor: '#ffffff',
+                        pointRadius: 6,
                         pointHoverRadius: 8,
-                        pointHoverBorderWidth: 3
+                        pointHoverBorderWidth: 3,
+                        tension: 0.3 // Немного сглаживаем линии
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
                     layout: {
-                        padding: {
-                            top: 20,
-                            bottom: 20
-                        }
+                        padding: 20
                     },
                     scales: {
                         r: {
@@ -140,77 +148,49 @@ class ResultsVisualizer {
                             max: 100,
                             ticks: {
                                 stepSize: 25,
-                                showLabelBackdrop: true,
-                                backdropColor: 'rgba(255, 255, 255, 0.1)', // Transparent backdrop
-                                color: '#2c3e50',
-                                font: {
-                                    size: 11,
-                                    weight: '600'
-                                },
-                                callback: function (value) {
-                                    // Преобразуем обратно для отображения: 0 -> -100%, 50 -> 0%, 100 -> +100%
-                                    const percentage = Math.round((value - 50) * 2);
-                                    if (percentage === 0) return '0%';
-                                    if (percentage > 0) return `+${percentage}%`;
-                                    return `${percentage}%`;
-                                }
+                                display: false, // Скрываем цифры осей, они загромождают
+                                backdropColor: 'transparent'
                             },
                             grid: {
-                                color: function (context) {
-                                    const value = context.tick.value;
-                                    if (value === 50) {
-                                        return 'rgba(0, 0, 0, 0.4)'; // Центральная линия (0%) - более тёмная
-                                    }
-                                    return 'rgba(0, 0, 0, 0.15)'; // Остальные линии
-                                },
-                                lineWidth: function (context) {
-                                    const value = context.tick.value;
-                                    if (value === 50) {
-                                        return 2; // Центральная линия толще
-                                    }
-                                    return 1;
-                                }
+                                color: 'rgba(255, 255, 255, 0.1)',
+                                circular: true, // Круглая сетка выглядит лучше
+                                lineWidth: 1
                             },
                             angleLines: {
-                                color: 'rgba(0, 0, 0, 0.1)',
+                                color: 'rgba(255, 255, 255, 0.1)',
                                 lineWidth: 1
                             },
                             pointLabels: {
                                 font: {
-                                    size: 12,
+                                    size: 14,
+                                    family: "'Space Grotesk', sans-serif",
                                     weight: '600'
                                 },
-                                color: '#2c3e50',
-                                padding: 15
+                                color: '#e1e8ed', // Star Silver
+                                padding: 20
                             }
                         }
                     },
                     plugins: {
                         legend: {
-                            display: true,
-                            position: 'top',
-                            labels: {
-                                font: {
-                                    size: 13,
-                                    weight: '600'
-                                },
-                                padding: 15,
-                                usePointStyle: true,
-                                pointStyle: 'circle'
-                            }
+                            display: false // Скрываем легенду, так как у нас один датасет и заголовок выше
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            padding: 12,
+                            backgroundColor: 'rgba(20, 20, 35, 0.9)',
+                            padding: 15,
                             titleFont: {
-                                size: 13,
+                                size: 14,
+                                family: "'Space Grotesk', sans-serif",
                                 weight: '600'
                             },
                             bodyFont: {
-                                size: 12
+                                size: 13,
+                                family: "'Inter', sans-serif"
                             },
-                            borderColor: 'rgba(74, 144, 226, 1)',
-                            borderWidth: 2,
+                            borderColor: 'rgba(0, 198, 251, 0.5)',
+                            borderWidth: 1,
+                            cornerRadius: 12,
+                            displayColors: false,
                             callbacks: {
                                 title: function (context) {
                                     return context[0].label;
@@ -218,23 +198,24 @@ class ResultsVisualizer {
                                 label: function (context) {
                                     const value = context.parsed.r;
                                     const percentage = Math.round((value - 50) * 2);
-                                    const dimensionKey = dimensionKeys[context.dataIndex];
-                                    const dimension = dimensions[dimensionKey];
 
                                     let level = '';
-                                    if (percentage > 50) level = ' (высокая)';
-                                    else if (percentage > 20) level = ' (умеренная)';
-                                    else if (percentage < -50) level = ' (низкая)';
-                                    else if (percentage < -20) level = ' (умеренно низкая)';
-                                    else level = ' (сбалансированная)';
+                                    if (percentage > 50) level = 'Высокая выраженность';
+                                    else if (percentage > 20) level = 'Умеренная выраженность';
+                                    else if (percentage < -50) level = 'Низкая выраженность';
+                                    else if (percentage < -20) level = 'Умеренно низкая выраженность';
+                                    else level = 'Сбалансировано';
 
-                                    return `${percentage > 0 ? '+' : ''}${percentage}%${level}`;
+                                    return [
+                                        `Значение: ${percentage > 0 ? '+' : ''}${percentage}%`,
+                                        level
+                                    ];
                                 }
                             }
                         }
                     },
                     animation: {
-                        duration: 1500,
+                        duration: 2000,
                         easing: 'easeOutQuart'
                     }
                 }

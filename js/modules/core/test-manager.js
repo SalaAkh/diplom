@@ -17,6 +17,17 @@ class TestManager {
     }
 
     /**
+     * Reset test state
+     */
+    reset() {
+        this.currentScenarioIndex = 0;
+        this.currentQuestionIndex = 0;
+        this.completedScenarios = [];
+        this.currentSituationalStep = {};
+        this.testMode = null;
+    }
+
+    /**
      * Helper to get dependencies
      */
     get analyzer() { return this.app.analyzer; }
@@ -186,7 +197,14 @@ class TestManager {
             return;
         }
 
-        const question = this.advancedQuestions[this.currentQuestionIndex];
+        const originalQuestion = this.advancedQuestions[this.currentQuestionIndex];
+        // Shallow copy to safely inject UI state
+        const question = { ...originalQuestion };
+
+        if (question.type === 'situational') {
+            question.currentStepIndex = this.currentSituationalStep[question.id] || 0;
+        }
+
         const total = this.advancedQuestions.length;
         const progress = ((this.currentQuestionIndex + 1) / total) * 100;
 
@@ -278,8 +296,7 @@ class TestManager {
     recordSituationalAnswer(questionId, stepId, choice) {
         if (!this.analyzer) return;
 
-        // Record logic (assuming AdvancedAnalyzer has this method, 
-        // if not, we might need to implement basic storage here)
+        // Record locally (if separate tracking needed) and in analyzer
         if (this.analyzer.recordSituationalAnswer) {
             this.analyzer.recordSituationalAnswer(questionId, stepId, choice);
         } else {
@@ -289,19 +306,22 @@ class TestManager {
         // Check if next step or next question
         const question = this.advancedQuestions.find(q => q.id === questionId);
         if (question && question.steps) {
-            // Check state from analyzer or local tracking
-            // For now, simpler to just rely on UI/App logic to ask for next render, 
-            // but TestManager should ideally control flow.
-            // Since UIController blindly renders, we just need to save state.
+            const currentStepIndex = this.currentSituationalStep[questionId] || 0;
 
-            const answeredSteps = this.analyzer.situationalAnswers
-                ? this.analyzer.situationalAnswers.find(sa => sa.questionId === questionId)
-                : null;
+            // If there are more steps
+            if (currentStepIndex + 1 < question.steps.length) {
+                // Advance to next step
+                this.currentSituationalStep[questionId] = currentStepIndex + 1;
 
-            const currentStepCount = answeredSteps && answeredSteps.steps ? answeredSteps.steps.length : 0;
+                this.storage.saveProgress({
+                    situational: this.analyzer.situationalAnswers,
+                    choices: this.analyzer.choices
+                });
 
-            if (currentStepCount >= question.steps.length) {
-                // Finished this question
+                // Re-render immediately for next step
+                this.showNext();
+            } else {
+                // Finished all steps for this question
                 this.storage.saveProgress({
                     situational: this.analyzer.situationalAnswers,
                     choices: this.analyzer.choices
@@ -309,19 +329,15 @@ class TestManager {
 
                 setTimeout(() => {
                     this.currentQuestionIndex++;
+                    // Clean up step state for this question (optional, but good for replay)
+                    // this.currentSituationalStep[questionId] = 0; 
                     this.showNext();
-                }, 500);
-            } else {
-                // Next step - just re-render current question (UI handles step logic)
-                this.storage.saveProgress({
-                    situational: this.analyzer.situationalAnswers,
-                    choices: this.analyzer.choices
-                });
-
-                setTimeout(() => {
-                    this.showNext(); // Re-render same question, UI picks up next step
-                }, 500);
+                }, 300);
             }
+        } else {
+            // Fallback if no steps structure (shouldn't happen for situational)
+            this.currentQuestionIndex++;
+            this.showNext();
         }
     }
 

@@ -316,17 +316,51 @@ class UIController {
     }
 
     renderSituationalQuestion(question, lang, t) {
-        // NOTE: complex situational logic (steps) generally requires keeping state.
-        // For strict View separation, the Controller should pass the CURRENT STEP to view.
-        // However, to keep it simple as a first refactor, we can rely on TestManager passing the *current step* index
-        // via a separate argument or property on the question object if mutated.
-        // For now, I'll assume TestManager manages the 'step' state and only asks UI to render the *current* step view.
-        // But the original code had checks inside render. 
-        // Let's rely on app-level delegation for the step logic for now or simplification.
+        // Determine current step
+        // We expect the step index to be passed in the question object (injected by TestManager)
+        // or we default to the first step (0)
+        const currentStepIndex = question.currentStepIndex || 0;
 
-        // Simplified placeholder to avoid breaking complex logic blindly.
-        return `<div class="question-content"><p>Situational questions require TestManager state integration. Coming soon.</p>
-                <button class="btn btn-primary" onclick="app.handleAdvancedAnswer('skip', ${question.id})">Skip</button></div>`;
+        if (!question.steps || !question.steps[currentStepIndex]) {
+            return `<div class="question-content"><p>Error: Step data not found.</p></div>`;
+        }
+
+        const step = question.steps[currentStepIndex];
+        const title = this.getScenarioText(step.title);
+        const description = this.getScenarioText(step.description);
+
+        // Render step progress
+        const stepsIndicator = `
+            <div class="steps-indicator">
+                ${question.steps.map((s, i) => `
+                    <div class="step-dot ${i === currentStepIndex ? 'active' : ''} ${i < currentStepIndex ? 'completed' : ''}"></div>
+                `).join('')}
+                <span class="step-text">${t('step') || 'Step'} ${currentStepIndex + 1} / ${question.steps.length}</span>
+            </div>
+        `;
+
+        const options = [];
+        if (step.options) {
+            Object.entries(step.options).forEach(([key, optData]) => {
+                options.push({ key: key, option: optData });
+            });
+        }
+
+        const optionsHTML = options.map(opt => `
+            <button class="option-btn" onclick="app.handleSituationalAnswer(${question.id}, ${step.stepId}, '${opt.key}')">
+                <span class="option-label">${opt.key}</span>
+                <span class="option-text">${this.getScenarioText(opt.option.text)}</span>
+            </button>
+        `).join('');
+
+        return `
+            <div class="question-content situational-question">
+                ${stepsIndicator}
+                <h2>${title}</h2>
+                <p class="question-description">${description}</p>
+                <div class="options-container">${optionsHTML}</div>
+            </div>
+        `;
     }
 
     /**
@@ -1033,13 +1067,13 @@ class UIController {
         const lang = this.i18n.getLanguage();
 
         container.innerHTML = `
-            <div class="screen animate-in">
+            <div class="screen animate-in active">
                 <div class="container-sm">
                     <div class="flex justify-between items-center mb-6">
                         <button class="btn-back" onclick="app.showIntro()">
-                            <span>←</span> ${t('back')}
+                            ${t('back')}
                         </button>
-                        <h1 class="text-3xl font-bold gradient-text">${t('myProfileTitle')}</h1>
+                        <h1 class="text-3xl font-bold text-gradient">${t('myProfileTitle')}</h1>
                         <div style="width: 24px;"></div>
                     </div>
                 
@@ -1065,10 +1099,10 @@ class UIController {
                         </div>
                         <div class="card-body">
                             ${history.length > 0 ? `
-                                <div class="grid gap-4">
+                                <div class="history-list">
                                      ${history.map((test, index) => `
-                                        <div class="p-4 rounded-lg bg-glass-light border border-white-10 flex flex-wrap justify-between items-center gap-4">
-                                            <div>
+                                        <div class="history-item">
+                                            <div class="history-info">
                                                 <h3 class="font-bold text-lg">${t('testNumber')} ${history.length - index}</h3>
                                                 <span class="text-sm text-secondary">${new Date(test.date).toLocaleDateString()}</span>
                                             </div>
