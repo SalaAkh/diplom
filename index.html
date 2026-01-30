@@ -172,34 +172,34 @@
 
     <!-- JavaScript модули -->
     <!-- Production-safe logger -->
-    <script src="js/logger.js"></script>
+    <script src="js/services/logger.js"></script>
     <!-- Google OAuth Config -->
-    <script src="js/google-auth-config.js"></script>
+    <script src="js/config/google-auth-config.js"></script>
 
     <!-- Критические модули (загружаются последовательно) -->
-    <script src="js/storage.js"></script>
-    <script src="js/localization.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/scenarios-data.js"></script>
-    <script src="js/advanced-scenarios-data.js"></script>
-    <script src="js/analysis.js"></script>
-    <script src="js/advanced-analysis.js"></script>
-    <script src="js/dynamic-scenarios.js"></script>
-    <script src="js/visualization.js"></script>
-    <script src="js/advanced-test-organizer.js"></script>
+    <script src="js/services/storage.js"></script>
+    <script src="js/services/localization.js"></script>
+    <script src="js/services/auth.js"></script>
+    <script src="js/data/scenarios-data.js"></script>
+    <script src="js/data/advanced-scenarios-data.js"></script>
+    <script src="js/analysis/analysis.js"></script>
+    <script src="js/analysis/advanced-analysis.js"></script>
+    <script src="js/data/dynamic-scenarios.js"></script>
+    <script src="js/vis/visualization.js"></script>
+    <script src="js/data/advanced-test-organizer.js"></script>
 
     <!-- Refactored Modules -->
-    <script src="js/modules/ui/ui-controller.js"></script>
-    <script src="js/modules/core/test-manager.js"></script>
-    <script src="js/modules/core/results-manager.js"></script>
+    <script src="js/ui/ui-controller.js"></script>
+    <script src="js/managers/test-manager.js"></script>
+    <script src="js/managers/results-manager.js"></script>
 
     <!-- Опциональные модули (только необходимые) -->
-    <script src="js/evolution-tracker.js" defer></script>
-    <script src="js/3d-visualization.js" defer></script>
-    <script src="js/background-3d.js" defer></script>
-    <script src="js/gamification.js" defer></script>
-    <script src="js/report-generator.js" defer></script>
-    <script src="js/navigation-controller.js" defer></script>
+    <script src="js/analysis/evolution-tracker.js" defer></script>
+    <script src="js/vis/3d-visualization.js" defer></script>
+    <script src="js/vis/background-3d.js" defer></script>
+    <script src="js/services/gamification.js" defer></script>
+    <script src="js/analysis/report-generator.js" defer></script>
+    <script src="js/ui/navigation-controller.js" defer></script>
 
     <!-- Главный модуль приложения (загружается последним) -->
     <script src="js/app.js"></script>

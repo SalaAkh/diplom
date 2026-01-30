@@ -120,27 +120,27 @@
 
     <!-- Scripts - Full stack for app.js -->
     <!-- Production-safe logger -->
-    <script src="js/logger.js"></script>
+    <script src="js/services/logger.js"></script>
     <!-- Configuration must load first -->
-    <script src="js/config.js"></script>
-    <script src="js/storage.js"></script>
-    <script src="js/localization.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/scenarios-data.js"></script>
-    <script src="js/advanced-scenarios-data.js"></script>
-    <script src="js/analysis.js"></script>
-    <script src="js/advanced-analysis.js"></script>
-    <script src="js/dynamic-scenarios.js"></script>
-    <script src="js/visualization.js"></script>
+    <script src="js/config/config.js"></script>
+    <script src="js/services/storage.js"></script>
+    <script src="js/services/localization.js"></script>
+    <script src="js/services/auth.js"></script>
+    <script src="js/data/scenarios-data.js"></script>
+    <script src="js/data/advanced-scenarios-data.js"></script>
+    <script src="js/analysis/analysis.js"></script>
+    <script src="js/analysis/advanced-analysis.js"></script>
+    <script src="js/data/dynamic-scenarios.js"></script>
+    <script src="js/vis/visualization.js"></script>
 
     <!-- Refactored Modules - MUST load before app.js -->
-    <script src="js/modules/ui/ui-controller.js"></script>
-    <script src="js/modules/core/test-manager.js"></script>
-    <script src="js/modules/core/results-manager.js"></script>
+    <script src="js/ui/ui-controller.js"></script>
+    <script src="js/managers/test-manager.js"></script>
+    <script src="js/managers/results-manager.js"></script>
 
-    <script src="js/evolution-tracker.js" defer></script>
-    <script src="js/navigation-controller.js" defer></script>
-    <script src="js/background-3d.js" defer></script>
+    <script src="js/analysis/evolution-tracker.js" defer></script>
+    <script src="js/ui/navigation-controller.js" defer></script>
+    <script src="js/vis/background-3d.js" defer></script>
 
     <!-- Three.js Setup -->
     <script type="importmap">
