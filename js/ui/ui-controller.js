@@ -871,11 +871,13 @@ class UIController {
                     </div>
                 </div>
                 
-                <!-- Main Actions -->
                 <div class="intro-actions flex flex-col items-center gap-4 mb-12">
                     ${hasProgress ? `
                         <button class="btn btn-primary btn-lg w-full max-w-md pulse-animation flex items-center justify-center gap-4 py-4 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1" onclick="app.continueTest()">
-                            <span class="material-symbols-rounded text-4xl">play_circle</span>
+                            <!-- Play Icon SVG -->
+                            <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" fill="currentColor">
+                                <path d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z"/>
+                            </svg>
                             <div class="flex flex-col items-start">
                                 <span class="font-bold text-lg tracking-wide uppercase">${t('continueTest')}</span>
                                 <span class="text-xs opacity-90 font-medium">
@@ -884,12 +886,18 @@ class UIController {
                             </div>
                         </button>
                         <button class="btn btn-secondary w-full max-w-md flex items-center justify-center gap-3 py-3 hover:bg-white/10 transition-colors" onclick="app.startNewTest()">
-                            <span class="material-symbols-rounded">restart_alt</span>
+                            <!-- Restart Icon SVG -->
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor">
+                                <path d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126.5T260-672l57 57q-38 34-57.5 79T240-440q0 88 56 153t144 65v100Zm80 0v-100q88 0 144-65t56-153q0-45-19.5-90T643-615l57-57q38 51 64 111.5T790-440q0 128-79.5 218.5T520-122ZM480-520 320-360h320L480-520Zm0-280q-17 0-28.5-11.5T440-840v-40q0-17 11.5-28.5T480-920q17 0 28.5 11.5T520-880v40q0 17-11.5 28.5T480-800Z"/>
+                            </svg>
                             <span>${t('startNew')}</span>
                         </button>
                     ` : `
                         <button class="btn btn-primary btn-lg w-full max-w-md pulse-animation flex items-center justify-center gap-4 py-4 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1" onclick="app.showTestTypeSelection()">
-                            <span class="material-symbols-rounded text-4xl">rocket_launch</span>
+                            <!-- Rocket Icon SVG -->
+                            <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" fill="currentColor">
+                                <path d="M480-120q-150 0-255-105T120-480q0-36 10-76t30-74l62 38q-14 28-21 54t-7 58q0 116 82 198t198 82q44 0 94.5-12.5T770-158l56 46q-68 44-142 66t-204 22Zm312-140-52-44q20-22 34-45.5t18-48.5h68q-5 38-23.5 76T792-260ZM168-608 604-172l56-56-436-436-56 56Zm312-312q28 0 54 7t52 23l-36 56q-16-9-33-12.5t-37-3.5q-64 0-113 36T298-720h-74q25-87 97.5-143.5T480-920Zm356 316q0-10-1-19.5t-3-19.5l66-14q3 16 4.5 33t1.5 33h-68Zm-154-154q13 18 22.5 40t13.5 44l64-22q-7-35-22.5-66.5T724-758l-42 42Z"/>
+                            </svg>
                             <span class="text-lg font-bold tracking-wide uppercase">${t('startTest')}</span>
                         </button>
                     `}
