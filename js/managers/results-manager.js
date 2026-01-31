@@ -213,6 +213,12 @@ class ResultsManager {
 
         const t = (key) => (window.t ? window.t(key) : key);
 
+        // Ensure profile has user name
+        if (user && profile) {
+            profile.name = user.name || user.username;
+            profile.username = user.username;
+        }
+
         const reportData = {
             title: t('reportTitle'),
             userLogin: user ? user.username : (window.t ? window.t('navGuest') : 'Guest'),

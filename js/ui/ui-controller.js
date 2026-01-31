@@ -1525,6 +1525,7 @@ class UIController {
                         </div>
                         <div class="card-body">
                             ${history.length > 0 ? `
+                                <div class="history-list">
                                     ${history.map((test, index) => `
                                         <div class="history-item">
                                             <div class="history-info">
@@ -1543,7 +1544,7 @@ class UIController {
                                             </div>
                                              <button class="btn btn-secondary btn-sm" onclick="app.viewTestResults(${index})">
                                                 ${t('viewResults')}
-                                            </button>
+                                             </button>
                                         </div>
                                      `).join('')}
                                 </div>

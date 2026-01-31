@@ -109,11 +109,6 @@ class ReportGenerator {
     /**
      * Генерация HTML отчета
      * @param {Object} data - Данные
-     * @returns {string} HTML строка
-     */
-    /**
-     * Генерация HTML отчета
-     * @param {Object} data - Данные
      * @param {string} format - Формат (html, doc, pdf)
      * @returns {string} HTML строка
      */
@@ -122,12 +117,17 @@ class ReportGenerator {
         const lang = window.i18n ? window.i18n.getLanguage() : 'ru';
         const date = new Date().toLocaleString(lang === 'kk' ? 'kk-KZ' : lang === 'ru' ? 'ru-RU' : 'en-US');
 
+        // PDF Specific: Consistent width for A4
+        const pdfWidth = '800px';
+        const bodyStyle = format === 'pdf' ?
+            `width: ${pdfWidth}; margin: 0 auto; padding: 20px; background: #ffffff; box-sizing: border-box;` :
+            (format === 'doc' ? 'width: 100%; margin: 0; padding: 0; background: #ffffff;' : 'max-width: 800px; margin: 40px auto; padding: 40px; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border-radius: 16px;');
+
         let html = `
 <!DOCTYPE html>
 <html lang="${lang}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${t('reportTitle')}</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
@@ -137,10 +137,13 @@ class ReportGenerator {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
             line-height: 1.6;
             color: #1a1a1a;
-            ${format === 'pdf' || format === 'doc' ? 'width: 100%; margin: 0; padding: 0;' : 'max-width: 800px; margin: 0 auto; padding: 20px;'}
-            background: #ffffff;
+            ${bodyStyle}
         }
         
+        /* Table Styles for DOC compatibility */
+        table { border-collapse: collapse; width: 100%; }
+        td, th { padding: 10px; vertical-align: top; }
+
         .header {
             background: linear-gradient(135deg, #050510 0%, #1a1a3a 100%);
             color: white;
@@ -148,166 +151,42 @@ class ReportGenerator {
             border-radius: 20px;
             margin-bottom: 40px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        
-        .header h1 { 
-            margin: 0 0 15px 0; 
-            font-size: 28px; 
-            text-transform: uppercase; 
-            letter-spacing: 2px;
-            color: #00c6fb;
-            font-weight: 800;
-        }
-        
-        .header p { margin: 8px 0; opacity: 0.9; font-size: 16px; }
         
         .section {
             background: #fff;
             padding: 30px;
             margin-bottom: 40px;
-            border: 1px solid #e2e8f0;
             border-radius: 16px;
+            width: 96%;
             page-break-inside: avoid;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .section h2 { 
-            color: #1e293b; 
-            margin-top: 0; 
-            border-bottom: 4px solid #00c6fb; 
-            padding-bottom: 12px; 
-            font-size: 24px;
-            display: inline-block;
-            margin-bottom: 25px;
-            font-weight: 800;
         }
 
-        .clear { clear: both; }
-
-        @media print {
-            .section { page-break-inside: avoid; margin-bottom: 30px; }
-            .header { page-break-after: avoid; }
-        }
-        
-        /* Stats Grid */
-        ${format === 'doc' ? `
-        .stats-container {
-            display: table;
-            width: 100%;
-            table-layout: fixed;
-            border-collapse: separate;
-            border-spacing: 15px 0;
-            margin-bottom: 30px;
-        }
-        .stat-card {
-            display: table-cell;
-            width: 33%;
+        .stat-card-doc {
             background: #f8fafc;
             padding: 20px;
-            border-radius: 12px;
             text-align: center;
-            border: 1px solid #e2e8f0;
-            vertical-align: top;
-        }
-        ` : `
-        .stats-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        .stat-card {
-            flex: 1;
-            background: #f8fafc;
-            padding: 20px;
             border-radius: 12px;
-            text-align: center;
-            border: 1px solid #e2e8f0;
+            page-break-inside: avoid;
         }
-        `}
-        
-        .stat-value { font-size: 26px; font-weight: 800; color: #005bea; display: block; margin-bottom: 5px; }
-        .stat-label { font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-        
-        /* Scores Styles */
-        ${format === 'doc' ? `
-        .score-row {
-            display: table;
-            width: 100%;
-            table-layout: fixed;
-            margin-bottom: 25px;
-            padding: 15px;
-            background: #fcfdfe;
-            border-radius: 12px;
-            border: 1px solid #f1f5f9;
-        }
-        .score-info {
-            display: table-cell;
-            width: 40%;
-            vertical-align: middle;
-            padding-right: 15px;
-        }
-        .score-bar {
-            display: table-cell;
-            width: 60%;
-            vertical-align: middle;
-        }
-        ` : `
-        .score-row {
-            margin-bottom: 25px;
-            padding: 15px;
-            background: #fcfdfe;
-            border-radius: 12px;
-            border: 1px solid #f1f5f9;
-        }
-        .score-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .score-bar {
-            height: 12px;
-            background: #f1f5f9;
-            border-radius: 6px;
-            overflow: hidden;
-            width: 100%;
-        }
-        `}
-        
-        .score-label {
-            font-weight: 800;
-            font-size: 18px;
-            color: #1e293b;
-        }
-        .score-value {
-            font-weight: 700;
-            font-size: 16px;
-        }
-        
-        ${format === 'doc' ? `
-        .score-fill-container {
-             height: 12px;
-            background: #f1f5f9;
-            border-radius: 6px;
-            overflow: hidden;
-            width: 100%;
-        }
-        ` : ''}
-        
-        .score-fill { height: 12px; border-radius: 6px; display: block; }
 
-        /* AI Analysis Card */
+        /* Original CSS for HTML/PDF */
+        .stats-container { display: flex; gap: 15px; margin-bottom: 30px; page-break-inside: avoid; }
+        .stat-card { flex: 1; background: #f8fafc; padding: 20px; border-radius: 12px; text-align: center; }
+        .score-row { margin-bottom: 25px; padding: 15px; background: #fcfdfe; border-radius: 12px; }
+        .score-info { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .score-bar { height: 12px; background: #f1f5f9; border-radius: 6px; overflow: hidden; width: 100%; }
+        .score-fill { height: 100%; border-radius: 6px; }
+
+        /* AI Card */
         .ai-card {
             background: linear-gradient(to right, #f0f7ff, #ffffff);
             border: 1px solid #bae6fd;
             padding: 30px;
             border-radius: 20px;
             position: relative;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
         .ai-badge {
             background: #0ea5e9;
@@ -320,7 +199,7 @@ class ReportGenerator {
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        
+
         .recommendation {
             padding: 20px;
             margin-bottom: 20px;
@@ -328,115 +207,110 @@ class ReportGenerator {
             border: 1px solid #e2e8f0;
             border-left: 6px solid #00c6fb;
             border-radius: 12px;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
         .recommendation h3 { color: #0369a1; margin: 0 0 10px 0; font-size: 18px; font-weight: 800; }
         .recommendation p { color: #475569; margin: 0; }
-        
-        .footer {
-            text-align: center;
-            color: #64748b;
-            font-size: 14px;
-            margin-top: 60px;
-            padding: 40px 0;
-            border-top: 2px solid #f1f5f9;
-        }
-        .chart-img {
-            display: block;
-            max-width: 550px;
-            width: 100%;
-            margin: 30px auto;
-            border: 1px solid #e2e8f0;
-            padding: 15px;
-            border-radius: 16px;
-            background: white;
-        }
-        .clear { clear: both; }
-        .page-break { page-break-after: always; }
     </style>
 </head>
 <body>
-    <div id="print-wrapper" style="${format === 'pdf' || format === 'doc' ? '' : 'padding: 20px;'}">
+    <div id="print-wrapper">
     <div class="header">
         <h1>${t('reportTitle')}</h1>
-        <p>${t('userLabel') || (lang === 'kk' ? 'Пайдаланушы' : lang === 'ru' ? 'Пользователь' : 'User')}: <strong>${data.userLogin || (lang === 'kk' ? 'Қонақ' : lang === 'ru' ? 'Гость' : 'Guest')}</strong></p>
+        ${data.profile && data.profile.name ? `<p style="font-size: 18px; margin-bottom: 5px;">${data.profile.name}</p>` : ''}
         <p>${t('reportDate')}: ${date}</p>
     </div>
 
     <!-- Statistics Section -->
-    ${data.statistics ? `
+    ${data.statistics ? (format === 'doc' ? `
+    <!-- DOC: Table Layout -->
+    <table width="100%" cellpadding="0" cellspacing="15" style="margin-bottom: 30px;">
+        <tr>
+            <td width="33%">
+                <div class="stat-card-doc">
+                    <span style="font-size: 26px; font-weight: 800; color: #005bea; display: block;">${data.statistics.level || 1}</span>
+                    <span style="font-size: 13px; color: #64748b; text-transform: uppercase;">${t('levelLabel')}</span>
+                </div>
+            </td>
+            <td width="33%">
+                <div class="stat-card-doc">
+                    <span style="font-size: 26px; font-weight: 800; color: #005bea; display: block;">${data.statistics.xp || 0}</span>
+                    <span style="font-size: 13px; color: #64748b; text-transform: uppercase;">XP</span>
+                </div>
+            </td>
+            <td width="33%">
+                <div class="stat-card-doc">
+                    <span style="font-size: 26px; font-weight: 800; color: #005bea; display: block;">${data.statistics.streak || 0}</span>
+                    <span style="font-size: 13px; color: #64748b; text-transform: uppercase;">${t('streakLabel')}</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+    ` : `
+    <!-- HTML/PDF: Flex Layout -->
     <div class="stats-container">
         <div class="stat-card">
-            <span class="stat-value">${data.statistics.level || 1}</span>
-            <span class="stat-label">${t('levelLabel') || 'Level'}</span>
+            <span style="font-size: 26px; font-weight: 800; color: #005bea; display: block;">${data.statistics.level || 1}</span>
+            <span style="font-size: 13px; color: #64748b; text-transform: uppercase;">${t('levelLabel')}</span>
         </div>
         <div class="stat-card">
-            <span class="stat-value">${data.statistics.xp || 0}</span>
-            <span class="stat-label">XP</span>
+            <span style="font-size: 26px; font-weight: 800; color: #005bea; display: block;">${data.statistics.xp || 0}</span>
+            <span style="font-size: 13px; color: #64748b; text-transform: uppercase;">XP</span>
         </div>
         <div class="stat-card">
-            <span class="stat-value">${data.statistics.streak || 0}</span>
-            <span class="stat-label">${t('streakLabel') || 'Streak'}</span>
+            <span style="font-size: 26px; font-weight: 800; color: #005bea; display: block;">${data.statistics.streak || 0}</span>
+            <span style="font-size: 13px; color: #64748b; text-transform: uppercase;">${t('streakLabel')}</span>
         </div>
-        <div class="clear"></div>
     </div>
-    ` : ''}
+    `) : ''}
 
     <div class="section">
         <h2>${t('summaryLabel')}</h2>
-        <p style="font-size: 16px; color: #4a5568;">${data.profile ? data.profile.summary : ''}</p>
+        <p>${data.profile ? data.profile.summary : ''}</p>
     </div>
-`;
 
-        if (data.scores) {
-            html += `
+    ${data.scores ? `
     <div class="section">
         <h2>${t('dimensionScores')}</h2>
-`;
+        ${Object.keys(data.scores).map(dim => {
+            const score = data.scores[dim];
+            const normalizedScore = (score + 100) / 2;
+            const dimName = t(`${dim}Name`) || dim;
+            const color = score > 30 ? '#2ecc71' : (score < -30 ? '#e74c3c' : '#3498db');
 
-            if (data.chartImage) {
-                html += `
-        <div style="text-align: center; margin-bottom: 30px;">
-            <img src="${data.chartImage}" class="chart-img" alt="Radar Chart">
-            <p style="font-size: 12px; color: #999;">${t('radarChartDescription') || 'Personality Profile Visualization'}</p>
-        </div>
-`;
-            }
-
-            Object.keys(data.scores).forEach(dim => {
-                const score = data.scores[dim];
-                const normalizedScore = (score + 100) / 2;
-                const dimName = t(`${dim}Name`) || dim;
-
-                let level = '';
-                if (score > 50) level = t('levelHigh');
-                else if (score > 20) level = t('levelMedium');
-                else if (score < -50) level = t('levelLow') || (lang === 'ru' ? 'Низкая выраженность' : 'Low');
-                else if (score < -20) level = t('levelVeryLow') || (lang === 'ru' ? 'Умеренно низкая' : 'Very Low');
-                else level = t('levelBalanced');
-
-                let color = '#3498db';
-                if (score > 30) color = '#2ecc71';
-                else if (score < -30) color = '#e74c3c';
-
-                html += `
-        <div class="score-row">
-            <div class="score-info">
-                <span class="score-label">${dimName}</span>
-                <span class="score-value" style="color: ${color}">${level} (${score > 0 ? '+' : ''}${score}%)</span>
+            return format === 'doc' ? `
+            <!-- DOC: Table Row for Scores -->
+            <table width="100%" style="margin-bottom: 20px; background: #fcfdfe; border: 1px solid #f1f5f9; border-radius: 12px;">
+                <tr>
+                    <td width="40%" style="vertical-align: middle; padding: 15px;">
+                        <span style="font-weight: 800; font-size: 18px; color: #1e293b;">${dimName}</span>
+                    </td>
+                    <td width="60%" style="vertical-align: middle; padding: 15px;">
+                        <div style="height: 12px; background: #f1f5f9; border-radius: 6px; width: 100%;">
+                            <div style="width: ${normalizedScore}%; height: 100%; background-color: ${color}; border-radius: 6px;"></div> 
+                        </div>
+                        <div style="text-align: right; font-weight: 700; font-size: 14px; margin-top: 5px;">${score > 0 ? '+' : ''}${score}%</div>
+                    </td>
+                </tr>
+            </table>
+            ` : `
+            <!-- HTML/PDF: Div Layout -->
+            <div class="score-row">
+                <div class="score-info">
+                    <span style="font-weight: 800; font-size: 18px; color: #1e293b;">${dimName}</span>
+                    <span style="font-weight: 700; font-size: 16px; color: ${color}">${score > 0 ? '+' : ''}${score}%</span>
+                </div>
+                <div class="score-bar">
+                    <div class="score-fill" style="width: ${normalizedScore}%; background-color: ${color};"></div>
+                </div>
             </div>
-            <div class="score-bar">
-                ${format === 'doc' ? `<div class="score-fill-container"><div class="score-fill" style="width: ${normalizedScore}%; background-color: ${color};"></div></div>` :
-                        `<div class="score-fill" style="width: ${normalizedScore}%; background-color: ${color};"></div>`
-                    }
-            </div>
-        </div>
-`;
-            });
-            html += `</div>`;
-        }
+            `;
+        }).join('')}
+    </div>
+    ` : ''}
 
-        if (data.aiAnalysis && data.aiAnalysis.personalityType) {
-            html += `
+    ${data.aiAnalysis && data.aiAnalysis.personalityType ? `
     <div class="section">
         <div class="ai-card">
             <span class="ai-badge">AI ANALYTICS</span>
@@ -445,26 +319,20 @@ class ReportGenerator {
             <p style="color:#4a5568; margin-top:10px; line-height:1.7;">${data.aiAnalysis.personalityType.description}</p>
         </div>
     </div>
-`;
-        }
+    ` : ''}
 
-        if (data.profile && data.profile.recommendations) {
-            html += `
+    ${data.profile && data.profile.recommendations ? `
     <div class="section">
         <h2>${t('recommendationsLabel')}</h2>
-`;
-            data.profile.recommendations.forEach(rec => {
-                html += `
+        ${data.profile.recommendations.map(rec => `
         <div class="recommendation">
             <h3>${rec.category || rec.title}</h3>
             <p>${rec.description || ''}</p>
         </div>
-`;
-            });
-            html += `</div>`;
-        }
+        `).join('')}
+    </div>
+    ` : ''}
 
-        html += `
     <div class="footer" style="padding-bottom: 50px; margin-top: 60px; clear: both;">
         <p style="margin-bottom: 20px; font-weight: 700; color: #1e293b; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
             ${t('generatedBy') || 'Generated by Self-Knowledge System'} &bull; Neural Constellation Engine
@@ -483,7 +351,7 @@ class ReportGenerator {
     </div>
 </body>
 </html>
-`;
+        `;
         return html;
     }
 
@@ -536,21 +404,21 @@ class ReportGenerator {
         const fullHtml = this.generateHTMLReport(data, 'pdf');
 
         const opt = {
-            margin: [10, 10, 10, 10], // Reduced margin to 10mm to prevent cutoff
+            margin: [10, 10, 24.5, 10], // Margins (Top, Right, Bottom, Left)
             filename: this.currentFilename,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: {
-                scale: 2,
+                scale: 4, // Higher quality
                 useCORS: true,
                 logging: false,
                 letterRendering: true,
                 allowTaint: false,
-                windowWidth: 800,
+                windowWidth: 800, // A4 width at 96 DPI
                 scrollY: 0,
                 scrollX: 0
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            pagebreak: { mode: ['css', 'legacy'] }
         };
 
         try {

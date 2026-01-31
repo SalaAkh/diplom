@@ -3,11 +3,11 @@
  * Позволяет отправлять оценки и текстовые отзывы.
  * В текущей реализации сохраняет данные в localStorage.
  */
-class FeedbackService {
+class FeedbackSystem {
     constructor() {
         this.storageKey = 'neural_constellation_feedback';
         this.feedbacks = this.loadFeedbacks();
-        console.log('FeedbackService initialized');
+        console.log('FeedbackSystem initialized');
     }
 
     /**
@@ -83,4 +83,4 @@ class FeedbackService {
 
 // Экспорт экземпляра для использования в приложении
 // Используем глобальную переменную для простоты доступа из app.js
-window.FeedbackService = FeedbackService;
+window.FeedbackSystem = FeedbackSystem;
