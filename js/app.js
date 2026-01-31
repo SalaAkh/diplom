@@ -423,6 +423,7 @@ class PersonalityTestApp {
             }
 
             this.scenarios = data.scenarios;
+            this.dimensions = data.dimensions;
 
             // Инициализация анализатора
             this.analyzer = new PersonalityAnalyzer(data);
@@ -530,26 +531,30 @@ class PersonalityTestApp {
      */
     checkSavedProgress() {
         const savedProgress = this.storage.loadProgress();
-        if (savedProgress && savedProgress.length > 0) {
+        if (savedProgress && savedProgress.choices) {
+            const choices = Array.isArray(savedProgress.choices) ? savedProgress.choices : [];
+
             // Если тест уже завершен (количество ответов >= количеству сценариев),
             // то не восстанавливаем его как активный, чтобы избежать дублирования в истории
-            if (this.scenarios && savedProgress.length >= this.scenarios.length) {
+            if (this.scenarios && choices.length >= this.scenarios.length) {
                 this.storage.clearAll(); // Или только удалить прогресс: localStorage.removeItem('testProgress');
                 this.currentScenarioIndex = 0;
                 return;
             }
 
-            // Восстановление прогресса
-            savedProgress.forEach(choice => {
-                this.analyzer.recordChoice(choice.scenarioId, choice.choice);
+            // Восстановление прогресса для базового теста
+            if (savedProgress.testMode === 'basic' || !savedProgress.testMode) {
+                choices.forEach(choice => {
+                    this.analyzer.recordChoice(choice.scenarioId, choice.choice);
 
-                // Восстанавливаем завершённые сценарии
-                const scenario = this.scenarios.find(s => s.id === choice.scenarioId);
-                if (scenario && !this.completedScenarios.find(s => s.id === choice.scenarioId)) {
-                    this.completedScenarios.push(scenario);
-                }
-            });
-            this.currentScenarioIndex = savedProgress.length;
+                    // Восстанавливаем завершённые сценарии
+                    const scenario = this.scenarios.find(s => s.id === choice.scenarioId);
+                    if (scenario && !this.completedScenarios.find(s => s.id === choice.scenarioId)) {
+                        this.completedScenarios.push(scenario);
+                    }
+                });
+                this.currentScenarioIndex = savedProgress.currentQuestionIndex || choices.length;
+            }
         }
     }
 
@@ -942,22 +947,140 @@ class PersonalityTestApp {
      */
     continueTest() {
         if (this.testManager) {
-            // Load scenarios data first
-            this.testManager.loadData();
-
             // Restore saved progress
             const savedProgress = this.storage.loadProgress();
-            if (savedProgress && savedProgress.length > 0) {
-                // Restore choices to analyzer
-                savedProgress.forEach(choice => {
-                    this.analyzer.recordChoice(choice.scenarioId, choice.choice);
-                });
+            if (savedProgress && savedProgress.choices) {
+                // Restore test mode
+                let testMode = savedProgress.testMode;
 
-                // Update current index to continue from where left off
-                this.testManager.currentScenarioIndex = savedProgress.length;
+                // Intelligent inference of test mode if missing
+                if (!testMode) {
+                    // Check signature of advanced test data
+                    if (!Array.isArray(savedProgress.choices) && (savedProgress.choices.scales || savedProgress.choices.situational || savedProgress.choices.open)) {
+                        testMode = 'advanced';
+                        console.log('🔄 Extracted test mode: advanced (inferred)');
+                    } else {
+                        testMode = 'basic';
+                    }
+                }
+
+                this.testManager.testMode = testMode;
+                this.testMode = testMode;
+
+                // Load appropriate data
+                if (testMode === 'advanced') {
+                    // Load advanced test data if not already loaded
+                    if (!this.testManager.advancedQuestions || this.testManager.advancedQuestions.length === 0) {
+                        this.testManager.loadAdvancedData().then((data) => {
+                            // Validate and Init Advanced Analyzer
+                            if (data && typeof AdvancedPersonalityAnalyzer !== 'undefined') {
+                                this.analyzer = new AdvancedPersonalityAnalyzer(data);
+                                console.log('✅ Advanced Analyzer initialized for continuation');
+                            }
+
+                            // Restore question index
+                            const restoredIndex = savedProgress.currentQuestionIndex || 0;
+                            this.testManager.currentQuestionIndex = restoredIndex;
+                            console.log('📍 Продолжаем с вопроса №', restoredIndex + 1);
+
+                            // Debug Info
+                            // alert(`DEBUG: Тест ${testMode}, Восстановлен индекс: ${restoredIndex}, Ответы: ${JSON.stringify(savedProgress.choices ? Object.keys(savedProgress.choices) : 'нет')}`);
+
+                            // Restore answers to analyzer
+                            if (savedProgress.choices) {
+                                // Restore basic choices (array in specialized property or root)
+                                const choicesArray = Array.isArray(savedProgress.choices) ? savedProgress.choices : (savedProgress.choices.choices || []);
+                                if (Array.isArray(choicesArray)) {
+                                    choicesArray.forEach(choice => {
+                                        this.analyzer.recordChoice(choice.scenarioId || choice.questionId, choice.choice);
+                                    });
+                                }
+
+                                // Restore scales
+                                if (savedProgress.choices.scales) {
+                                    this.analyzer.scaleAnswers = savedProgress.choices.scales || {};
+                                }
+
+                                // Restore open answers
+                                if (savedProgress.choices.open && this.analyzer.recordOpenAnswer) {
+                                    // Manually restore or set property if analyzer supports it
+                                    this.analyzer.openAnswers = savedProgress.choices.open || {};
+                                }
+
+                                // Restore situational
+                                if (savedProgress.choices.situational) {
+                                    this.analyzer.situationalAnswers = savedProgress.choices.situational || {};
+                                }
+                            }
+
+                            // Continue from where left off
+                            this.testManager.showNext();
+                        }).catch(error => {
+                            console.error('Failed to load advanced test data:', error);
+                            this.showTestTypeSelection();
+                        });
+                        return; // Exit here, showNext is called in then()
+                    } else {
+                        // Data already loaded, just restore index
+                        this.testManager.currentQuestionIndex = savedProgress.currentQuestionIndex || 0;
+
+                        // Also restore answers if needed (in case we didn't reload but analyzer is fresh)
+                        if (savedProgress.choices) {
+                            const choicesArray = Array.isArray(savedProgress.choices) ? savedProgress.choices : (savedProgress.choices.choices || []);
+                            if (Array.isArray(choicesArray)) {
+                                choicesArray.forEach(choice => {
+                                    this.analyzer.recordChoice(choice.scenarioId || choice.questionId, choice.choice);
+                                });
+                            }
+                            if (savedProgress.choices.scales) {
+                                this.analyzer.scaleAnswers = savedProgress.choices.scales || {};
+                            }
+                            if (savedProgress.choices.open) {
+                                this.analyzer.openAnswers = savedProgress.choices.open || {};
+                            }
+                            if (savedProgress.choices.situational) {
+                                this.analyzer.situationalAnswers = savedProgress.choices.situational || {};
+                            }
+                        }
+                    }
+                } else {
+                    // Basic test - load scenarios data first
+                    this.testManager.loadData();
+
+                    // Init Basic Analyzer if missing
+                    if (!this.analyzer) {
+                        this.analyzer = new PersonalityAnalyzer({
+                            scenarios: this.scenarios,
+                            dimensions: this.dimensions
+                        });
+                        console.log('✅ Basic Analyzer initialized for continuation');
+                    }
+
+                    // Restore choices to analyzer
+                    if (Array.isArray(savedProgress.choices)) {
+                        this.testManager.testMode = 'basic';
+                        this.testManager.completedScenarios = [];
+
+                        savedProgress.choices.forEach(choice => {
+                            this.analyzer.recordChoice(choice.scenarioId, choice.choice);
+
+                            // Also restore to testManager.completedScenarios so DynamicSelector skips them!
+                            const scenario = this.scenarios.find(s => s.id === choice.scenarioId);
+                            if (scenario) {
+                                this.testManager.completedScenarios.push(scenario);
+                            }
+                        });
+
+                        // Update current index to continue from where left off
+                        this.testManager.currentScenarioIndex = savedProgress.currentQuestionIndex || savedProgress.choices.length;
+                    }
+                }
+
+                this.testManager.showNext();
+            } else {
+                // No progress found, show test selection
+                this.showTestTypeSelection();
             }
-
-            this.testManager.showNext();
         }
     }
 
@@ -989,6 +1112,7 @@ class PersonalityTestApp {
         }
     }
 
+
     /**
      * Обработка выбора в сценарии (для Basic)
      */
@@ -1007,42 +1131,6 @@ class PersonalityTestApp {
         }
     }
 
-    /**
-     * Обработка ответа на шкалу
-     */
-    handleScaleAnswer(questionId) {
-        const slider = document.getElementById(`scale - input - ${questionId} `);
-        if (slider && this.testManager) {
-            this.testManager.recordScaleAnswer(questionId, parseInt(slider.value));
-        }
-    }
-
-    /**
-     * Обработка ответа на открытый вопрос
-     */
-    handleOpenAnswer(questionId) {
-        const textarea = document.getElementById(`open - answer - ${questionId} `);
-        if (textarea && this.testManager) {
-            this.testManager.recordOpenAnswer(questionId, textarea.value);
-        }
-    }
-
-    /**
-     * Обработка ответа на ситуационный вопрос
-     */
-    handleSituationalAnswer(questionId, stepId, choice) {
-        if (this.testManager) {
-            // Note: TestManager needs recordSituationalAnswer method, 
-            // but we might not have added it yet.
-            // For now, let's assume it exists or fallback to skipping
-            if (this.testManager.recordSituationalAnswer) {
-                this.testManager.recordSituationalAnswer(questionId, stepId, choice);
-            } else {
-                console.warn('recordSituationalAnswer not implemented in TestManager');
-                this.testManager.showNext();
-            }
-        }
-    }
 
     /**
      * Отображение результатов

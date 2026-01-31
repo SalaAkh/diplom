@@ -475,22 +475,23 @@ class UIController {
         const currentTheme = localStorage.getItem('theme') || 'dark';
         this.setTheme(currentTheme);
 
-        toggle.onclick = () => {
-            const newTheme = document.body.classList.contains('dark-theme') ? 'light' : 'dark';
-            this.setTheme(newTheme);
-        };
+        // Note: Click handler is set by navigation-controller.js to avoid conflicts
     }
 
     setTheme(theme) {
         localStorage.setItem('theme', theme);
-        const icon = document.querySelector('.theme-icon');
+        const icons = document.querySelectorAll('.theme-icon');
 
         if (theme === 'dark') {
             document.body.classList.add('dark-theme');
-            if (icon) icon.textContent = '☀️';
+            icons.forEach(icon => {
+                if (icon) icon.textContent = 'light_mode'; // Sun icon for dark theme
+            });
         } else {
             document.body.classList.remove('dark-theme');
-            if (icon) icon.textContent = '🌙';
+            icons.forEach(icon => {
+                if (icon) icon.textContent = 'dark_mode'; // Moon icon for light theme
+            });
         }
     }
 
@@ -800,7 +801,8 @@ class UIController {
         const user = this.app.auth.getCurrentUser();
 
         // Check if there is incomplete progress
-        const hasProgress = this.app.storage && this.app.storage.loadProgress() && this.app.storage.loadProgress().length > 0;
+        const progressData = this.app.storage && this.app.storage.loadProgress();
+        const hasProgress = progressData && progressData.choices && (Array.isArray(progressData.choices) ? progressData.choices.length > 0 : Object.keys(progressData.choices).length > 0);
 
         container.innerHTML = `
             <div class="intro-screen">
@@ -872,18 +874,23 @@ class UIController {
                 <!-- Main Actions -->
                 <div class="intro-actions flex flex-col items-center gap-4 mb-12">
                     ${hasProgress ? `
-                        <button class="btn btn-primary btn-lg w-full max-w-md pulse-animation" onclick="app.continueTest()">
-                            <span class="text-xl">▶️</span>
-                            <div class="flex flex-col items-start ml-2">
-                                <span class="font-bold">${t('continueTest')}</span>
-                                <span class="text-xs opacity-80">${this.app.storage.loadProgress().length} questions completed</span>
+                        <button class="btn btn-primary btn-lg w-full max-w-md pulse-animation flex items-center justify-center gap-4 py-4 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1" onclick="app.continueTest()">
+                            <span class="material-symbols-rounded text-4xl">play_circle</span>
+                            <div class="flex flex-col items-start">
+                                <span class="font-bold text-lg tracking-wide uppercase">${t('continueTest')}</span>
+                                <span class="text-xs opacity-90 font-medium">
+                                    ${progressData.currentQuestionIndex || (Array.isArray(progressData.choices) ? progressData.choices.length : Object.keys(progressData.choices || {}).length)} / ${(app.scenarios ? app.scenarios.length : '30+')} ${t('questionsCompleted')}
+                                </span>
                             </div>
                         </button>
-                        <button class="btn btn-secondary w-full max-w-md" onclick="app.startNewTest()">${t('startNew')}</button>
+                        <button class="btn btn-secondary w-full max-w-md flex items-center justify-center gap-3 py-3 hover:bg-white/10 transition-colors" onclick="app.startNewTest()">
+                            <span class="material-symbols-rounded">restart_alt</span>
+                            <span>${t('startNew')}</span>
+                        </button>
                     ` : `
-                        <button class="btn btn-primary btn-lg w-full max-w-md pulse-animation" onclick="app.showTestTypeSelection()">
-                            <span class="text-2xl mr-2">🚀</span>
-                            <span class="text-lg font-bold">${t('startTest')}</span>
+                        <button class="btn btn-primary btn-lg w-full max-w-md pulse-animation flex items-center justify-center gap-4 py-4 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1" onclick="app.showTestTypeSelection()">
+                            <span class="material-symbols-rounded text-4xl">rocket_launch</span>
+                            <span class="text-lg font-bold tracking-wide uppercase">${t('startTest')}</span>
                         </button>
                     `}
                 </div>

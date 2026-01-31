@@ -424,8 +424,10 @@
 
 @media (max-width: 768px) {
     .page-header {
-        flex-direction: column;
-        text-align: center;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
         gap: var(--space-4);
         padding-top: var(--space-4);
     }

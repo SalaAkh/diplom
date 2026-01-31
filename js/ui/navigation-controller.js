@@ -53,16 +53,28 @@ class NavigationController {
 
             themeToggle.onclick = () => {
                 const isDark = document.body.classList.contains('dark-theme');
-                if (isDark) {
-                    document.body.classList.remove('dark-theme');
-                    localStorage.setItem('theme', 'light');
-                    const icon = themeToggle.querySelector('.theme-icon');
-                    if (icon) icon.textContent = 'dark_mode';
+                const newTheme = isDark ? 'light' : 'dark';
+
+                // Use centralized setTheme if available
+                if (window.app && window.app.ui && typeof window.app.ui.setTheme === 'function') {
+                    window.app.ui.setTheme(newTheme);
                 } else {
-                    document.body.classList.add('dark-theme');
-                    localStorage.setItem('theme', 'dark');
-                    const icon = themeToggle.querySelector('.theme-icon');
-                    if (icon) icon.textContent = 'light_mode';
+                    // Fallback to direct manipulation
+                    if (isDark) {
+                        document.body.classList.remove('dark-theme');
+                        localStorage.setItem('theme', 'light');
+                        const icons = document.querySelectorAll('.theme-icon');
+                        icons.forEach(icon => {
+                            if (icon) icon.textContent = 'dark_mode';
+                        });
+                    } else {
+                        document.body.classList.add('dark-theme');
+                        localStorage.setItem('theme', 'dark');
+                        const icons = document.querySelectorAll('.theme-icon');
+                        icons.forEach(icon => {
+                            if (icon) icon.textContent = 'light_mode';
+                        });
+                    }
                 }
             };
         }

@@ -140,6 +140,7 @@ class LocalizationManager {
                 pleaseEnterAnswer: "Жауабыңызды енгізіңіз",
 
                 // Тест
+                questionsCompleted: "аяқталды",
                 question: "Сұрақ",
                 of: "/",
                 back: "← Артқа",
@@ -380,6 +381,7 @@ class LocalizationManager {
                 pleaseEnterAnswer: "Пожалуйста, введите ответ",
 
                 // Тест
+                questionsCompleted: "пройдено",
                 question: "Вопрос",
                 of: "из",
                 back: "← Назад",
@@ -583,6 +585,7 @@ class LocalizationManager {
                 pleaseEnterAnswer: "Please enter an answer",
 
                 // Test
+                questionsCompleted: "completed",
                 question: "Question",
                 of: "of",
                 back: "← Back",

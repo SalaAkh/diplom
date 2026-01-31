@@ -97,10 +97,17 @@ class TestManager {
         this.completedScenarios = [];
 
         // Load scenarios first
+        // Load scenarios first
         this.loadData();
 
+        // Ensure we use the Basic Analyzer
+        this.app.analyzer = new PersonalityAnalyzer({
+            scenarios: this.scenarios,
+            dimensions: this.app.dimensions || (this.app.scenarios ? this.app.scenarios.dimensions : {})
+        });
+
         // Reset Analyzer & Storage
-        if (this.analyzer) this.analyzer.reset();
+        this.analyzer.reset();
         if (this.storage) this.storage.clearAll();
 
         this.app.state = 'testing';
@@ -239,11 +246,15 @@ class TestManager {
             this.completedScenarios.push(scenario);
         }
 
-        this.storage.saveProgress(this.analyzer.choices);
+        // Increment index BEFORE saving so we resume at the next question
+        this.currentScenarioIndex++;
+        this.storage.saveProgress(this.analyzer.choices, 'basic', this.currentScenarioIndex);
         this.currentScenarioStartTime = null;
 
         // Next
-        setTimeout(() => this.showNext(), 500);
+        setTimeout(() => {
+            this.showNext();
+        }, 500);
     }
 
     /**
@@ -251,10 +262,10 @@ class TestManager {
      */
     recordAdvancedAnswer(choice, questionId) {
         this.analyzer.recordChoice(questionId, choice);
-        this.storage.saveProgress(this.analyzer.choices);
 
         setTimeout(() => {
             this.currentQuestionIndex++;
+            this.storage.saveProgress(this.analyzer.choices, this.testMode, this.currentQuestionIndex);
             this.showNext();
         }, 500);
     }
@@ -264,13 +275,13 @@ class TestManager {
      */
     recordScaleAnswer(questionId, value) {
         this.analyzer.recordScaleAnswer(questionId, value);
-        this.storage.saveProgress({
-            scales: this.analyzer.scaleAnswers,
-            choices: this.analyzer.choices
-        });
 
         setTimeout(() => {
             this.currentQuestionIndex++;
+            this.storage.saveProgress({
+                scales: this.analyzer.scaleAnswers,
+                choices: this.analyzer.choices
+            }, this.testMode, this.currentQuestionIndex);
             this.showNext();
         }, 300);
     }
@@ -286,8 +297,15 @@ class TestManager {
             this.analyzer.recordOpenAnswer(questionId, text);
         }
 
-        this.currentQuestionIndex++;
-        this.showNext();
+        setTimeout(() => {
+            this.currentQuestionIndex++;
+            // Save progress
+            this.storage.saveProgress({
+                open: this.analyzer.openAnswers || {},
+                choices: this.analyzer.choices
+            }, this.testMode, this.currentQuestionIndex);
+            this.showNext();
+        }, 300);
     }
 
     /**
@@ -316,19 +334,18 @@ class TestManager {
                 this.storage.saveProgress({
                     situational: this.analyzer.situationalAnswers,
                     choices: this.analyzer.choices
-                });
+                }, this.testMode, this.currentQuestionIndex);
 
                 // Re-render immediately for next step
                 this.showNext();
             } else {
                 // Finished all steps for this question
-                this.storage.saveProgress({
-                    situational: this.analyzer.situationalAnswers,
-                    choices: this.analyzer.choices
-                });
-
                 setTimeout(() => {
                     this.currentQuestionIndex++;
+                    this.storage.saveProgress({
+                        situational: this.analyzer.situationalAnswers,
+                        choices: this.analyzer.choices
+                    }, this.testMode, this.currentQuestionIndex);
                     // Clean up step state for this question (optional, but good for replay)
                     // this.currentSituationalStep[questionId] = 0; 
                     this.showNext();
@@ -346,6 +363,13 @@ class TestManager {
      */
     finishTest() {
         this.app.state = 'results';
+
+        // Clear progress from storage since test is finished
+        if (this.storage) {
+            this.storage.clearAll(); // Clears 'testProgress'
+            console.log('✅ Test finished, progress cleared');
+        }
+
         if (this.ui) {
             // UI Controller creates the visualizer, but App might still hold the method
             // Ideally UIController should handle showResults, but for now delegating back to App 

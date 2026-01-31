@@ -187,19 +187,29 @@ class StorageManager {
 
     /**
      * Сохранение прогресса прохождения теста
-     * @param {Array} choices - Массив выборов
+     * @param {Array|Object} choices - Массив выборов или объект с данными прогресса
+     * @param {string} testMode - Режим теста ('basic' или 'advanced')
+     * @param {number} currentQuestionIndex - Текущий индекс вопроса
      */
-    saveProgress(choices) {
+    saveProgress(choices, testMode = null, currentQuestionIndex = 0) {
         if (!this.isStorageAvailable) {
+            console.warn('⚠️ localStorage недоступен, прогресс не сохранен');
             return false;
         }
 
         try {
             const data = {
                 choices: choices,
+                testMode: testMode,
+                currentQuestionIndex: currentQuestionIndex,
                 timestamp: new Date().toISOString()
             };
             localStorage.setItem('testProgress', JSON.stringify(data));
+            console.log('✅ Прогресс сохранен:', {
+                testMode: testMode,
+                questionIndex: currentQuestionIndex,
+                choicesCount: Array.isArray(choices) ? choices.length : Object.keys(choices).length
+            });
             return true;
         } catch (error) {
             // Обработка QuotaExceededError
@@ -210,6 +220,7 @@ class StorageManager {
                     this.clearOldData();
                     // Пробуем снова сохранить
                     localStorage.setItem('testProgress', JSON.stringify(data));
+                    console.log('✅ Прогресс сохранен после очистки');
                     return true;
                 } catch (retryError) {
                     console.error('Не удалось сохранить прогресс даже после очистки:', retryError);
@@ -217,7 +228,7 @@ class StorageManager {
                     return false;
                 }
             } else {
-                console.error('Ошибка сохранения прогресса:', error);
+                console.error('❌ Ошибка сохранения прогресса:', error);
                 this.isStorageAvailable = false;
                 return false;
             }
@@ -260,12 +271,15 @@ class StorageManager {
 
     /**
      * Загрузка прогресса
-     * @returns {Array|null} Массив выборов или null
+     * @returns {Object|null} Объект с данными прогресса или null
      */
     loadProgress() {
         try {
             const data = localStorage.getItem('testProgress');
-            if (!data) return null;
+            if (!data) {
+                console.log('ℹ️ Сохраненный прогресс не найден');
+                return null;
+            }
 
             const parsed = JSON.parse(data);
 
@@ -276,14 +290,21 @@ class StorageManager {
                 return null;
             }
 
-            // Валидация массива выборов
-            if (parsed.choices && !this.validateProgress(parsed.choices)) {
+            // Валидация массива выборов (если это старый формат - только массив)
+            if (Array.isArray(parsed.choices) && !this.validateProgress(parsed.choices)) {
                 console.warn('Прогресс не прошел валидацию, очищаем поврежденные данные');
                 localStorage.removeItem('testProgress');
                 return null;
             }
 
-            return parsed.choices;
+            console.log('✅ Прогресс загружен:', {
+                testMode: parsed.testMode,
+                questionIndex: parsed.currentQuestionIndex,
+                timestamp: parsed.timestamp
+            });
+
+            // Возвращаем полный объект прогресса
+            return parsed;
         } catch (error) {
             console.error('Ошибка загрузки прогресса:', error);
             // Очищаем поврежденные данные
