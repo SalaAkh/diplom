@@ -164,6 +164,7 @@ class LocalizationManager {
                 startBasicTest: "Жылдам тестті бастау",
                 startAdvancedTest: "Тереңдетілген тестті бастау",
                 loading: "Жүктелуде...",
+                loadingProfile: "Профиль жүктелуде...",
                 errorLoadingAdvancedTest: "Тереңдетілген тестті жүктеу кезінде қате орын алды. Кейінірек қайталаңыз.",
                 continue: "Жалғастыру",
                 enterYourAnswer: "Жауабыңызды енгізіңіз...",
@@ -277,6 +278,12 @@ class LocalizationManager {
                 systematicName: "Рационалдық",
                 peopleOrientedName: "Жекешілдік",
                 riskToleranceName: "Бақылау",
+                // Footer & Meta
+                project: "Дипломдық жоба",
+                dataProcessed: "Деректер браузерде өңделуде",
+                theme: "Тақырып",
+                rename: "Атын өзгерту",
+                deleteTest: "Жою",
 
                 // Жүйе туралы
                 aboutTitle: "Жүйе туралы",
@@ -503,6 +510,7 @@ class LocalizationManager {
                 startBasicTest: "Начать быстрый тест",
                 startAdvancedTest: "Начать углубленный тест",
                 loading: "Загрузка...",
+                loadingProfile: "Загрузка профиля...",
                 errorLoadingAdvancedTest: "Ошибка загрузки углубленного теста. Попробуйте позже.",
                 continue: "Продолжить",
                 enterYourAnswer: "Введите ваш ответ...",
@@ -626,6 +634,12 @@ class LocalizationManager {
                 systematicName: "Рациональность",
                 peopleOrientedName: "Индивидуализм",
                 riskToleranceName: "Контроль",
+                // Footer & Meta
+                project: "Дипломный проект",
+                dataProcessed: "Данные обрабатываются в вашем браузере",
+                theme: "Тема",
+                rename: "Переименовать",
+                deleteTest: "Удалить",
                 explorationName: "Исследователь",
                 // Эволюция
                 evolutionTitle: "Эволюция профиля",
@@ -808,6 +822,7 @@ class LocalizationManager {
                 startBasicTest: "Start Quick Test",
                 startAdvancedTest: "Start Advanced Test",
                 loading: "Loading...",
+                loadingProfile: "Loading profile...",
                 errorLoadingAdvancedTest: "Error loading advanced test. Please try again later.",
                 continue: "Continue",
                 enterYourAnswer: "Enter your answer...",
@@ -925,6 +940,12 @@ class LocalizationManager {
                 systematicName: "Rationality",
                 peopleOrientedName: "Individualism",
                 riskToleranceName: "Control",
+                // Footer & Meta
+                project: "Diploma Project",
+                dataProcessed: "Data is processed in your browser",
+                theme: "Theme",
+                rename: "Rename",
+                deleteTest: "Delete",
 
                 // About System
                 aboutTitle: "About System",
