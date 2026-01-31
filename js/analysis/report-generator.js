@@ -1,6 +1,6 @@
 /**
  * Модуль генерации отчетов
- * Создает профессиональные отчеты в различных форматах
+ * Создает профессиональные отчеты в различных форматах (HTML, PDF, JSON, TXT, DOC)
  * 
  * Автор: Ахмедьянов Саламат КПО 9/22-2
  * Дата: 2026
@@ -8,7 +8,8 @@
 
 class ReportGenerator {
     constructor() {
-        this.formats = ['json', 'text', 'html'];
+        this.formats = ['json', 'text', 'html', 'pdf', 'doc'];
+        this.currentFilename = 'report';
     }
 
     /**
@@ -26,7 +27,9 @@ class ReportGenerator {
             case 'html':
                 return this.generateHTMLReport(data);
             case 'pdf':
-                return this.generatePDFReport(data);
+                return this.generatePDFReport(data); // Returns Promise
+            case 'doc':
+                return this.generateDocReport(data);
             default:
                 return this.generateHTMLReport(data);
         }
@@ -105,7 +108,7 @@ class ReportGenerator {
      */
     generateHTMLReport(data) {
         const date = new Date().toLocaleString('ru-RU');
-        
+
         let html = `
 <!DOCTYPE html>
 <html lang="ru">
@@ -121,7 +124,7 @@ class ReportGenerator {
             max-width: 900px;
             margin: 0 auto;
             padding: 2rem;
-            background: #f8f9fa;
+            background: #fff;
         }
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -129,34 +132,34 @@ class ReportGenerator {
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
+            text-align: center;
         }
         .section {
             background: white;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
+            border: 1px solid #e1e8ed;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         h1 { margin: 0 0 0.5rem 0; }
-        h2 { color: #4a90e2; margin-top: 0; }
+        h2 { color: #4a90e2; margin-top: 0; border-bottom: 2px solid #f0f0f0; padding-bottom: 0.5rem; }
         .score-item {
             display: flex;
             justify-content: space-between;
-            padding: 0.75rem;
-            border-bottom: 1px solid #e1e8ed;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
         }
-        .score-item:last-child { border-bottom: none; }
         .score-bar {
             height: 8px;
             background: #e1e8ed;
             border-radius: 4px;
             margin-top: 0.5rem;
             overflow: hidden;
+            width: 100%;
         }
         .score-fill {
             height: 100%;
             background: linear-gradient(90deg, #4a90e2, #7b68ee);
-            transition: width 0.3s;
         }
         .recommendation {
             padding: 1rem;
@@ -165,16 +168,12 @@ class ReportGenerator {
             border-left: 4px solid #4a90e2;
             border-radius: 4px;
         }
-        @media print {
-            body { background: white; }
-            .section { page-break-inside: avoid; }
-        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>Отчет о прохождении системы самопознания</h1>
-        <p>Дата: ${date}</p>
+        <p>Дата формирования: ${date}</p>
     </div>
         `;
 
@@ -194,16 +193,16 @@ class ReportGenerator {
             `;
             Object.keys(data.scores).forEach(dim => {
                 const score = data.scores[dim];
-                const normalizedScore = (score + 100) / 2; // Преобразуем -100..100 в 0..100
+                const normalizedScore = (score + 100) / 2;
                 html += `
         <div class="score-item">
-            <div>
+            <div style="flex: 1; margin-right: 20px;">
                 <strong>${dim}</strong>
                 <div class="score-bar">
                     <div class="score-fill" style="width: ${normalizedScore}%"></div>
                 </div>
             </div>
-            <div><strong>${score}%</strong></div>
+            <div style="font-weight: bold; color: #4a90e2;">${score}%</div>
         </div>
                 `;
             });
@@ -245,25 +244,145 @@ class ReportGenerator {
     }
 
     /**
-     * Генерация PDF отчета (упрощенная версия через печать)
+     * Генерация DOC отчета (HTML с MIME-типом Word)
+     * @param {Object} data 
+     * @returns {string} HTML контент
+     */
+    generateDocReport(data) {
+        // Word понимает простой HTML. Добавляем специфичные мета-теги для Word.
+        const htmlContent = this.generateHTMLReport(data);
+
+        // Оборачиваем в структуру, понятную Word
+        return `
+            <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+            <head>
+                <meta charset="utf-8">
+                <title>Отчет</title>
+                <!--[if gte mso 9]>
+                <xml>
+                <w:WordDocument>
+                <w:View>Print</w:View>
+                <w:Zoom>90</w:Zoom>
+                <w:DoNotOptimizeForBrowser/>
+                </w:WordDocument>
+                </xml>
+                <![endif]-->
+                <style>
+                    body { font-family: 'Times New Roman', serif; }
+                </style>
+            </head>
+            <body>
+                ${htmlContent}
+            </body>
+            </html>
+        `;
+    }
+
+    /**
+     * Генерация PDF отчета
+     * Использует html2pdf.js для сохранения файла
      * @param {Object} data - Данные
-     * @returns {Promise} Промис с Blob
+     * @returns {Promise} Промис
      */
     async generatePDFReport(data) {
-        // Создаем HTML отчет
-        const html = this.generateHTMLReport(data);
-        
-        // Создаем временное окно для печати
-        const printWindow = window.open('', '_blank');
-        printWindow.document.write(html);
-        printWindow.document.close();
-        
-        // Ждем загрузки и предлагаем печать
-        printWindow.onload = () => {
-            printWindow.print();
+        // Проверяем наличие библиотеки
+        if (typeof html2pdf === 'undefined') {
+            console.error('html2pdf library is missing');
+            alert('Библиотека html2pdf не загружена. Пожалуйста, проверьте подключение к интернету.');
+            return Promise.reject('html2pdf not found');
+        }
+
+        // 1. Получаем полные данные отчета
+        const fullHtml = this.generateHTMLReport(data);
+
+        // 2. Создаем контейнер для рендеринга
+        const container = document.createElement('div');
+        container.className = 'pdf-export-container';
+
+        // 3. Парсим HTML строку, чтобы извлечь стили и контент
+        // Это критически важно, так как вставка полной строки <html>...</html> в div
+        // создает невалидный DOM, который html2canvas может игнорировать (пустой лист).
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(fullHtml, 'text/html');
+
+        // Извлекаем стили (важно клонировать)
+        const styles = doc.querySelectorAll('style');
+        styles.forEach(style => {
+            container.appendChild(style.cloneNode(true));
+        });
+
+        // Извлекаем содержимое body
+        const bodyContent = doc.body.innerHTML;
+        const contentWrapper = document.createElement('div');
+        contentWrapper.innerHTML = bodyContent;
+        // Добавляем класс body, если есть (для специфичных селекторов)
+        if (doc.body.className) contentWrapper.className = doc.body.className;
+
+        container.appendChild(contentWrapper);
+
+        // 4. Стилизация контейнера
+        // Используем fixed позиционирование, но видимое для браузера (на экране)
+        // Некоторые браузеры не рендерят элементы за пределами видимости (left: -9999px)
+        container.style.position = 'fixed';
+        container.style.left = '0';
+        container.style.top = '0';
+        container.style.width = '800px'; // A4 ширина
+        container.style.height = 'auto';
+        container.style.maxHeight = '100vh'; // Ограничиваем высоту вьюпорта
+        container.style.overflow = 'hidden'; // Скрываем скроллбары
+        container.style.background = '#ffffff';
+        container.style.color = '#000000 !important'; // Форсируем черный текст
+        container.style.zIndex = '-9999'; // Скрываем под основным контентом
+        container.style.opacity = '0.01'; // Делаем почти прозрачным, но не 0 (0 иногда не рендерится)
+        container.style.pointerEvents = 'none'; // Чтобы не мешал кликам
+
+        // Важно: html2canvas требует, чтобы элемент был в DOM
+        document.body.appendChild(container);
+
+        // 5. Даем браузеру время на отрисовку и применение стилей
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // 6. Настройки экспорта
+        const opt = {
+            margin: [10, 10, 10, 10],
+            filename: this.currentFilename,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                letterRendering: true,
+                allowTaint: true,
+                scrollY: 0,
+                scrollX: 0,
+                windowWidth: 800
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
-        
-        return Promise.resolve(new Blob([html], { type: 'text/html' }));
+
+        // Форсируем белый фон для контента внутри
+        if (contentWrapper) {
+            contentWrapper.style.backgroundColor = '#ffffff';
+            contentWrapper.style.color = '#000000';
+        }
+
+        try {
+            // 7. Генерируем PDF
+            const worker = html2pdf().from(container).set(opt);
+            await worker.save();
+
+            // 8. Очистка
+            if (document.body.contains(container)) {
+                document.body.removeChild(container);
+            }
+            return Promise.resolve();
+        } catch (error) {
+            console.error('Ошибка при генерации PDF (ReportGenerator):', error);
+            if (document.body.contains(container)) {
+                document.body.removeChild(container);
+            }
+            throw error;
+        }
     }
 
     /**
@@ -273,32 +392,47 @@ class ReportGenerator {
      * @param {string} filename - Имя файла
      */
     downloadReport(data, format = 'html', filename = null) {
-        const report = this.generateReport(data, format);
-        
+        // Если имя файла отсутствует, генерируем стандартное
         if (!filename) {
             const date = new Date().toISOString().split('T')[0];
             filename = `personality-report-${date}.${format === 'json' ? 'json' : format === 'text' ? 'txt' : 'html'}`;
         }
 
+        // Убеждаемся, что расширение соответствует формату
+        if (format === 'pdf' && !filename.endsWith('.pdf')) filename += '.pdf';
+        if (format === 'html' && !filename.endsWith('.html')) filename += '.html';
+        if (format === 'doc' && !filename.endsWith('.doc')) filename += '.doc';
+
+        this.currentFilename = filename;
+
+        if (format === 'pdf') {
+            this.generatePDFReport(data).catch(err => {
+                console.error('PDF Generation failed', err);
+                alert('Не удалось создать PDF. Попробуйте еще раз.');
+            });
+            return;
+        }
+
+        const report = this.generateReport(data, format);
+
         let blob;
-        let mimeType;
 
         switch (format) {
             case 'json':
                 blob = new Blob([report], { type: 'application/json' });
-                mimeType = 'application/json';
                 break;
             case 'text':
                 blob = new Blob([report], { type: 'text/plain' });
-                mimeType = 'text/plain';
                 break;
             case 'html':
                 blob = new Blob([report], { type: 'text/html' });
-                mimeType = 'text/html';
+                break;
+            case 'doc':
+                // Используем MIME-тип Word для открытия HTML как документа
+                blob = new Blob(['\ufeff', report], { type: 'application/msword' });
                 break;
             default:
                 blob = new Blob([report], { type: 'text/html' });
-                mimeType = 'text/html';
         }
 
         const url = URL.createObjectURL(blob);
@@ -315,4 +449,10 @@ class ReportGenerator {
 // Экспорт для использования в других модулях
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = ReportGenerator;
+}
+
+// Обеспечиваем глобальную доступность
+if (typeof window !== 'undefined') {
+    window.ReportGenerator = ReportGenerator;
+    console.log('ReportGenerator initialized'); // Log for debugging
 }

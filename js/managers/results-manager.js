@@ -169,15 +169,42 @@ class ResultsManager {
 
     /**
      * Download Results
-     * @param {string} format 'json', 'html', 'text'
+     * @param {string} format 'json', 'html', 'text', 'pdf'
      */
     downloadResults(format = 'html') {
         const profile = this.analyzer.generateProfile();
         const scores = this.analyzer.getPercentageScores();
         const normalizedScores = this.analyzer.getNormalizedScores();
         const stats = this.analyzer.getStatistics();
-        // Assuming we can get current AI analysis from storage or cached state
-        // For now generating basic structure
+
+        // Lazy load ReportGenerator if needed
+        let reportGen = this.app.reportGenerator;
+
+        // Force check window.ReportGenerator (last resort) and re-instantiate if needed
+        if (!reportGen && typeof window !== 'undefined' && window.ReportGenerator) {
+            console.log('ResultsManager: Lazy initializing ReportGenerator');
+            reportGen = new window.ReportGenerator();
+            // Cache it if possible
+            this.app.reportGenerator = reportGen;
+        }
+
+        // Попытка получить данные пользователя и историю для правильного имени файла
+        const user = this.auth.getCurrentUser();
+        let filename = null;
+
+        if (user) {
+            const history = this.auth.getTestHistory();
+            if (history && history.length > 0) {
+                const lastTest = history[history.length - 1];
+                const safeTitle = (lastTest.title || `Test #${history.length}`).replace(/[^a-zа-яё0-9\s-]/gi, '_');
+                const dateStart = new Date().toISOString().split('T')[0];
+                filename = `${user.username}_${safeTitle}_${dateStart}.${format === 'pdf' ? 'pdf' : format === 'json' ? 'json' : format === 'text' ? 'txt' : 'html'}`;
+            }
+        }
+
+        if (!filename) {
+            filename = `personality-report-${new Date().toISOString().split('T')[0]}.${format === 'pdf' ? 'pdf' : format === 'json' ? 'json' : format === 'text' ? 'txt' : 'html'}`;
+        }
 
         const reportData = {
             title: 'Отчёт о прохождении системы самопознания',
@@ -186,18 +213,22 @@ class ResultsManager {
             profile: profile,
             scores: scores,
             normalizedScores: normalizedScores,
-            // aiAnalysis: ... (might need to pass this in or fetch from last result)
+            // aiAnalysis: ... (можно добавить, если доступно)
         };
 
-        if (this.app.reportGenerator) {
-            this.app.reportGenerator.downloadReport(reportData, format);
+        if (reportGen) {
+            reportGen.downloadReport(reportData, format, filename);
         } else {
-            // Simple fallback
+            console.warn('ReportGenerator not found even after lazy init, falling back to simple JSON export');
+
+            // Simple fallback (JSON only)
+            const finalFilename = filename.endsWith('.json') ? filename : filename + '.json';
+
             const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `personality-report-${Date.now()}.json`;
+            a.download = finalFilename;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

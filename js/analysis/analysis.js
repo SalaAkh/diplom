@@ -428,7 +428,7 @@ class PersonalityAnalyzer {
         // Добавляем тип профиля (название топ-категории)
         profile.type = profile.categories.length > 0
             ? profile.categories[0].name
-            : "Сбалансированный профиль";
+            : (window.t ? window.t('balancedProfile') : "Сбалансированный профиль");
 
         // Добавляем traits (черты характера) на основе доминирующих измерений
         profile.traits = this.extractTraits(scores, profile.dimensions);
@@ -464,7 +464,7 @@ class PersonalityAnalyzer {
 
         // If no strong traits, add balanced
         if (traits.length === 0) {
-            traits.push("Сбалансированный подход");
+            traits.push(window.t ? window.t('balancedApproach') : "Сбалансированный подход");
         }
 
         return traits.slice(0, 5); // Max 5 traits
@@ -474,74 +474,70 @@ class PersonalityAnalyzer {
      * Генерация общего резюме профиля
      */
     generateSummary(scores) {
+        const t = (key) => (window.t ? window.t(key) : key);
         const traits = [];
         const strengths = [];
-        const areasForDevelopment = [];
 
         // Рациональность
         if (scores.rationality > 0.3) {
-            traits.push("рациональный подход");
-            strengths.push("логическое мышление");
+            traits.push(t('traitRational'));
+            strengths.push(t('strengthLogical'));
         }
 
         // Интуиция
         if (scores.intuition > 0.3) {
-            traits.push("развитая интуиция");
-            strengths.push("интуитивное прозрение");
+            traits.push(t('traitIntuitive'));
+            strengths.push(t('strengthIntuitive'));
         }
 
         // Индивидуализм
         if (scores.individualism > 0.3) {
-            traits.push("самостоятельность");
-            strengths.push("независимость");
+            traits.push(t('traitIndependent'));
+            strengths.push(t('strengthIndependent'));
         } else if (scores.individualism < -0.3) {
-            traits.push("коллективизм");
-            strengths.push("командная работа");
+            traits.push(t('traitCollectivist'));
+            strengths.push(t('strengthTeamwork'));
         }
 
         // Стратегическое мышление
         if (scores.strategic > 0.3) {
-            traits.push("стратегическое видение");
-            strengths.push("долгосрочное планирование");
+            traits.push(t('traitStrategic'));
+            strengths.push(t('strengthPlanning'));
         }
 
         // Адаптивность
         if (scores.adaptation > 0.3) {
-            traits.push("высокая адаптивность");
-            strengths.push("гибкость в решениях");
+            traits.push(t('traitAdaptive'));
+            strengths.push(t('strengthFlexibility'));
         }
 
         // Смысл
         if (scores.meaning > 0.3) {
-            traits.push("поиск глубинного смысла");
-            strengths.push("ценностная ориентация");
+            traits.push(t('traitMeaning'));
+            strengths.push(t('strengthValues'));
         }
 
         // Прагматизм (Utility)
         if (scores.utility > 0.3) {
-            traits.push("прагматичность");
-            strengths.push("ориентация на результат");
+            traits.push(t('traitPragmatic'));
+            strengths.push(t('strengthResult'));
         }
 
         // Исследователь
         if (scores.explorer > 0.3) {
-            traits.push("исследовательский дух");
-            strengths.push("любознательность");
+            traits.push(t('traitExplorer'));
+            strengths.push(t('strengthCuriosity'));
         }
 
         let summary = "";
         if (traits.length === 0) {
-            summary = "Ваш профиль демонстрирует сбалансированный подход к различным аспектам принятия решений.";
+            summary = t('summaryBalanced');
         } else {
-            summary = `Ваш профиль характеризуется: ${traits.join(", ")}.`;
+            summary = `${t('summaryIntro')} ${traits.join(", ")}.`;
         }
 
         if (strengths.length > 0) {
-            summary += ` Ваши сильные стороны: ${strengths.join(", ")}.`;
-        }
-
-        if (areasForDevelopment.length > 0) {
-            summary += ` Области для развития: ${areasForDevelopment.join(", ")}.`;
+            summary += ` ${t('summaryStrengths')} ${strengths.join(", ")}.`;
         }
 
         return summary;
@@ -553,168 +549,79 @@ class PersonalityAnalyzer {
      * @returns {Array} Массив категорий с matchScore
      */
     calculateCategoryMatch(scores) {
+        const t = (key) => (window.t ? window.t(key) : key);
         const categories = [
             {
                 id: "research",
-                name: "Исследование и Наука",
+                name: t('research'),
                 color: "#4a90e2",
-                description: "Научная деятельность, аналитика, R&D",
+                description: t('descResearch') || "Научная деятельность, аналитика, R&D",
                 calculateMatch: (s) => {
-                    // Высокий explorer, rationality, strategic
                     const explorerScore = Math.max(0, (s.explorer + 1) / 2);
                     const rationalityScore = Math.max(0, (s.rationality + 1) / 2);
                     const strategicScore = Math.max(0, (s.strategic + 1) / 2);
                     return (explorerScore * 0.4 + rationalityScore * 0.3 + strategicScore * 0.3);
-                },
-                activities: [
-                    "Научные исследования",
-                    "R&D и разработка",
-                    "Аналитика данных",
-                    "Консалтинг",
-                    "Преподавание и образование"
-                ],
-                skills: [
-                    "Методология исследований",
-                    "Анализ данных",
-                    "Критическое мышление",
-                    "Научное письмо",
-                    "Статистический анализ"
-                ]
+                }
             },
             {
                 id: "creativity",
-                name: "Творчество и Инновации",
+                name: t('creativity'),
                 color: "#7b68ee",
-                description: "Дизайн, искусство, стартапы, креативные индустрии",
+                description: t('descCreativity') || "Дизайн, искусство, стартапы",
                 calculateMatch: (s) => {
-                    // Высокий explorer, intuition, adaptation
                     const explorerScore = Math.max(0, (s.explorer + 1) / 2);
-                    const intuitionScore = Math.max(0, (s.intuition + 1) / 2); // Используем прямую метрику
+                    const intuitionScore = Math.max(0, (s.intuition + 1) / 2);
                     const adaptationScore = Math.max(0, (s.adaptation + 1) / 2);
                     return (explorerScore * 0.4 + intuitionScore * 0.3 + adaptationScore * 0.3);
-                },
-                activities: [
-                    "Дизайн и визуальное искусство",
-                    "Стартапы и инновации",
-                    "Креативные индустрии",
-                    "Предпринимательство",
-                    "Медиа и контент"
-                ],
-                skills: [
-                    "Креативное мышление",
-                    "Дизайн-мышление",
-                    "Инновации",
-                    "Визуальная коммуникация",
-                    "Прототипирование"
-                ]
+                }
             },
             {
                 id: "management",
-                name: "Управление и Лидерство",
+                name: t('management'),
                 color: "#50c878",
-                description: "Менеджмент, HR, стратегическое планирование",
+                description: t('descManagement') || "Менеджмент, HR, стратегия",
                 calculateMatch: (s) => {
-                    // Высокий strategic, rationality, meaning
                     const strategicScore = Math.max(0, (s.strategic + 1) / 2);
                     const rationalityScore = Math.max(0, (s.rationality + 1) / 2);
                     const meaningScore = Math.max(0, (s.meaning + 1) / 2);
                     return (strategicScore * 0.4 + rationalityScore * 0.3 + meaningScore * 0.3);
-                },
-                activities: [
-                    "Менеджмент и руководство",
-                    "HR и управление персоналом",
-                    "Стратегическое планирование",
-                    "Бизнес-консалтинг",
-                    "Политика и общественная деятельность"
-                ],
-                skills: [
-                    "Лидерство",
-                    "Управление командой",
-                    "Стратегическое мышление",
-                    "Переговоры",
-                    "Управление проектами"
-                ]
+                }
             },
             {
                 id: "social",
-                name: "Социальная сфера и Помощь",
+                name: t('social'),
                 color: "#f39c12",
-                description: "Образование, социальная работа, медицина, психология",
+                description: t('descSocial') || "Образование, медицина, психология",
                 calculateMatch: (s) => {
-                    // Высокий meaning, intuition, collectivism (collectivism = -individualism)
                     const meaningScore = Math.max(0, (s.meaning + 1) / 2);
                     const intuitionScore = Math.max(0, (s.intuition + 1) / 2);
                     const collectivismScore = Math.max(0, (1 - s.individualism) / 2);
                     return (meaningScore * 0.4 + intuitionScore * 0.3 + collectivismScore * 0.3);
-                },
-                activities: [
-                    "Образование и преподавание",
-                    "Социальная работа",
-                    "Медицина и здравоохранение",
-                    "Психология и консультирование",
-                    "Волонтёрство и благотворительность"
-                ],
-                skills: [
-                    "Эмпатия",
-                    "Коммуникация",
-                    "Педагогика",
-                    "Консультирование",
-                    "Социальная работа"
-                ]
+                }
             },
             {
                 id: "entrepreneurship",
-                name: "Предпринимательство",
+                name: t('entrepreneurship'),
                 color: "#e74c3c",
-                description: "Стартапы, бизнес, инновационные проекты",
+                description: t('descEntrepreneurship') || "Бизнес, проекты",
                 calculateMatch: (s) => {
-                    // Высокий utility, adaptation, strategic
                     const utilityScore = Math.max(0, (s.utility + 1) / 2);
                     const adaptationScore = Math.max(0, (s.adaptation + 1) / 2);
                     const strategicScore = Math.max(0, (s.strategic + 1) / 2);
                     return (utilityScore * 0.4 + adaptationScore * 0.3 + strategicScore * 0.3);
-                },
-                activities: [
-                    "Создание стартапов",
-                    "Бизнес-развитие",
-                    "Инновационные проекты",
-                    "Инвестиции",
-                    "Консалтинг для бизнеса"
-                ],
-                skills: [
-                    "Предпринимательское мышление",
-                    "Управление рисками",
-                    "Стратегическое планирование",
-                    "Нетворкинг",
-                    "Финансовая грамотность"
-                ]
+                }
             },
             {
                 id: "analytics",
-                name: "Аналитика и Консалтинг",
+                name: t('analytics'),
                 color: "#9b59b6",
-                description: "Анализ данных, консалтинг, стратегическое планирование",
+                description: t('descAnalytics') || "Анализ данных, консалтинг",
                 calculateMatch: (s) => {
-                    // Высокий rationality, strategic, explorer
                     const rationalityScore = Math.max(0, (s.rationality + 1) / 2);
                     const strategicScore = Math.max(0, (s.strategic + 1) / 2);
                     const explorerScore = Math.max(0, (s.explorer + 1) / 2);
                     return (rationalityScore * 0.4 + strategicScore * 0.35 + explorerScore * 0.25);
-                },
-                activities: [
-                    "Аналитика данных",
-                    "Бизнес-консалтинг",
-                    "Стратегическое планирование",
-                    "Финансовый анализ",
-                    "Операционные исследования"
-                ],
-                skills: [
-                    "Аналитическое мышление",
-                    "Работа с данными",
-                    "Моделирование",
-                    "Стратегический анализ",
-                    "Презентация результатов"
-                ]
+                }
             }
         ];
 
@@ -736,13 +643,14 @@ class PersonalityAnalyzer {
      * @returns {Array} Массив векторов развития
      */
     generateDevelopmentVectors(scores) {
+        const t = (key) => (window.t ? window.t(key) : key);
         const vectors = [];
 
         // Исследователь-Стратег: высокий explorer + strategic
         if (scores.explorer > 0.3 && scores.strategic > 0.3) {
             vectors.push({
-                name: "Исследователь-Стратег",
-                description: "Вы сочетаете стремление к новым знаниям со стратегическим видением. Идеально для долгосрочных исследовательских проектов и научного лидерства.",
+                name: t('vectorResearcherStrategist'),
+                description: t('descResearcherStrategist') || "Вы сочетаете стремление к новым знаниям со стратегическим видением.",
                 combination: "explorer + strategic",
                 strength: Math.min(scores.explorer, scores.strategic)
             });
@@ -751,8 +659,8 @@ class PersonalityAnalyzer {
         // Творец-Новатор: высокий explorer, низкий rationality (интуитивный)
         if (scores.explorer > 0.3 && scores.rationality < 0.2) {
             vectors.push({
-                name: "Творец-Новатор",
-                description: "Ваша готовность экспериментировать и создавать новое делает вас идеальным для инновационных проектов и творческих индустрий.",
+                name: t('vectorCreatorInnovator'),
+                description: t('descCreatorInnovator') || "Ваша готовность экспериментировать и создавать новое.",
                 combination: "explorer + intuition",
                 strength: (scores.explorer - scores.rationality) / 2
             });
@@ -761,8 +669,8 @@ class PersonalityAnalyzer {
         // Лидер-Организатор: высокий collectivism (низкий individualism) + strategic
         if (scores.individualism < -0.3 && scores.strategic > 0.3) {
             vectors.push({
-                name: "Лидер-Организатор",
-                description: "Вы умеете работать с людьми и видеть долгосрочную перспективу. Отлично подходит для руководящих позиций и управления командами.",
+                name: t('vectorLeaderOrganizer'),
+                description: t('descLeaderOrganizer') || "Вы умеете работать с людьми и видеть долгосрочную перспективу.",
                 combination: "collectivism + strategic",
                 strength: Math.min(-scores.individualism, scores.strategic)
             });
@@ -771,8 +679,8 @@ class PersonalityAnalyzer {
         // Аналитик-Рационалист: высокий rationality + explorer
         if (scores.rationality > 0.3 && scores.explorer > 0.2) {
             vectors.push({
-                name: "Аналитик-Рационалист",
-                description: "Ваш рациональный подход к анализу в сочетании с любознательностью идеален для научной работы и глубокого исследования проблем.",
+                name: t('vectorAnalystRationalist'),
+                description: t('descAnalystRationalist') || "Ваш рациональный подход к анализу.",
                 combination: "rationality + explorer",
                 strength: Math.min(scores.rationality, scores.explorer)
             });
@@ -781,8 +689,8 @@ class PersonalityAnalyzer {
         // Системный Аналитик: высокий rationality + strategic
         if (scores.rationality > 0.3 && scores.strategic > 0.3) {
             vectors.push({
-                name: "Системный Аналитик",
-                description: "Вы предпочитаете структурированный подход и долгосрочное планирование. Отлично для ролей, требующих надёжности и стратегического видения.",
+                name: t('vectorSystemAnalyst'),
+                description: t('descSystemAnalyst') || "Вы предпочитаете структурированный подход.",
                 combination: "rationality + strategic",
                 strength: Math.min(scores.rationality, scores.strategic)
             });
@@ -791,8 +699,8 @@ class PersonalityAnalyzer {
         // Самостоятельный Исследователь: высокий explorer + individualism
         if (scores.explorer > 0.3 && scores.individualism > 0.3) {
             vectors.push({
-                name: "Самостоятельный Исследователь",
-                description: "Ваш исследовательский дух в сочетании с независимостью идеален для академической работы и глубоких исследований.",
+                name: t('vectorIndependentResearcher'),
+                description: t('descIndependentResearcher') || "Ваш исследовательский дух в сочетании с независимостью.",
                 combination: "explorer + individualism",
                 strength: Math.min(scores.explorer, scores.individualism)
             });

@@ -19,106 +19,235 @@
     align-items: center;
     justify-content: space-between;
     gap: 4rem;
-    padding: 6rem 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    min-height: 70vh;
+    padding: 8rem 2rem 6rem;
+    /* Transparent background to show canvas */
+    background: radial-gradient(circle at top right, rgba(102, 126, 234, 0.1) 0%, transparent 60%),
+        radial-gradient(circle at bottom left, rgba(118, 75, 162, 0.1) 0%, transparent 60%);
+    color: var(--text-color);
+    min-height: 85vh;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>');
-    opacity: 0.3;
-}
-
+/* Glassmorphism card for content if needed, or just clean typography */
 .hero-content {
     flex: 1;
-    max-width: 600px;
-    z-index: 1;
+    max-width: 650px;
+    z-index: 2;
+    padding: 3rem;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    /* Increased border-radius for "rounded sides" */
+    border-radius: 48px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
 .hero-title {
-    font-size: 3.5rem;
-    font-weight: 700;
+    font-size: 4rem;
+    font-weight: 800;
     margin-bottom: 1.5rem;
-    line-height: 1.2;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     animation: fadeIn 0.8s ease-out;
+    letter-spacing: -0.02em;
+}
+
+[data-theme="light"] .hero-title {
+    background: linear-gradient(135deg, #2c3e50 0%, #4a90e2 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .hero-subtitle {
-    font-size: 1.25rem;
-    line-height: 1.7;
-    margin-bottom: 2.5rem;
-    opacity: 0.95;
+    font-size: 1.35rem;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+    color: var(--text-secondary);
     animation: fadeIn 1s ease-out 0.2s both;
+    font-weight: 300;
+}
+
+/* Auth Status Badges */
+.auth-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.auth-status-badge.logged-in {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.auth-status-badge.guest {
+    background: rgba(245, 158, 11, 0.1);
+    color: #F59E0B;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.hero-title .highlight {
+    color: var(--primary-color);
+    background: linear-gradient(120deg, var(--primary-color) 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .hero-cta {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     flex-wrap: wrap;
     animation: fadeIn 1.2s ease-out 0.4s both;
 }
 
 .btn-lg {
-    padding: 1rem 2rem;
-    font-size: 1.125rem;
-    font-weight: 600;
-    border-radius: 12px;
+    padding: 1.1rem 2.8rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 50px;
+    /* Pill shape */
+    /* Use !important to override potential load order issues */
+    background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%) !important;
+    border: none;
+    box-shadow: 0 6px 20px rgba(0, 198, 251, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: white !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+.btn-lg .material-symbols-rounded {
+    font-size: 1.4rem;
+    /* Ensure icon is vertically centered */
+    line-height: 1;
+}
+
+.btn-lg:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 198, 251, 0.5);
+    background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%) !important;
+}
+
+.btn-lg:active {
+    transform: translateY(-1px) scale(0.98);
 }
 
 .btn-xl {
-    padding: 1.25rem 2.5rem;
-    font-size: 1.25rem;
+    padding: 1.4rem 3.5rem;
+    font-size: 1.3rem;
     font-weight: 700;
-    border-radius: 14px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+    border: none;
+    box-shadow: 0 8px 25px rgba(0, 198, 251, 0.4);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.btn-xl:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 12px 35px rgba(0, 198, 251, 0.6);
+    background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+}
+
+.btn-xl:active {
+    transform: translateY(-2px) scale(0.98);
+    box-shadow: 0 6px 15px rgba(0, 198, 251, 0.4);
 }
 
 /* Hero Visual */
 .hero-visual {
     flex: 1;
     position: relative;
-    height: 400px;
+    height: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Optional: Add a subtle glow behind visual */
+    background: radial-gradient(circle, rgba(74, 144, 226, 0.1) 0%, transparent 70%);
 }
 
 .floating-icon {
-    font-size: 4rem;
-    animation: float 3s ease-in-out infinite;
+    font-size: 5rem;
+    animation: float 6s ease-in-out infinite;
     position: absolute;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 20px rgba(74, 144, 226, 0.5);
+    /* Default position for the first icon (psychology) */
+    top: 15%;
+    left: 15%;
 }
 
 .floating-icon.delay-1 {
-    animation-delay: 1s;
-    top: 20%;
-    right: 20%;
+    animation-delay: 2s;
+    /* Position for second icon (fingerprint) - Top Right */
+    top: 25%;
+    left: auto;
+    right: 15%;
 }
 
 .floating-icon.delay-2 {
-    animation-delay: 2s;
+    animation-delay: 4s;
+    /* Position for third icon (auto_graph) - Bottom Center */
+    top: auto;
     bottom: 20%;
-    left: 20%;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
+/* Update animation to respect the initial transform if needed,
+   but since we use top/left, translate is cleaner for float */
 @keyframes float {
 
     0%,
     100% {
-        transform: translateY(0px);
+        transform: translateY(0) translateX(0);
     }
 
     50% {
-        transform: translateY(-20px);
+        transform: translateY(-20px) translateX(0);
     }
+}
+
+/* Fix for the third icon which uses translateX to center */
+.floating-icon.delay-2 {
+    animation: float-centered 6s ease-in-out infinite;
+    animation-delay: 4s;
+}
+
+@keyframes float-centered {
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-20px);
+    }
+}
+
+[data-theme="light"] .floating-icon {
+    color: rgba(74, 144, 226, 0.8);
+    text-shadow: none;
 }
 
 /* Sections */
@@ -126,24 +255,27 @@
 .how-it-works-section,
 .dimensions-section,
 .cta-section {
-    padding: 5rem 2rem;
+    /* Increased padding for bigger gaps between "screens" */
+    padding: 8rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .section-title {
     text-align: center;
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 3rem;
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 5rem;
     color: var(--text-color);
+    letter-spacing: -0.02em;
 }
 
 /* Features Grid */
 .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    /* Increased gap between cards */
+    gap: 4rem;
 }
 
 .feature-card {
@@ -389,5 +521,37 @@
     .user-info-banner {
         flex-direction: column;
         text-align: center;
+    }
+}
+
+/* CTA Actions Group */
+.cta-actions-group {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.cta-actions-group .btn {
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+/* Mobile adjustments for CTA buttons */
+@media (max-width: 600px) {
+    .cta-actions-group {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .cta-actions-group .btn {
+        width: 100%;
+        min-width: unset;
     }
 }

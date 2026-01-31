@@ -186,6 +186,7 @@ class TestManager {
 
         // Delegate rendering to UI
         if (this.ui) {
+            this.currentScenario = nextScenario; // Store for re-rendering
             this.ui.showScenario(nextScenario, {
                 current: current + 1,
                 total: total,

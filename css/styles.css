@@ -274,16 +274,28 @@ body:not(.dark-theme) .google-signin-container {
 }
 
 .btn-secondary {
-    background: var(--card-bg);
-    color: var(--primary-color);
-    border: 2px solid var(--primary-color);
-    backdrop-filter: blur(5px);
+    background: rgba(255, 255, 255, 0.05);
+    color: #00c6fb;
+    border: 2px solid #00c6fb;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 198, 251, 0.2);
 }
 
-.btn-secondary:hover {
-    background: var(--primary-color);
-    color: white;
-    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+/* Ensure secondary style overrides primary gradient even if size class is present */
+.btn-secondary.btn-xl,
+.btn-secondary.btn-lg {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #00c6fb;
+}
+
+.btn-secondary:hover,
+.btn-secondary.btn-xl:hover,
+.btn-secondary.btn-lg:hover {
+    background: linear-gradient(135deg, rgba(0, 198, 251, 0.1), rgba(0, 91, 234, 0.1));
+    color: #00d2ff;
+    border-color: #00d2ff;
+    box-shadow: 0 6px 20px rgba(0, 198, 251, 0.4);
+    transform: translateY(-2px);
 }
 
 /* Scenario Screen */
@@ -525,7 +537,8 @@ body:not(.dark-theme) .google-signin-container {
     position: relative;
 }
 
-#radarChartContainer canvas {
+#radarChartContainer canvas,
+.crisp-chart {
     max-width: 100%;
     max-height: 100%;
     /* Ensure crispy rendering on high DPI */
@@ -1678,7 +1691,20 @@ h3 {
 }
 
 .language-flag {
-    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 16px;
+    overflow: hidden;
+    border-radius: 2px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.language-flag svg {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .language-name {
@@ -2216,6 +2242,56 @@ h3 {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     transition: var(--transition);
 }
+
+
+
+.scale-value-display {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+/* Стили для открытых вопросов */
+.open-answer-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 1.1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.open-answer-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.open-answer-textarea::placeholder {
+    color: var(--text-light);
+    opacity: 0.7;
+}
+
+.open-answer-info {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+}
+
+.char-count {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
 
 .scale-slider::-webkit-slider-thumb:hover {
     transform: scale(1.2);

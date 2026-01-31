@@ -136,7 +136,7 @@ class ResultsVisualizer {
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Ваш профиль',
+                        label: window.t ? window.t('yourProfile') : 'Ваш профиль',
                         data: values,
                         backgroundColor: gradient,
                         borderColor: '#00c6fb',
@@ -216,11 +216,11 @@ class ResultsVisualizer {
                                     const percentage = Math.round((value - 50) * 2);
 
                                     let level = '';
-                                    if (percentage > 50) level = 'Высокая выраженность';
-                                    else if (percentage > 20) level = 'Умеренная выраженность';
-                                    else if (percentage < -50) level = 'Низкая выраженность';
-                                    else if (percentage < -20) level = 'Умеренно низкая выраженность';
-                                    else level = 'Сбалансировано';
+                                    if (percentage > 50) level = window.t ? window.t('levelHigh') : 'Высокая выраженность';
+                                    else if (percentage > 20) level = window.t ? window.t('levelMedium') : 'Умеренная выраженность';
+                                    else if (percentage < -50) level = window.t ? window.t('levelLow') : 'Низкая выраженность';
+                                    else if (percentage < -20) level = window.t ? window.t('levelVeryLow') : 'Умеренно низкая выраженность';
+                                    else level = window.t ? window.t('levelBalanced') : 'Сбалансировано';
 
                                     return [
                                         `Значение: ${percentage > 0 ? '+' : ''}${percentage}%`,

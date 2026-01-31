@@ -36,6 +36,11 @@ class NeuralBackground {
     }
 
     updateThemeColors() {
+        // Guard: THREE may not be loaded yet (ES module async loading)
+        if (typeof THREE === 'undefined') {
+            return; // Will be called again after THREE loads in setupScene
+        }
+
         // Проверяем, какая тема активна
         const isDarkTheme = document.body.classList.contains('dark-theme');
 
@@ -44,15 +49,17 @@ class NeuralBackground {
             this.config.color = 0x00c6fb; // Яркий голубой
             this.config.secondaryColor = 0x9d8df1; // Яркий фиолетовый
             this.config.blending = THREE.AdditiveBlending;
-            this.config.lineOpacity = 0.2;
-            this.config.particleSize = 2.5;
+            this.config.lineOpacity = 0.3; // Увеличена видимость линий
+            this.config.particleSize = 4.0; // Увеличен размер частиц
+            this.config.particleOpacity = 1.0; // Полная непрозрачность
         } else {
             // Светлая тема: ТЕМНЫЕ и НАСЫЩЕННЫЕ цвета для максимального контраста
             this.config.color = 0x111111; // Почти черный
             this.config.secondaryColor = 0x333333; // Темно-серый
             this.config.blending = THREE.NormalBlending;
             this.config.lineOpacity = 0.8; // Еще более заметные линии
-            this.config.particleSize = 4.0; // Крупные частицы
+            this.config.particleSize = 5.0; // Крупные частицы
+            this.config.particleOpacity = 1.0; // Полная непрозрачность
         }
 
         this.updateMaterials();
@@ -62,6 +69,7 @@ class NeuralBackground {
         if (this.pointsMaterial) {
             this.pointsMaterial.blending = this.config.blending;
             this.pointsMaterial.size = this.config.particleSize || 2.5;
+            this.pointsMaterial.opacity = this.config.particleOpacity || 0.8;
             this.pointsMaterial.needsUpdate = true;
         }
         if (this.lineMaterial) {
@@ -102,12 +110,21 @@ class NeuralBackground {
     }
 
     setupScene() {
+        console.log('[NeuralBackground] setupScene() called');
         const container = document.getElementById(this.containerId);
-        if (!container) return;
+        if (!container) {
+            console.error('[NeuralBackground] Container not found:', this.containerId);
+            return;
+        }
+        console.log('[NeuralBackground] Container found, THREE available:', typeof THREE !== 'undefined');
+
+        // Now that THREE is loaded, apply theme colors
+        this.updateThemeColors();
 
         // Создаем сцену
         this.scene = new THREE.Scene();
         // this.scene.background = new THREE.Color(this.config.backgroundColor); // Прозрачный фон лучше для CSS градиентов
+
 
         // Камера
         const width = window.innerWidth;
@@ -138,6 +155,7 @@ class NeuralBackground {
         // Запуск анимации
         this.animate();
 
+        console.log('[NeuralBackground] ✅ Initialization complete! Particles should be visible.');
         if (window.logger) window.logger.info('NeuralBackground initialized');
     }
 
@@ -221,7 +239,7 @@ class NeuralBackground {
             size: this.config.particleSize,
             vertexColors: true,
             transparent: true,
-            opacity: 0.8,
+            opacity: this.config.particleOpacity || 0.8,
             blending: this.config.blending || THREE.AdditiveBlending,
             sizeAttenuation: true
         });
@@ -381,3 +399,4 @@ class NeuralBackground {
 
 // Экспорт
 window.NeuralBackground = NeuralBackground;
+console.log('[NeuralBackground] Class defined and exported to window');

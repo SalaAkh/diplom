@@ -516,3 +516,102 @@
         flex-wrap: wrap;
     }
 }
+
+/* ============================================
+   CONTINUE TEST BANNER
+   ============================================ */
+
+.continue-test-banner {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border: 2px solid var(--primary-color);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    animation: slideInDown 0.5s ease-out;
+}
+
+.continue-test-banner .banner-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 1;
+}
+
+.continue-test-banner .material-symbols-rounded {
+    font-size: 3rem;
+    color: var(--primary-color);
+}
+
+.continue-test-banner .banner-text h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.continue-test-banner .banner-text p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.continue-test-banner .btn {
+    white-space: nowrap;
+    background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+    /* Vibrant blue gradient */
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 198, 251, 0.4);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Bouncy transition */
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.continue-test-banner .btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 198, 251, 0.6);
+    background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+    /* Brighter on hover */
+}
+
+.continue-test-banner .btn:active {
+    transform: translateY(-1px) scale(0.98);
+    box-shadow: 0 4px 10px rgba(0, 198, 251, 0.4);
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive for continue banner */
+@media (max-width: 768px) {
+    .continue-test-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+    }
+
+    .continue-test-banner .banner-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .continue-test-banner .btn {
+        width: 100%;
+    }
+}

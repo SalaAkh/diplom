@@ -70,6 +70,10 @@ class LocalizationManager {
                 myProfile: "Менің профилім",
                 logout: "Шығу",
                 loginOrRegister: "Кіру немесе тіркелу",
+                welcomeBack: "Қош келдіңіз",
+                guestMode: "Қонақ режимі",
+                loggedIn: "Сіз жүйеге кірдіңіз",
+                loginSuccess: "Сіз жүйеге сәтті кірдіңіз",
 
                 // Ошибки
                 error: "Қате",
@@ -100,6 +104,20 @@ class LocalizationManager {
                 controlDesc: "белгісіздікке және өзгерістерге дайындық",
                 meaningThinking: "Мағына іздеу ↔ Практикалық пайда",
                 meaningDesc: "іс-әрекеттердің тереңдігі және нәтижеге бағытталуы",
+
+                // Landing Page
+                landingHeroTitle: "Өзіңіздің шынайы табиғатыңызды таныңыз",
+                landingHeroSubtitle: "Когнитивті психология мен таңдау сценарийлеріне негізделген интеллектуалды тұлғаны талдау жүйесі. Күшті жақтарыңыз бен даму бағыттарыңызды анықтаңыз.",
+                landingFeaturesTitle: "Сіз не аласыз",
+                howItWorksTitle: "Бұл қалай жұмыс істейді",
+                step1Title: "Тесттен өтіңіз",
+                step1Desc: "Өзіңізге жақын іс-әрекет нұсқаларын таңдап, 12 сценарийлік сұраққа жауап беріңіз.",
+                step2Title: "Алгоритм есептейді",
+                step2Desc: "Жүйе жауаптарыңызды тұлғаның 6 негізгі өлшемі бойынша талдайды.",
+                step3Title: "Профильді аласыз",
+                step3Desc: "Толық есеп, 3D-модель және даму бойынша ұсыныстар бірден қолжетімді.",
+                ctaTitle: "Ішкі әлеміңізді ашыңыз",
+                ctaText: "5-7 минут ішінде тесттен өтіп, жеке ұсыныстармен тұлғаңыздың толық талдауын алыңыз.",
                 // Старые названия для обратной совместимости
                 systematicThinking: "Рациональность ↔ Интуиция",
                 systematicDesc: "тапсырмаларды шешуге қалай қарайсыз",
@@ -110,8 +128,20 @@ class LocalizationManager {
                 exploration: "Исследователь ↔ Исполнитель",
                 explorationDesc: "жаңа білімге ұмтылуыңыз",
                 startTest: "Тестті бастау",
+                resultsTitle: "Тұлғалық профиль талдауы",
+                yourProfile: "Сіздің профиліңіз",
+                levelHigh: "Жоғары айқындық",
+                levelMedium: "Орташа айқындық",
+                levelLow: "Төмен айқындық",
+                levelVeryLow: "Өте төмен айқындық",
+                levelBalanced: "Теңгерімді",
+                balancedProfile: "Теңгерімді профиль",
+                balancedApproach: "Теңгерімді тәсіл",
+                home: "Басты бет",
                 continueTest: "Тестті жалғастыру",
                 startNew: "Жаңадан бастау",
+                unfinishedTest: "Аяқталмаған тест",
+                continueOrStartNew: "Сіз тоқтаған жерден жалғастыра аласыз немесе жаңа тест бастай аласыз",
 
                 // Выбор типа теста
                 selectTestType: "Тест түрін таңдаңыз",
@@ -138,6 +168,8 @@ class LocalizationManager {
                 continue: "Жалғастыру",
                 enterYourAnswer: "Жауабыңызды енгізіңіз...",
                 pleaseEnterAnswer: "Жауабыңызды енгізіңіз",
+                exactQuantity: "нақты саны",
+                startNewTest: "Жаңа тест бастау",
 
                 // Тест
                 questionsCompleted: "аяқталды",
@@ -174,9 +206,55 @@ class LocalizationManager {
 
                 // Профиль
                 myProfileTitle: "Менің профилім",
-                registered: "Тіркелген:",
-                lastLogin: "Соңғы кіру:",
-                testHistory: "Тест тарихы",
+                research: "Зерттеулер және Ғылым",
+                creativity: "Шығармашылық және Инновациялар",
+                management: "Басқару және Көшбасшылық",
+                social: "Әлеуметтік сала және Көмек",
+                entrepreneurship: "Кәсіпкерлік",
+                analytics: "Аналитика және Консалтинг",
+
+                // Vectors
+                vectorResearcherStrategist: "Зерттеуші-Стратег",
+                vectorCreatorInnovator: "Жаратушы-Новатор",
+                vectorLeaderOrganizer: "Көшбасшы-Ұйымдастырушы",
+                vectorAnalystRationalist: "Аналитик-Рационалист",
+                vectorSystemAnalyst: "Жүйелік Аналитик",
+                vectorIndependentResearcher: "Тәуелсіз Зерттеуші",
+
+                // Traits & Summary parts
+                traitRational: "рационалды тәсіл",
+                traitIntuitive: "дамыған интуиция",
+                traitIndependent: "өзіндік дербестік",
+                traitCollectivist: "коллективизм",
+                traitStrategic: "стратегиялық пайым",
+                traitAdaptive: "жоғары бейімделгіштік",
+                traitMeaning: "терең мағына іздеу",
+                traitPragmatic: "прагматикалық",
+                traitExplorer: "зерттеуші рух",
+
+                strengthLogical: "логикалық ойлау",
+                strengthIntuitive: "интуитивті пайымдау",
+                strengthIndependent: "тәуелсіздік",
+                strengthTeamwork: "командалық жұмыс",
+                strengthPlanning: "ұзақ мерзімді жоспарлау",
+                strengthFlexibility: "шешімдердегі икемділік",
+                strengthValues: "құндылық бағдары",
+                strengthResult: "нәтижеге бағдарлану",
+                strengthCuriosity: "білуге құмарлық",
+
+                summaryIntro: "Сіздің профиліңіз келесідей сипатталады:",
+                summaryStrengths: "Сіздің күшті жақтарыңыз:",
+                summaryBalanced: "Сіздің профиліңіз шешім қабылдаудың әртүрлі аспектілеріне теңгерімді тәсілді көрсетеді.",
+
+                testHistory: "Тесттер тарихы",
+                evolutionProgress: "Даму прогресі",
+                keyInsights: "Негізгі инсайттар",
+                insightPositiveTitle: "Күшті жақтарды дамыту",
+                insightNeutralTitle: "Басымдықтардың өзгеруі",
+                insightStabilityTitle: "Профиль тұрақтылығы",
+                insightPositiveText: "Сіз {count} өлшемде өсім көрсеттіңіз: {dimensions}. Бұл белсенді дамуды білдіреді.",
+                insightNeutralText: "Сіздің таңдауыңыз {count} өлшемде өзгерді. Бұл көзқарастардың табиғи эволюциясын немесе жаңа жағдайларға бейімделуді көрсетуі мүмкін.",
+                insightStabilityText: "Сіздің профиліңіз тұрақты болып қалады, бұл қалыптасқан құндылықтар мен басымдықтарды білдіреді.",
                 testNumber: "Тест #",
                 viewResults: "Нәтижелерді көру",
                 noHistory: "Сіз әлі тесттен өткен жоқсыз.",
@@ -251,7 +329,28 @@ class LocalizationManager {
                 // Сравнение
                 you: "Сіз",
                 average: "Орташа",
-                percentile: "процентиль"
+                percentile: "процентиль",
+
+                // Сапа және Ойын
+                reliabilityTitle: "Тест сенімділігі",
+                statisticalTitle: "Статистикалық валидация",
+                qualityLabel: "Сапа:",
+                validityLabel: "Жалпы жарамдылық:",
+                testRetestReliability: "Тест-ретест сенімділігі:",
+                internalConsistency: "Ішкі үйлесімділік:",
+                issuesTitle: "Ескертулер:",
+                yourGroup: "Сіздің тобыңыз:",
+                comparisonTitle: "Орташа мәндермен салыстыру",
+                comparisonInsights: "Салыстыру инсайттары",
+                levelLabel: "Деңгей",
+                streakLabel: "Тізбек:",
+                achievementsTitle: "Жетістіктер:",
+                newAchievements: "🎉 Жаңа жетістіктер!",
+                xpToNext: "Келесі деңгейге дейін:",
+                rateAllAspects: "Нәтижелердің барлық аспектілерін бағалаңыз",
+                feedbackThanks: "Кері байланысыңызға рахмет!",
+                feedbackError: "Кері байланыс сақталмады. Қайталап көріңіз.",
+                feedbackSkipped: "Кері байланыс өткізіп жіберілді"
             },
             ru: {
                 // Общие
@@ -282,6 +381,9 @@ class LocalizationManager {
                 myProfile: "Мой профиль",
                 logout: "Выйти",
                 loginOrRegister: "Войти или зарегистрироваться",
+                welcomeBack: "С возвращением",
+                guestMode: "Гостевой режим",
+                loggedIn: "Вы вошли в систему",
                 loginWithGoogle: "Войти через Google",
                 or: "или",
 
@@ -336,6 +438,20 @@ class LocalizationManager {
                 meaningName: "Поиск смысла ↔ Практическая польза",
                 meaningDesc: "глубина ваших мотивов против ориентации на результат",
                 dimMeaningDesc: "глубина ваших мотивов против ориентации на результат",
+
+                // Landing Page
+                landingHeroTitle: "Познай свою истинную природу",
+                landingHeroSubtitle: "Интеллектуальная система анализа личности, основанная на когнитивной психологии и сценариях выбора. Определите свои сильные стороны и векторы развития.",
+                landingFeaturesTitle: "Что вы получите",
+                howItWorksTitle: "Как это работает",
+                step1Title: "Проходите тест",
+                step1Desc: "Ответьте на 12 сценарных вопросов, выбирая близкие вам варианты действий.",
+                step2Title: "Алгоритм считает",
+                step2Desc: "Система анализирует ваши ответы по 6 ключевым измерениям личности.",
+                step3Title: "Получаете профиль",
+                step3Desc: "Детальный отчет, 3D-модель и рекомендации по развитию доступны мгновенно.",
+                ctaTitle: "Откройте свой внутренний мир",
+                ctaText: "Пройдите тест за 5-7 минут и получите детальный анализ вашей личности с персональными рекомендациями.",
                 strategicThinking: "Стратегия ↔ Тактика",
                 strategicDesc: "ваш временной горизонт планирования и видение перспективы",
                 explorerThinking: "Исследователь ↔ Исполнитель",
@@ -351,8 +467,20 @@ class LocalizationManager {
                 exploration: "Потребность в исследовании",
                 explorationDesc: "ваше стремление к новым знаниям",
                 startTest: "Начать тестирование",
+                resultsTitle: "Анализ личностного профиля",
+                yourProfile: "Ваш профиль",
+                levelHigh: "Высокая выраженность",
+                levelMedium: "Умеренная выраженность",
+                levelLow: "Низкая выраженность",
+                levelVeryLow: "Умеренно низкая выраженность",
+                levelBalanced: "Сбалансировано",
+                balancedProfile: "Сбалансированный профиль",
+                balancedApproach: "Сбалансированный подход",
+                home: "На главную",
                 continueTest: "Продолжить тест",
                 startNew: "Начать заново",
+                unfinishedTest: "Незавершенный тест",
+                continueOrStartNew: "Вы можете продолжить с того места, где остановились, или начать новый тест",
 
                 // Выбор типа теста
                 selectTestType: "Выберите тип теста",
@@ -379,6 +507,8 @@ class LocalizationManager {
                 continue: "Продолжить",
                 enterYourAnswer: "Введите ваш ответ...",
                 pleaseEnterAnswer: "Пожалуйста, введите ответ",
+                exactQuantity: "точное количество",
+                startNewTest: "Начать новый тест",
 
                 // Тест
                 questionsCompleted: "пройдено",
@@ -419,7 +549,56 @@ class LocalizationManager {
                 registered: "Зарегистрирован:",
                 lastLogin: "Последний вход:",
                 testHistory: "История тестирований",
-                testNumber: "Тест #",
+
+                research: "Исследование и Наука",
+                creativity: "Творчество и Инновации",
+                management: "Управление и Лидерство",
+                social: "Социальная сфера и Помощь",
+                entrepreneurship: "Предпринимательство",
+                analytics: "Аналитика и Консалтинг",
+
+                // Vectors
+                vectorResearcherStrategist: "Исследователь-Стратег",
+                vectorCreatorInnovator: "Творец-Новатор",
+                vectorLeaderOrganizer: "Лидер-Организатор",
+                vectorAnalystRationalist: "Аналитик-Рационалист",
+                vectorSystemAnalyst: "Системный Аналитик",
+                vectorIndependentResearcher: "Самостоятельный Исследователь",
+
+                // Traits & Summary parts
+                traitRational: "рациональный подход",
+                traitIntuitive: "развитая интуиция",
+                traitIndependent: "самостоятельность",
+                traitCollectivist: "коллективизм",
+                traitStrategic: "стратегическое видение",
+                traitAdaptive: "высокая адаптивность",
+                traitMeaning: "поиск глубинного смысла",
+                traitPragmatic: "прагматичность",
+                traitExplorer: "исследовательский дух",
+
+                strengthLogical: "логическое мышление",
+                strengthIntuitive: "интуитивное прозрение",
+                strengthIndependent: "независимость",
+                strengthTeamwork: "командная работа",
+                strengthPlanning: "долгосрочное планирование",
+                strengthFlexibility: "гибкость в решениях",
+                strengthValues: "ценностная ориентация",
+                strengthResult: "ориентация на результат",
+                strengthCuriosity: "любознательность",
+
+                summaryIntro: "Ваш профиль характеризуется:",
+                summaryStrengths: "Ваши сильные стороны:",
+                summaryBalanced: "Ваш профиль демонстрирует сбалансированный подход к различным аспектам принятия решений.",
+
+                evolutionProgress: "Прогресс развития",
+                keyInsights: "Ключевые инсайты",
+                insightPositiveTitle: "Развитие сильных сторон",
+                insightNeutralTitle: "Изменение приоритетов",
+                insightStabilityTitle: "Стабильность профиля",
+                insightPositiveText: "Вы показали рост в {count} измерении(ях): {dimensions}. Это указывает на активное развитие.",
+                insightNeutralText: "Ваши предпочтения изменились в {count} измерении(ях). Это может отражать естественную эволюцию взглядов или адаптацию к новым обстоятельствам.",
+                insightStabilityText: "Ваш профиль остаётся стабильным, что указывает на устойчивые предпочтения и ценности.",
+                testNumber: "Тест №",
                 viewResults: "Просмотреть результаты",
                 noHistory: "Вы ещё не проходили тест.",
                 startTesting: "Начать тестирование",
@@ -481,7 +660,28 @@ class LocalizationManager {
                 // Сравнение
                 you: "Вы",
                 average: "Среднее",
-                percentile: "процентиль"
+                percentile: "процентиль",
+
+                // Качество и Геймификация
+                reliabilityTitle: "Надежность теста",
+                statisticalTitle: "Статистическая валидация",
+                qualityLabel: "Качество:",
+                validityLabel: "Общая валидность:",
+                testRetestReliability: "Тест-ретест надежность:",
+                internalConsistency: "Внутренняя согласованность (Cronbach's Alpha):",
+                issuesTitle: "Замечания:",
+                yourGroup: "Ваша группа:",
+                comparisonTitle: "Сравнение со средними значениями",
+                comparisonInsights: "Инсайты из сравнения",
+                levelLabel: "Уровень",
+                streakLabel: "Последовательность:",
+                achievementsTitle: "Достижения:",
+                newAchievements: "🎉 Новые достижения!",
+                xpToNext: "До следующего уровня:",
+                rateAllAspects: "Пожалуйста, оцените все аспекты результатов",
+                feedbackThanks: "Спасибо за вашу обратную связь!",
+                feedbackError: "Не удалось сохранить обратную связь. Попробуйте еще раз.",
+                feedbackSkipped: "Обратная связь пропущена"
             },
             en: {
                 // General
@@ -512,6 +712,9 @@ class LocalizationManager {
                 myProfile: "My Profile",
                 logout: "Logout",
                 loginOrRegister: "Sign in or register",
+                welcomeBack: "Welcome back",
+                guestMode: "Guest Mode",
+                loggedIn: "Logged In",
                 loginWithGoogle: "Sign in with Google",
                 or: "or",
                 googleNotConfigured: "Google Sign-In not configured",
@@ -545,6 +748,20 @@ class LocalizationManager {
                 controlDesc: "readiness for uncertainty and flexibility in change",
                 meaningThinking: "Search for Meaning ↔ Practical Utility",
                 meaningDesc: "depth of your motives vs focus on concrete results",
+
+                // Landing Page
+                landingHeroTitle: "Know Your True Nature",
+                landingHeroSubtitle: "An intelligent personality analysis system based on cognitive psychology and choice scenarios. Identify your strengths and development vectors.",
+                landingFeaturesTitle: "What You Will Get",
+                howItWorksTitle: "How It Works",
+                step1Title: "Take the Test",
+                step1Desc: "Answer 12 scenario questions by choosing the action options closest to you.",
+                step2Title: "Algorithm Calculates",
+                step2Desc: "The system analyzes your answers across 6 key personality dimensions.",
+                step3Title: "Get Profile",
+                step3Desc: "Detailed report, 3D model, and development recommendations are available instantly.",
+                ctaTitle: "Discover Your Inner World",
+                ctaText: "Take the test in 5-7 minutes and get a detailed analysis of your personality with personal recommendations.",
                 // Старые названия для обратной совместимости
                 systematicThinking: "Rationality ↔ Intuition",
                 systematicDesc: "how you approach problem solving",
@@ -555,8 +772,20 @@ class LocalizationManager {
                 exploration: "Explorer ↔ Executor",
                 explorationDesc: "your drive for new knowledge",
                 startTest: "Start Testing",
+                resultsTitle: "Personality Profile Analysis",
+                yourProfile: "Your Profile",
+                levelHigh: "High visibility",
+                levelMedium: "Moderate visibility",
+                levelLow: "Low visibility",
+                levelVeryLow: "Very low visibility",
+                levelBalanced: "Balanced",
+                balancedProfile: "Balanced Profile",
+                balancedApproach: "Balanced Approach",
+                home: "Home",
                 continueTest: "Continue Test",
                 startNew: "Start New",
+                unfinishedTest: "Unfinished Test",
+                continueOrStartNew: "You can continue from where you left off or start a new test",
 
                 // Test type selection
                 selectTestType: "Select Test Type",
@@ -583,6 +812,8 @@ class LocalizationManager {
                 continue: "Continue",
                 enterYourAnswer: "Enter your answer...",
                 pleaseEnterAnswer: "Please enter an answer",
+                exactQuantity: "exact quantity",
+                startNewTest: "Start New Test",
 
                 // Test
                 questionsCompleted: "completed",
@@ -622,6 +853,55 @@ class LocalizationManager {
                 myProfileTitle: "My Profile",
                 registered: "Registered:",
                 lastLogin: "Last Login:",
+                evolutionProgress: "Development Progress",
+
+                research: "Research and Science",
+                creativity: "Creativity and Innovation",
+                management: "Management and Leadership",
+                social: "Social Sphere and Assistance",
+                entrepreneurship: "Entrepreneurship",
+                analytics: "Analytics and Consulting",
+
+                // Vectors
+                vectorResearcherStrategist: "Researcher-Strategist",
+                vectorCreatorInnovator: "Creator-Innovator",
+                vectorLeaderOrganizer: "Leader-Organizer",
+                vectorAnalystRationalist: "Analyst-Rationalist",
+                vectorSystemAnalyst: "System Analyst",
+                vectorIndependentResearcher: "Independent Researcher",
+
+                // Traits & Summary parts
+                traitRational: "rational approach",
+                traitIntuitive: "developed intuition",
+                traitIndependent: "independence",
+                traitCollectivist: "collectivism",
+                traitStrategic: "strategic vision",
+                traitAdaptive: "high adaptability",
+                traitMeaning: "search for deep meaning",
+                traitPragmatic: "pragmatism",
+                traitExplorer: "explorative spirit",
+
+                strengthLogical: "logical thinking",
+                strengthIntuitive: "intuitive insight",
+                strengthIndependent: "independence",
+                strengthTeamwork: "teamwork",
+                strengthPlanning: "long-term planning",
+                strengthFlexibility: "flexibility in decisions",
+                strengthValues: "value orientation",
+                strengthResult: "result orientation",
+                strengthCuriosity: "curiosity",
+
+                summaryIntro: "Your profile is characterized by:",
+                summaryStrengths: "Your strengths:",
+                summaryBalanced: "Your profile demonstrates a balanced approach to various aspects of decision-making.",
+
+                keyInsights: "Key Insights",
+                insightPositiveTitle: "Developing Strengths",
+                insightNeutralTitle: "Changing Priorities",
+                insightStabilityTitle: "Profile Stability",
+                insightPositiveText: "You showed growth in {count} dimension(s): {dimensions}. This indicates active development.",
+                insightNeutralText: "Your preferences changed in {count} dimension(s). This may reflect natural evolution of views or adaptation to new circumstances.",
+                insightStabilityText: "Your profile remains stable, indicating consistent values and priorities.",
                 testHistory: "Test History",
                 testNumber: "Test #",
                 viewResults: "View Results",
@@ -697,7 +977,28 @@ class LocalizationManager {
                 // Сравнение
                 you: "You",
                 average: "Average",
-                percentile: "percentile"
+                percentile: "percentile",
+
+                // Quality & Gamification
+                reliabilityTitle: "Test Reliability",
+                statisticalTitle: "Statistical Validation",
+                qualityLabel: "Quality:",
+                validityLabel: "Overall Validity:",
+                testRetestReliability: "Test-Retest Reliability:",
+                internalConsistency: "Internal Consistency:",
+                issuesTitle: "Issues:",
+                yourGroup: "Your Group:",
+                comparisonTitle: "Comparison with Averages",
+                comparisonInsights: "Comparison Insights",
+                levelLabel: "Level",
+                streakLabel: "Streak:",
+                achievementsTitle: "Achievements:",
+                newAchievements: "🎉 New Achievements!",
+                xpToNext: "To next level:",
+                rateAllAspects: "Please rate all aspects of the results",
+                feedbackThanks: "Thank you for your feedback!",
+                feedbackError: "Failed to save feedback. Please try again.",
+                feedbackSkipped: "Feedback skipped"
             }
         };
     }
@@ -710,6 +1011,8 @@ class LocalizationManager {
      */
     t(key, params = {}) {
         let translation = this.translations[this.currentLanguage]?.[key] ||
+            this.translations['en']?.[key] ||
+            this.translations['ru']?.[key] ||
             this.translations['kk']?.[key] ||
             key;
 
@@ -762,17 +1065,29 @@ class LocalizationManager {
      */
     getAvailableLanguages() {
         return [
-            { code: 'kk', name: 'Қазақша', flag: '🇰🇿' },
-            { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-            { code: 'en', name: 'English', flag: '🇬🇧' }
+            {
+                code: 'kk',
+                name: 'Қазақша',
+                flag: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 16" width="24" height="12"><rect width="32" height="16" fill="#00afca"/><circle cx="16" cy="8" r="3.5" fill="#fec52e"/><path d="M16 4.5v7M12.5 8h7" stroke="#fec52e" stroke-width="0.5"/><path d="M0 0h1.5v16H0z" fill="#fec52e"/></svg>`
+            },
+            {
+                code: 'ru',
+                name: 'Русский',
+                flag: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="21" height="14"><rect width="3" height="2" fill="#fff"/><rect width="3" height="1.333" y="0.667" fill="#0039a6"/><rect width="3" height="0.667" y="1.333" fill="#d52b1e"/></svg>`
+            },
+            {
+                code: 'en',
+                name: 'English',
+                flag: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="24" height="12"><clipPath id="s"><path d="M0 0v30h60V0z"/></clipPath><path d="M0 0v30h60V0z" fill="#012169"/><path d="m0 0 60 30m0-30L0 30" stroke="#fff" stroke-width="6"/><path d="m0 0 60 30m0-30L0 30" clip-path="url(#s)" stroke="#C8102E" stroke-width="4"/><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"/><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/></svg>`
+            }
         ];
     }
 }
 
 // Глобальная функция для удобства
-let i18n;
 if (typeof window !== 'undefined') {
-    i18n = new LocalizationManager();
+    window.i18n = new LocalizationManager();
+    window.t = (key) => window.i18n.t(key);
 }
 
 // Экспорт для использования в других модулях

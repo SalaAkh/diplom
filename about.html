@@ -69,11 +69,7 @@
                 <span class="nav-text" data-i18n="navProfile">Профиль</span>
 
             </a>
-            <a href="index.html" class="nav-item" onclick="localStorage.setItem('showResults', 'true')">
-                <div class="nav-icon"><span class="material-symbols-rounded">bar_chart</span></div>
-                <span class="nav-text" data-i18n="navResults">Результаты</span>
 
-            </a>
             <a href="about.html" class="nav-item active">
                 <div class="nav-icon"><span class="material-symbols-rounded">info</span></div>
                 <span class="nav-text" data-i18n="navAbout">О системе</span>
@@ -221,39 +217,32 @@
     <script src="js/services/localization.js"></script>
     <script src="js/ui/navigation-controller.js" defer></script>
 
-    <!-- Three.js for background -->
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
-        }
-    }
-    </script>
-    <script type="module">
-        import * as THREE from 'three';
-        window.THREE = THREE;
-    </script>
+    <!-- Three.js (CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Production-safe logger -->
     <script src="js/services/logger.js"></script>
     <!-- Configuration must load first -->
     <script src="js/config/config.js"></script>
-    <script src="js/vis/background-3d.js" defer></script>
+    <script src="js/vis/background-3d.js"></script>
 
     <script>
         // Initialize background and theme
         document.addEventListener('DOMContentLoaded', () => {
-            // Apply saved theme
+            // Apply saved theme (handled by CSS/JS usually, but ensuring here)
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'light') {
                 document.body.classList.remove('dark-theme');
             }
 
-            // Init 3D background
-            setTimeout(() => {
-                if (typeof NeuralBackground !== 'undefined') {
+            // Init 3D background with checks
+            const initBg = () => {
+                if (typeof NeuralBackground !== 'undefined' && typeof THREE !== 'undefined') {
                     new NeuralBackground('background-canvas');
+                } else {
+                    setTimeout(initBg, 100);
                 }
-            }, 500);
+            };
+            initBg();
         });
     </script>
 </body>

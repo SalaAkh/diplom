@@ -18,7 +18,7 @@ class EvolutionTracker {
      */
     saveSessionResults(userId, sessionData) {
         const history = this.getEvolutionHistory(userId);
-        
+
         const session = {
             date: new Date().toISOString(),
             scores: sessionData.scores || {},
@@ -30,13 +30,13 @@ class EvolutionTracker {
         };
 
         history.sessions.push(session);
-        
+
         // Вычисляем тренды
         history.trends = this.calculateTrends(history.sessions);
-        
+
         // Сохраняем обновлённую историю
         this.saveEvolutionHistory(userId, history);
-        
+
         return session;
     }
 
@@ -69,7 +69,7 @@ class EvolutionTracker {
             if (scores2[dimension] !== undefined) {
                 const change = scores2[dimension] - scores1[dimension];
                 const absChange = Math.abs(change);
-                
+
                 comparison.dimensions[dimension] = {
                     before: scores1[dimension],
                     after: scores2[dimension],
@@ -112,7 +112,7 @@ class EvolutionTracker {
      */
     trackEvolution(userId) {
         const history = this.getEvolutionHistory(userId);
-        
+
         if (history.sessions.length < 2) {
             return {
                 hasEvolution: false,
@@ -122,7 +122,7 @@ class EvolutionTracker {
 
         const sessions = history.sessions;
         const comparisons = [];
-        
+
         // Сравниваем каждую сессию с предыдущей
         for (let i = 1; i < sessions.length; i++) {
             const comparison = this.compareSessions(sessions[i - 1], sessions[i]);
@@ -153,7 +153,7 @@ class EvolutionTracker {
      */
     generateEvolutionReport(userId) {
         const evolution = this.trackEvolution(userId);
-        
+
         if (!evolution.hasEvolution) {
             return evolution;
         }
@@ -277,31 +277,39 @@ class EvolutionTracker {
      */
     generateEvolutionInsights(evolution) {
         const insights = [];
+        const t = (key) => (window.t ? window.t(key) : key);
+
+        // Helper to localize dimension list
+        const localizeDims = (dims) => dims.map(d => t(`${d}Name`) || d).join(', ');
 
         if (evolution.overallComparison) {
             const comp = evolution.overallComparison;
-            
+
             if (comp.improvements && comp.improvements.length > 0) {
                 insights.push({
                     type: 'positive',
-                    title: 'Развитие сильных сторон',
-                    text: `Вы показали рост в ${comp.improvements.length} измерении(ях): ${comp.improvements.join(', ')}. Это указывает на активное развитие.`
+                    title: t('insightPositiveTitle') || 'Развитие сильных сторон',
+                    text: (t('insightPositiveText') || 'Вы показали рост в {count} измерении(ях): {dimensions}.')
+                        .replace('{count}', comp.improvements.length)
+                        .replace('{dimensions}', localizeDims(comp.improvements))
                 });
             }
 
             if (comp.regressions && comp.regressions.length > 0) {
                 insights.push({
                     type: 'neutral',
-                    title: 'Изменение приоритетов',
-                    text: `Ваши предпочтения изменились в ${comp.regressions.length} измерении(ях). Это может отражать естественную эволюцию взглядов или адаптацию к новым обстоятельствам.`
+                    title: t('insightNeutralTitle') || 'Изменение приоритетов',
+                    text: (t('insightNeutralText') || 'Ваши предпочтения изменились в {count} измерении(ях).')
+                        .replace('{count}', comp.regressions.length)
+                        .replace('{dimensions}', localizeDims(comp.regressions))
                 });
             }
 
             if (comp.overallChange < 0.1) {
                 insights.push({
                     type: 'stability',
-                    title: 'Стабильность профиля',
-                    text: 'Ваш профиль остаётся стабильным, что указывает на устойчивые предпочтения и ценности.'
+                    title: t('insightStabilityTitle') || 'Стабильность профиля',
+                    text: t('insightStabilityText') || 'Ваш профиль остаётся стабильным.'
                 });
             }
         }
@@ -320,7 +328,7 @@ class EvolutionTracker {
         if (evolution.trends) {
             Object.keys(evolution.trends).forEach(dimension => {
                 const trend = evolution.trends[dimension];
-                
+
                 if (trend.direction === 'increasing' && trend.rate > 0.05) {
                     recommendations.push({
                         dimension: dimension,
@@ -391,8 +399,8 @@ class EvolutionTracker {
             months: diffMonths,
             years: diffYears,
             formatted: diffYears > 0 ? `${diffYears} год(а/лет)` :
-                       diffMonths > 0 ? `${diffMonths} месяц(ев)` :
-                       `${diffDays} день(дней)`
+                diffMonths > 0 ? `${diffMonths} месяц(ев)` :
+                    `${diffDays} день(дней)`
         };
     }
 
@@ -404,7 +412,7 @@ class EvolutionTracker {
     getEvolutionHistory(userId) {
         const key = `${this.storageKey}_${userId}`;
         const stored = localStorage.getItem(key);
-        
+
         if (stored) {
             try {
                 return JSON.parse(stored);

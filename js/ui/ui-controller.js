@@ -373,9 +373,51 @@ class UIController {
             this.updateStaticContent();
             this.initLanguageSelector(); // Re-render selector to update active state
 
-            // If in intro state, re-render to update content
-            if (this.app.state === 'intro') {
-                this.app.showIntro();
+            // Re-render current screen based on app state
+            if (this.app) {
+                switch (this.app.state) {
+                    case 'intro':
+                        this.app.showIntro();
+                        break;
+                    case 'profile':
+                        this.app.showProfile();
+                        break;
+                    case 'results':
+                        // Use active results if available
+                        if (this.app.activeResults) {
+                            this.app.showResults(this.app.activeResults);
+                        } else {
+                            this.app.showResults();
+                        }
+                        break;
+                    case 'testSelection':
+                        this.app.showTestSelection();
+                        break;
+                    case 'testing':
+                        // If testing, we need to re-render the current scenario or question
+                        if (this.app.testManager) {
+                            if (this.app.testManager.testMode === 'basic' && this.app.testManager.currentScenario) {
+                                const total = this.app.testManager.scenarios.length;
+                                const current = this.app.testManager.completedScenarios.length;
+                                const progress = ((current + 1) / total) * 100;
+
+                                this.showScenario(this.app.testManager.currentScenario, {
+                                    current: current + 1,
+                                    total: total,
+                                    percent: Math.round(progress)
+                                });
+                            } else if (this.app.testManager.testMode === 'advanced') {
+                                // For advanced, it's easier to just call showNext if we are precisely on an index
+                                // but showNext increments or selects. 
+                                // Ideally we need a reRenderCurrent in testManager.
+                                // But for now, let's at least handle Basic clearly.
+                            }
+                        }
+                        break;
+                    case 'auth':
+                        this.app.showAuth();
+                        break;
+                }
             }
         }
     }
@@ -798,141 +840,334 @@ class UIController {
 
         container.style.opacity = '0';
         const t = this.i18n.t.bind(this.i18n);
-        const user = this.app.auth.getCurrentUser();
+        const user = this.app.auth ? this.app.auth.getCurrentUser() : null;
 
         // Check if there is incomplete progress
-        const progressData = this.app.storage && this.app.storage.loadProgress();
-        const hasProgress = progressData && progressData.choices && (Array.isArray(progressData.choices) ? progressData.choices.length > 0 : Object.keys(progressData.choices).length > 0);
+        let hasProgress = false;
+        try {
+            if (this.app.storage) {
+                const progressData = this.app.storage.loadProgress();
+                if (progressData && progressData.choices) {
+                    hasProgress = Array.isArray(progressData.choices) ?
+                        progressData.choices.length > 0 :
+                        Object.keys(progressData.choices).length > 0;
+                }
+            }
+        } catch (e) {
+            console.error('Error checking progress', e);
+        }
 
-        container.innerHTML = `
-            <div class="intro-screen">
-                <!-- Hero Section matching About page style -->
-                <div class="cosmic-card glowing mb-8">
-                    <div class="about-hero text-center p-6">
-                        <h1 class="gradient-text text-3xl mb-4" data-i18n="aboutSystem">${t('aboutSystem')}</h1>
-                        <p class="text-lg text-secondary" data-i18n="systemDescription">${t('systemDescription')}</p>
+        // Попытка использовать шаблон из HTML (если он есть)
+        const template = document.getElementById('landing-template');
+
+        if (template) {
+            // Клонируем контент шаблона
+            const clone = template.content.cloneNode(true);
+            container.innerHTML = '';
+            container.appendChild(clone);
+
+            // Обновляем тексты в соответствии с текущим языком
+            this.updateStaticContent();
+
+            // === 1. Обновляем Hero Section в зависимости от статуса ===
+            const heroContent = container.querySelector('.hero-content');
+            if (heroContent) {
+                // Добавляем бейдж статуса перед заголовком
+                const badge = document.createElement('div');
+
+                if (user) {
+                    // Пользователь вошел
+                    badge.className = 'auth-status-badge logged-in';
+                    badge.innerHTML = `
+                        <span class="material-symbols-rounded">check_circle</span>
+                        ${t('loggedIn') || 'Вы вошли в систему'}
+                    `;
+
+                    // Обновляем заголовок
+                    const heroTitle = heroContent.querySelector('.hero-title');
+                    if (heroTitle) {
+                        heroTitle.innerHTML = `${t('welcomeBack') || 'С возвращением'}, <br><span class="highlight">${user.username}</span>!`;
+                    }
+                } else {
+                    // Гость
+                    badge.className = 'auth-status-badge guest';
+                    badge.innerHTML = `
+                        <span class="material-symbols-rounded">account_circle</span>
+                        ${t('guestMode') || 'Гостевой режим'}
+                    `;
+                }
+
+                // Вставляем бейдж первым элементом
+                heroContent.insertBefore(badge, heroContent.firstChild);
+            }
+
+            // === 2. Обновляем кнопки действий ===
+            const actionsContainer = container.querySelector('#landing-actions');
+
+            if (actionsContainer) {
+                let buttonsHtml = '';
+
+                if (user) {
+                    // Для авторизованного пользователя
+                    if (hasProgress) {
+                        buttonsHtml += `
+                            <button class="btn btn-primary btn-lg pulse-animation" onclick="app.continueTest()">
+                                <span class="material-symbols-rounded">play_arrow</span>
+                                ${t('continueTest') || 'Продолжить тест'}
+                            </button>
+                        `;
+                    } else {
+                        buttonsHtml += `
+                            <button class="btn btn-primary btn-lg pulse-animation" onclick="app.showTestTypeSelection()">
+                                <span class="material-symbols-rounded">play_arrow</span>
+                                ${t('startTest') || 'Начать тест'}
+                            </button>
+                        `;
+                    }
+                    // Доп. кнопка профиля
+                    buttonsHtml += `
+                        <a href="profile.html" class="btn btn-secondary btn-lg">
+                            <span class="material-symbols-rounded">person</span>
+                            ${t('myProfile') || 'Мой профиль'}
+                        </a>
+                    `;
+                } else {
+                    // Для гостя
+                    if (hasProgress) {
+                        buttonsHtml += `
+                            <button class="btn btn-primary btn-lg pulse-animation" onclick="app.continueTest()">
+                                <span class="material-symbols-rounded">play_arrow</span>
+                                ${t('continueTest') || 'Продолжить'}
+                            </button>
+                        `;
+                    } else {
+                        buttonsHtml += `
+                            <button class="btn btn-primary btn-lg pulse-animation" onclick="app.showTestTypeSelection()">
+                                <span class="material-symbols-rounded">science</span>
+                                ${t('startTest') || 'Начать тест'}
+                            </button>
+                        `;
+                    }
+
+                    // Кнопки входа/регистрации
+                    buttonsHtml += `
+                        <button class="btn btn-secondary btn-lg" onclick="app.showAuth()">
+                            <span class="material-symbols-rounded">login</span>
+                            ${t('login') || 'Войти'}
+                        </button>
+                    `;
+                }
+
+                actionsContainer.innerHTML = buttonsHtml;
+
+                // Также обновляем нижний CTA блок
+                const ctaActionsContainer = container.querySelector('#cta-actions');
+                if (ctaActionsContainer) {
+                    if (hasProgress) {
+                        ctaActionsContainer.innerHTML = `
+                            <div class="cta-actions-group">
+                                <button class="btn btn-primary btn-xl pulse-animation" onclick="app.continueTest()">
+                                    <span class="material-symbols-rounded">play_arrow</span>
+                                    ${t('continueTest') || 'Продолжить тест'}
+                                </button>
+                                <button class="btn btn-secondary btn-xl" onclick="app.showTestTypeSelection()">
+                                    <span class="material-symbols-rounded">refresh</span>
+                                    ${t('startNewTest') || 'Начать заново'}
+                                </button>
+                            </div>
+                         `;
+                    } else {
+                        ctaActionsContainer.innerHTML = `
+                            <button class="btn btn-primary btn-xl pulse-animation" onclick="app.showTestTypeSelection()">
+                                <span class="material-symbols-rounded">play_arrow</span>
+                                ${t('startTest') || 'Начать тестирование'}
+                            </button>
+                         `;
+                    }
+                }
+            }
+        } else {
+            // Фолбек на хардкод (упрощенная версия)
+            container.innerHTML = `
+                <div class="intro-screen">
+                    <h1 class="fade-in split-text">${t('appName')}</h1>
+                    <div class="actions fade-in delay-2">
+                         <button class="btn btn-primary btn-lg" onclick="app.showTestTypeSelection()">
+                            ${t('startTest')}
+                        </button>
                     </div>
                 </div>
+            `;
+        }
 
-                <!-- Features Grid -->
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold mb-6 gradient-text text-center" data-i18n="whatAwaits">${t('whatAwaits')}</h2>
-                    <div class="feature-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-                        <div class="feature-card cosmic-card p-6 flex flex-col items-center text-center">
-                            <span class="feature-icon text-4xl mb-4">🎭</span>
-                            <h3 class="text-xl font-bold mb-2" data-i18n="featInteractive">${t('featInteractive')}</h3>
-                            <p class="text-sm text-secondary" data-i18n="featInteractiveDesc">${t('featInteractiveDesc')}</p>
-                        </div>
-                        <div class="feature-card cosmic-card p-6 flex flex-col items-center text-center">
-                            <span class="feature-icon text-4xl mb-4">🧠</span>
-                            <h3 class="text-xl font-bold mb-2" data-i18n="featPattern">${t('featPattern')}</h3>
-                            <p class="text-sm text-secondary" data-i18n="featPatternDesc">${t('featPatternDesc')}</p>
-                        </div>
-                        <div class="feature-card cosmic-card p-6 flex flex-col items-center text-center">
-                            <span class="feature-icon text-4xl mb-4">📊</span>
-                            <h3 class="text-xl font-bold mb-2" data-i18n="feat3D">${t('feat3D')}</h3>
-                            <p class="text-sm text-secondary" data-i18n="feat3DDesc">${t('feat3DDesc')}</p>
-                        </div>
-                    </div>
+        // Плавное появление
+        requestAnimationFrame(() => {
+            container.style.transition = 'opacity 0.5s';
+            container.style.opacity = '1';
+        });
+    }
+
+
+
+    /**
+     * Show Converter Modal
+     */
+    showConverter() {
+        // Create modal container if not exists
+        let modal = document.getElementById('converterModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'converterModal';
+            modal.className = 'modal-overlay fade-in';
+            document.body.appendChild(modal);
+        }
+
+        const t = this.i18n.t.bind(this.i18n);
+
+        modal.innerHTML = `
+            <div class="modal-content glass">
+                <span class="modal-close" onclick="document.getElementById('converterModal').remove()">&times;</span>
+                <h2>Конвертер отчетов</h2>
+                <p>Загрузите JSON файл с результатами теста для конвертации в другие форматы.</p>
+                
+                <div class="converter-upload-area" id="dropZone">
+                    <input type="file" id="jsonFileInput" accept=".json" style="display: none" onchange="app.ui.handleFileSelect(event)">
+                    <button class="btn btn-secondary" onclick="document.getElementById('jsonFileInput').click()">
+                        <span class="material-symbols-rounded">upload_file</span>
+                        Выберите файл
+                    </button>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: var(--text-secondary);">или перетащите сюда</p>
+                    <div id="fileNameDisplay" style="margin-top: 10px; font-weight: bold;"></div>
                 </div>
 
-                <!-- Dimensions Grid -->
-                <div class="cosmic-card mb-8">
-                    <div class="card-header p-6 border-b border-white/10">
-                        <h2 class="card-title gradient-text text-xl m-0" data-i18n="dimensionsTitle">${t('dimensionsTitle')}</h2>
-                    </div>
-                    <div class="card-body p-6">
-                        <div class="dimension-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                            <div class="dimension-card p-4 bg-white/5 rounded-lg">
-                                <h4 class="font-bold text-primary mb-1" data-i18n="strategicName">${t('strategicName')}</h4>
-                                <p class="text-xs text-secondary" data-i18n="dimStrategyDesc">${t('dimStrategyDesc')}</p>
-                            </div>
-                            <div class="dimension-card p-4 bg-white/5 rounded-lg">
-                                <h4 class="font-bold text-primary mb-1" data-i18n="explorerName">${t('explorerName')}</h4>
-                                <p class="text-xs text-secondary" data-i18n="dimResearchDesc">${t('dimResearchDesc')}</p>
-                            </div>
-                            <div class="dimension-card p-4 bg-white/5 rounded-lg">
-                                <h4 class="font-bold text-primary mb-1" data-i18n="individualismName">${t('individualismName')}</h4>
-                                <p class="text-xs text-secondary" data-i18n="dimIndividualismDesc">${t('dimIndividualismDesc')}</p>
-                            </div>
-                            <div class="dimension-card p-4 bg-white/5 rounded-lg">
-                                <h4 class="font-bold text-primary mb-1" data-i18n="rationalityName">${t('rationalityName')}</h4>
-                                <p class="text-xs text-secondary" data-i18n="dimRationalityDesc">${t('dimRationalityDesc')}</p>
-                            </div>
-                            <div class="dimension-card p-4 bg-white/5 rounded-lg">
-                                <h4 class="font-bold text-primary mb-1" data-i18n="controlName">${t('controlName')}</h4>
-                                <p class="text-xs text-secondary" data-i18n="dimControlDesc">${t('dimControlDesc')}</p>
-                            </div>
-                            <div class="dimension-card p-4 bg-white/5 rounded-lg">
-                                <h4 class="font-bold text-primary mb-1" data-i18n="meaningName">${t('meaningName')}</h4>
-                                <p class="text-xs text-secondary" data-i18n="dimMeaningDesc">${t('dimMeaningDesc')}</p>
-                            </div>
-                        </div>
+                <div id="converterActions" style="display: none; margin-top: 20px;">
+                    <h3>Скачать как:</h3>
+                    <div class="results-actions-top" style="justify-content: center; gap: 10px;">
+                        <button class="btn btn-sm btn-secondary" onclick="app.ui.convertAndDownload('html')">📄 HTML</button>
+                        <button class="btn btn-sm btn-secondary" onclick="app.ui.convertAndDownload('doc')">📝 Word</button>
+                        <button class="btn btn-sm btn-primary" onclick="app.ui.convertAndDownload('pdf')">📄 PDF</button>
                     </div>
                 </div>
                 
-                <div class="intro-actions flex flex-col items-center gap-4 mb-12">
-                    ${hasProgress ? `
-                        <button class="btn btn-primary btn-lg w-full max-w-md pulse-animation flex items-center justify-center gap-4 py-4 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1" onclick="app.continueTest()">
-                            <!-- Play Icon SVG -->
-                            <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" fill="currentColor">
-                                <path d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z"/>
-                            </svg>
-                            <div class="flex flex-col items-start">
-                                <span class="font-bold text-lg tracking-wide uppercase">${t('continueTest')}</span>
-                                <span class="text-xs opacity-90 font-medium">
-                                    ${progressData.currentQuestionIndex || (Array.isArray(progressData.choices) ? progressData.choices.length : Object.keys(progressData.choices || {}).length)} / ${(app.scenarios ? app.scenarios.length : '30+')} ${t('questionsCompleted')}
-                                </span>
-                            </div>
-                        </button>
-                        <button class="btn btn-secondary w-full max-w-md flex items-center justify-center gap-3 py-3 hover:bg-white/10 transition-colors" onclick="app.startNewTest()">
-                            <!-- Restart Icon SVG -->
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor">
-                                <path d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126.5T260-672l57 57q-38 34-57.5 79T240-440q0 88 56 153t144 65v100Zm80 0v-100q88 0 144-65t56-153q0-45-19.5-90T643-615l57-57q38 51 64 111.5T790-440q0 128-79.5 218.5T520-122ZM480-520 320-360h320L480-520Zm0-280q-17 0-28.5-11.5T440-840v-40q0-17 11.5-28.5T480-920q17 0 28.5 11.5T520-880v40q0 17-11.5 28.5T480-800Z"/>
-                            </svg>
-                            <span>${t('startNew')}</span>
-                        </button>
-                    ` : `
-                        <button class="btn btn-primary btn-lg w-full max-w-md pulse-animation flex items-center justify-center gap-4 py-4 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1" onclick="app.showTestTypeSelection()">
-                            <!-- Rocket Icon SVG -->
-                            <svg xmlns="http://www.w3.org/2000/svg" height="32" viewBox="0 -960 960 960" width="32" fill="currentColor">
-                                <path d="M480-120q-150 0-255-105T120-480q0-36 10-76t30-74l62 38q-14 28-21 54t-7 58q0 116 82 198t198 82q44 0 94.5-12.5T770-158l56 46q-68 44-142 66t-204 22Zm312-140-52-44q20-22 34-45.5t18-48.5h68q-5 38-23.5 76T792-260ZM168-608 604-172l56-56-436-436-56 56Zm312-312q28 0 54 7t52 23l-36 56q-16-9-33-12.5t-37-3.5q-64 0-113 36T298-720h-74q25-87 97.5-143.5T480-920Zm356 316q0-10-1-19.5t-3-19.5l66-14q3 16 4.5 33t1.5 33h-68Zm-154-154q13 18 22.5 40t13.5 44l64-22q-7-35-22.5-66.5T724-758l-42 42Z"/>
-                            </svg>
-                            <span class="text-lg font-bold tracking-wide uppercase">${t('startTest')}</span>
-                        </button>
-                    `}
-                </div>
-                
-                ${user ? `
-                    <div class="user-info text-center mt-8">
-                        <p class="mb-2 text-secondary">${t('loggedInAs')} <strong class="text-white">${user.username}</strong></p>
-                        <div class="flex justify-center gap-4">
-                            <button class="btn-link text-sm" onclick="app.showProfile()">${t('myProfile')}</button>
-                            <button class="btn-link text-sm text-red-400" onclick="app.logout()">${t('logout')}</button>
-                        </div>
-                    </div>
-                ` : `
-                    <div class="user-info mt-8">
-                        <div class="auth-section flex flex-col items-center">
-                            <div id="googleSignInButton" class="google-signin-container mb-4"></div>
-                            <div class="auth-divider w-full max-w-xs mb-4">
-                                <span data-i18n="or">${t('or')}</span>
-                            </div>
-                            <button class="btn-link" onclick="app.showAuth()">${t('loginOrRegister')}</button>
-                        </div>
-                    </div>
-                `}
+                <div id="conversionStatus" style="margin-top: 15px; color: var(--text-secondary);"></div>
             </div>
         `;
 
-        setTimeout(() => {
-            container.style.transition = 'opacity 0.5s ease-out';
-            container.style.opacity = '1';
+        // Setup Drag and Drop
+        const dropZone = document.getElementById('dropZone');
 
-            if (!user && this.app.auth.isGoogleSignInConfigured()) {
-                this.app.auth.initGoogleSignIn();
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            dropZone.classList.add('highlight');
+            dropZone.style.borderColor = 'var(--primary-color)';
+            dropZone.style.background = 'rgba(var(--primary-rgb), 0.1)';
+        }
+
+        function unhighlight(e) {
+            dropZone.classList.remove('highlight');
+            dropZone.style.borderColor = '';
+            dropZone.style.background = '';
+        }
+
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            this.handleFileSelect({ target: { files: files } });
+        }, false);
+    }
+
+    handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const display = document.getElementById('fileNameDisplay');
+        const actions = document.getElementById('converterActions');
+        const status = document.getElementById('conversionStatus');
+
+        if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+            display.textContent = 'Ошибка: Выберите .json файл';
+            display.style.color = 'red';
+            actions.style.display = 'none';
+            return;
+        }
+
+        display.textContent = `Выбран: ${file.name}`;
+        display.style.color = 'var(--text-primary)';
+
+        // Read file
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                this.loadedReportData = JSON.parse(e.target.result);
+                // Check if it's a valid report (basic check)
+                if (this.loadedReportData.data && (this.loadedReportData.data.profile || this.loadedReportData.data.scores)) {
+                    // Wrapped format
+                    this.loadedReportData = this.loadedReportData.data;
+                }
+
+                if (!this.loadedReportData.profile && !this.loadedReportData.scores) {
+                    throw new Error('Некорректный формат файла отчета');
+                }
+
+                actions.style.display = 'block';
+                status.textContent = 'Файл успешно прочитан. Выберите формат для конвертации.';
+                status.style.color = 'green';
+
+                // Store original filename for export naming
+                this.loadedFilenameBase = file.name.replace('.json', '');
+
+            } catch (error) {
+                console.error('File parse error:', error);
+                status.textContent = 'Ошибка чтения файла: ' + error.message;
+                status.style.color = 'red';
+                actions.style.display = 'none';
             }
-        }, 100);
+        };
+        reader.readAsText(file);
+    }
+
+    convertAndDownload(format) {
+        if (!this.loadedReportData) return;
+
+        const status = document.getElementById('conversionStatus');
+        status.textContent = `Конвертация в ${format.toUpperCase()}...`;
+        status.style.color = 'var(--text-primary)';
+
+        // Use global window.ReportGenerator if available
+        let reportGen = this.app.reportGenerator;
+        if (!reportGen && typeof window !== 'undefined' && window.ReportGenerator) {
+            reportGen = new window.ReportGenerator();
+        }
+
+        if (reportGen) {
+            // Use original filename base
+            const filename = `${this.loadedFilenameBase}.${format}`;
+            reportGen.downloadReport(this.loadedReportData, format, filename);
+
+            setTimeout(() => {
+                status.textContent = 'Готово! Файл должен скачаться.';
+                status.style.color = 'green';
+            }, 1000);
+        } else {
+            status.textContent = 'Ошибка: Генератор отчетов не найден.';
+            status.style.color = 'red';
+        }
     }
 
     showTestTypeSelection() {
@@ -943,11 +1178,42 @@ class UIController {
         container.style.opacity = '0';
         const t = this.i18n.t.bind(this.i18n);
 
+        // Check if there is incomplete progress
+        let hasProgress = false;
+        try {
+            if (this.app.storage) {
+                const progressData = this.app.storage.loadProgress();
+                if (progressData && progressData.choices) {
+                    hasProgress = Array.isArray(progressData.choices) ?
+                        progressData.choices.length > 0 :
+                        Object.keys(progressData.choices).length > 0;
+                }
+            }
+        } catch (e) {
+            console.error('Error checking progress', e);
+        }
+
         // Fallbacks provided directly in template literal for better readability
         container.innerHTML = `
             <div class="test-selection-screen">
                 <h1>${t('selectTestType') || 'Выберите тип теста'}</h1>
                 <p class="subtitle">${t('testTypeDescription') || 'Выберите подходящий для вас вариант тестирования'}</p>
+                
+                ${hasProgress ? `
+                    <div class="continue-test-banner">
+                        <div class="banner-content">
+                            <span class="material-symbols-rounded">history</span>
+                            <div class="banner-text">
+                                <h3>${t('unfinishedTest') || 'У вас есть незавершенный тест'}</h3>
+                                <p>${t('continueOrStartNew') || 'Вы можете продолжить с того места, где остановились, или начать новый тест'}</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-lg pulse-animation" onclick="app.continueTest()">
+                            <span class="material-symbols-rounded">play_arrow</span>
+                            ${t('continueTest') || 'Продолжить тест'}
+                        </button>
+                    </div>
+                ` : ''}
                 
                 <div class="test-type-cards">
                     <div class="test-type-card" onclick="app.startBasicTest()">
@@ -973,7 +1239,7 @@ class UIController {
                         <h2>${t('advancedTest') || 'Углубленный тест'}</h2>
                         <div class="test-type-badge">${t('mostAccurate') || 'Максимально точный'}</div>
                         <div class="test-type-info">
-                            <p class="test-count">${t('questionsCount') || 'Вопросов'}: <strong>30-50</strong></p>
+                            <p class="test-count">${t('questionsCount') || 'Вопросов'}: <strong>36</strong> <span style="font-size: 0.8em; opacity: 0.8;">(${t('exactQuantity') || 'точное количество'})</span></p>
                             <p class="test-time">${t('estimatedTime') || 'Время'}: <strong>~45-60 ${t('minutes') || 'минут'}</strong></p>
                         </div>
                         <div class="test-type-description">
@@ -1028,7 +1294,7 @@ class UIController {
                 </p>
                 <button class="btn btn-primary" onclick="location.reload()">Обновить страницу</button>
             </div>
-        `;
+    `;
     }
 
 
@@ -1062,7 +1328,7 @@ class UIController {
                 <div class="loading-spinner"></div>
                 <p>${t('processingResults') || 'Processing results...'}</p>
             </div>
-        `;
+    `;
 
         // Render main content
         setTimeout(() => {
@@ -1078,11 +1344,12 @@ class UIController {
             let content = `
                 <div class="results-screen animate-in">
                     <div class="results-header">
-                        <button class="btn-home" onclick="app.showIntro()">🏠</button>
-                        <h1 id="resultsTitle">${t('resultsTitle')}</h1>
+                        <button class="btn-home" onclick="app.showIntro()" title="${t('home')}">🏠</button>
+                        <h1 id="resultsTitle">${t('resultsTitle') || 'Personality Profile Analysis'}</h1>
                         <div class="results-actions-top">
                              <button class="btn btn-sm btn-secondary" onclick="app.downloadResults('json')">💾 JSON</button>
                              <button class="btn btn-sm btn-secondary" onclick="app.downloadResults('html')">📄 HTML</button>
+                             <button class="btn btn-sm btn-primary" onclick="app.downloadResults('pdf')">📄 PDF</button>
                         </div>
                     </div>
 
@@ -1108,7 +1375,7 @@ class UIController {
                          </div>
                     </div>
                 </div>
-             `;
+    `;
 
             container.innerHTML = content;
 
@@ -1155,7 +1422,7 @@ class UIController {
         if (aiAnalysis.personalityType) {
             const confidence = Math.round(aiAnalysis.personalityType.confidence * 100);
             html += `
-            <div class="ai-section">
+                <div class="ai-section">
                     <h3>🎯 ${t('personalityType')}</h3>
                     <div class="personality-type-card">
                         <h4>${aiAnalysis.personalityType.name}</h4>
@@ -1163,7 +1430,7 @@ class UIController {
                         <div class="confidence-badge">${t('confidence')} ${confidence}%</div>
                     </div>
                 </div>
-            `;
+    `;
         }
 
         // Insights
@@ -1177,7 +1444,7 @@ class UIController {
                     </div>
                 `;
             });
-            html += '</div></div>';
+            html += '</div></div > ';
         }
 
         html += '</div>';
@@ -1193,6 +1460,10 @@ class UIController {
 
         const t = this.i18n.t.bind(this.i18n);
         const lang = this.i18n.getLanguage();
+
+        // Fetch Evolution History for the chart
+        const evolutionHistory = this.app.auth ? this.app.auth.getEvolutionHistory() : null;
+        const showEvolution = evolutionHistory && evolutionHistory.sessions && evolutionHistory.sessions.length >= 2;
 
         container.innerHTML = `
             <div class="screen animate-in active">
@@ -1219,6 +1490,33 @@ class UIController {
                             </div>
                         </div>
                     </div>
+
+                    <!-- Evolution Chart -->
+                    ${showEvolution ? `
+                    <div class="cosmic-card mb-6 fade-in delay-1">
+                        <div class="card-header">
+                            <h2 class="card-title">📈 ${t('evolutionProgress') || 'Прогресс развития'}</h2>
+                        </div>
+                        <div class="card-body">
+                            <div style="height: 300px; width: 100%; position: relative;">
+                                <canvas id="evolutionChart" class="crisp-chart"></canvas>
+                            </div>
+                            ${evolutionReport && evolutionReport.insights ? `
+                                <div class="evolution-insights mt-4">
+                                    <h3 class="text-lg font-semibold mb-2">${t('keyInsights') || 'Ключевые инсайты'}</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        ${evolutionReport.insights.slice(0, 2).map(insight => `
+                                            <div class="insight-card ${insight.type || 'neutral'}" style="background: rgba(var(--primary-rgb), 0.05); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--primary-color);">
+                                                <h4 style="margin: 0 0 0.5rem 0; color: var(--primary-color);">${insight.title}</h4>
+                                                <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">${insight.text}</p>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                    ` : ''}
                     
                     <!-- History List -->
                     <div class="cosmic-card">
@@ -1255,6 +1553,130 @@ class UIController {
                 </div>
             </div>
         `;
+
+        if (showEvolution) {
+            // Give DOM time to settle (avoid blurry charts due to initial scale/layout)
+            setTimeout(() => {
+                this.renderEvolutionChart(evolutionHistory);
+                // Second pass to fix any sizing glitches after animations (e.g. fade-in)
+                setTimeout(() => {
+                    if (this.evolutionChartInstance) {
+                        this.evolutionChartInstance.resize();
+                    }
+                }, 1000);
+            }, 500);
+        }
+    }
+
+    /**
+     * Render Evolution Chart using Chart.js
+     * @param {Object} history - Evolution history data
+     */
+    renderEvolutionChart(history) {
+        const t = (key) => (window.t ? window.t(key) : key);
+        const ctx = document.getElementById('evolutionChart');
+        if (!ctx || !history || !history.sessions) return;
+
+        // Prepare data
+        // We want to show how each dimension changes over time
+        // X-axis: Dates (Sessions)
+        // Y-axis: Score (%)
+
+        // Extract dates and formatted labels
+        const labels = history.sessions.map((session, index) => {
+            const date = new Date(session.date);
+            return `Test ${index + 1} (${date.toLocaleDateString()})`;
+        });
+
+        // Identify dimensions from the first session (or all unique dimensions)
+        // Assuming dimensions are consistent
+        const firstSessionScores = history.sessions[0].normalizedScores || {};
+        const dimensions = Object.keys(firstSessionScores);
+
+        // Colors for dataset (using design token colors if possible, or hardcoded palette)
+        const colors = [
+            '#e11d48', // Red
+            '#2563eb', // Blue
+            '#16a34a', // Green
+            '#d97706', // Amber
+            '#9333ea', // Purple
+            '#0891b2'  // Cyan
+        ];
+
+        const datasets = dimensions.map((dim, index) => {
+            return {
+                label: t(`${dim}Name`) || dim,
+                data: history.sessions.map(s => (s.normalizedScores && s.normalizedScores[dim] !== undefined) ? s.normalizedScores[dim] : 0),
+                borderColor: colors[index % colors.length],
+                backgroundColor: colors[index % colors.length],
+                tension: 0.4, // Smooth curves
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                fill: false
+            };
+        });
+
+        // Destroy existing chart if any (to avoid memory leaks/glitches)
+        if (this.evolutionChartInstance) {
+            this.evolutionChartInstance.destroy();
+        }
+
+        // Create new Chart
+        this.evolutionChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                resizeDelay: 0,
+                animation: {
+                    duration: 800
+                },
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: getComputedStyle(document.body).getPropertyValue('--text-primary').trim() || '#fff',
+                            usePointStyle: true,
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: { size: 14 },
+                        bodyFont: { size: 13 }
+                    }
+                },
+                scales: {
+                    y: {
+                        min: -100,
+                        max: 100,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: getComputedStyle(document.body).getPropertyValue('--text-secondary').trim() || '#aaa'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: getComputedStyle(document.body).getPropertyValue('--text-secondary').trim() || '#aaa'
+                        }
+                    }
+                }
+            }
+        });
     }
 
     getUserAvatar(user) {
@@ -1273,6 +1695,145 @@ class UIController {
         const t = this.i18n.t.bind(this.i18n);
         // ... implementation ...
         alert(t('featureComingSoon') || 'Modal implementation in progress');
+    }
+
+    // ================= START GENERAL MODAL UI =================
+
+    /**
+     * Show a generic modal
+     * @param {Object} options - Modal options
+     * @param {string} options.title - Modal title
+     * @param {string} options.content - HTML content
+     * @param {Array} options.actions - Array of action buttons [{text, class, onClick}]
+     * @param {boolean} options.closeOnOutsideClick - Close when clicking outside
+     */
+    showModal({ title, content, actions = [], closeOnOutsideClick = true }) {
+        const modalId = 'genericModal';
+        let modal = document.getElementById(modalId);
+
+        if (modal) modal.remove();
+
+        modal = document.createElement('div');
+        modal.id = modalId;
+        modal.className = 'modal-overlay fade-in';
+
+        const closeHandler = () => modal.remove();
+
+        if (closeOnOutsideClick) {
+            modal.onclick = (e) => {
+                if (e.target === modal) closeHandler();
+            };
+        }
+
+        const buttonsHtml = actions.map((btn, index) => {
+            const btnClass = btn.class || 'btn-secondary';
+            return `<button class="btn ${btnClass}" id="modalBtn${index}">${btn.text}</button>`;
+        }).join('');
+
+        modal.innerHTML = `
+            <div class="modal-content glass">
+                <span class="modal-close">&times;</span>
+                ${title ? `<h2 class="modal-title">${title}</h2>` : ''}
+                <div class="modal-body">${content}</div>
+                ${actions.length > 0 ? `<div class="modal-actions">${buttonsHtml}</div>` : ''}
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Bind events
+        modal.querySelector('.modal-close').onclick = closeHandler;
+
+        actions.forEach((btn, index) => {
+            const el = document.getElementById(`modalBtn${index}`);
+            if (el && btn.onClick) {
+                el.onclick = () => {
+                    btn.onClick();
+                    if (btn.closeAfter !== false) closeHandler();
+                };
+            }
+        });
+    }
+
+    /**
+     * Show Alert Modal (replacement for alert())
+     */
+    showAlert(message, title = null) {
+        const t = this.i18n.t.bind(this.i18n);
+        this.showModal({
+            title: title || t('attention') || 'Внимание',
+            content: `<p>${message}</p>`,
+            actions: [
+                { text: 'OK', class: 'btn-primary', onClick: () => { } }
+            ]
+        });
+    }
+
+    /**
+     * Show Confirm Modal (replacement for confirm())
+     * @param {string} message 
+     * @param {Function} onConfirm 
+     * @param {Function} onCancel 
+     */
+    showConfirm(message, onConfirm, onCancel = null) {
+        const t = this.i18n.t.bind(this.i18n);
+        this.showModal({
+            title: t('confirmation') || 'Подтверждение',
+            content: `<p>${message}</p>`,
+            actions: [
+                {
+                    text: t('cancel') || 'Отмена',
+                    class: 'btn-secondary',
+                    onClick: () => { if (onCancel) onCancel(); }
+                },
+                {
+                    text: t('confirm') || 'Да',
+                    class: 'btn-primary',
+                    onClick: () => { if (onConfirm) onConfirm(); }
+                }
+            ]
+        });
+    }
+
+    /**
+     * Show Prompt Modal (replacement for prompt())
+     * @param {string} message 
+     * @param {string} defaultValue 
+     * @param {Function} onSubmit 
+     */
+    showPrompt(message, defaultValue = '', onSubmit) {
+        const t = this.i18n.t.bind(this.i18n);
+        const inputId = 'promptInput';
+
+        this.showModal({
+            title: t('inputRequired') || 'Ввод данных',
+            content: `
+                <p>${message}</p>
+                <input type="text" id="${inputId}" class="form-control" value="${defaultValue}" style="width: 100%; margin-top: 10px;">
+            `,
+            actions: [
+                { text: t('cancel') || 'Отмена', class: 'btn-secondary', onClick: () => { } },
+                {
+                    text: 'OK',
+                    class: 'btn-primary',
+                    closeAfter: false, // Handle manually
+                    onClick: () => {
+                        const val = document.getElementById(inputId).value;
+                        if (onSubmit) {
+                            onSubmit(val);
+                            const modal = document.getElementById('genericModal');
+                            if (modal) modal.remove();
+                        }
+                    }
+                }
+            ]
+        });
+
+        // Focus input
+        setTimeout(() => {
+            const input = document.getElementById(inputId);
+            if (input) input.focus();
+        }, 100);
     }
 
     showError(message) {
