@@ -35,7 +35,7 @@
 
 ### 📋 Удаленные файлы
 
-```
+```text
 js/lib/html2pdf.bundle.min.js          (~1 МБ)
 js/lib/html2pdf.bundle.min.js.LICENSE.txt
 js/lib/chart.umd.js.map                (~950 КБ)

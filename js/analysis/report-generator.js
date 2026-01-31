@@ -138,80 +138,109 @@ class ReportGenerator {
             line-height: 1.6;
             color: #1a1a1a;
             ${bodyStyle}
+            text-align: center; /* Центрирование всего текста */
         }
         
         /* Table Styles for DOC compatibility */
-        table { border-collapse: collapse; width: 100%; }
-        td, th { padding: 10px; vertical-align: top; }
+        table { border-collapse: collapse; width: 100%; margin: 0 auto; }
+        td, th { padding: 10px; vertical-align: top; text-align: center; }
 
         .header {
             background: linear-gradient(135deg, #050510 0%, #1a1a3a 100%);
             color: white;
-            padding: 40px 30px;
+            padding: 25px 20px;
             border-radius: 20px;
-            margin-bottom: 40px;
+            margin-bottom: 25px;
             text-align: center;
         }
         
         .section {
             background: #fff;
-            padding: 30px;
-            margin-bottom: 40px;
+            padding: 40px; /* Увеличил отступ внутри секции (было 20px) */
+            margin-bottom: 25px;
+            margin-left: auto; 
+            margin-right: auto; 
             border-radius: 16px;
             width: 96%;
+            max-width: 800px; 
             page-break-inside: avoid;
+            text-align: center; 
         }
 
         .stat-card-doc {
             background: #f8fafc;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             border-radius: 12px;
             page-break-inside: avoid;
+            margin: 0 auto;
         }
 
         /* Original CSS for HTML/PDF */
-        .stats-container { display: flex; gap: 15px; margin-bottom: 30px; page-break-inside: avoid; }
-        .stat-card { flex: 1; background: #f8fafc; padding: 20px; border-radius: 12px; text-align: center; }
-        .score-row { margin-bottom: 25px; padding: 15px; background: #fcfdfe; border-radius: 12px; }
-        .score-info { display: flex; justify-content: space-between; margin-bottom: 12px; }
-        .score-bar { height: 12px; background: #f1f5f9; border-radius: 6px; overflow: hidden; width: 100%; }
+        .stats-container { 
+            display: flex; 
+            gap: 15px; 
+            margin-bottom: 20px; 
+            page-break-inside: avoid; 
+            justify-content: center; 
+        }
+        .stat-card { flex: 1; background: #f8fafc; padding: 15px; border-radius: 12px; text-align: center; max-width: 250px; }
+        
+        .score-row { 
+            margin-bottom: 15px; 
+            padding: 10px; 
+            background: #fcfdfe; 
+            border-radius: 12px; 
+            text-align: center;
+        }
+        .score-info { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 8px; 
+            text-align: center;
+            padding: 0 10px;
+        }
+        .score-bar { height: 12px; background: #f1f5f9; border-radius: 6px; overflow: hidden; width: 100%; margin: 0 auto; }
         .score-fill { height: 100%; border-radius: 6px; }
 
         /* AI Card */
         .ai-card {
             background: linear-gradient(to right, #f0f7ff, #ffffff);
             border: 1px solid #bae6fd;
-            padding: 30px;
+            padding: 30px; /* Увеличил отступ в карточке AI */
             border-radius: 20px;
             position: relative;
             page-break-inside: avoid;
             break-inside: avoid;
+            text-align: center;
         }
         .ai-badge {
             background: #0ea5e9;
             color: white;
-            padding: 6px 16px;
+            padding: 4px 12px;
             border-radius: 100px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
-            float: right;
+            display: inline-block; 
+            margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .recommendation {
-            padding: 20px;
+            padding: 30px; /* Сделал отступы шире (было 15px) */
             margin-bottom: 20px;
             background: #ffffff;
             border: 1px solid #e2e8f0;
-            border-left: 6px solid #00c6fb;
+            border-left: 6px solid #00c6fb; 
             border-radius: 12px;
             page-break-inside: avoid;
             break-inside: avoid;
+            text-align: center;
+            /* Убрал ограничение ширины max-width: 90%, теперь блок будет шире */
         }
-        .recommendation h3 { color: #0369a1; margin: 0 0 10px 0; font-size: 18px; font-weight: 800; }
-        .recommendation p { color: #475569; margin: 0; }
+        .recommendation h3 { color: #0369a1; margin: 0 0 5px 0; font-size: 16px; font-weight: 800; text-align: center; }
+        .recommendation p { color: #475569; margin: 0; font-size: 14px; text-align: justify; text-indent: 1.5em; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -333,17 +362,17 @@ class ReportGenerator {
     </div>
     ` : ''}
 
-    <div class="footer" style="padding-bottom: 50px; margin-top: 60px; clear: both;">
-        <p style="margin-bottom: 20px; font-weight: 700; color: #1e293b; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
+    <div class="footer" style="padding-bottom: 20px; margin-top: 30px; clear: both;">
+        <p style="margin-bottom: 15px; font-weight: 700; color: #1e293b; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">
             ${t('generatedBy') || 'Generated by Self-Knowledge System'} &bull; Neural Constellation Engine
         </p>
-        <div style="background: #f8fafc; padding: 30px; border-radius: 16px; border: 2px solid #e2e8f0; display: block; max-width: 550px; margin: 0 auto; text-align: center;">
-            <p style="font-weight: 800; color: #0f172a; font-size: 18px; margin: 0 0 10px 0;">
+        <div style="background: #f8fafc; padding: 20px; border-radius: 16px; border: 2px solid #e2e8f0; display: block; max-width: 550px; margin: 0 auto; text-align: center;">
+            <p style="font-weight: 800; color: #0f172a; font-size: 16px; margin: 0 0 5px 0;">
                 ${lang === 'kk' ? 'Авторы: Ахмедьянов Саламат КПО 9/22-2' :
                 lang === 'ru' ? 'Автор: Ахмедьянов Саламат КПО 9/22-2' :
                     'Author: Akhmedyanov Salamat KPO 9/22-2'}
             </p>
-            <p style="margin: 0; font-size: 14px; color: #475569; font-weight: 600;">
+            <p style="margin: 0; font-size: 12px; color: #475569; font-weight: 600;">
                 &copy; 2026 Diploma Project. All rights reserved.
             </p>
         </div>
@@ -413,7 +442,7 @@ class ReportGenerator {
                 logging: false,
                 letterRendering: true,
                 allowTaint: false,
-                windowWidth: 800, // A4 width at 96 DPI
+                windowWidth: 1300, // A4 width at 96 DPI
                 scrollY: 0,
                 scrollX: 0
             },
