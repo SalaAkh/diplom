@@ -556,6 +556,8 @@ class PersonalityAnalyzer {
                 name: t('research'),
                 color: "#4a90e2",
                 description: t('descResearch') || "Научная деятельность, аналитика, R&D",
+                skills: ["Аналитическое мышление", "Методология исследований", "Критический анализ"],
+                activities: ["Научные исследования", "Сбор и анализ данных", "Написание научных статей"],
                 calculateMatch: (s) => {
                     const explorerScore = Math.max(0, (s.explorer + 1) / 2);
                     const rationalityScore = Math.max(0, (s.rationality + 1) / 2);
@@ -568,6 +570,8 @@ class PersonalityAnalyzer {
                 name: t('creativity'),
                 color: "#7b68ee",
                 description: t('descCreativity') || "Дизайн, искусство, стартапы",
+                skills: ["Креативность", "Дизайн-мышление", "Прототипирование"],
+                activities: ["Создание визуального контента", "Генерация идей", "Проектирование интерфейсов"],
                 calculateMatch: (s) => {
                     const explorerScore = Math.max(0, (s.explorer + 1) / 2);
                     const intuitionScore = Math.max(0, (s.intuition + 1) / 2);
@@ -580,6 +584,8 @@ class PersonalityAnalyzer {
                 name: t('management'),
                 color: "#50c878",
                 description: t('descManagement') || "Менеджмент, HR, стратегия",
+                skills: ["Лидерство", "Стратегическое планирование", "Переговоры"],
+                activities: ["Управление командами", "Разработка стратегий", "Организация бизнес-процессов"],
                 calculateMatch: (s) => {
                     const strategicScore = Math.max(0, (s.strategic + 1) / 2);
                     const rationalityScore = Math.max(0, (s.rationality + 1) / 2);
@@ -592,6 +598,8 @@ class PersonalityAnalyzer {
                 name: t('social'),
                 color: "#f39c12",
                 description: t('descSocial') || "Образование, медицина, психология",
+                skills: ["Эмпатия", "Коммуникация", "Педагогика"],
+                activities: ["Помощь людям", "Обучение и менторство", "Психологическая поддержка"],
                 calculateMatch: (s) => {
                     const meaningScore = Math.max(0, (s.meaning + 1) / 2);
                     const intuitionScore = Math.max(0, (s.intuition + 1) / 2);
@@ -604,6 +612,8 @@ class PersonalityAnalyzer {
                 name: t('entrepreneurship'),
                 color: "#e74c3c",
                 description: t('descEntrepreneurship') || "Бизнес, проекты",
+                skills: ["Предпринимательство", "Риск-менеджмент", "Продажи"],
+                activities: ["Запуск новых проектов", "Поиск бизнес-возможностей", "Нетворкинг"],
                 calculateMatch: (s) => {
                     const utilityScore = Math.max(0, (s.utility + 1) / 2);
                     const adaptationScore = Math.max(0, (s.adaptation + 1) / 2);
@@ -616,6 +626,8 @@ class PersonalityAnalyzer {
                 name: t('analytics'),
                 color: "#9b59b6",
                 description: t('descAnalytics') || "Анализ данных, консалтинг",
+                skills: ["Статистика", "Системный анализ", "Data Science"],
+                activities: ["Прогнозирование", "Оптимизация процессов", "Работа с большими данными"],
                 calculateMatch: (s) => {
                     const rationalityScore = Math.max(0, (s.rationality + 1) / 2);
                     const strategicScore = Math.max(0, (s.strategic + 1) / 2);
@@ -734,7 +746,7 @@ class PersonalityAnalyzer {
 
         // Добавляем навыки из топ-категорий
         topCategories.forEach(cat => {
-            if (cat.matchScore > 0.3) {
+            if (cat.matchScore > 0.3 && cat.skills) {
                 cat.skills.forEach(skill => {
                     if (!skills.find(s => s.name === skill)) {
                         skills.push({
@@ -747,51 +759,52 @@ class PersonalityAnalyzer {
             }
         });
 
+        const t = (key) => (window.t ? window.t(key) : key);
         // Добавляем общие навыки на основе профиля
         if (scores.rationality < -0.2) {
             skills.push({
-                name: "Структурированное мышление",
-                category: "Общее развитие",
+                name: t('skillStructuredThinking'),
+                category: t('generalDevelopment'),
                 priority: 0.5
             });
         }
 
         if (scores.individualism > 0.2) {
             skills.push({
-                name: "Командная работа",
-                category: "Общее развитие",
+                name: t('skillTeamwork'),
+                category: t('generalDevelopment'),
                 priority: 0.5
             });
         }
 
         if (scores.control > 0.2) {
             skills.push({
-                name: "Управление неопределённостью",
-                category: "Общее развитие",
+                name: t('skillUncertaintyManagement'),
+                category: t('generalDevelopment'),
                 priority: 0.5
             });
         }
 
         if (scores.strategic < -0.2) {
             skills.push({
-                name: "Стратегическое планирование",
-                category: "Общее развитие",
+                name: t('skillStrategicPlanning'),
+                category: t('generalDevelopment'),
                 priority: 0.5
             });
         }
 
         if (scores.explorer < -0.2) {
             skills.push({
-                name: "Исследовательские навыки",
-                category: "Общее развитие",
+                name: t('skillResearchSkills'),
+                category: t('generalDevelopment'),
                 priority: 0.5
             });
         }
 
         if (scores.meaning < -0.2) {
             skills.push({
-                name: "Поиск глубинного смысла",
-                category: "Общее развитие",
+                name: t('skillMeaningSearch'),
+                category: t('generalDevelopment'),
                 priority: 0.5
             });
         }
@@ -811,15 +824,19 @@ class PersonalityAnalyzer {
     generateRecommendations(scores, categories) {
         const recommendations = [];
 
+        const t = (key) => (window.t ? window.t(key) : key);
         // Используем топ-3 категории для генерации рекомендаций
         const topCategories = categories.slice(0, 3).filter(cat => cat.matchScore > 0.2);
 
         topCategories.forEach(cat => {
             const matchPercent = Math.round(cat.matchScore * 100);
+            const matchTextTemplate = t('profileMatchText') || "Ваш профиль соответствует этому направлению на {percent}%.";
+            const matchText = matchTextTemplate.replace('{percent}', matchPercent);
+
             recommendations.push({
                 category: cat.name,
                 title: cat.description,
-                description: `Ваш профиль соответствует этому направлению на ${matchPercent}%. ${this.getCategoryDescription(cat.id, scores)}`,
+                description: `${matchText} ${this.getCategoryDescription(cat.id, scores)}`,
                 activities: cat.activities,
                 skills: cat.skills,
                 matchScore: cat.matchScore
@@ -829,11 +846,11 @@ class PersonalityAnalyzer {
         // Если нет подходящих категорий, добавляем общую рекомендацию
         if (recommendations.length === 0) {
             recommendations.push({
-                category: "Общее развитие",
-                title: "Сбалансированный профиль",
-                description: "Ваш профиль демонстрирует сбалансированный подход. Исследуйте разные направления для определения наиболее подходящего пути.",
-                activities: ["Разнообразные проекты", "Междисциплинарная работа"],
-                skills: ["Адаптивность", "Гибкость"],
+                category: t('generalDevelopment'),
+                title: t('balancedProfileTitle'),
+                description: t('balancedProfileDesc'),
+                activities: [t('activitiesMisc')],
+                skills: [t('adaptationName'), t('flexibility')],
                 matchScore: 0.5
             });
         }
@@ -848,15 +865,16 @@ class PersonalityAnalyzer {
      * @returns {string} Описание категории
      */
     getCategoryDescription(categoryId, scores) {
+        const t = (key) => (window.t ? window.t(key) : key);
         const descriptions = {
-            research: "Ваша склонность к рациональному анализу и исследованию делает вас идеальным кандидатом для научной работы, аналитики и R&D. Вы умеете глубоко погружаться в проблемы и находить системные решения.",
-            creativity: "Ваша готовность к экспериментам и созданию нового открывает возможности в творческих индустриях, дизайне и инновационных проектах. Вы не боитесь идти непроторенными путями и адаптироваться к изменениям.",
-            management: "Ваше умение работать с людьми и видеть стратегическую перспективу ценится в управлении и лидерстве. Вы способны мотивировать команды и достигать долгосрочных целей.",
-            social: "Ваша ориентация на людей и поиск смысла делают вас отличным кандидатом для работы в социальной сфере, образовании и здравоохранении. Вы умеете помогать другим и находить ценность в служении.",
-            entrepreneurship: "Ваша независимость, стратегическое мышление и готовность к адаптации идеальны для предпринимательства. Вы способны создавать новые возможности и управлять рисками.",
-            analytics: "Ваш рациональный подход, стратегическое мышление и стремление к контролю делают вас отличным аналитиком и консультантом. Вы умеете структурировать сложные проблемы и находить оптимальные решения."
+            research: t('descResearch'),
+            creativity: t('descCreativity'),
+            management: t('descManagement'),
+            social: t('descSocial'),
+            entrepreneurship: t('descEntrepreneurship'),
+            analytics: t('descAnalytics')
         };
-        return descriptions[categoryId] || "Это направление может быть интересным для вашего развития.";
+        return descriptions[categoryId] || t('meaningDesc');
     }
 
     /**

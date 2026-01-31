@@ -41,9 +41,11 @@ class ReportGenerator {
      * @returns {string} JSON строка
      */
     generateJSONReport(data) {
+        const t = (key) => (window.t ? window.t(key) : key);
+        const lang = window.i18n ? window.i18n.getLanguage() : 'ru';
         const report = {
-            title: 'Отчет о прохождении системы самопознания',
-            date: new Date().toLocaleString('ru-RU'),
+            title: t('reportTitle'),
+            date: new Date().toLocaleString(lang === 'kk' ? 'kk-KZ' : lang === 'ru' ? 'ru-RU' : 'en-US'),
             version: '1.0',
             data: data
         };
@@ -56,36 +58,39 @@ class ReportGenerator {
      * @returns {string} Текстовый отчет
      */
     generateTextReport(data) {
+        const t = (key) => (window.t ? window.t(key) : key);
+        const lang = window.i18n ? window.i18n.getLanguage() : 'ru';
         let report = '='.repeat(60) + '\n';
-        report += 'ОТЧЕТ О ПРОХОЖДЕНИИ СИСТЕМЫ САМОПОЗНАНИЯ\n';
+        report += t('reportTitle').toUpperCase() + '\n';
         report += '='.repeat(60) + '\n\n';
-        report += `Дата: ${new Date().toLocaleString('ru-RU')}\n\n`;
+        report += `${t('reportDate')}: ${new Date().toLocaleString(lang === 'kk' ? 'kk-KZ' : lang === 'ru' ? 'ru-RU' : 'en-US')}\n\n`;
 
         if (data.profile && data.profile.summary) {
-            report += 'ОБЩЕЕ РЕЗЮМЕ\n';
+            report += t('summaryLabel').toUpperCase() + '\n';
             report += '-'.repeat(60) + '\n';
             report += data.profile.summary + '\n\n';
         }
 
         if (data.scores) {
-            report += 'ОЦЕНКИ ПО ИЗМЕРЕНИЯМ\n';
+            report += t('dimensionScores').toUpperCase() + '\n';
             report += '-'.repeat(60) + '\n';
             Object.keys(data.scores).forEach(dim => {
                 const score = data.scores[dim];
-                report += `${dim}: ${score}%\n`;
+                const dimName = t(`${dim}Name`) || dim;
+                report += `${dimName}: ${score}%\n`;
             });
             report += '\n';
         }
 
         if (data.aiAnalysis && data.aiAnalysis.personalityType) {
-            report += 'ТИП ЛИЧНОСТИ\n';
+            report += t('personalityType').toUpperCase() + '\n';
             report += '-'.repeat(60) + '\n';
             report += `${data.aiAnalysis.personalityType.name}\n`;
             report += `${data.aiAnalysis.personalityType.description}\n\n`;
         }
 
         if (data.profile && data.profile.recommendations) {
-            report += 'РЕКОМЕНДАЦИИ\n';
+            report += t('recommendationsLabel').toUpperCase() + '\n';
             report += '-'.repeat(60) + '\n';
             data.profile.recommendations.forEach((rec, index) => {
                 report += `${index + 1}. ${rec.category || rec.title}\n`;
@@ -96,7 +101,7 @@ class ReportGenerator {
         }
 
         report += '\n' + '='.repeat(60) + '\n';
-        report += 'Сгенерировано системой самопознания\n';
+        report += t('generatedBy') + '\n';
 
         return report;
     }
@@ -107,15 +112,17 @@ class ReportGenerator {
      * @returns {string} HTML строка
      */
     generateHTMLReport(data) {
-        const date = new Date().toLocaleString('ru-RU');
+        const t = (key) => (window.t ? window.t(key) : key);
+        const lang = window.i18n ? window.i18n.getLanguage() : 'ru';
+        const date = new Date().toLocaleString(lang === 'kk' ? 'kk-KZ' : lang === 'ru' ? 'ru-RU' : 'en-US');
 
         let html = `
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="${lang}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Отчет о прохождении системы самопознания</title>
+    <title>${t('reportTitle')}</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -172,15 +179,15 @@ class ReportGenerator {
 </head>
 <body>
     <div class="header">
-        <h1>Отчет о прохождении системы самопознания</h1>
-        <p>Дата формирования: ${date}</p>
+        <h1>${t('reportTitle')}</h1>
+        <p>${t('reportDate')}: ${date}</p>
     </div>
         `;
 
         if (data.profile && data.profile.summary) {
             html += `
     <div class="section">
-        <h2>Общее резюме</h2>
+        <h2>${t('summaryLabel')}</h2>
         <p>${data.profile.summary}</p>
     </div>
             `;
@@ -189,15 +196,16 @@ class ReportGenerator {
         if (data.scores) {
             html += `
     <div class="section">
-        <h2>Оценки по измерениям</h2>
+        <h2>${t('dimensionScores')}</h2>
             `;
             Object.keys(data.scores).forEach(dim => {
                 const score = data.scores[dim];
                 const normalizedScore = (score + 100) / 2;
+                const dimName = t(`${dim}Name`) || dim;
                 html += `
         <div class="score-item">
             <div style="flex: 1; margin-right: 20px;">
-                <strong>${dim}</strong>
+                <strong>${dimName}</strong>
                 <div class="score-bar">
                     <div class="score-fill" style="width: ${normalizedScore}%"></div>
                 </div>
@@ -212,7 +220,7 @@ class ReportGenerator {
         if (data.aiAnalysis && data.aiAnalysis.personalityType) {
             html += `
     <div class="section">
-        <h2>Тип личности</h2>
+        <h2>${t('personalityType')}</h2>
         <h3>${data.aiAnalysis.personalityType.name}</h3>
         <p>${data.aiAnalysis.personalityType.description}</p>
     </div>
@@ -222,7 +230,7 @@ class ReportGenerator {
         if (data.profile && data.profile.recommendations) {
             html += `
     <div class="section">
-        <h2>Рекомендации</h2>
+        <h2>${t('recommendationsLabel')}</h2>
             `;
             data.profile.recommendations.forEach(rec => {
                 html += `
@@ -234,6 +242,12 @@ class ReportGenerator {
             });
             html += `</div>`;
         }
+
+        html += `
+    <div style="text-align: center; color: #95a5a6; font-size: 0.9rem; margin-top: 2rem;">
+        ${t('generatedBy')}
+    </div>
+        `;
 
         html += `
 </body>
@@ -395,7 +409,8 @@ class ReportGenerator {
         // Если имя файла отсутствует, генерируем стандартное
         if (!filename) {
             const date = new Date().toISOString().split('T')[0];
-            filename = `personality-report-${date}.${format === 'json' ? 'json' : format === 'text' ? 'txt' : 'html'}`;
+            const lang = window.i18n ? window.i18n.getLanguage() : 'ru';
+            filename = `personality-report-${date}_${lang}.${format === 'json' ? 'json' : format === 'text' ? 'txt' : 'html'}`;
         }
 
         // Убеждаемся, что расширение соответствует формату

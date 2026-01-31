@@ -188,8 +188,8 @@ class ResultsManager {
             this.app.reportGenerator = reportGen;
         }
 
-        // Попытка получить данные пользователя и историю для правильного имени файла
-        const user = this.auth.getCurrentUser();
+        const lang = window.i18n ? window.i18n.getLanguage() : 'ru';
+        const user = this.auth ? this.auth.getCurrentUser() : null;
         let filename = null;
 
         if (user) {
@@ -198,17 +198,19 @@ class ResultsManager {
                 const lastTest = history[history.length - 1];
                 const safeTitle = (lastTest.title || `Test #${history.length}`).replace(/[^a-zа-яё0-9\s-]/gi, '_');
                 const dateStart = new Date().toISOString().split('T')[0];
-                filename = `${user.username}_${safeTitle}_${dateStart}.${format === 'pdf' ? 'pdf' : format === 'json' ? 'json' : format === 'text' ? 'txt' : 'html'}`;
+                filename = `${user.username}_${safeTitle}_${dateStart}_${lang}.${format === 'pdf' ? 'pdf' : format === 'json' ? 'json' : format === 'text' ? 'txt' : 'html'}`;
             }
         }
 
         if (!filename) {
-            filename = `personality-report-${new Date().toISOString().split('T')[0]}.${format === 'pdf' ? 'pdf' : format === 'json' ? 'json' : format === 'text' ? 'txt' : 'html'}`;
+            filename = `personality-report-${new Date().toISOString().split('T')[0]}_${lang}.${format === 'pdf' ? 'pdf' : format === 'json' ? 'json' : format === 'text' ? 'txt' : 'html'}`;
         }
 
+        const t = (key) => (window.t ? window.t(key) : key);
+
         const reportData = {
-            title: 'Отчёт о прохождении системы самопознания',
-            date: new Date().toLocaleString('ru-RU'),
+            title: t('reportTitle'),
+            date: new Date().toLocaleString(lang === 'kk' ? 'kk-KZ' : lang === 'ru' ? 'ru-RU' : 'en-US'),
             statistics: stats,
             profile: profile,
             scores: scores,
