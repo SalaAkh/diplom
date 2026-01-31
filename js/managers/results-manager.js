@@ -175,7 +175,12 @@ class ResultsManager {
         const profile = this.analyzer.generateProfile();
         const scores = this.analyzer.getPercentageScores();
         const normalizedScores = this.analyzer.getNormalizedScores();
-        const stats = this.analyzer.getStatistics();
+        // Получаем расширенную статистику, включая геймификацию
+        const analyzerStats = this.analyzer.getStatistics();
+        const gamificationStats = (this.app.gamification && typeof this.app.gamification.getUserProgress === 'function')
+            ? this.app.gamification.getUserProgress()
+            : {};
+        const stats = { ...analyzerStats, ...gamificationStats };
 
         // Lazy load ReportGenerator if needed
         let reportGen = this.app.reportGenerator;
@@ -210,13 +215,37 @@ class ResultsManager {
 
         const reportData = {
             title: t('reportTitle'),
+            userLogin: user ? user.username : (window.t ? window.t('navGuest') : 'Guest'),
             date: new Date().toLocaleString(lang === 'kk' ? 'kk-KZ' : lang === 'ru' ? 'ru-RU' : 'en-US'),
             statistics: stats,
             profile: profile,
             scores: scores,
             normalizedScores: normalizedScores,
-            // aiAnalysis: ... (можно добавить, если доступно)
+            aiAnalysis: null
         };
+
+        // Try to get AI analysis from history if available
+        if (user) {
+            const history = this.auth.getTestHistory();
+            if (history && history.length > 0) {
+                const lastTest = history[history.length - 1];
+                if (lastTest.aiAnalysis) {
+                    reportData.aiAnalysis = lastTest.aiAnalysis;
+                }
+            }
+        }
+
+        // Попытка захватить изображение графика для отчета
+        if (this.app.visualizer && this.app.visualizer.charts && this.app.visualizer.charts.radar) {
+            try {
+                // Используем белый фон для экспорта изображения, так как PDF белый
+                // Но Chart.js toBase64Image сохраняет текущее состояние canvas.
+                // Если canvas прозрачный, он будет прозрачным и в PDF.
+                reportData.chartImage = this.app.visualizer.charts.radar.toBase64Image();
+            } catch (e) {
+                console.warn('Не удалось захватить изображение графика:', e);
+            }
+        }
 
         if (reportGen) {
             reportGen.downloadReport(reportData, format, filename);

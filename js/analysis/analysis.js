@@ -353,56 +353,52 @@ class PersonalityAnalyzer {
             skillRecommendations: []
         };
 
-        // Определяем язык для описаний (пробуем получить из localStorage или используем русский по умолчанию)
+        // Determine language for descriptions
         let currentLang = 'ru';
         try {
-            if (typeof localStorage !== 'undefined') {
+            if (window.i18n) {
+                currentLang = window.i18n.getLanguage();
+            } else if (typeof localStorage !== 'undefined') {
                 const savedLang = localStorage.getItem('preferredLanguage');
                 if (savedLang && ['kk', 'ru', 'en'].includes(savedLang)) {
                     currentLang = savedLang;
-                } else {
-                    // Пробуем определить по браузеру
-                    const browserLang = navigator.language || navigator.userLanguage;
-                    if (browserLang.startsWith('kk') || browserLang.startsWith('kz')) {
-                        currentLang = 'kk';
-                    } else if (browserLang.startsWith('en')) {
-                        currentLang = 'en';
-                    }
                 }
             }
         } catch (e) {
-            // Используем русский по умолчанию
+            // Use 'ru' as default
         }
 
-        // Анализ каждого измерения
+        const t = (key, params) => (window.t ? window.t(key, params) : key);
+
+        // Analyze each dimension
         Object.keys(this.dimensions).forEach(dimension => {
             const score = scores[dimension];
             const dimensionInfo = this.dimensions[dimension];
 
-            // Получаем переведенные названия
+            // Get translated names
             const dimensionName = this.getTranslatedText(dimensionInfo.name, currentLang);
             const oppositeName = this.getTranslatedText(dimensionInfo.opposite, currentLang);
 
             let level, description;
             if (score > 0.5) {
-                level = "высокая";
-                description = `Вы демонстрируете сильную склонность к ${dimensionName.toLowerCase()}.`;
+                level = t('analyzerLevelHigh');
+                description = t('descStrongSlight', { dimension: dimensionName });
             } else if (score > 0.2) {
-                level = "умеренная";
-                description = `У вас есть склонность к ${dimensionName.toLowerCase()}.`;
+                level = t('analyzerLevelModerate');
+                description = t('descModerateSlight', { dimension: dimensionName });
             } else if (score < -0.5) {
-                level = "низкая";
-                description = `Вы предпочитаете ${oppositeName.toLowerCase()}.`;
+                level = t('analyzerLevelLow');
+                description = t('descPreferOpposite', { opposite: oppositeName });
             } else if (score < -0.2) {
-                level = "умеренно низкая";
-                description = `Вы склонны к ${oppositeName.toLowerCase()}.`;
+                level = t('analyzerLevelModerateLow');
+                description = t('descModerateOpposite', { opposite: oppositeName });
             } else {
-                level = "сбалансированная";
-                description = `У вас сбалансированный подход между ${dimensionName.toLowerCase()} и ${oppositeName.toLowerCase()}.`;
+                level = t('analyzerLevelBalanced');
+                description = t('descBalancedApproach', { dimension: dimensionName, opposite: oppositeName });
             }
 
             profile.dimensions[dimension] = {
-                name: dimensionName, // Используем переведенный текст
+                name: dimensionName,
                 score: score,
                 percentage: Math.round(score * 100),
                 level: level,
@@ -555,9 +551,9 @@ class PersonalityAnalyzer {
                 id: "research",
                 name: t('research'),
                 color: "#4a90e2",
-                description: t('descResearch') || "Научная деятельность, аналитика, R&D",
-                skills: ["Аналитическое мышление", "Методология исследований", "Критический анализ"],
-                activities: ["Научные исследования", "Сбор и анализ данных", "Написание научных статей"],
+                description: t('descResearch'),
+                skills: [t('skillAnalytic'), t('skillMethodology'), t('skillCritical')],
+                activities: [t('actResearch'), t('actAnalysis'), t('actScience')],
                 calculateMatch: (s) => {
                     const explorerScore = Math.max(0, (s.explorer + 1) / 2);
                     const rationalityScore = Math.max(0, (s.rationality + 1) / 2);
@@ -569,9 +565,9 @@ class PersonalityAnalyzer {
                 id: "creativity",
                 name: t('creativity'),
                 color: "#7b68ee",
-                description: t('descCreativity') || "Дизайн, искусство, стартапы",
-                skills: ["Креативность", "Дизайн-мышление", "Прототипирование"],
-                activities: ["Создание визуального контента", "Генерация идей", "Проектирование интерфейсов"],
+                description: t('descCreativity'),
+                skills: [t('skillCreative'), t('skillDesign'), t('skillProto')],
+                activities: [t('actVisual'), t('actIdeas'), t('actUI')],
                 calculateMatch: (s) => {
                     const explorerScore = Math.max(0, (s.explorer + 1) / 2);
                     const intuitionScore = Math.max(0, (s.intuition + 1) / 2);
@@ -583,9 +579,9 @@ class PersonalityAnalyzer {
                 id: "management",
                 name: t('management'),
                 color: "#50c878",
-                description: t('descManagement') || "Менеджмент, HR, стратегия",
-                skills: ["Лидерство", "Стратегическое планирование", "Переговоры"],
-                activities: ["Управление командами", "Разработка стратегий", "Организация бизнес-процессов"],
+                description: t('descManagement'),
+                skills: [t('skillLeadership'), t('skillStrategicPlan'), t('skillNegot')],
+                activities: [t('actManage'), t('actStrategy'), t('actOrg')],
                 calculateMatch: (s) => {
                     const strategicScore = Math.max(0, (s.strategic + 1) / 2);
                     const rationalityScore = Math.max(0, (s.rationality + 1) / 2);
@@ -597,9 +593,9 @@ class PersonalityAnalyzer {
                 id: "social",
                 name: t('social'),
                 color: "#f39c12",
-                description: t('descSocial') || "Образование, медицина, психология",
-                skills: ["Эмпатия", "Коммуникация", "Педагогика"],
-                activities: ["Помощь людям", "Обучение и менторство", "Психологическая поддержка"],
+                description: t('descSocial'),
+                skills: [t('skillEmpat'), t('skillComm'), t('skillPed')],
+                activities: [t('actHelp'), t('actTeach'), t('actPsych')],
                 calculateMatch: (s) => {
                     const meaningScore = Math.max(0, (s.meaning + 1) / 2);
                     const intuitionScore = Math.max(0, (s.intuition + 1) / 2);
@@ -611,9 +607,9 @@ class PersonalityAnalyzer {
                 id: "entrepreneurship",
                 name: t('entrepreneurship'),
                 color: "#e74c3c",
-                description: t('descEntrepreneurship') || "Бизнес, проекты",
-                skills: ["Предпринимательство", "Риск-менеджмент", "Продажи"],
-                activities: ["Запуск новых проектов", "Поиск бизнес-возможностей", "Нетворкинг"],
+                description: t('descEntrepreneurship'),
+                skills: [t('skillEntrepreneur'), t('skillRisk'), t('skillSales')],
+                activities: [t('actNewProj'), t('actOpp'), t('actNet')],
                 calculateMatch: (s) => {
                     const utilityScore = Math.max(0, (s.utility + 1) / 2);
                     const adaptationScore = Math.max(0, (s.adaptation + 1) / 2);
@@ -625,9 +621,9 @@ class PersonalityAnalyzer {
                 id: "analytics",
                 name: t('analytics'),
                 color: "#9b59b6",
-                description: t('descAnalytics') || "Анализ данных, консалтинг",
-                skills: ["Статистика", "Системный анализ", "Data Science"],
-                activities: ["Прогнозирование", "Оптимизация процессов", "Работа с большими данными"],
+                description: t('descAnalytics'),
+                skills: [t('skillStat'), t('skillSysAnal'), t('skillDS')],
+                activities: [t('actForecast'), t('actOpt'), t('actBigData')],
                 calculateMatch: (s) => {
                     const rationalityScore = Math.max(0, (s.rationality + 1) / 2);
                     const strategicScore = Math.max(0, (s.strategic + 1) / 2);
@@ -721,8 +717,8 @@ class PersonalityAnalyzer {
         // Предприниматель-Стратег: высокий individualism + strategic
         if (scores.individualism > 0.3 && scores.strategic > 0.3) {
             vectors.push({
-                name: "Предприниматель-Стратег",
-                description: "Ваша независимость и стратегическое мышление делают вас идеальным для предпринимательства и инновационных бизнес-проектов.",
+                name: t('vectorEntrepreneurStrategist'),
+                description: t('descEntrepreneurStrategist'),
                 combination: "individualism + strategic",
                 strength: Math.min(scores.individualism, scores.strategic)
             });

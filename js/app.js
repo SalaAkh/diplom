@@ -594,7 +594,14 @@ class PersonalityTestApp {
             }
 
             // Восстановление прогресса для базового теста
-            if (savedProgress.testMode === 'basic' || !savedProgress.testMode) {
+            // Check if testMode is explicitly 'basic' OR it's missing and the data looks basic (array of choices)
+            // AND it doesn't look like advanced (no scales/situational keys)
+            const isAdvancedData = !Array.isArray(choices) && (choices.scales || choices.situational || choices.open);
+
+            if ((savedProgress.testMode === 'basic' || !savedProgress.testMode) && !isAdvancedData) {
+                this.testMode = 'basic';
+                if (this.testManager) this.testManager.testMode = 'basic';
+
                 choices.forEach(choice => {
                     this.analyzer.recordChoice(choice.scenarioId, choice.choice);
 
@@ -607,7 +614,10 @@ class PersonalityTestApp {
                 this.currentScenarioIndex = savedProgress.currentQuestionIndex || choices.length;
             }
             // Восстановление прогресса для расширенного теста
-            else if (savedProgress.testMode === 'advanced') {
+            else if (savedProgress.testMode === 'advanced' || isAdvancedData) {
+                this.testMode = 'advanced';
+                if (this.testManager) this.testManager.testMode = 'advanced';
+
                 const choicesData = savedProgress.choices;
                 const choicesArray = Array.isArray(choicesData) ? choicesData : (choicesData.choices || []);
 
@@ -615,6 +625,15 @@ class PersonalityTestApp {
                     choicesArray.forEach(choice => {
                         this.analyzer.recordChoice(choice.scenarioId || choice.questionId, choice.choice);
                     });
+                }
+
+                // Initialize Advanced Analyzer if needed
+                if (!this.analyzer || !(this.analyzer instanceof AdvancedPersonalityAnalyzer)) {
+                    if (typeof AdvancedPersonalityAnalyzer !== 'undefined') {
+                        // We need data to init analyzer, will be done in continueTest usually, 
+                        // but here we just mark the mode
+                        console.log('Detected advanced mode in checkSavedProgress');
+                    }
                 }
 
                 // Восстанавливаем другие типы ответов расширенного теста
@@ -969,8 +988,11 @@ class PersonalityTestApp {
                     if (!Array.isArray(savedProgress.choices) && (savedProgress.choices.scales || savedProgress.choices.situational || savedProgress.choices.open)) {
                         testMode = 'advanced';
                         console.log('🔄 Extracted test mode: advanced (inferred)');
-                    } else {
+                    } else if (savedProgress.choices && savedProgress.choices.length > 0 && (savedProgress.choices[0].weights || savedProgress.choices[0].scenarioId)) {
+                        // Basic test usually has simple choices array
                         testMode = 'basic';
+                    } else {
+                        testMode = 'basic'; // Default fallback
                     }
                 }
 
