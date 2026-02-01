@@ -1,9 +1,9 @@
 /**
- * Модуль аутентификации и управления аккаунтами
- * Локальная система без сервера
+ * Аутентификация және аккаунттарды басқару модулі (Authentication and account management module)
+ * Серверсіз жергілікті жүйе (Local system without server)
  * 
- * Автор: Ахмедьянов Саламат КПО 9/22-2
- * Дата: 2026
+ * Авторы (Author): Ахмедьянов Саламат КПО 9/22-2
+ * Мерзімі (Date): 2026
  */
 
 class AuthManager {
@@ -57,7 +57,7 @@ class AuthManager {
     initGoogleSignIn() {
         // Проверяем конфигурацию перед инициализацией
         if (!this.isGoogleSignInConfigured()) {
-            debugLog('Google Sign-In не настроен или API не загружен');
+            debugLog('Google Sign-In бапталмаған немесе API жүктелмеген (Google Sign-In not configured or API not loaded)');
             return false;
         }
 
@@ -74,12 +74,12 @@ class AuthManager {
                     { theme: 'outline', size: 'large' }
                 );
             } catch (renderError) {
-                debugLog('Не удалось отобразить кнопку Google Sign-In:', renderError);
+                debugLog('Google Sign-In батырмасын көрсету мүмкін болмады (Failed to render Google Sign-In button):', renderError);
             }
 
             return true;
         } catch (error) {
-            console.error('Ошибка инициализации Google Sign-In:', error);
+            console.error('Google Sign-In инициализациялау қатесі (Error initializing Google Sign-In):', error);
             return false;
         }
     }
@@ -136,10 +136,10 @@ class AuthManager {
                 user: this.currentUser
             };
         } catch (error) {
-            console.error('Google Sign-In error:', error);
+            console.error('Google Sign-In қатесі (Google Sign-In error):', error);
             return {
                 success: false,
-                error: 'Ошибка входа через Google'
+                error: 'Google арқылы кіру қатесі (Error logging in via Google)'
             };
         }
     }
@@ -168,7 +168,7 @@ class AuthManager {
             if (users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
                 return {
                     success: false,
-                    error: 'Пользователь с таким именем уже существует'
+                    error: 'Мұндай атымен пайдаланушы бұрыннан бар (User with this name already exists)'
                 };
             }
 
@@ -194,10 +194,10 @@ class AuthManager {
                 user: newUser
             };
         } catch (error) {
-            console.error('Ошибка регистрации:', error);
+            console.error('Тіркеу қатесі (Registration error):', error);
             return {
                 success: false,
-                error: 'Ошибка при регистрации'
+                error: 'Тіркелу қатесі (Error during registration)'
             };
         }
     }
@@ -215,7 +215,7 @@ class AuthManager {
             if (!user) {
                 return {
                     success: false,
-                    error: 'Пользователь не найден'
+                    error: 'Пайдаланушы табылмады (User not found)'
                 };
             }
 
@@ -236,10 +236,10 @@ class AuthManager {
                 user: user
             };
         } catch (error) {
-            console.error('Ошибка входа:', error);
+            console.error('Кіру қатесі (Login error):', error);
             return {
                 success: false,
-                error: 'Ошибка при входе'
+                error: 'Кіру қатесі (Error during login)'
             };
         }
     }
@@ -274,7 +274,7 @@ class AuthManager {
                 }
             }
         } catch (error) {
-            console.error('Ошибка проверки сессии:', error);
+            console.error('Сессияны тексеру қатесі (Error checking session):', error);
         }
 
         return null;
@@ -319,7 +319,7 @@ class AuthManager {
 
             return true;
         } catch (error) {
-            console.error('Ошибка сохранения результатов:', error);
+            console.error('Нәтижелерді сақтау қатесі (Error saving results):', error);
             return false;
         }
     }
@@ -368,7 +368,7 @@ class AuthManager {
             const usersData = localStorage.getItem(this.usersKey);
             return usersData ? JSON.parse(usersData) : [];
         } catch (error) {
-            console.error('Ошибка загрузки пользователей:', error);
+            console.error('Пайдаланушыларды жүктеу қатесі (Error loading users):', error);
             return [];
         }
     }
@@ -381,7 +381,7 @@ class AuthManager {
         try {
             localStorage.setItem(this.usersKey, JSON.stringify(users));
         } catch (error) {
-            console.error('Ошибка сохранения пользователей:', error);
+            console.error('Пайдаланушыларды сақтау қатесі (Error saving users):', error);
         }
     }
 
@@ -420,7 +420,7 @@ class AuthManager {
 
             return true;
         } catch (error) {
-            console.error('Ошибка удаления аккаунта:', error);
+            console.error('Аккаунтты өшіру қатесі (Error deleting account):', error);
             return false;
         }
     }

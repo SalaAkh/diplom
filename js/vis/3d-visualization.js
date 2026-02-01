@@ -1,9 +1,9 @@
 /**
- * Модуль 3D визуализации результатов
- * Использует Three.js для создания интерактивных 3D графиков
+ * Нәтижелерді 3D визуализациялау модулі (3D results visualization module)
+ * Интерактивті 3D графиктерді жасау үшін Three.js қолданылады (Uses Three.js to create interactive 3D charts)
  * 
- * Автор: Ахмедьянов Саламат КПО 9/22-2
- * Дата: 2026
+ * Авторы (Author): Ахмедьянов Саламат КПО 9/22-2
+ * Мерзімі (Date): 2026
  */
 
 class Visualization3D {
@@ -15,6 +15,7 @@ class Visualization3D {
         this.controls = null;
         this.animationId = null;
         this.currentVisualization = null;
+        this.descriptionElement = null;
     }
 
     /**
@@ -23,13 +24,13 @@ class Visualization3D {
     initScene() {
         // Проверяем доступность Three.js
         if (typeof THREE === 'undefined') {
-            console.warn('Three.js ещё не загружен, 3D визуализация недоступна');
+            console.warn('Three.js әлі жүктелген жоқ, 3D визуализация қолжетімсіз (Three.js not loaded yet, 3D visualization unavailable)');
             return false;
         }
 
         const container = document.getElementById(this.containerId);
         if (!container) {
-            console.error('Контейнер не найден:', this.containerId);
+            console.error('Контейнер табылмады (Container not found):', this.containerId);
             return false;
         }
 
@@ -74,6 +75,9 @@ class Visualization3D {
 
         this.clearScene();
 
+        // Add accessible description
+        this.addAccessibleDescription(scores, dimensions, false);
+
         const dimensionKeys = Object.keys(dimensions);
         const numDimensions = dimensionKeys.length;
         const radius = 2;
@@ -112,7 +116,7 @@ class Visualization3D {
         dimensionKeys.forEach((key, index) => {
             const angle = (index / numDimensions) * Math.PI * 2 - Math.PI / 2;
             const score = scores[key] || 0;
-            // Преобразуем -100..100 в 0..radius
+            // [-100..100] ауқымын [0..radius] ауқымына ауыстырамыз (Convert -100..100 to 0..radius)
             const normalizedScore = (score + 100) / 200;
             const distance = normalizedScore * radius;
             const x = Math.cos(angle) * distance;
@@ -192,9 +196,12 @@ class Visualization3D {
         this.clearScene();
 
         if (history.length < 2) {
-            console.warn('Недостаточно данных для временной анимации');
+            console.warn('Уақытша анимация үшін деректер жеткіліксіз (Insufficient data for time animation)');
             return;
         }
+
+        // Add accessible description
+        this.addAccessibleDescription(history, dimensions, true);
 
         const dimensionKeys = Object.keys(dimensions);
         const numDimensions = dimensionKeys.length;
@@ -212,7 +219,7 @@ class Visualization3D {
             dimensionKeys.forEach((key, index) => {
                 const angle = (index / numDimensions) * Math.PI * 2 - Math.PI / 2;
                 const score = scores[key] || 0;
-                const normalizedScore = (score + 1) / 2; // Преобразуем -1..1 в 0..1
+                const normalizedScore = (score + 1) / 2; // [-1..1] мәнін [0..1] ауқымына ауыстырамыз (Convert -1..1 to 0..1)
                 const distance = normalizedScore * radius;
                 const x = Math.cos(angle) * distance;
                 const y = Math.sin(angle) * distance;
@@ -282,6 +289,73 @@ class Visualization3D {
     }
 
     /**
+     * Добавление доступного описания для скринридеров
+     * @param {Object|Array} data - Данные для описания
+     * @param {Object} dimensions - Описания измерений
+     * @param {boolean} isEvolution - Флаг типа визуализации
+     */
+    addAccessibleDescription(data, dimensions, isEvolution = false) {
+        const container = document.getElementById(this.containerId);
+        if (!container) return;
+
+        // Удаляем старое описание если есть
+        if (this.descriptionElement) {
+            this.descriptionElement.remove();
+        }
+
+        // Создаем скрытый элемент
+        this.descriptionElement = document.createElement('div');
+        this.descriptionElement.className = 'sr-only'; // Используем класс из accessibility.css
+        this.descriptionElement.setAttribute('aria-live', 'polite');
+
+        const currentLang = document.documentElement.lang || 'ru';
+        const t = (key) => window.t ? window.t(key) : key;
+
+        let text = '';
+        if (isEvolution) {
+            text = currentLang === 'ru'
+                ? '3D визуализация эволюции профиля. Показывает изменение ваших показателей во времени.'
+                : (currentLang === 'kk'
+                    ? 'Профиль эволюциясының 3D визуализациясы. Уақыт өте келе көрсеткіштеріңіздің өзгеруін көрсетеді.'
+                    : '3D visualization of profile evolution. Shows how your scores changed over time.');
+        } else {
+            const scores = data;
+            const dimensionKeys = Object.keys(dimensions);
+
+            const intro = currentLang === 'ru'
+                ? '3D Радарная диаграмма профиля личности. Значения: '
+                : (currentLang === 'kk'
+                    ? 'Жеке тұлға профилінің 3D радаралық диаграммасы. Мәндер: '
+                    : '3D Radar Chart of personality profile. Values: ');
+
+            const parts = dimensionKeys.map(key => {
+                const nameObj = dimensions[key].name;
+                const name = (typeof nameObj === 'object')
+                    ? (nameObj[currentLang] || nameObj['ru'] || key)
+                    : nameObj;
+
+                // Форматируем значение
+                let score = scores[key] || 0;
+                // Если значения normalized (-1..1), переводим в проценты (-100..100)
+                if (Math.abs(score) <= 1) score = Math.round(score * 100);
+
+                return `${name}: ${score}%`;
+            });
+
+            text = intro + parts.join(', ') + '.';
+        }
+
+        this.descriptionElement.textContent = text;
+        container.appendChild(this.descriptionElement);
+
+        // Добавляем ARIA атрибуты к canvas
+        if (this.renderer && this.renderer.domElement) {
+            this.renderer.domElement.setAttribute('role', 'img');
+            this.renderer.domElement.setAttribute('aria-label', text);
+        }
+    }
+
+    /**
      * Добавление текстовой метки (упрощенная версия)
      */
     addTextLabel(text, x, y, z, parent) {
@@ -317,6 +391,10 @@ class Visualization3D {
         }
         if (this.currentVisualization) {
             this.currentVisualization = null;
+        }
+        if (this.descriptionElement) {
+            this.descriptionElement.remove();
+            this.descriptionElement = null;
         }
     }
 

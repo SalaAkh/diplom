@@ -227,5 +227,5 @@ if (typeof window !== 'undefined') {
     window.errorHandler = new ErrorHandler();
     window.ErrorUtils = ErrorUtils;
 
-    console.log('%c[Error Handler] Initialized', 'color: #3498db; font-weight: bold');
+    console.log('%c[Қате дестелеуіш] Инициализацияланды ([Error Handler] Initialized)', 'color: #3498db; font-weight: bold');
 }

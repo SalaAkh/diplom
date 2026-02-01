@@ -98,7 +98,7 @@ class PersonalityAnalyzer {
 
             // Валидация веса
             if (typeof weight !== 'number' || isNaN(weight)) {
-                console.warn('Некорректный вес для измерения:', dimension, weight);
+                console.warn('Өлшем үшін жарамсыз салмақ (Invalid weight for dimension):', dimension, weight);
                 return;
             }
 
@@ -108,7 +108,7 @@ class PersonalityAnalyzer {
 
             // Проверяем, что измерение существует в scores
             if (this.scores[baseDimension] === undefined) {
-                console.warn('Измерение не найдено в scores:', baseDimension);
+                console.warn('Өлшем ұпайлардан табылмады (Dimension not found in scores):', baseDimension);
                 return;
             }
 
@@ -129,7 +129,7 @@ class PersonalityAnalyzer {
      */
     normalizeDimensionName(dimension) {
         if (!dimension || typeof dimension !== 'string') {
-            console.warn('Некорректное название измерения:', dimension);
+            console.warn('Өлшем атауы жарамсыз (Invalid dimension name):', dimension);
             return { name: dimension || 'unknown', negated: false };
         }
 
@@ -169,12 +169,12 @@ class PersonalityAnalyzer {
             if (validDimensions.includes(mapping.name)) {
                 return mapping;
             } else {
-                console.warn('Маппинг измерения ведет к невалидному измерению:', dimension, '->', mapping.name);
+                console.warn('Өлшемді сәйкестендіру жарамсыз өлшемге әкеледі (Dimension mapping leads to invalid dimension):', dimension, '->', mapping.name);
             }
         }
 
         // Если измерение не распознано, логируем предупреждение и возвращаем как есть
-        console.warn('Неизвестное измерение:', dimension, '. Используется как есть.');
+        console.warn('Белгісіз өлшем (Unknown dimension):', dimension, '. Сол күйінде қолданылады (Used as is).');
         return { name: dimension, negated: false };
     }
 

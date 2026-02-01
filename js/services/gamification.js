@@ -22,7 +22,7 @@ class GamificationSystem {
      */
     initialize() {
         if (this.initialized) return;
-        
+
         this.loadUserProgress();
         this.generateDailyChallenges();
         this.initialized = true;
@@ -35,17 +35,17 @@ class GamificationSystem {
     recordTestCompletion(testData) {
         const today = new Date().toDateString();
         const lastDate = this.lastTestDate ? new Date(this.lastTestDate).toDateString() : null;
-        
+
         // Проверка последовательности
         if (lastDate === today) {
             // Уже проходили сегодня
             return;
         }
-        
+
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
         const yesterdayStr = yesterday.toDateString();
-        
+
         if (lastDate === yesterdayStr) {
             // Продолжаем последовательность
             this.streak++;
@@ -53,22 +53,22 @@ class GamificationSystem {
             // Сбрасываем последовательность
             this.streak = 1;
         }
-        
+
         this.lastTestDate = new Date().toISOString();
-        
+
         // Начисление опыта
         const baseXP = 100;
         const streakBonus = Math.min(this.streak * 10, 50);
         const xpGained = baseXP + streakBonus;
-        
+
         this.addExperience(xpGained);
-        
+
         // Проверка достижений
         this.checkAchievements(testData);
-        
+
         // Сохранение прогресса
         this.saveUserProgress();
-        
+
         return {
             xpGained,
             streak: this.streak,
@@ -83,7 +83,7 @@ class GamificationSystem {
      */
     addExperience(xp) {
         this.experience += xp;
-        
+
         // Проверка повышения уровня
         const xpForNextLevel = this.getXPForLevel(this.userLevel + 1);
         if (this.experience >= xpForNextLevel) {
@@ -94,7 +94,7 @@ class GamificationSystem {
                 totalXP: this.experience
             };
         }
-        
+
         return {
             levelUp: false,
             currentLevel: this.userLevel,
@@ -119,7 +119,7 @@ class GamificationSystem {
      */
     checkAchievements(testData) {
         const newAchievements = [];
-        
+
         // Достижения за количество прохождений
         const totalTests = this.getTotalTestsCompleted();
         if (totalTests === 1 && !this.hasAchievement('first_test')) {
@@ -134,7 +134,7 @@ class GamificationSystem {
         if (totalTests === 25 && !this.hasAchievement('twenty_five_tests')) {
             newAchievements.push(this.unlockAchievement('twenty_five_tests'));
         }
-        
+
         // Достижения за последовательность
         if (this.streak === 3 && !this.hasAchievement('three_day_streak')) {
             newAchievements.push(this.unlockAchievement('three_day_streak'));
@@ -145,7 +145,7 @@ class GamificationSystem {
         if (this.streak === 30 && !this.hasAchievement('month_streak')) {
             newAchievements.push(this.unlockAchievement('month_streak'));
         }
-        
+
         // Достижения за уровни
         if (this.userLevel === 5 && !this.hasAchievement('level_five')) {
             newAchievements.push(this.unlockAchievement('level_five'));
@@ -156,7 +156,7 @@ class GamificationSystem {
         if (this.userLevel === 20 && !this.hasAchievement('level_twenty')) {
             newAchievements.push(this.unlockAchievement('level_twenty'));
         }
-        
+
         // Достижения за разнообразие выборов
         if (testData.choices) {
             const uniqueChoices = new Set(testData.choices.map(c => c.choice));
@@ -164,7 +164,7 @@ class GamificationSystem {
                 newAchievements.push(this.unlockAchievement('diverse_thinker'));
             }
         }
-        
+
         // Достижения за консистентность
         if (testData.aiAnalysis && testData.aiAnalysis.vector) {
             const consistency = testData.aiAnalysis.vector.consistency || 0;
@@ -172,7 +172,7 @@ class GamificationSystem {
                 newAchievements.push(this.unlockAchievement('consistent_decider'));
             }
         }
-        
+
         return newAchievements;
     }
 
@@ -184,14 +184,14 @@ class GamificationSystem {
     unlockAchievement(achievementId) {
         const achievement = this.getAchievementDefinition(achievementId);
         if (!achievement) return null;
-        
+
         achievement.unlocked = true;
         achievement.unlockedAt = new Date().toISOString();
-        
+
         if (!this.achievements.find(a => a.id === achievementId)) {
             this.achievements.push(achievement);
         }
-        
+
         return achievement;
     }
 
@@ -308,7 +308,7 @@ class GamificationSystem {
                 xpReward: 200
             }
         };
-        
+
         const definition = definitions[achievementId];
         if (definition) {
             return { ...definition, unlocked: false };
@@ -336,12 +336,12 @@ class GamificationSystem {
     generateDailyChallenges() {
         const today = new Date().toDateString();
         const stored = this.getStoredDailyChallenges();
-        
+
         if (stored && stored.date === today) {
             this.dailyChallenges = stored.challenges;
             return;
         }
-        
+
         const challenges = [
             {
                 id: 'complete_test',
@@ -368,7 +368,7 @@ class GamificationSystem {
                 completed: false
             }
         ];
-        
+
         this.dailyChallenges = challenges;
         this.saveDailyChallenges();
     }
@@ -383,7 +383,7 @@ class GamificationSystem {
         const progressXP = this.experience - xpForCurrent;
         const neededXP = xpForNext - xpForCurrent;
         const progressPercent = (progressXP / neededXP) * 100;
-        
+
         return {
             level: this.userLevel,
             experience: this.experience,
@@ -406,12 +406,12 @@ class GamificationSystem {
             'level_five', 'level_ten', 'level_twenty',
             'diverse_thinker', 'consistent_decider'
         ];
-        
+
         const definitions = {};
         ids.forEach(id => {
             definitions[id] = this.getAchievementDefinition(id);
         });
-        
+
         return definitions;
     }
 
@@ -437,7 +437,7 @@ class GamificationSystem {
                 return [JSON.parse(data)]; // Упрощенная версия
             }
         } catch (e) {
-            console.warn('Ошибка загрузки истории:', e);
+            console.warn('Тарихты жүктеу қатесі (Error loading history):', e);
         }
         return [];
     }
@@ -457,7 +457,7 @@ class GamificationSystem {
             };
             localStorage.setItem('gamification_progress', JSON.stringify(data));
         } catch (e) {
-            console.warn('Ошибка сохранения прогресса:', e);
+            console.warn('Прогресті сақтау қатесі (Error saving progress):', e);
         }
     }
 
@@ -476,7 +476,7 @@ class GamificationSystem {
                 this.achievements = parsed.achievements || [];
             }
         } catch (e) {
-            console.warn('Ошибка загрузки прогресса:', e);
+            console.warn('Прогресті жүктеу қатесі (Error loading progress):', e);
         }
     }
 
@@ -491,7 +491,7 @@ class GamificationSystem {
             };
             localStorage.setItem('daily_challenges', JSON.stringify(data));
         } catch (e) {
-            console.warn('Ошибка сохранения челленджей:', e);
+            console.warn('Челлендждерді сақтау қатесі (Error saving challenges):', e);
         }
     }
 
@@ -506,7 +506,7 @@ class GamificationSystem {
                 return JSON.parse(data);
             }
         } catch (e) {
-            console.warn('Ошибка загрузки челленджей:', e);
+            console.warn('Челлендждерді жүктеу қатесі (Error loading challenges):', e);
         }
         return null;
     }

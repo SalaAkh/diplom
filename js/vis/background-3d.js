@@ -110,13 +110,13 @@ class NeuralBackground {
     }
 
     setupScene() {
-        console.log('[NeuralBackground] setupScene() called');
+        console.log('[NeuralBackground] setupScene() шақырылды ([NeuralBackground] setupScene() called)');
         const container = document.getElementById(this.containerId);
         if (!container) {
             console.error('[NeuralBackground] Container not found:', this.containerId);
             return;
         }
-        console.log('[NeuralBackground] Container found, THREE available:', typeof THREE !== 'undefined');
+        console.log('[NeuralBackground] Контейнер табылды, THREE қолжетімді: ([NeuralBackground] Container found, THREE available:)', typeof THREE !== 'undefined');
 
         // Now that THREE is loaded, apply theme colors
         this.updateThemeColors();
@@ -155,7 +155,22 @@ class NeuralBackground {
         // Запуск анимации
         this.animate();
 
-        console.log('[NeuralBackground] ✅ Initialization complete! Particles should be visible.');
+        // Page Visibility API - Stop animation when tab is inactive
+        this.handleVisibility = () => {
+            if (document.hidden) {
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                    this.animationId = null;
+                }
+            } else {
+                if (!this.animationId) {
+                    this.animate();
+                }
+            }
+        };
+        document.addEventListener('visibilitychange', this.handleVisibility);
+
+        console.log('[NeuralBackground] ✅ Инициализация аяқталды! Бөлшектер көрінуі тиіс. ([NeuralBackground] ✅ Initialization complete! Particles should be visible.)');
         if (window.logger) window.logger.info('NeuralBackground initialized');
     }
 
@@ -278,6 +293,18 @@ class NeuralBackground {
     animate() {
         this.animationId = requestAnimationFrame(this.animate.bind(this));
 
+        // Проверка настроек доступности - если анимации отключены или включен упрощенный режим, не двигаем частицы
+        const animationsEnabled = !window.accessibilityService || window.accessibilityService.settings.animations;
+        const simplifiedMode = window.accessibilityService && window.accessibilityService.settings.simplified;
+
+        if (!animationsEnabled || simplifiedMode) {
+            // В упрощенном режиме вообще не рендерим (он скрыт через CSS)
+            if (!simplifiedMode) {
+                this.renderer.render(this.scene, this.camera);
+            }
+            return;
+        }
+
         const positions = this.particles.geometry.attributes.position.array;
         const count = this.config.particleCount;
 
@@ -323,8 +350,14 @@ class NeuralBackground {
         let colorIndex = 0;
         const connectDistSq = this.config.connectionDistance * this.config.connectionDistance;
 
-        // Проверяем все пары (можно оптимизировать через spatial hashing, но для 150 частиц O(N^2) ок)
+        // Проверяем все пары (можно оптимизировать через spatial hashing)
+        // Ограничиваем количество линий для производительности
+        const maxLines = 1000;
+        let lineCount = 0;
+
         for (let i = 0; i < this.config.particleCount; i++) {
+            if (lineCount >= maxLines) break;
+
             const ix = positions[i * 3];
             const iy = positions[i * 3 + 1];
             const iz = positions[i * 3 + 2];
@@ -335,13 +368,17 @@ class NeuralBackground {
                 const jz = positions[j * 3 + 2];
 
                 const dx = ix - jx;
+                if (Math.abs(dx) > this.config.connectionDistance) continue; // Быстрая проверка X
                 const dy = iy - jy;
+                if (Math.abs(dy) > this.config.connectionDistance) continue; // Быстрая проверка Y
                 const dz = iz - jz;
+                if (Math.abs(dz) > this.config.connectionDistance) continue; // Быстрая проверка Z
+
                 const distSq = dx * dx + dy * dy + dz * dz;
 
                 if (distSq < connectDistSq) {
                     // Есть связь
-                    if (vertexIndex + 6 >= linePositions.length) break; // Защита от переполнения
+                    if (vertexIndex + 6 >= linePositions.length) break;
 
                     // Точка 1
                     linePositions[vertexIndex++] = ix;
@@ -353,22 +390,17 @@ class NeuralBackground {
                     linePositions[vertexIndex++] = jy;
                     linePositions[vertexIndex++] = jz;
 
-                    // Цвет (интерполяция прозрачности от дистанции)
-                    const alpha = 1.0 - distSq / connectDistSq;
-
-                    // Цвет точки 1
+                    // Цвет
                     lineColors[colorIndex++] = colors[i * 3];
                     lineColors[colorIndex++] = colors[i * 3 + 1];
                     lineColors[colorIndex++] = colors[i * 3 + 2];
-                    // lineColors[colorIndex-1] (alpha не поддерживается в rgb буфере без шейдера, 
-                    // но LineBasicMaterial берет global opacity, либо vertexColors)
-                    // Для прозрачности по вершинам нужен ShaderMaterial или хак.
-                    // Упростим: просто копируем цвет, прозрачность общая 0.2
 
-                    // Цвет точки 2
                     lineColors[colorIndex++] = colors[j * 3];
                     lineColors[colorIndex++] = colors[j * 3 + 1];
                     lineColors[colorIndex++] = colors[j * 3 + 2];
+
+                    lineCount++;
+                    if (lineCount >= maxLines) break;
                 }
             }
         }
@@ -399,4 +431,4 @@ class NeuralBackground {
 
 // Экспорт
 window.NeuralBackground = NeuralBackground;
-console.log('[NeuralBackground] Class defined and exported to window');
+console.log('[NeuralBackground] Класс анықталды және терезеге экспортталды ([NeuralBackground] Class defined and exported to window)');

@@ -52,7 +52,7 @@ class StorageManager {
                 localStorage.removeItem('testProgress');
             }
         } catch (error) {
-            console.error('Ошибка очистки старых данных:', error);
+            console.error('Ескі деректерді тазалау қатесі (Error clearing old data):', error);
         }
     }
 
@@ -62,7 +62,7 @@ class StorageManager {
      */
     saveResults(results) {
         if (!this.isStorageAvailable) {
-            console.warn('localStorage недоступен, результаты не будут сохранены');
+            console.warn('localStorage қолжетімсіз, нәтижелер сақталмайды (localStorage unavailable, results will not be saved)');
             return false;
         }
 
@@ -77,7 +77,7 @@ class StorageManager {
         } catch (error) {
             // Обработка QuotaExceededError
             if (error.name === 'QuotaExceededError' || error.code === 22) {
-                console.warn('Превышен лимит localStorage, пытаемся освободить место...');
+                console.warn('localStorage лимитінен асты, орын босатуға тырысудамыз... (localStorage limit exceeded, trying to free up space...)');
                 try {
                     // Пытаемся очистить старые данные
                     this.clearOldData();
@@ -86,12 +86,12 @@ class StorageManager {
                     // Данные сохранены после очистки старых записей
                     return true;
                 } catch (retryError) {
-                    console.error('Не удалось сохранить даже после очистки:', retryError);
+                    console.error('Тазалаудан кейін де сақтау мүмкін болмады (Failed to save even after clearing):', retryError);
                     this.isStorageAvailable = false;
                     return false;
                 }
             } else {
-                console.error('Ошибка сохранения результатов:', error);
+                console.error('Нәтижелерді сақтау қатесі (Error saving results):', error);
                 this.isStorageAvailable = false;
                 return false;
             }
@@ -154,32 +154,32 @@ class StorageManager {
 
             // Валидация структуры данных
             if (!parsed || typeof parsed !== 'object') {
-                console.warn('Невалидная структура данных в localStorage');
+                console.warn('localStorage-тағы деректер құрылымы жарамсыз (Invalid data structure in localStorage)');
                 this.clearAll(); // Очищаем поврежденные данные
                 return null;
             }
 
             // Проверяем версию данных (для будущих миграций)
             if (parsed.version && parsed.version !== '1.0') {
-                console.warn('Несовместимая версия данных:', parsed.version);
+                console.warn('Деректердің нұсқасы үйлесімсіз (Incompatible data version):', parsed.version);
                 // В будущем здесь можно добавить миграцию данных
             }
 
             // Валидация результатов
             if (parsed.results && !this.validateResults(parsed.results)) {
-                console.warn('Результаты не прошли валидацию, очищаем поврежденные данные');
+                console.warn('Нәтижелер валидациядан өтпеді, зақымдалған деректер тазалануда (Results failed validation, clearing corrupted data)');
                 this.clearAll();
                 return null;
             }
 
             return parsed.results;
         } catch (error) {
-            console.error('Ошибка загрузки результатов:', error);
+            console.error('Нәтижелерді жүктеу қатесі (Error loading results):', error);
             // Если данные повреждены, очищаем их
             try {
                 this.clearAll();
             } catch (clearError) {
-                console.error('Ошибка очистки поврежденных данных:', clearError);
+                console.error('Зақымдалған деректерді тазалау қатесі (Error clearing corrupted data):', clearError);
             }
             return null;
         }
@@ -193,7 +193,7 @@ class StorageManager {
      */
     saveProgress(choices, testMode = null, currentQuestionIndex = 0) {
         if (!this.isStorageAvailable) {
-            console.warn('⚠️ localStorage недоступен, прогресс не сохранен');
+            console.warn('⚠️ localStorage қолжетімсіз, прогресс сақталған жоқ (⚠️ localStorage unavailable, progress not saved)');
             return false;
         }
 
@@ -205,7 +205,7 @@ class StorageManager {
                 timestamp: new Date().toISOString()
             };
             localStorage.setItem('testProgress', JSON.stringify(data));
-            console.log('✅ Прогресс сохранен:', {
+            console.log('✅ Прогресс сақталды (✅ Progress saved):', {
                 testMode: testMode,
                 questionIndex: currentQuestionIndex,
                 choicesCount: Array.isArray(choices) ? choices.length : Object.keys(choices).length
@@ -214,21 +214,21 @@ class StorageManager {
         } catch (error) {
             // Обработка QuotaExceededError
             if (error.name === 'QuotaExceededError' || error.code === 22) {
-                console.warn('Превышен лимит localStorage при сохранении прогресса');
+                console.warn('Прогресті сақтау кезінде localStorage лимитінен асты (localStorage limit exceeded while saving progress)');
                 try {
                     // Пытаемся очистить старые данные
                     this.clearOldData();
                     // Пробуем снова сохранить
                     localStorage.setItem('testProgress', JSON.stringify(data));
-                    console.log('✅ Прогресс сохранен после очистки');
+                    console.log('✅ Прогрес тазалаудан кейін сақталды (✅ Progress saved after clearing)');
                     return true;
                 } catch (retryError) {
-                    console.error('Не удалось сохранить прогресс даже после очистки:', retryError);
+                    console.error('Тазалаудан кейін де прогресті сақтау мүмкін болмады (Failed to save progress even after clearing):', retryError);
                     this.isStorageAvailable = false;
                     return false;
                 }
             } else {
-                console.error('❌ Ошибка сохранения прогресса:', error);
+                console.error('❌ Прогресті сақтау қатесі (❌ Error saving progress):', error);
                 this.isStorageAvailable = false;
                 return false;
             }
@@ -277,7 +277,7 @@ class StorageManager {
         try {
             const data = localStorage.getItem('testProgress');
             if (!data) {
-                console.log('ℹ️ Сохраненный прогресс не найден');
+                console.log('ℹ️ Сақталған прогрес табылмады (ℹ️ Saved progress not found)');
                 return null;
             }
 
@@ -285,19 +285,19 @@ class StorageManager {
 
             // Валидация структуры
             if (!parsed || typeof parsed !== 'object') {
-                console.warn('Невалидная структура прогресса в localStorage');
+                console.warn('localStorage-тағы прогресс құрылымы жарамсыз (Invalid progress structure in localStorage)');
                 localStorage.removeItem('testProgress');
                 return null;
             }
 
             // Валидация массива выборов (если это старый формат - только массив)
             if (Array.isArray(parsed.choices) && !this.validateProgress(parsed.choices)) {
-                console.warn('Прогресс не прошел валидацию, очищаем поврежденные данные');
+                console.warn('Прогресс валидациядан өтпеді, зақымдалған деректер тазалануда (Progress failed validation, clearing corrupted data)');
                 localStorage.removeItem('testProgress');
                 return null;
             }
 
-            console.log('✅ Прогресс загружен:', {
+            console.log('✅ Прогресс жүктелді (✅ Progress loaded):', {
                 testMode: parsed.testMode,
                 questionIndex: parsed.currentQuestionIndex,
                 timestamp: parsed.timestamp
@@ -306,12 +306,12 @@ class StorageManager {
             // Возвращаем полный объект прогресса
             return parsed;
         } catch (error) {
-            console.error('Ошибка загрузки прогресса:', error);
+            console.error('Прогресті жүктеу қатесі (Error loading progress):', error);
             // Очищаем поврежденные данные
             try {
                 localStorage.removeItem('testProgress');
             } catch (clearError) {
-                console.error('Ошибка очистки поврежденного прогресса:', clearError);
+                console.error('Зақымдалған прогресті тазалау қатесі (Error clearing corrupted progress):', clearError);
             }
             return null;
         }
@@ -330,7 +330,7 @@ class StorageManager {
             localStorage.removeItem('testProgress');
             return true;
         } catch (error) {
-            console.error('Ошибка очистки данных:', error);
+            console.error('Деректерді тазалау қатесі (Error clearing data):', error);
             return false;
         }
     }
@@ -356,7 +356,7 @@ class StorageManager {
             const current = this.loadResults();
             return current ? [current] : [];
         } catch (error) {
-            console.error('Ошибка получения истории:', error);
+            console.error('Тарихты алу қатесі (Error getting history):', error);
             return [];
         }
     }

@@ -7,7 +7,7 @@ class FeedbackSystem {
     constructor() {
         this.storageKey = 'neural_constellation_feedback';
         this.feedbacks = this.loadFeedbacks();
-        console.log('FeedbackSystem initialized');
+        console.log('Кері байланыс жүйесі инициализацияланды (FeedbackSystem initialized)');
     }
 
     /**

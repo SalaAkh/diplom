@@ -1,9 +1,9 @@
 /**
- * Модуль локализации
- * Поддержка казахского (основной), русского и английского языков
+ * Локализация модулі (Localization module)
+ * Қазақ (негізгі), орыс және ағылшын тілдерін қолдау (Support for Kazakh (primary), Russian and English)
  * 
- * Автор: Ахмедьянов Саламат КПО 9/22-2
- * Дата: 2026
+ * Авторы (Author): Ахмедьянов Саламат КПО 9/22-2
+ * Мерзімі (Date): 2026
  */
 
 class LocalizationManager {
@@ -13,8 +13,8 @@ class LocalizationManager {
     }
 
     /**
-     * Определение языка пользователя
-     * @returns {string} Код языка (kk, ru, en)
+     * Пайдаланушы тілін анықтау (Detect user language)
+     * @returns {string} Тіл коды (Language code) (kk, ru, en)
      */
     detectLanguage() {
         // Проверяем сохранённый выбор
@@ -36,8 +36,8 @@ class LocalizationManager {
     }
 
     /**
-     * Загрузка переводов
-     * @returns {Object} Объект с переводами
+     * Аудармаларды жүктеу (Load translations)
+     * @returns {Object} Аудармалар нысаны (Translations object)
      */
     loadTranslations() {
         return {
@@ -116,8 +116,8 @@ class LocalizationManager {
                 step2Desc: "Жүйе жауаптарыңызды тұлғаның 6 негізгі өлшемі бойынша талдайды.",
                 step3Title: "Профильді аласыз",
                 step3Desc: "Толық есеп, 3D-модель және даму бойынша ұсыныстар бірден қолжетімді.",
-                ctaTitle: "Ішкі әлеміңізді ашыңыз",
-                ctaText: "5-7 минут ішінде тесттен өтіп, жеке ұсыныстармен тұлғаңыздың толық талдауын алыңыз.",
+                ctaTitle: "Өз әлеуетіңізді бүгін ашыңыз",
+                ctaText: "Интеллектуалды талдаудан өтіп, тұлғаңыздың дамуына арналған жекеленген ИИ-ұсыныстарды алыңыз.",
                 // Старые названия для обратной совместимости
 
                 startTest: "Тестті бастау",
@@ -164,6 +164,8 @@ class LocalizationManager {
                 pleaseEnterAnswer: "Жауабыңызды енгізіңіз",
                 exactQuantity: "нақты саны",
                 startNewTest: "Жаңа тест бастау",
+                attention: "Назар аударыңыз",
+                ok: "Жарайды",
 
                 // Тест
                 questionsCompleted: "аяқталды",
@@ -427,7 +429,23 @@ class LocalizationManager {
                 newAchievements: "🎉 Жаңа жетістіктер!",
                 xpToNext: "Келесі деңгейге дейін:",
                 rateAllAspects: "Нәтижелердің барлық аспектілерін бағалаңыз",
-                generatedBy: "Өзіндік тану жүйесінде жасалған"
+                generatedBy: "Өзіндік тану жүйесінде жасалған",
+
+                // Доступность
+                accessTitle: "Қолжетімділік параметрлері",
+                contrastLabel: "Контрасттылық",
+                contrastNormal: "Қалыпты",
+                contrastHigh: "Жоғары",
+                textSizeLabel: "Мәтін өлшемі",
+                textSizeSmall: "Кіші",
+                textSizeNormal: "Қалыпты",
+                textSizeLarge: "Үлкен",
+                textSizeExtraLarge: "Өте үлкен",
+                animationsLabel: "Интерфейс анимациялары",
+                audioFeedbackLabel: "Дыбыстық сүйемелдеу",
+                simplifiedLabel: "Қарапайым режим",
+                readingLabel: "Нәтижелерді дауыстап оқу",
+                voiceControlLabel: "Дауыспен басқару"
             },
             ru: {
                 // Общие
@@ -527,8 +545,8 @@ class LocalizationManager {
                 step2Desc: "Система анализирует ваши ответы по 6 ключевым измерениям личности.",
                 step3Title: "Получаете профиль",
                 step3Desc: "Детальный отчет, 3D-модель и рекомендации по развитию доступны мгновенно.",
-                ctaTitle: "Откройте свой внутренний мир",
-                ctaText: "Пройдите тест за 5-7 минут и получите детальный анализ вашей личности с персональными рекомендациями.",
+                ctaTitle: "Раскройте свой потенциал сегодня",
+                ctaText: "Пройдите интеллектуальный анализ и получите персональные ИИ-рекомендации для вашего личностного роста.",
 
                 startTest: "Начать тестирование",
                 resultsTitle: "Анализ личностного профиля",
@@ -574,6 +592,8 @@ class LocalizationManager {
                 pleaseEnterAnswer: "Пожалуйста, введите ответ",
                 exactQuantity: "точное количество",
                 startNewTest: "Начать новый тест",
+                attention: "Внимание",
+                ok: "ОК",
 
                 // Тест
                 questionsCompleted: "пройдено",
@@ -826,7 +846,23 @@ class LocalizationManager {
                 xpToNext: "До следующего уровня:",
                 rateAllAspects: "Пожалуйста, оцените все аспекты результатов",
                 feedbackSkipped: "Обратная связь пропущена",
-                generatedBy: "Сгенерировано системой самопознания"
+                generatedBy: "Сгенерировано системой самопознания",
+
+                // Доступность
+                accessTitle: "Настройки доступности",
+                contrastLabel: "Контрастность",
+                contrastNormal: "Обычная",
+                contrastHigh: "Высокая",
+                textSizeLabel: "Размер текста",
+                textSizeSmall: "Мелкий",
+                textSizeNormal: "Обычный",
+                textSizeLarge: "Крупный",
+                textSizeExtraLarge: "Очень крупный",
+                animationsLabel: "Анимации интерфейса",
+                audioFeedbackLabel: "Звуковое сопровождение",
+                simplifiedLabel: "Упрощенный режим",
+                readingLabel: "Озвучивание результатов",
+                voiceControlLabel: "Голосовое управление"
             },
             en: {
                 // General
@@ -905,8 +941,8 @@ class LocalizationManager {
                 step2Desc: "The system analyzes your answers across 6 key personality dimensions.",
                 step3Title: "Get Profile",
                 step3Desc: "Detailed report, 3D model, and development recommendations are available instantly.",
-                ctaTitle: "Discover Your Inner World",
-                ctaText: "Take the test in 5-7 minutes and get a detailed analysis of your personality with personal recommendations.",
+                ctaTitle: "Unlock Your Potential Today",
+                ctaText: "Complete an intelligent analysis and receive personalized AI recommendations for your personal growth.",
                 // Старые названия для обратной совместимости
                 systematicThinking: "Rationality ↔ Intuition",
                 systematicDesc: "how you approach problem solving",
@@ -960,6 +996,8 @@ class LocalizationManager {
                 pleaseEnterAnswer: "Please enter an answer",
                 exactQuantity: "exact quantity",
                 startNewTest: "Start New Test",
+                attention: "Attention",
+                ok: "OK",
 
                 // Test
                 questionsCompleted: "completed",
@@ -1229,7 +1267,23 @@ class LocalizationManager {
                 skillDS: "Data Science",
                 actForecast: "Forecasting",
                 actOpt: "Process Optimization",
-                actBigData: "Working with Big Data"
+                actBigData: "Working with Big Data",
+
+                // Accessibility
+                accessTitle: "Accessibility Settings",
+                contrastLabel: "Contrast",
+                contrastNormal: "Normal",
+                contrastHigh: "High",
+                textSizeLabel: "Text Size",
+                textSizeSmall: "Small",
+                textSizeNormal: "Normal",
+                textSizeLarge: "Large",
+                textSizeExtraLarge: "Extra Large",
+                animationsLabel: "Interface Animations",
+                audioFeedbackLabel: "Sound Feedback",
+                simplifiedLabel: "Simplified Mode",
+                readingLabel: "Read Results Aloud",
+                voiceControlLabel: "Voice Control"
             }
         };
     }
@@ -1256,8 +1310,8 @@ class LocalizationManager {
     }
 
     /**
-     * Установка языка
-     * @param {string} lang - Код языка (kk, ru, en)
+     * Тілді орнату (Set language)
+     * @param {string} lang - Тіл коды (Language code) (kk, ru, en)
      */
     setLanguage(lang) {
         if (['kk', 'ru', 'en'].includes(lang)) {
@@ -1269,17 +1323,17 @@ class LocalizationManager {
     }
 
     /**
-     * Получение текущего языка
-     * @returns {string} Код языка
+     * Ағымдағы тілді алу (Get current language)
+     * @returns {string} Тіл коды (Language code)
      */
     getLanguage() {
         return this.currentLanguage;
     }
 
     /**
-     * Получение названия языка
-     * @param {string} lang - Код языка
-     * @returns {string} Название языка
+     * Тіл атауын алу (Get language name)
+     * @param {string} lang - Тіл коды (Language code)
+     * @returns {string} Тіл атауы (Language name)
      */
     getLanguageName(lang) {
         const names = {
@@ -1291,8 +1345,8 @@ class LocalizationManager {
     }
 
     /**
-     * Получение всех доступных языков
-     * @returns {Array} Массив языков
+     * Барлық қолжетімді тілдерді алу (Get all available languages)
+     * @returns {Array} Тілдер массиві (Languages array)
      */
     getAvailableLanguages() {
         return [

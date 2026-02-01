@@ -16,6 +16,10 @@
    --color-nebula-deep: #005bea;
    --color-nebula-dark: #0039a6;
 
+   /* Gradients */
+   --gradient-primary: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+   --gradient-cosmic: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
    /* Accent Colors - Cosmic Elements */
    --color-star-white: #f8f9fa;
    --color-star-silver: #e1e8ed;

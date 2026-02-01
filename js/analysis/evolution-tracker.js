@@ -417,7 +417,7 @@ class EvolutionTracker {
             try {
                 return JSON.parse(stored);
             } catch (e) {
-                console.error('Ошибка чтения истории эволюции:', e);
+                console.error('Эволюция тарихын оқу қатесі (Error reading evolution history):', e);
             }
         }
 
@@ -438,7 +438,7 @@ class EvolutionTracker {
         try {
             localStorage.setItem(key, JSON.stringify(history));
         } catch (e) {
-            console.error('Ошибка сохранения истории эволюции:', e);
+            console.error('Эволюция тарихын сақтау қатесі (Error saving evolution history):', e);
         }
     }
 

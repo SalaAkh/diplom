@@ -473,7 +473,7 @@ class ReportGenerator {
     async generatePDFReport(data) {
         if (typeof html2pdf === 'undefined') {
             console.error('html2pdf library is missing');
-            alert('Библиотека html2pdf не загружена. Пожалуйста, проверьте подключение к интернету.');
+            alert('html2pdf кітапханасы жүктелген жоқ. Интернет байланысын тексеріңіз (html2pdf library not loaded. Please check your internet connection).');
             return Promise.reject('html2pdf not found');
         }
 
@@ -528,7 +528,7 @@ class ReportGenerator {
         if (format === 'pdf') {
             this.generatePDFReport(data).catch(err => {
                 console.error('PDF Generation failed', err);
-                alert('Не удалось создать PDF. Попробуйте еще раз.');
+                alert('PDF жасау мүмкін болмады. Қайталап көріңіз (Failed to create PDF. Please try again).');
             });
             return;
         }
@@ -570,5 +570,5 @@ if (typeof module !== 'undefined' && module.exports) {
 
 if (typeof window !== 'undefined') {
     window.ReportGenerator = ReportGenerator;
-    console.log('ReportGenerator initialized');
+    console.log('Есеп генераторы инициализацияланды (ReportGenerator initialized)');
 }

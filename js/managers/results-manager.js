@@ -96,7 +96,7 @@ class ResultsManager {
             return results;
 
         } catch (error) {
-            console.error('Error calculating results:', error);
+            console.error('Нәтижелерді есептеу қатесі (Error calculating results):', error);
             throw error;
         }
     }
@@ -145,7 +145,7 @@ class ResultsManager {
                 }
 
             } catch (error) {
-                console.error('Async results processing failed:', error);
+                console.error('Асинхронды нәтижелерді өңдеу сәтсіз аяқталды (Async results processing failed):', error);
             }
         }, 100);
     }
@@ -187,7 +187,7 @@ class ResultsManager {
 
         // Fallback: If not found, try to create a new one from global window.ReportGenerator
         if (!reportGen && typeof window !== 'undefined' && window.ReportGenerator) {
-            console.log('ResultsManager: Creating new ReportGenerator instance');
+            console.log('ResultsManager: Жаңа ReportGenerator данасын жасау (Creating new ReportGenerator instance)');
             reportGen = new window.ReportGenerator();
             this.app.reportGenerator = reportGen;
         }
@@ -248,15 +248,15 @@ class ResultsManager {
                 // Если canvas прозрачный, он будет прозрачным и в PDF.
                 reportData.chartImage = this.app.visualizer.charts.radar.toBase64Image();
             } catch (e) {
-                console.warn('Не удалось захватить изображение графика:', e);
+                console.warn('График кескінін түсіру мүмкін болмады (Failed to capture chart image):', e);
             }
         }
 
         if (reportGen) {
             reportGen.downloadReport(reportData, format, filename);
         } else {
-            console.error('CRITICAL: ReportGenerator instance not found. Cannot generate report.');
-            alert('Ошибка: Модуль генерации отчетов не загружен.');
+            console.error('МАҢЫЗДЫ ҚАТЕ: ReportGenerator данасы табылмады. Есепті жасау мүмкін емес (CRITICAL: ReportGenerator instance not found. Cannot generate report).');
+            alert('Қате: Есептерді жасау модулі жүктелген жоқ (Error: Report generation module not loaded).');
         }
     }
 }

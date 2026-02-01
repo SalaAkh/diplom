@@ -1,7 +1,7 @@
 /**
  * Сервис для работы с обратной связью
  */
-console.log('FeedbackService script loading...');
+console.log('Кері байланыс қызметі жүктелуде... (FeedbackService script loading...)');
 // Mock class if FeedbackSystem is missing
 class FeedbackSystemMock {
     constructor() {
@@ -135,4 +135,4 @@ class FeedbackService {
 
 // Экспорт для глобального использования
 window.FeedbackService = FeedbackService;
-console.log('FeedbackService loaded and exported to window');
+console.log('Кері байланыс қызметі жүктелді және терезеге экспортталды (FeedbackService loaded and exported to window)');

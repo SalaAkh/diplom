@@ -1,30 +1,31 @@
 /**
- * Главный модуль приложения
- * Управляет состоянием и взаимодействием всех компонентов
+ * Қосымшаның негізгі модулі (Main application module)
+ * Барлық компоненттердің күйі мен өзара әрекеттесуін басқарады (Manages state and interaction of all components)
  * 
- * Дипломный проект: Разработка программной системы анализа личностных предпочтений 
- * и направлений развития пользователя на основе интерактивных сценариев выбора, 
- * на языках программирования HTML, CSS, JS
+ * Дипломдық жоба: HTML, CSS, JS бағдарламалау тілдерінде интерактивті таңдау сценарийлері негізінде 
+ * пайдаланушының жеке басымдықтары мен даму бағыттарын талдау бағдарламалық жүйесін әзірлеу
+ * (Diploma project: Development of a software system for analyzing personal preferences 
+ * and user development directions based on interactive choice scenarios, in JS)
  * 
- * Автор: Ахмедьянов Саламат КПО 9/22-2
- * Дата: 2026
+ * Авторы (Author): Ахмедьянов Саламат КПО 9/22-2
+ * Мерзімі (Date): 2026
  */
 
-// Флаг отладки (можно установить через localStorage или URL параметр)
+// Түзету жалаушасы (Debug flag) (localStorage немесе URL параметрі арқылы орнатуға болады)
 const DEBUG = localStorage.getItem('debug') === 'true' ||
     (typeof URLSearchParams !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === 'true');
 
-// Вспомогательные функции для логирования
+// Логтауға арналған көмекші функциялар (Helper functions for logging)
 const debugLog = DEBUG ? console.log.bind(console) : () => { };
 const debugError = DEBUG ? console.error.bind(console) : () => { };
 const debugWarn = DEBUG ? console.warn.bind(console) : () => { };
 
-// Критичные ошибки всегда логируются
+// Маңызды қателер әрқашан логталады (Critical errors are always logged)
 const criticalError = console.error.bind(console);
 const criticalLog = console.log.bind(console);
 
 // Easter Egg Signature
-console.log('%c Developed by Ахмедьянов Саламат КПО 9/22-2 ', 'background: #222; color: #bada55; font-size: 12px; padding: 4px; border-radius: 4px;');
+console.log('%c Әзірлеген Ахмедьянов Саламат КПО 9/22-2 (Developed by Akhmedyanov Salamat) ', 'background: #222; color: #bada55; font-size: 12px; padding: 4px; border-radius: 4px;');
 
 /**
  * Функция debounce для задержки выполнения
@@ -229,7 +230,7 @@ class PersonalityTestApp {
             // Проверяем сразу
             const immediateData = getBuiltInData();
             if (immediateData && immediateData.scenarios && immediateData.scenarios.length > 0) {
-                debugLog('SCENARIOS_DATA доступен сразу');
+                debugLog('SCENARIOS_DATA бірден қолжетімді (SCENARIOS_DATA available immediately)');
                 return resolve(immediateData);
             }
 
@@ -243,7 +244,7 @@ class PersonalityTestApp {
             const onDataLoaded = () => {
                 const data = getBuiltInData();
                 if (data && data.scenarios && data.scenarios.length > 0) {
-                    debugLog('SCENARIOS_DATA загружен через событие');
+                    debugLog('SCENARIOS_DATA оқиға арқылы жүктелді (SCENARIOS_DATA loaded via event)');
                     cleanup();
                     resolve(data);
                 }
@@ -280,7 +281,7 @@ class PersonalityTestApp {
                 if (Date.now() - startTime >= timeout || attempts >= maxAttempts) {
                     cleanup();
                     const error = new Error('Встроенные данные сценариев недоступны. Убедитесь, что scenarios-data.js загружен правильно.');
-                    criticalError('КРИТИЧЕСКАЯ ОШИБКА: Встроенные данные недоступны');
+                    criticalError('МАҢЫЗДЫ ҚАТЕ: Кірістірілген деректер қолжетімсіз (CRITICAL ERROR: Embedded data unavailable)');
                     criticalError('SCENARIOS_DATA:', typeof SCENARIOS_DATA);
                     criticalError('window.SCENARIOS_DATA:', typeof window !== 'undefined' ? typeof window.SCENARIOS_DATA : 'N/A');
                     reject(error);
@@ -363,7 +364,7 @@ class PersonalityTestApp {
                 // If specific critical deps are missing
                 const critical = depsCheck.missing.filter(d => d !== 'visualizer' && d !== 'threejs'); // visualizer depends on threejs
                 if (critical.length > 0) {
-                    criticalError('КРИТИЧЕСКИЕ ЗАВИСИМОСТИ ОТСУТСТВУЮТ:', critical);
+                    criticalError('МАҢЫЗДЫ ТӘУЕЛДІЛІКТЕР ЖОҚ (CRITICAL DEPENDENCIES MISSING):', critical);
                     this.showDependencyError(critical);
                     return;
                 } else if (depsCheck.missing.includes('threejs')) {
@@ -377,7 +378,7 @@ class PersonalityTestApp {
             // Используем Promise-based подход для загрузки данных
             try {
                 data = await this.waitForScenariosData(2000);
-                debugLog('Встроенные данные сценариев успешно загружены');
+                debugLog('Сценарийлердің кірістірілген деректері сәтті жүктелді (Embedded scenario data loaded successfully)');
             } catch (error) {
                 // Если Promise-based подход не сработал, пробуем последнюю попытку
                 const getBuiltInData = () => {
@@ -396,7 +397,7 @@ class PersonalityTestApp {
                 const lastAttempt = getBuiltInData();
                 if (lastAttempt && lastAttempt.scenarios && lastAttempt.scenarios.length > 0) {
                     data = lastAttempt;
-                    debugLog('Встроенные данные найдены в последней попытке');
+                    debugLog('Соңғы әрекетте кірістірілген деректер табылды (Embedded data found on last attempt)');
                 } else {
                     throw error; // Пробрасываем ошибку дальше
                 }
@@ -404,7 +405,7 @@ class PersonalityTestApp {
 
             // Если встроенные данные не найдены, это критическая ошибка
             if (!data || !data.scenarios || !Array.isArray(data.scenarios) || data.scenarios.length === 0) {
-                criticalError('КРИТИЧЕСКАЯ ОШИБКА: Встроенные данные недоступны');
+                criticalError('МАҢЫЗДЫ ҚАТЕ: Кірістірілген деректер қолжетімсіз (CRITICAL ERROR: Embedded data unavailable)');
                 criticalError('SCENARIOS_DATA:', typeof SCENARIOS_DATA);
                 criticalError('window.SCENARIOS_DATA:', typeof window !== 'undefined' ? typeof window.SCENARIOS_DATA : 'N/A');
                 throw new Error('Встроенные данные сценариев недоступны. Убедитесь, что scenarios-data.js загружен правильно.');
@@ -412,7 +413,7 @@ class PersonalityTestApp {
 
             // Валидация структуры данных
             if (!this.validateScenariosData(data)) {
-                criticalError('КРИТИЧЕСКАЯ ОШИБКА: Невалидная структура данных сценариев');
+                criticalError('МАҢЫЗДЫ ҚАТЕ: Сценарий деректерінің құрылымы жарамсыз (CRITICAL ERROR: Invalid scenario data structure)');
                 throw new Error('Структура данных сценариев невалидна. Проверьте формат данных в scenarios-data.js или scenarios.json.');
             }
 
@@ -427,14 +428,14 @@ class PersonalityTestApp {
                         if (this.validateScenariosData(jsonData)) {
                             // Используем данные из файла, если они валидны
                             data = jsonData;
-                            debugLog('Данные обновлены из scenarios.json');
+                            debugLog('Деректер scenarios.json файлынан жаңартылды (Data updated from scenarios.json)');
                         } else {
-                            debugWarn('Данные из scenarios.json невалидны, используются встроенные данные');
+                            debugWarn('scenarios.json деректері жарамсыз, кірістірілген деректер қолданылуда (Data from scenarios.json is invalid, using embedded data)');
                         }
                     }
                 } catch (fetchError) {
                     // Не критично - используем встроенные данные
-                    debugLog('Не удалось загрузить scenarios.json, используются встроенные данные');
+                    debugLog('scenarios.json жүктеу мүмкін болмады, кірістірілген деректер қолданылуда (Failed to load scenarios.json, using embedded data)');
                 }
             }
 
@@ -478,10 +479,10 @@ class PersonalityTestApp {
                 this.initUI();
 
                 // Инициализация 3D фона - ждем загрузки Three.js ES модуля
-                console.log('[App] Attempting to initialize background. NeuralBackground available:', typeof NeuralBackground !== 'undefined', 'THREE available:', typeof THREE !== 'undefined');
+                console.log('[Қосымша] Фонды инициализациялау әрекеті. NeuralBackground қолжетімді: ([App] Attempting to initialize background. NeuralBackground available:)', typeof NeuralBackground !== 'undefined', 'THREE қолжетімді (available):', typeof THREE !== 'undefined');
                 const initBackground3D = () => {
                     if (typeof NeuralBackground !== 'undefined' && typeof THREE !== 'undefined') {
-                        console.log('[App] Initializing NeuralBackground...');
+                        console.log('[Қосымша] NeuralBackground инициализациялануда... ([App] Initializing NeuralBackground...)');
                         this.background3D = new NeuralBackground('background-canvas');
                     } else if (typeof NeuralBackground !== 'undefined') {
                         // THREE еще не загружен, ждем
@@ -518,17 +519,17 @@ class PersonalityTestApp {
             }, 100);
 
         } catch (error) {
-            criticalError('Ошибка инициализации:', error);
+            criticalError('Инициализация қатесі (Initialization error):', error);
             const errorMessage = error.message || 'Неизвестная ошибка';
-            criticalError('Детали ошибки:', errorMessage);
+            criticalError('Қате мәліметтері (Error details):', errorMessage);
 
             // Дополнительная диагностика
-            debugLog('Проверка доступности SCENARIOS_DATA:', typeof SCENARIOS_DATA);
-            debugLog('Проверка доступности window.SCENARIOS_DATA:', typeof window !== 'undefined' ? typeof window.SCENARIOS_DATA : 'window недоступен');
+            debugLog('SCENARIOS_DATA қолжетімділігін тексеру (Checking SCENARIOS_DATA availability):', typeof SCENARIOS_DATA);
+            debugLog('window.SCENARIOS_DATA қолжетімділігін тексеру (Checking window.SCENARIOS_DATA availability):', typeof window !== 'undefined' ? typeof window.SCENARIOS_DATA : 'window unavailable');
 
             // Последняя попытка использовать встроенные данные напрямую
             if (typeof SCENARIOS_DATA !== 'undefined' && SCENARIOS_DATA && SCENARIOS_DATA.scenarios) {
-                debugLog('Попытка использовать SCENARIOS_DATA напрямую...');
+                debugLog('SCENARIOS_DATA дерегін тікелей қолдану әрекеті (Trying to use SCENARIOS_DATA directly)...');
                 try {
                     this.scenarios = SCENARIOS_DATA.scenarios;
                     this.analyzer = new PersonalityAnalyzer(SCENARIOS_DATA);
@@ -571,9 +572,9 @@ class PersonalityTestApp {
                     }, 100);
 
                 } catch (error) {
-                    criticalError('Ошибка инициализации:', error);
+                    criticalError('Инициализация қатесі (Initialization error):', error);
                     const errorMessage = error.message || 'Неизвестная ошибка';
-                    criticalError('Детали ошибки:', errorMessage);
+                    criticalError('Қате мәліметтері (Error details):', errorMessage);
                     this.showError(errorMessage);
                 }
             }
@@ -653,7 +654,7 @@ class PersonalityTestApp {
                     if (typeof AdvancedPersonalityAnalyzer !== 'undefined') {
                         // We need data to init analyzer, will be done in continueTest usually, 
                         // but here we just mark the mode
-                        console.log('Detected advanced mode in checkSavedProgress');
+                        console.log('checkSavedProgress ішінде кеңейтілген режим анықталды (Detected advanced mode in checkSavedProgress)');
                     }
                 }
 
@@ -845,14 +846,14 @@ class PersonalityTestApp {
 
             // Сначала пробуем использовать встроенные данные (для file:// протокола)
             if (typeof ADVANCED_SCENARIOS_DATA !== 'undefined' && ADVANCED_SCENARIOS_DATA && ADVANCED_SCENARIOS_DATA.questions) {
-                debugLog('Используем встроенные данные углубленного теста (ADVANCED_SCENARIOS_DATA)');
+                debugLog('Кеңейтілген тесттің кірістірілген деректерін қолдану (Using embedded advanced test data): ADVANCED_SCENARIOS_DATA');
                 data = ADVANCED_SCENARIOS_DATA;
             } else if (typeof window !== 'undefined' && window.ADVANCED_SCENARIOS_DATA && window.ADVANCED_SCENARIOS_DATA.questions) {
-                debugLog('Используем встроенные данные углубленного теста (window.ADVANCED_SCENARIOS_DATA)');
+                debugLog('Кеңейтілген тесттің кірістірілген деректерін қолдану (Using embedded advanced test data): window.ADVANCED_SCENARIOS_DATA');
                 data = window.ADVANCED_SCENARIOS_DATA;
             } else {
                 // Пробуем загрузить через fetch (для HTTP/HTTPS)
-                debugLog('Пробуем загрузить данные углубленного теста через fetch...');
+                debugLog('Кеңейтілген тест деректерін fetch арқылы жүктеуге тырысуда (Trying to load advanced test data via fetch)...');
                 try {
                     const response = await fetch('data/advanced-scenarios.json');
                     if (!response.ok) {
@@ -860,7 +861,7 @@ class PersonalityTestApp {
                     }
                     data = await response.json();
                 } catch (fetchError) {
-                    criticalError('Fetch не удался (возможно file:// протокол):', fetchError.message);
+                    criticalError('Fetch сәтсіз аяқталды (мүмкін file:// хаттамасы) (Fetch failed, possibly file:// protocol):', fetchError.message);
                     throw new Error('Данные углубленного теста не найдены. Убедитесь, что файл advanced-scenarios-data.js загружен.');
                 }
             }
@@ -877,7 +878,7 @@ class PersonalityTestApp {
             this.advancedQuestions = data.questions;
             return data;
         } catch (error) {
-            criticalError('Ошибка загрузки данных углубленного теста:', error);
+            criticalError('Кеңейтілген тест деректерін жүктеу қатесі (Error loading advanced test data):', error);
             // Пробрасываем ошибку дальше для обработки в вызывающем коде
             throw error;
         }
@@ -928,7 +929,7 @@ class PersonalityTestApp {
      */
     showQuestion() {
         if (!this.advancedQuestions || this.advancedQuestions.length === 0) {
-            criticalError('Вопросы углубленного теста не загружены');
+            criticalError('Кеңейтілген тест сұрақтары жүктелген жоқ (Advanced test questions not loaded)');
             this.showTestTypeSelection();
             return;
         }
@@ -966,7 +967,7 @@ class PersonalityTestApp {
         } else if (question.type === 'situational') {
             questionHTML = this.ui.renderSituationalQuestion(question, currentLang, t);
         } else {
-            criticalError('Неизвестный тип вопроса:', question.type);
+            criticalError('Сұрақтың белгісіз түрі (Unknown question type):', question.type);
             this.currentQuestionIndex++;
             this.showQuestion();
             return;
@@ -1028,13 +1029,13 @@ class PersonalityTestApp {
                             // Validate and Init Advanced Analyzer
                             if (data && typeof AdvancedPersonalityAnalyzer !== 'undefined') {
                                 this.analyzer = new AdvancedPersonalityAnalyzer(data);
-                                console.log('✅ Advanced Analyzer initialized for continuation');
+                                console.log('✅ Жалғастыру үшін кеңейтілген анализатор инициализацияланды (✅ Advanced Analyzer initialized for continuation)');
                             }
 
                             // Restore question index
                             const restoredIndex = savedProgress.currentQuestionIndex || 0;
                             this.testManager.currentQuestionIndex = restoredIndex;
-                            console.log('📍 Продолжаем с вопроса №', restoredIndex + 1);
+                            console.log('📍 №', restoredIndex + 1, 'сұрақтан жалғастырамыз (📍 Continuing from question No.)');
 
                             // Debug Info
                             // alert(`DEBUG: Тест ${testMode}, Восстановлен индекс: ${restoredIndex}, Ответы: ${JSON.stringify(savedProgress.choices ? Object.keys(savedProgress.choices) : 'нет')}`);
@@ -1641,6 +1642,11 @@ class PersonalityTestApp {
     /**
      * Обработка ответа на ситуационный вопрос
      */
+    handleSituationalAnswer(questionId, stepId, choice) {
+        if (this.testManager) {
+            this.testManager.recordSituationalAnswer(questionId, stepId, choice);
+        }
+    }
 
     // ... (skipping unchanged code)
 
@@ -1697,7 +1703,7 @@ class PersonalityTestApp {
      */
     registerServiceWorker() {
         if (!('serviceWorker' in navigator)) {
-            debugLog('Service Worker не поддерживается в этом браузере');
+            debugLog('Бұл браузерде Service Worker қолдау көрсетілмейді (Service Worker not supported in this browser)');
             return;
         }
 
@@ -1706,7 +1712,7 @@ class PersonalityTestApp {
                 const swPath = window.location.pathname.includes('/diplom/') ? './sw.js' : '/sw.js';
                 navigator.serviceWorker.register('./sw.js')
                     .then((registration) => {
-                        debugLog('Service Worker зарегистрирован:', registration.scope);
+                        debugLog('Service Worker тіркелді (Service Worker registered):', registration.scope);
 
                         // Проверка обновлений
                         registration.addEventListener('updatefound', () => {
@@ -1715,22 +1721,22 @@ class PersonalityTestApp {
                                 if (newWorker) {
                                     newWorker.addEventListener('statechange', () => {
                                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                            debugLog('Доступна новая версия приложения');
+                                            debugLog('Қолданбаның жаңа нұсқасы қолжетімді (New application version available)');
                                         }
                                     });
                                 }
                             } catch (updateError) {
-                                debugWarn('Ошибка при проверке обновлений Service Worker:', updateError);
+                                debugWarn('Service Worker жаңартуларын тексеру қатесі (Error checking Service Worker updates):', updateError);
                             }
                         });
                     })
                     .catch((error) => {
-                        debugWarn('Ошибка регистрации Service Worker:', error);
+                        debugWarn('Service Worker тіркеу қатесі (Service Worker registration error):', error);
                         // Не критично, приложение может работать без Service Worker
                     });
             });
         } catch (error) {
-            debugWarn('Ошибка при настройке Service Worker:', error);
+            debugWarn('Service Worker теңшеу қатесі (Error setting up Service Worker):', error);
         }
     }
 
@@ -1894,7 +1900,7 @@ function initializeApp() {
             debugWarn(`Попытка ${initAttempts}: PersonalityTestApp не определён, ждём...`);
             setTimeout(initializeApp, 200);
         } else {
-            criticalError('PersonalityTestApp не определён после', MAX_INIT_ATTEMPTS, 'попыток');
+            criticalError('PersonalityTestApp анықталмады (PersonalityTestApp not defined after)', MAX_INIT_ATTEMPTS, 'attempts');
         }
         return;
     }
@@ -1925,7 +1931,7 @@ function initializeApp() {
 
     // Логируем статус модулей для диагностики (только при первой попытке или при ошибках)
     if (initAttempts === 1 || initAttempts % 10 === 0) {
-        debugLog('Статус загрузки модулей:', moduleStatus);
+        debugLog('Модульдердің жүктелу күйі (Module loading status):', moduleStatus);
         const availableModules = Object.entries(moduleStatus)
             .filter(([_, available]) => available)
             .map(([name]) => name);
@@ -1934,10 +1940,10 @@ function initializeApp() {
             .map(([name]) => name);
 
         if (availableModules.length > 0) {
-            debugLog('Загружены модули:', availableModules);
+            debugLog('Жүктелген модульдер (Modules loaded):', availableModules);
         }
         if (missingModules.length > 0) {
-            debugWarn('Отсутствуют модули:', missingModules);
+            debugWarn('Модульдер жетіспейді (Missing modules):', missingModules);
         }
     }
 
@@ -1945,7 +1951,7 @@ function initializeApp() {
 
     if (missingModules.length > 0) {
         if (initAttempts < MAX_INIT_ATTEMPTS) {
-            console.warn(`Попытка ${initAttempts}: Критические модули не загружены:`, missingModules);
+            console.warn(`${initAttempts}-әрекет (Attempt): Маңызды модульдер жүктелмеген (Critical modules not loaded):`, missingModules);
             // Ждем еще немного и пробуем снова
             setTimeout(() => {
                 initializeApp(); // Рекурсивно пытаемся снова
@@ -1953,17 +1959,16 @@ function initializeApp() {
             return;
         } else {
             // Превышен лимит попыток - выводим критическую ошибку
-            console.error('Критические модули не загружены после', MAX_INIT_ATTEMPTS, 'попыток:', missingModules);
-            console.error('Проверьте порядок загрузки скриптов в index.html');
+            console.error('Маңызды модульдер ' + MAX_INIT_ATTEMPTS + ' әрекеттен кейін де жүктелмеді (Critical modules not loaded after attempts):', missingModules);
             // Показываем ошибку пользователю, но не прерываем выполнение полностью
             const container = document.getElementById('app');
             if (container) {
                 container.innerHTML = `
                     <div class="error-message">
-                        <h2>Ошибка загрузки модулей</h2>
-                        <p>Не удалось загрузить критические модули: ${missingModules.join(', ')}</p>
-                        <p style="font-size: 0.9em; color: #666;">Проверьте консоль браузера (F12) для деталей.</p>
-                        <button class="btn btn-primary" onclick="location.reload()">Перезагрузить страницу</button>
+                        <h2>Модульдерді жүктеу қатесі (Error loading modules)</h2>
+                        <p>Маңызды модульдерді жүктеу мүмкін болмады (Failed to load critical modules): ${missingModules.join(', ')}</p>
+                        <p style="font-size: 0.9em; color: #666;">Мәліметтерді браузер консолінен (F12) тексеріңіз (Check browser console for details).</p>
+                        <button class="btn btn-primary" onclick="location.reload()">Бетті қайта жүктеу (Reload page)</button>
                     </div>
                 `;
             }
@@ -1987,22 +1992,22 @@ function initializeApp() {
     }
 
     if (!hasData) {
-        debugWarn(`Попытка ${initAttempts}: SCENARIOS_DATA ещё не загружен, ждём...`);
-        debugLog('Проверка SCENARIOS_DATA:', typeof SCENARIOS_DATA);
-        debugLog('Проверка window.SCENARIOS_DATA:', typeof window !== 'undefined' ? typeof window.SCENARIOS_DATA : 'window недоступен');
+        debugWarn(`${initAttempts}-әрекет (Attempt): SCENARIOS_DATA әлі жүктелмеген, күтеміз... (SCENARIOS_DATA not loaded yet, waiting...)`);
+        debugLog('SCENARIOS_DATA тексеру (Checking SCENARIOS_DATA):', typeof SCENARIOS_DATA);
+        debugLog('window.SCENARIOS_DATA тексеру (Checking window.SCENARIOS_DATA):', typeof window !== 'undefined' ? typeof window.SCENARIOS_DATA : 'window unavailable');
 
         if (initAttempts < MAX_INIT_ATTEMPTS) {
             setTimeout(initializeApp, 200);
         } else {
-            criticalError('Превышено максимальное количество попыток загрузки SCENARIOS_DATA');
+            criticalError('SCENARIOS_DATA жүктеу әрекеттерінің шекті санынан асты (Max attempts to load SCENARIOS_DATA exceeded)');
             const container = document.getElementById('app');
             if (container) {
                 container.innerHTML = `
                     <div class="error-message">
-                        <h2>Ошибка загрузки данных</h2>
-                        <p>Не удалось загрузить данные сценариев. Убедитесь, что файл scenarios-data.js загружен.</p>
-                        <p style="font-size: 0.9em; color: #666;">Проверьте консоль браузера (F12) для деталей.</p>
-                        <button class="btn btn-primary" onclick="location.reload()">Перезагрузить страницу</button>
+                        <h2>Деректерді жүктеу қатесі (Error loading data)</h2>
+                        <p>Сценарий деректерін жүктеу мүмкін болмады (Failed to load scenario data). Убедитесь, что файл scenarios-data.js загружен.</p>
+                        <p style="font-size: 0.9em; color: #666;">Мәліметтерді браузер консолінен (F12) тексеріңіз (Check browser console for details).</p>
+                        <button class="btn btn-primary" onclick="location.reload()">Бетті қайта жүктеу (Reload page)</button>
                     </div>
                 `;
             }
@@ -2010,7 +2015,7 @@ function initializeApp() {
         return;
     }
 
-    debugLog('Встроенные данные найдены через:', dataSource);
+    debugLog('Кірістірілген деректер табылды (Embedded data found via):', dataSource);
 
     // Все готово, инициализируем
     try {
@@ -2018,18 +2023,18 @@ function initializeApp() {
         // Вызываем init() после создания экземпляра
         if (app && typeof app.init === 'function') {
             app.init().catch(error => {
-                criticalError('Ошибка инициализации приложения:', error);
+                criticalError('Қолданбаны инициализациялау қатесі (Error initializing application):', error);
             });
         }
     } catch (error) {
-        criticalError('Ошибка создания приложения:', error);
+        criticalError('Қолданбаны жасау қатесі (Error creating application):', error);
         const container = document.getElementById('app');
         if (container) {
             container.innerHTML = `
                 <div class="error-message">
-                    <h2>Ошибка инициализации</h2>
+                    <h2>Инициализация қатесі (Initialization error)</h2>
                     <p>${error.message || 'Неизвестная ошибка'}</p>
-                    <button class="btn btn-primary" onclick="location.reload()">Перезагрузить страницу</button>
+                    <button class="btn btn-primary" onclick="location.reload()">Бетті қайта жүктеу (Reload page)</button>
                 </div>
             `;
         }

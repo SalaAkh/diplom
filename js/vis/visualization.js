@@ -1,9 +1,9 @@
 /**
- * Модуль визуализации результатов анализа
- * Использует Chart.js для создания графиков и диаграмм
+ * Талдау нәтижелерін визуализациялау модулі (Analysis results visualization module)
+ * ГРАФИКТЕР мен диаграммаларды жасау үшін Chart.js қолданылады (Uses Chart.js to create charts and diagrams)
  * 
- * Автор: Ахмедьянов Саламат КПО 9/22-2
- * Дата: 2026
+ * Авторы (Author): Ахмедьянов Саламат КПО 9/22-2
+ * Мерзімі (Date): 2026
  */
 
 class ResultsVisualizer {
@@ -15,7 +15,7 @@ class ResultsVisualizer {
 
         // Проверяем наличие Chart.js
         if (typeof Chart === 'undefined') {
-            console.error('Chart.js не загружен! Визуализация будет недоступна.');
+            console.error('Chart.js жүктелген жоқ! Визуализация қолжетімсіз болады (Chart.js not loaded! Visualization will be unavailable).');
             this.chartAvailable = false;
         } else {
             this.chartAvailable = true;
@@ -35,14 +35,14 @@ class ResultsVisualizer {
      * @param {string} containerId - ID контейнера
      * @param {string} message - Сообщение об ошибке
      */
-    showFallbackUI(containerId, message = 'График недоступен') {
+    showFallbackUI(containerId, message = 'График қолжетімсіз (Chart unavailable)') {
         const container = document.getElementById(containerId);
         if (!container) return;
 
         container.innerHTML = `
             <div class="chart-fallback">
                 <p class="fallback-message">${message}</p>
-                <p class="fallback-hint">Попробуйте обновить страницу</p>
+                <p class="fallback-hint">Бетті қайта жүктеп көріңіз (Try reloading the page)</p>
             </div>
         `;
     }
@@ -61,13 +61,13 @@ class ResultsVisualizer {
         try {
             // Проверка наличия Chart.js
             if (!this.isChartAvailable()) {
-                this.showFallbackUI(this.containerId, 'Chart.js не загружен. График недоступен.');
+                this.showFallbackUI(this.containerId, 'Chart.js жүктелген жоқ. График қолжетімсіз (Chart.js not loaded. Chart unavailable).');
                 return;
             }
 
             const container = document.getElementById(this.containerId);
             if (!container) {
-                console.error('Контейнер не найден:', this.containerId);
+                console.error('Контейнер табылмады (Container not found):', this.containerId);
                 return;
             }
 
@@ -82,14 +82,14 @@ class ResultsVisualizer {
 
             const canvas = document.getElementById('radarChart');
             if (!canvas) {
-                console.error('Canvas элемент не создан');
+                console.error('Canvas элементі жасалмады (Canvas element not created)');
                 return;
             }
 
             const ctx = canvas.getContext('2d');
             if (!ctx) {
-                console.error('Canvas context not available');
-                this.showFallbackUI(this.containerId, 'Не удалось инициализировать график');
+                console.error('Canvas контексті қолжетімсіз (Canvas context not available)');
+                this.showFallbackUI(this.containerId, 'Графикті инициализациялау мүмкін болмады (Failed to initialize chart)');
                 return;
             }
 
@@ -116,6 +116,20 @@ class ResultsVisualizer {
                 return nameObj;
             });
 
+            if (canvas) {
+                canvas.setAttribute('role', 'img');
+                const dimensionKeys = Object.keys(dimensions);
+                const valuesWithLabels = labels.map((label, idx) => {
+                    const score = scores[dimensionKeys[idx]] || 0;
+                    return `${label}: ${Math.round(score)}%`;
+                }).join(', ');
+
+                const ariaLabel = window.t ?
+                    `${window.t('yourProfile')} (Radar Chart). ${valuesWithLabels}` :
+                    `Сіздің профиліңіз (Радиалды диаграмма). (Your profile (Radar chart)). ${valuesWithLabels}`;
+                canvas.setAttribute('aria-label', ariaLabel);
+            }
+
             const dimensionKeys = Object.keys(dimensions);
 
             // Преобразуем процентные значения [-100, 100] в [0, 100] для визуализации
@@ -136,7 +150,7 @@ class ResultsVisualizer {
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: window.t ? window.t('yourProfile') : 'Ваш профиль',
+                        label: window.t ? window.t('yourProfile') : 'Сіздің профиліңіз (Your profile)',
                         data: values,
                         backgroundColor: gradient,
                         borderColor: '#00c6fb',
@@ -216,14 +230,14 @@ class ResultsVisualizer {
                                     const percentage = Math.round((value - 50) * 2);
 
                                     let level = '';
-                                    if (percentage > 50) level = window.t ? window.t('levelHigh') : 'Высокая выраженность';
-                                    else if (percentage > 20) level = window.t ? window.t('levelMedium') : 'Умеренная выраженность';
-                                    else if (percentage < -50) level = window.t ? window.t('levelLow') : 'Низкая выраженность';
-                                    else if (percentage < -20) level = window.t ? window.t('levelVeryLow') : 'Умеренно низкая выраженность';
-                                    else level = window.t ? window.t('levelBalanced') : 'Сбалансировано';
+                                    if (percentage > 50) level = window.t ? window.t('levelHigh') : 'Жоғары айқындылық (High expression)';
+                                    else if (percentage > 20) level = window.t ? window.t('levelMedium') : 'Орташа айқындылық (Medium expression)';
+                                    else if (percentage < -50) level = window.t ? window.t('levelLow') : 'Төмен айқындылық (Low expression)';
+                                    else if (percentage < -20) level = window.t ? window.t('levelVeryLow') : 'Орташа төмен айқындылық (Moderately low expression)';
+                                    else level = window.t ? window.t('levelBalanced') : 'Теңгерілген (Balanced)';
 
                                     return [
-                                        `Значение: ${percentage > 0 ? '+' : ''}${percentage}%`,
+                                        `Мәні (Value): ${percentage > 0 ? '+' : ''}${percentage}%`,
                                         level
                                     ];
                                 }
@@ -237,8 +251,8 @@ class ResultsVisualizer {
                 }
             });
         } catch (error) {
-            console.error('Ошибка создания радиальной диаграммы:', error);
-            this.showFallbackUI(this.containerId, 'Ошибка создания графика. Попробуйте обновить страницу.');
+            console.error('Радаралық диаграмманы жасау қатесі (Error creating radar chart):', error);
+            this.showFallbackUI(this.containerId, 'График жасау қатесі. Бетті жаңартып көріңіз (Error creating chart. Try reloading the page).');
         }
     }
 
@@ -251,13 +265,13 @@ class ResultsVisualizer {
         try {
             // Проверка наличия Chart.js
             if (!this.isChartAvailable()) {
-                this.showFallbackUI('barChartContainer', 'Chart.js не загружен. График недоступен.');
+                this.showFallbackUI('barChartContainer', 'Chart.js жүктелген жоқ. График қолжетімсіз (Chart.js not loaded. Chart unavailable).');
                 return;
             }
 
             const container = document.getElementById('barChartContainer');
             if (!container) {
-                console.error('Контейнер barChartContainer не найден');
+                console.error('barChartContainer контейнері табылмады (Container barChartContainer not found)');
                 return;
             }
 
@@ -270,11 +284,12 @@ class ResultsVisualizer {
             const canvas = document.createElement('canvas');
             canvas.id = 'barChart';
             container.appendChild(canvas);
+            canvas.setAttribute('role', 'img');
 
             const ctx = canvas.getContext('2d');
             if (!ctx) {
-                console.error('Canvas context not available');
-                this.showFallbackUI('barChartContainer', 'Не удалось инициализировать график');
+                console.error('Canvas контексті қолжетімсіз (Canvas context not available)');
+                this.showFallbackUI('barChartContainer', 'Графикті инициализациялау мүмкін болмады (Failed to initialize chart)');
                 return;
             }
 
@@ -286,6 +301,10 @@ class ResultsVisualizer {
                 // Если значение > 1 или < -1, предполагаем что это уже проценты
                 return Math.abs(score) > 1 ? Math.round(score) : Math.round(score * 100);
             });
+
+            // Improved ARIA label
+            const barDescription = labels.map((label, idx) => `${label}: ${values[idx]}%`).join(', ');
+            canvas.setAttribute('aria-label', `Тест нәтижелерінің бағандық диаграммасы (Bar chart of test results). Деректер (Data): ${barDescription}`);
 
             // Цвета в зависимости от значения
             const backgroundColors = values.map(value => {
@@ -310,7 +329,7 @@ class ResultsVisualizer {
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Оценка (%)',
+                        label: 'Бағалау (%) (Score (%))',
                         data: values,
                         backgroundColor: backgroundColors,
                         borderColor: borderColors,
@@ -355,8 +374,8 @@ class ResultsVisualizer {
                 }
             });
         } catch (error) {
-            console.error('Ошибка создания столбчатой диаграммы:', error);
-            this.showFallbackUI('barChartContainer', 'Ошибка создания графика');
+            console.error('Бағандық диаграмманы жасау қатесі (Error creating bar chart):', error);
+            this.showFallbackUI('barChartContainer', 'График жасау қатесі (Error creating chart)');
         }
     }
 
@@ -370,13 +389,13 @@ class ResultsVisualizer {
         try {
             // Проверка наличия Chart.js
             if (!this.isChartAvailable()) {
-                this.showFallbackUI(containerId, 'Chart.js не загружен. График недоступен.');
+                this.showFallbackUI(containerId, 'Chart.js жүктелген жоқ. График қолжетімсіз (Chart.js not loaded. Chart unavailable).');
                 return;
             }
 
             const container = document.getElementById(containerId);
             if (!container) {
-                console.error('Контейнер не найден:', containerId);
+                console.error('Контейнер табылмады (Container not found):', containerId);
                 return;
             }
 
@@ -388,11 +407,13 @@ class ResultsVisualizer {
             const canvas = document.createElement('canvas');
             canvas.id = `polarChart_${dimension}`;
             container.appendChild(canvas);
+            canvas.setAttribute('role', 'img');
+            canvas.setAttribute('aria-label', `Диаграмма для измерения ${dimension}: ${Math.round(score * 100)}%`);
             const ctx = canvas.getContext('2d');
 
             if (!ctx) {
-                console.error('Canvas context not available');
-                this.showFallbackUI(containerId, 'Не удалось инициализировать график');
+                console.error('Canvas контексті қолжетімсіз (Canvas context not available)');
+                this.showFallbackUI(containerId, 'Графикті инициализациялау мүмкін болмады (Failed to initialize chart)');
                 return;
             }
 
@@ -408,7 +429,7 @@ class ResultsVisualizer {
             this.charts[`polar_${dimension}`] = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Текущее значение', 'Остальное'],
+                    labels: ['Ағымдағы мән (Current value)', 'Қалғаны (Rest)'],
                     datasets: [{
                         data: [normalizedValue, 100 - normalizedValue],
                         backgroundColor: [
@@ -443,8 +464,8 @@ class ResultsVisualizer {
                 }
             });
         } catch (error) {
-            console.error('Ошибка создания круговой диаграммы:', error);
-            this.showFallbackUI(containerId, 'Ошибка создания графика');
+            console.error('Дөңгелек диаграмманы жасау қатесі (Error creating pie/polar chart):', error);
+            this.showFallbackUI(containerId, 'График жасау қатесі (Error creating chart)');
         }
     }
 
@@ -479,11 +500,11 @@ class ResultsVisualizer {
         // Функция для получения описания уровня
         const getLevelBadge = (level) => {
             const badges = {
-                'высокая': { text: 'Высокий', class: 'badge-high' },
-                'умеренная': { text: 'Средний', class: 'badge-medium' },
-                'сбалансированная': { text: 'Баланс', class: 'badge-balanced' },
-                'умеренно низкая': { text: 'Низкий', class: 'badge-low' },
-                'низкая': { text: 'Очень низкий', class: 'badge-very-low' }
+                'высокая': { text: 'Жоғары (High)', class: 'badge-high' },
+                'умеренная': { text: 'Орташа (Medium)', class: 'badge-medium' },
+                'сбалансированная': { text: 'Баланс (Balance)', class: 'badge-balanced' },
+                'умеренно низкая': { text: 'Төмен (Low)', class: 'badge-low' },
+                'низкая': { text: 'Өте төмен (Very low)', class: 'badge-very-low' }
             };
             return badges[level] || { text: level, class: 'badge-default' };
         };
@@ -580,6 +601,29 @@ class ResultsVisualizer {
 
         html += '</div>';
         container.innerHTML = html;
+
+        // Speaking results if reading mode is active
+        if (window.accessibilityService && window.accessibilityService.settings.reading) {
+            try {
+                let summaryToSpeak = "";
+                if (window.t) {
+                    summaryToSpeak = `${window.t('yourProfile')}. ${profile.summary}. `;
+                    Object.keys(profile.dimensions).forEach(key => {
+                        const dim = profile.dimensions[key];
+                        summaryToSpeak += `${dim.name}: ${dim.percentage}%. `;
+                    });
+                } else {
+                    summaryToSpeak = `Ваш личностный профиль. ${profile.summary}. `;
+                    Object.keys(profile.dimensions).forEach(key => {
+                        const dim = profile.dimensions[key];
+                        summaryToSpeak += `${dim.name}: ${dim.percentage}%. `;
+                    });
+                }
+                window.accessibilityService.speak(summaryToSpeak);
+            } catch (e) {
+                console.error("Профиль нәтижелерін дыбыстау қатесі (Error speaking profile results):", e);
+            }
+        }
     }
 
     /**
@@ -591,13 +635,13 @@ class ResultsVisualizer {
         try {
             // Проверка наличия Chart.js
             if (!this.isChartAvailable()) {
-                this.showFallbackUI(containerId, 'Chart.js не загружен. График недоступен.');
+                this.showFallbackUI(containerId, 'Chart.js жүктелген жоқ. График қолжетімсіз (Chart.js not loaded. Chart unavailable).');
                 return;
             }
 
             const container = document.getElementById(containerId);
             if (!container) {
-                console.error('Контейнер не найден:', containerId);
+                console.error('Контейнер табылмады (Container not found):', containerId);
                 return;
             }
 
@@ -610,10 +654,12 @@ class ResultsVisualizer {
             }
 
             container.appendChild(canvas);
+            canvas.setAttribute('role', 'img');
+            canvas.setAttribute('aria-label', 'Даму бағыттарының диаграммасы (Development directions chart)');
             const ctx = canvas.getContext('2d');
             if (!ctx) {
-                console.error('Canvas context not available');
-                this.showFallbackUI(containerId, 'Не удалось инициализировать график');
+                console.error('Canvas контексті қолжетімсіз (Canvas context not available)');
+                this.showFallbackUI(containerId, 'Графикті инициализациялау мүмкін болмады (Failed to initialize chart)');
                 return;
             }
 
@@ -658,8 +704,8 @@ class ResultsVisualizer {
                 }
             });
         } catch (error) {
-            console.error('Ошибка создания диаграммы направлений развития:', error);
-            this.showFallbackUI(containerId, 'Ошибка создания графика');
+            console.error('Даму бағыттарының диаграммасын жасау қатесі (Error creating development directions chart):', error);
+            this.showFallbackUI(containerId, 'График жасау қатесі (Error creating chart)');
         }
     }
 
@@ -683,9 +729,19 @@ class ResultsVisualizer {
             }
 
             container.appendChild(canvas);
+            canvas.setAttribute('role', 'img');
+
+            const comparisonDesc = Object.keys(dimensions).map((key, idx) => {
+                const score = userScores[key] || 0;
+                return `${dimensions[key].name}: ${Math.round(score * 100)}%`;
+            }).join(', ');
+
+            canvas.setAttribute('aria-label', window.t ?
+                `${window.t('comparison')} (Bar Chart). ${comparisonDesc}` :
+                `Сравнение со средним профилем. ${comparisonDesc}`);
             const ctx = canvas.getContext('2d');
             if (!ctx) {
-                console.error('Canvas context not available');
+                console.error('Canvas контексті қолжетімсіз (Canvas context not available)');
                 return;
             }
 
@@ -710,14 +766,14 @@ class ResultsVisualizer {
                     labels: labels,
                     datasets: [
                         {
-                            label: 'Ваш профиль',
+                            label: 'Сіздің профиліңіз (Your profile)',
                             data: userValues,
                             backgroundColor: 'rgba(74, 144, 226, 0.6)',
                             borderColor: 'rgba(74, 144, 226, 1)',
                             borderWidth: 2
                         },
                         {
-                            label: 'Средний профиль',
+                            label: 'Орташа профиль (Average profile)',
                             data: averageValues,
                             backgroundColor: 'rgba(201, 203, 207, 0.6)',
                             borderColor: 'rgba(201, 203, 207, 1)',
@@ -764,8 +820,8 @@ class ResultsVisualizer {
                 }
             });
         } catch (error) {
-            console.error('Ошибка создания сравнительной диаграммы:', error);
-            this.showFallbackUI(containerId, 'Ошибка создания графика');
+            console.error('Салыстырмалы диаграмманы жасау қатесі (Error creating comparative chart):', error);
+            this.showFallbackUI(containerId, 'График жасау қатесі (Error creating chart)');
         }
     }
 
@@ -782,7 +838,7 @@ class ResultsVisualizer {
         let html = '<div class="vectors-container">';
 
         if (vectors.length === 0) {
-            html += '<p>Векторы развития не определены для вашего профиля.</p>';
+            html += '<p>Сіздің профиліңіз үшін даму векторлары анықталмаған (Development vectors not defined for your profile).</p>';
         } else {
             vectors.forEach((vector, index) => {
                 const strengthPercent = Math.round(vector.strength * 100);
@@ -863,7 +919,7 @@ class ResultsVisualizer {
         let html = '<div class="skills-recommendations">';
 
         if (skills.length === 0) {
-            html += '<p>Рекомендации по навыкам не определены.</p>';
+            html += '<p>Дағдылар бойынша ұсыныстар анықталмаған (Skill recommendations not defined).</p>';
         } else {
             // Группируем по категориям
             const byCategory = {};
@@ -915,7 +971,7 @@ class ResultsVisualizer {
         try {
             // Проверка наличия Chart.js
             if (!this.isChartAvailable()) {
-                this.showFallbackUI(containerId, 'Chart.js не загружен. График недоступен.');
+                this.showFallbackUI(containerId, 'Chart.js жүктелген жоқ. График қолжетімсіз (Chart.js not loaded. Chart unavailable).');
                 return;
             }
 
@@ -942,7 +998,7 @@ class ResultsVisualizer {
             const labels = sessions.map((s, i) => `Сессия ${i + 1}`);
             const data = sessions.map(s => {
                 const score = s.normalizedScores?.[dimension] || 0;
-                return Math.round((score + 1) * 50); // Преобразуем [-1, 1] в [0, 100]
+                return Math.round((score + 1) * 50); // [-1, 1] мәнін [0, 100] ауқымына ауыстырамыз (Convert [-1, 1] to [0, 100])
             });
 
             // Уничтожение предыдущего графика
@@ -1009,8 +1065,8 @@ class ResultsVisualizer {
                 }
             });
         } catch (error) {
-            console.error('Ошибка создания графика эволюции:', error);
-            this.showFallbackUI(containerId, 'Ошибка создания графика');
+            console.error('Эволюция графигін жасау қатесі (Error creating evolution chart):', error);
+            this.showFallbackUI(containerId, 'График жасау қатесі (Error creating chart)');
         }
     }
 
@@ -1024,14 +1080,14 @@ class ResultsVisualizer {
         try {
             // Проверка наличия Chart.js
             if (!this.isChartAvailable()) {
-                this.showFallbackUI(containerId, 'Chart.js не загружен. График недоступен.');
+                this.showFallbackUI(containerId, 'Chart.js жүктелген жоқ. График қолжетімсіз (Chart.js not loaded. Chart unavailable).');
                 return;
             }
 
             const container = document.getElementById(containerId);
             if (!container || !session1.normalizedScores || !session2.normalizedScores) {
                 if (container) {
-                    this.showFallbackUI(containerId, 'Недостаточно данных для сравнения сессий');
+                    this.showFallbackUI(containerId, 'Сессияларды салыстыру үшін деректер жеткіліксіз (Insufficient data to compare sessions)');
                 }
                 return;
             }
@@ -1045,7 +1101,7 @@ class ResultsVisualizer {
 
             if (!ctx) {
                 console.error('Canvas context not available');
-                this.showFallbackUI(containerId, 'Не удалось инициализировать график');
+                this.showFallbackUI(containerId, 'Графикті инициализациялау мүмкін болмады (Failed to initialize chart)');
                 return;
             }
             const dimensions = Object.keys(session1.normalizedScores);
@@ -1065,14 +1121,14 @@ class ResultsVisualizer {
                     labels: labels,
                     datasets: [
                         {
-                            label: 'Сессия 1',
+                            label: '1-сессия (Session 1)',
                             data: data1,
                             backgroundColor: 'rgba(74, 144, 226, 0.7)',
                             borderColor: '#4a90e2',
                             borderWidth: 2
                         },
                         {
-                            label: 'Сессия 2',
+                            label: '2-сессия (Session 2)',
                             data: data2,
                             backgroundColor: 'rgba(123, 104, 238, 0.7)',
                             borderColor: '#7b68ee',
@@ -1112,8 +1168,8 @@ class ResultsVisualizer {
                 }
             });
         } catch (error) {
-            console.error('Ошибка создания графика сравнения сессий:', error);
-            this.showFallbackUI(containerId, 'Ошибка создания графика');
+            console.error('Сессияларды салыстыру графигін жасау қатесі (Error creating session comparison chart):', error);
+            this.showFallbackUI(containerId, 'График жасау қатесі (Error creating chart)');
         }
     }
 
@@ -1142,12 +1198,12 @@ class ResultsVisualizer {
      */
     getDimensionLabel(dimension) {
         const labels = {
-            strategic: 'Стратегическое',
-            explorer: 'Исследователь',
-            individualism: 'Индивидуализм',
-            rationality: 'Рациональность',
-            control: 'Контроль',
-            meaning: 'Поиск смысла'
+            strategic: 'Стратегиялық (Strategic)',
+            explorer: 'Зерттеуші (Explorer)',
+            individualism: 'Индивидуализм (Individualism)',
+            rationality: 'Рационалдылық (Rationality)',
+            control: 'Бақылау (Control)',
+            meaning: 'Мағына іздеу (Search for meaning)'
         };
         return labels[dimension] || dimension;
     }
@@ -1161,7 +1217,7 @@ class ResultsVisualizer {
         const container = document.getElementById(containerId);
         if (!container || !evolutionData || !evolutionData.hasEvolution) {
             if (container) {
-                container.innerHTML = '<p>Недостаточно данных для анализа эволюции. Пройдите тест ещё раз.</p>';
+                container.innerHTML = '<p>Эволюцияны талдау үшін деректер жеткіліксіз. Тесттен қайта өтіңіз (Insufficient data for evolution analysis. Take the test again).</p>';
             }
             return;
         }
@@ -1172,22 +1228,22 @@ class ResultsVisualizer {
         if (evolutionData.evolutionSummary) {
             html += `
                 <div class="evolution-summary">
-                    <h3>Сводка изменений</h3>
+                    <h3>Өзгерістер жиынтығы (Evolution Summary)</h3>
                     <div class="summary-stats">
                         <div class="stat-item">
-                            <span class="stat-label">Всего сессий:</span>
+                            <span class="stat-label">Барлық сессиялар (Total sessions):</span>
                             <span class="stat-value">${evolutionData.totalSessions}</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-label">Значительных изменений:</span>
+                            <span class="stat-label">Маңызды өзгерістер (Significant changes):</span>
                             <span class="stat-value">${evolutionData.evolutionSummary.totalChanges}</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-label">Улучшений:</span>
+                            <span class="stat-label">Жақсартулар (Improvements):</span>
                             <span class="stat-value positive">${evolutionData.evolutionSummary.improvements}</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-label">Стабильность:</span>
+                            <span class="stat-label">Тұрақтылық (Stability):</span>
                             <span class="stat-value">${Math.round(evolutionData.evolutionSummary.stability * 100)}%</span>
                         </div>
                     </div>
@@ -1197,7 +1253,7 @@ class ResultsVisualizer {
 
         // Инсайты
         if (evolutionData.insights && evolutionData.insights.length > 0) {
-            html += '<div class="evolution-insights"><h3>Инсайты об эволюции</h3><ul>';
+            html += '<div class="evolution-insights"><h3>Эволюция инсайттары (Evolution Insights)</h3><ul>';
             evolutionData.insights.forEach(insight => {
                 html += `
                     <li class="insight-item insight-${insight.type}">
@@ -1211,7 +1267,7 @@ class ResultsVisualizer {
 
         // Рекомендации
         if (evolutionData.recommendations && evolutionData.recommendations.length > 0) {
-            html += '<div class="evolution-recommendations"><h3>Рекомендации</h3><ul>';
+            html += '<div class="evolution-recommendations"><h3>Ұсыныстар (Recommendations)</h3><ul>';
             evolutionData.recommendations.forEach(rec => {
                 html += `
                     <li class="recommendation-item">
@@ -1224,7 +1280,7 @@ class ResultsVisualizer {
 
         // Графики изменений по измерениям
         if (evolutionData.overallComparison && evolutionData.overallComparison.dimensions) {
-            html += '<div class="evolution-charts"><h3>Изменения по измерениям</h3>';
+            html += '<div class="evolution-charts"><h3>Өлшемдер бойынша өзгерістер (Changes by dimensions)</h3>';
             Object.keys(evolutionData.overallComparison.dimensions).forEach(dim => {
                 const change = evolutionData.overallComparison.dimensions[dim];
                 if (Math.abs(change.absChange) > 0.1) {
@@ -1268,13 +1324,13 @@ class ResultsVisualizer {
      */
     renderAdvancedResults(advancedProfile, dimensions, containerId = 'advanced-results') {
         if (!advancedProfile || !advancedProfile.advanced) {
-            console.warn('Расширенный профиль не найден');
+            console.warn('Кеңейтілген профиль табылмады (Advanced profile not found)');
             return;
         }
 
         const container = document.getElementById(containerId);
         if (!container) {
-            console.error(`Контейнер ${containerId} не найден`);
+            console.error(`${containerId} контейнері табылмады (Container not found)`);
             return;
         }
 
@@ -1285,31 +1341,31 @@ class ResultsVisualizer {
         if (advanced.questionTypes) {
             html += `
                 <div class="advanced-section question-types-section">
-                    <h3>Статистика по типам вопросов</h3>
+                    <h3>Сұрақ түрлері бойынша статистика (Question Types Statistics)</h3>
                     <div class="question-types-grid">
                         <div class="question-type-stat">
                             <div class="stat-icon">📋</div>
                             <div class="stat-value">${advanced.questionTypes.scenarios || 0}</div>
-                            <div class="stat-label">Сценарии</div>
+                            <div class="stat-label">Сценарийлер (Scenarios)</div>
                         </div>
                         <div class="question-type-stat">
                             <div class="stat-icon">📊</div>
                             <div class="stat-value">${advanced.questionTypes.scales || 0}</div>
-                            <div class="stat-label">Шкалы</div>
+                            <div class="stat-label">Шкалалар (Scales)</div>
                         </div>
                         <div class="question-type-stat">
                             <div class="stat-icon">✍️</div>
                             <div class="stat-value">${advanced.questionTypes.open || 0}</div>
-                            <div class="stat-label">Открытые</div>
+                            <div class="stat-label">Ашық (Open)</div>
                         </div>
                         <div class="question-type-stat">
                             <div class="stat-icon">🔄</div>
                             <div class="stat-value">${advanced.questionTypes.situational || 0}</div>
-                            <div class="stat-label">Ситуационные</div>
+                            <div class="stat-label">Ситуациялық (Situational)</div>
                         </div>
                     </div>
                     <div class="total-questions">
-                        <strong>Всего вопросов: ${advanced.totalQuestions}</strong>
+                        <strong>Барлығы (Total questions): ${advanced.totalQuestions}</strong>
                     </div>
                 </div>
             `;
@@ -1319,7 +1375,7 @@ class ResultsVisualizer {
         if (advanced.confidence) {
             html += `
                 <div class="advanced-section confidence-section">
-                    <h3>Уровни достоверности результатов</h3>
+                    <h3>Нәтижелердің сенімділік деңгейі (Result Confidence Levels)</h3>
                     <div class="confidence-chart-container">
                         <canvas id="confidenceChart"></canvas>
                     </div>
@@ -1331,7 +1387,7 @@ class ResultsVisualizer {
         if (advanced.consistency) {
             html += `
                 <div class="advanced-section consistency-section">
-                    <h3>Согласованность результатов</h3>
+                    <h3>Нәтижелердің сәйкестігі (Result Consistency)</h3>
                     <div class="consistency-chart-container">
                         <canvas id="consistencyChart"></canvas>
                     </div>
@@ -1344,16 +1400,16 @@ class ResultsVisualizer {
             const analysis = advanced.detailedAnalysis;
             html += `
                 <div class="advanced-section detailed-analysis-section">
-                    <h3>Детализированный анализ</h3>
+                    <h3>Егжей-тегжейлі талдау (Detailed Analysis)</h3>
                     ${analysis.strengths && analysis.strengths.length > 0 ? `
                         <div class="analysis-group strengths">
-                            <h4>Сильные стороны</h4>
+                            <h4>Күшті жақтар (Strengths)</h4>
                             <ul>
                                 ${analysis.strengths.map(s => `
                                     <li>
                                         <strong>${s.name}</strong>
                                         <span class="score-badge">${Math.round(s.score * 100)}%</span>
-                                        <span class="confidence-badge">Достоверность: ${Math.round(s.confidence * 100)}%</span>
+                                        <span class="confidence-badge">Сенімділік (Confidence): ${Math.round(s.confidence * 100)}%</span>
                                     </li>
                                 `).join('')}
                             </ul>
@@ -1361,13 +1417,13 @@ class ResultsVisualizer {
                     ` : ''}
                     ${analysis.weaknesses && analysis.weaknesses.length > 0 ? `
                         <div class="analysis-group weaknesses">
-                            <h4>Области для развития</h4>
+                            <h4>Даму аймақтары (Areas for Development)</h4>
                             <ul>
                                 ${analysis.weaknesses.map(w => `
                                     <li>
                                         <strong>${w.name}</strong>
                                         <span class="score-badge">${Math.round(w.score * 100)}%</span>
-                                        <span class="confidence-badge">Достоверность: ${Math.round(w.confidence * 100)}%</span>
+                                        <span class="confidence-badge">Сенімділік (Confidence): ${Math.round(w.confidence * 100)}%</span>
                                     </li>
                                 `).join('')}
                             </ul>
@@ -1375,7 +1431,7 @@ class ResultsVisualizer {
                     ` : ''}
                     ${analysis.balanced && analysis.balanced.length > 0 ? `
                         <div class="analysis-group balanced">
-                            <h4>Сбалансированные области</h4>
+                            <h4>Теңгерілген аймақтар (Balanced Areas)</h4>
                             <ul>
                                 ${analysis.balanced.map(b => `
                                     <li>
@@ -1388,11 +1444,11 @@ class ResultsVisualizer {
                     ` : ''}
                     ${analysis.recommendations && analysis.recommendations.length > 0 ? `
                         <div class="analysis-recommendations">
-                            <h4>Рекомендации</h4>
+                            <h4>Ұсыныстар (Recommendations)</h4>
                             <ul>
                                 ${analysis.recommendations.map(r => `
                                     <li class="recommendation-item">
-                                        <strong>${r.type === 'leverage' ? 'Используйте' : 'Развивайте'}:</strong>
+                                        <strong>${r.type === 'leverage' ? 'Қолданыңыз (Leverage)' : 'Дамытыңыз (Develop)'}:</strong>
                                         ${r.text}
                                         <div class="recommendation-dimensions">
                                             ${r.dimensions ? r.dimensions.join(', ') : ''}
@@ -1431,7 +1487,7 @@ class ResultsVisualizer {
             if (!this.isChartAvailable()) {
                 const container = canvas ? canvas.parentElement : document.getElementById('confidenceChart')?.parentElement;
                 if (container) {
-                    this.showFallbackUI(container.id || 'confidenceChartContainer', 'Chart.js не загружен. График недоступен.');
+                    this.showFallbackUI(container.id || 'confidenceChartContainer', 'Chart.js жүктелген жоқ. График қолжетімсіз (Chart.js not loaded. Chart unavailable).');
                 }
                 return;
             }
@@ -1464,7 +1520,7 @@ class ResultsVisualizer {
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Достоверность (%)',
+                        label: 'Сенімділік (Confidence) (%)',
                         data: values,
                         backgroundColor: values.map(v => {
                             if (v >= 80) return 'rgba(50, 200, 120, 0.7)';
@@ -1500,7 +1556,7 @@ class ResultsVisualizer {
                         tooltip: {
                             callbacks: {
                                 label: function (context) {
-                                    return 'Достоверность: ' + context.parsed.y.toFixed(1) + '%';
+                                    return 'Сенімділік (Confidence): ' + context.parsed.y.toFixed(1) + '%';
                                 }
                             }
                         }
@@ -1508,10 +1564,10 @@ class ResultsVisualizer {
                 }
             });
         } catch (error) {
-            console.error('Ошибка создания графика достоверности:', error);
+            console.error('Сенімділік графигін жасау қатесі (Error creating confidence chart):', error);
             const container = document.getElementById('confidenceChart')?.parentElement;
             if (container) {
-                this.showFallbackUI(container.id || 'confidenceChartContainer', 'Ошибка создания графика');
+                this.showFallbackUI(container.id || 'confidenceChartContainer', 'График жасау қатесі (Error creating chart)');
             }
         }
     }
@@ -1527,7 +1583,7 @@ class ResultsVisualizer {
             if (!this.isChartAvailable()) {
                 const container = canvas ? canvas.parentElement : document.getElementById('consistencyChart')?.parentElement;
                 if (container) {
-                    this.showFallbackUI(container.id || 'consistencyChartContainer', 'Chart.js не загружен. График недоступен.');
+                    this.showFallbackUI(container.id || 'consistencyChartContainer', 'Chart.js жүктелген жоқ. График қолжетімсіз (Chart.js not loaded. Chart unavailable).');
                 }
                 return;
             }
@@ -1560,7 +1616,7 @@ class ResultsVisualizer {
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Согласованность (%)',
+                        label: 'Сәйкестік (Consistency) (%)',
                         data: values,
                         backgroundColor: values.map(v => {
                             if (v >= 0.8) return 'rgba(74, 144, 226, 0.7)';
@@ -1596,7 +1652,7 @@ class ResultsVisualizer {
                         tooltip: {
                             callbacks: {
                                 label: function (context) {
-                                    return 'Согласованность: ' + context.parsed.y.toFixed(1) + '%';
+                                    return 'Сәйкестік (Consistency): ' + context.parsed.y.toFixed(1) + '%';
                                 }
                             }
                         }
@@ -1604,10 +1660,10 @@ class ResultsVisualizer {
                 }
             });
         } catch (error) {
-            console.error('Ошибка создания графика согласованности:', error);
+            console.error('Сәйкестік графигін жасау қатесі (Error creating consistency chart):', error);
             const container = document.getElementById('consistencyChart')?.parentElement;
             if (container) {
-                this.showFallbackUI(container.id || 'consistencyChartContainer', 'Ошибка создания графика');
+                this.showFallbackUI(container.id || 'consistencyChartContainer', 'График жасау қатесі (Error creating chart)');
             }
         }
     }

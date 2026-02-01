@@ -58,6 +58,7 @@ class NavigationController {
                 // Use centralized setTheme if available
                 if (window.app && window.app.ui && typeof window.app.ui.setTheme === 'function') {
                     window.app.ui.setTheme(newTheme);
+                    if (window.audioFeedback) window.audioFeedback.playToggle(newTheme === 'dark');
                 } else {
                     // Fallback to direct manipulation
                     if (isDark) {
@@ -201,13 +202,15 @@ class NavigationController {
             });
         }
 
-        // Close nav on mobile when clicking outside
+        // Close nav when clicking outside or on overlay
         document.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768) {
-                // If nav is open (active) and click is NOT inside nav and NOT on toggle
-                if (this.navElement.classList.contains('active') &&
-                    !this.navElement.contains(e.target) &&
-                    !this.navToggle.contains(e.target)) {
+            // Find if there's an active nav
+            if (this.navElement && this.navElement.classList.contains('active')) {
+                const isClickInsideNav = this.navElement.contains(e.target);
+                const isClickOnToggle = this.navToggle && this.navToggle.contains(e.target);
+                const isClickOnOverlay = e.target.classList.contains('nav-overlay');
+
+                if (!isClickInsideNav && !isClickOnToggle || isClickOnOverlay) {
                     this.closeNav();
                 }
             }
@@ -302,6 +305,7 @@ class NavigationController {
 
     navigateToScreen(screenName) {
         this.currentScreen = screenName;
+        if (window.audioFeedback) window.audioFeedback.playClick();
 
         // Update active state
         this.navItems.forEach(item => {
@@ -335,7 +339,7 @@ class NavigationController {
                 case 'about':
                     break;
                 default:
-                    console.warn(`Unknown screen: ${screenName}`);
+                    console.warn(`Белгісіз экран (Unknown screen): ${screenName}`);
             }
         }
 
@@ -354,14 +358,25 @@ class NavigationController {
         this.toggleCollapse();
     }
 
+    openNav() {
+        if (!this.overlay) {
+            this.overlay = document.createElement('div');
+            this.overlay.className = 'nav-overlay';
+            document.body.appendChild(this.overlay);
+            this.overlay.addEventListener('click', () => this.closeNav());
+        }
+
+        if (this.navElement) this.navElement.classList.add('active');
+        if (this.navToggle) this.navToggle.classList.add('active');
+        if (this.overlay) this.overlay.classList.add('active');
+        if (window.audioFeedback) window.audioFeedback.playNav();
+    }
+
     closeNav() {
         if (this.navElement) this.navElement.classList.remove('active');
         if (this.navToggle) this.navToggle.classList.remove('active');
-    }
-
-    openNav() {
-        if (this.navElement) this.navElement.classList.add('active');
-        if (this.navToggle) this.navToggle.classList.add('active');
+        if (this.overlay) this.overlay.classList.remove('active');
+        if (window.audioFeedback) window.audioFeedback.playNav();
     }
 
 

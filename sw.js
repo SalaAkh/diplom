@@ -1,13 +1,13 @@
 /**
- * Service Worker для PWA
- * Обеспечивает офлайн работу и кэширование
+ * PWA үшін Service Worker (Service Worker for PWA)
+ * Офлайн жұмыс пен кэштеуді қамтамасыз етеді (Provides offline work and caching)
  * 
- * Автор: Ахмедьянов Саламат КПО 9/22-2
- * Дата: 2026
+ * Авторы (Author): Ахмедьянов Саламат КПО 9/22-2
+ * Мерзімі (Date): 2026
  */
 
-const CACHE_NAME = 'self-knowledge-v1';
-const RUNTIME_CACHE = 'runtime-cache-v1';
+const CACHE_NAME = 'self-knowledge-v1.1';
+const RUNTIME_CACHE = 'runtime-cache-v1.1';
 
 // Файлы для кэширования при установке
 const STATIC_CACHE_URLS = [
@@ -23,33 +23,33 @@ const STATIC_CACHE_URLS = [
   './css/pages.css',
   './css/gamification.css',
   './css/themes.css',
-  './js/storage.js',
-  './js/localization.js',
-  './js/auth.js',
-  './js/scenarios-data.js',
-  './js/advanced-scenarios-data.js',
-  './js/analysis.js',
-  './js/advanced-analysis.js',
-  './js/dynamic-scenarios.js',
-  './js/visualization.js',
-  './js/visualization-3d.js',
-  './js/navigation-controller.js',
-  './js/background-3d.js',
-  './js/gamification.js',
-  './js/evolution-tracker.js',
-  './js/report-generator.js',
-  './js/3d-visualization.js',
-  './js/ai-analysis.js',
-  './js/ai-coach.js',
-  './js/ml-engine.js',
-  './js/quality-control.js',
-  './js/feedback-system.js',
-  './js/social-features.js',
-  './js/advanced-analytics.js',
-  './js/scenario-calibration.js',
-  './js/statistical-validation.js',
-  './js/test-reliability.js',
-  './js/quality-dashboard.js',
+  './js/services/storage.js',
+  './js/services/localization.js',
+  './js/services/auth.js',
+  './js/data/scenarios-data.js',
+  './js/data/advanced-scenarios-data.js',
+  './js/analysis/analysis.js',
+  './js/analysis/advanced-analysis.js',
+  './js/data/dynamic-scenarios.js',
+  './js/vis/visualization.js',
+  './js/vis/visualization-3d.js',
+  './js/ui/navigation-controller.js',
+  './js/vis/background-3d.js',
+  './js/services/gamification.js',
+  './js/analysis/evolution-tracker.js',
+  './js/analysis/report-generator.js',
+  './js/vis/3d-visualization.js',
+  './js/analysis/ai-analysis.js',
+  './js/analysis/ai-coach.js',
+  './js/analysis/ml-engine.js',
+  './js/analysis/quality-control.js',
+  './js/services/feedback-system.js',
+  './js/services/social-features.js',
+  './js/analysis/advanced-analytics.js',
+  './js/analysis/scenario-calibration.js',
+  './js/analysis/statistical-validation.js',
+  './js/analysis/test-reliability.js',
+  './js/analysis/quality-dashboard.js',
   './js/app.js',
   './data/scenarios.json',
   './data/advanced-scenarios.json',
@@ -59,12 +59,12 @@ const STATIC_CACHE_URLS = [
 
 // Установка Service Worker
 self.addEventListener('install', (event) => {
-  console.log('[Service Worker] Установка...');
+  console.log('[Service Worker] Орнатылуда... (Installing...)');
 
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[Service Worker] Кэширование статических файлов');
+        console.log('[Service Worker] Статикалық файлдарды кэштеу (Caching static files)');
         return cache.addAll(STATIC_CACHE_URLS.map(url => {
           try {
             return new Request(url, { mode: 'no-cors' });
@@ -72,7 +72,7 @@ self.addEventListener('install', (event) => {
             return url;
           }
         })).catch(err => {
-          console.warn('[Service Worker] Некоторые файлы не удалось закэшировать:', err);
+          console.warn('[Service Worker] Кейбір файлдар кэштелмеді (Some files could not be cached):', err);
           // Продолжаем даже если некоторые файлы не закэшировались
           return Promise.resolve();
         });
@@ -85,7 +85,7 @@ self.addEventListener('install', (event) => {
 
 // Активация Service Worker
 self.addEventListener('activate', (event) => {
-  console.log('[Service Worker] Активация...');
+  console.log('[Service Worker] Белсендірілуде... (Activating...)');
 
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -96,7 +96,7 @@ self.addEventListener('activate', (event) => {
             return cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE;
           })
           .map((cacheName) => {
-            console.log('[Service Worker] Удаление старого кэша:', cacheName);
+            console.log('[Service Worker] Ескі кэшті жою (Deleting old cache):', cacheName);
             return caches.delete(cacheName);
           })
       );
@@ -148,7 +148,7 @@ self.addEventListener('fetch', (event) => {
             return response;
           })
           .catch((error) => {
-            console.error('[Service Worker] Ошибка загрузки:', error);
+            console.error('[Service Worker] Жүктеу қатесі (Loading error):', error);
 
             // Если это HTML запрос, возвращаем офлайн страницу
             if (event.request.headers.get('accept').includes('text/html')) {
@@ -156,7 +156,7 @@ self.addEventListener('fetch', (event) => {
             }
 
             // Для других типов возвращаем пустой ответ
-            return new Response('Офлайн режим', {
+            return new Response('Офлайн режим (Offline mode)', {
               status: 503,
               statusText: 'Service Unavailable',
               headers: new Headers({
@@ -207,7 +207,7 @@ self.addEventListener('push', (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification('Система самопознания', options)
+    self.registration.showNotification('Өзіндік тану жүйесі (Self-Knowledge System)', options)
   );
 });
 

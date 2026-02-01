@@ -15,6 +15,18 @@ class UIController {
     }
 
     /**
+     * Escape HTML special characters to prevent XSS
+     * @param {string} str 
+     * @returns {string}
+     */
+    escapeHTML(str) {
+        if (!str || typeof str !== 'string') return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    /**
      * Helper to get text based on current language
      */
     getScenarioText(textObj) {
@@ -58,6 +70,10 @@ class UIController {
     showScenario(scenario, progress) {
         const container = document.getElementById('app');
         if (!container) return;
+
+        // Manage focus for accessibility
+        const appWrapper = document.getElementById('appWrapper');
+        if (appWrapper) appWrapper.scrollTop = 0;
 
         // Animation
         container.style.opacity = '0';
@@ -124,7 +140,24 @@ class UIController {
         setTimeout(() => {
             container.style.transition = 'opacity 0.3s';
             container.style.opacity = '1';
+            this.focusHeading();
         }, 10);
+    }
+
+    /**
+     * Focus the main heading for accessibility
+     */
+    focusHeading() {
+        const heading = document.querySelector('#app h1, #app h2, .page-title');
+        if (heading) {
+            heading.setAttribute('tabindex', '-1');
+            heading.focus();
+
+            // Announce to screen reader
+            if (window.keyboardNav) {
+                window.keyboardNav.announce(heading.textContent);
+            }
+        }
     }
 
     // ================= START ADVANCED UI =================
@@ -168,6 +201,7 @@ class UIController {
         setTimeout(() => {
             container.style.transition = 'opacity 0.3s';
             container.style.opacity = '1';
+            this.focusHeading();
         }, 10);
     }
 
@@ -711,15 +745,20 @@ class UIController {
         const successDiv = document.createElement('div');
         successDiv.className = 'auth-success';
         successDiv.style.cssText = `
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient-cosmic);
             color: white;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
             text-align: center;
-            font-weight: 500;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            animation: slideInDown 0.3s ease-out;
+            font-family: var(--font-body);
+            font-size: var(--text-lg);
+            font-weight: var(--weight-medium);
+            line-height: var(--leading-snug);
+            box-shadow: var(--shadow-lg);
+            animation: slideInDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            white-space: pre-line;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         `;
         successDiv.textContent = message;
 
@@ -761,7 +800,14 @@ class UIController {
         const result = this.app.auth.login(username);
 
         if (result.success) {
-            this.showAuthSuccess(this.i18n.t('loginSuccess') || `Добро пожаловать, ${username}!`);
+            const capitalizedName = username.charAt(0).toUpperCase() + username.slice(1);
+            const welcomeMsg = this.i18n.getLanguage() === 'ru'
+                ? `С возвращением,\n${capitalizedName}!`
+                : (this.i18n.getLanguage() === 'kk'
+                    ? `Қош келдіңіз,\n${capitalizedName}!`
+                    : `Welcome back,\n${capitalizedName}!`);
+
+            this.showAuthSuccess(welcomeMsg);
 
             // Redirect to intro after short delay
             setTimeout(() => {
@@ -805,7 +851,14 @@ class UIController {
         const result = this.app.auth.register(username, email);
 
         if (result.success) {
-            this.showAuthSuccess(this.i18n.t('registerSuccess') || `Аккаунт создан! Добро пожаловать, ${username}!`);
+            const capitalizedName = username.charAt(0).toUpperCase() + username.slice(1);
+            const welcomeMsg = this.i18n.getLanguage() === 'ru'
+                ? `Аккаунт создан!\nС возвращением, ${capitalizedName}!`
+                : (this.i18n.getLanguage() === 'kk'
+                    ? `Аккаунт жасалды!\nҚош келдіңіз, ${capitalizedName}!`
+                    : `Account created!\nWelcome, ${capitalizedName}!`);
+
+            this.showAuthSuccess(welcomeMsg);
 
             // Redirect to intro after short delay
             setTimeout(() => {
@@ -854,7 +907,7 @@ class UIController {
                 }
             }
         } catch (e) {
-            console.error('Error checking progress', e);
+            console.error('Прогресті тексеру қатесі (Error checking progress)', e);
         }
 
         // Попытка использовать шаблон из HTML (если он есть)
@@ -886,7 +939,8 @@ class UIController {
                     // Обновляем заголовок
                     const heroTitle = heroContent.querySelector('.hero-title');
                     if (heroTitle) {
-                        heroTitle.innerHTML = `${t('welcomeBack') || 'С возвращением'}, <br><span class="highlight">${user.username}</span>!`;
+                        const escapedUsername = this.escapeHTML(user.username);
+                        heroTitle.innerHTML = `${t('welcomeBack') || 'С возвращением'}, <br><span class="highlight">${escapedUsername}</span>!`;
                     }
                 } else {
                     // Гость
@@ -1004,6 +1058,7 @@ class UIController {
         requestAnimationFrame(() => {
             container.style.transition = 'opacity 0.5s';
             container.style.opacity = '1';
+            this.focusHeading();
         });
     }
 
@@ -1101,7 +1156,7 @@ class UIController {
         const status = document.getElementById('conversionStatus');
 
         if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
-            display.textContent = 'Ошибка: Выберите .json файл';
+            display.textContent = 'Қате: .json файлын таңдаңыз (Error: Select .json file)';
             display.style.color = 'red';
             actions.style.display = 'none';
             return;
@@ -1126,15 +1181,15 @@ class UIController {
                 }
 
                 actions.style.display = 'block';
-                status.textContent = 'Файл успешно прочитан. Выберите формат для конвертации.';
+                status.textContent = 'Файл сәтті оқылды. Конвертациялау форматын таңдаңыз (File read successfully. Select format for conversion).';
                 status.style.color = 'green';
 
                 // Store original filename for export naming
                 this.loadedFilenameBase = file.name.replace('.json', '');
 
             } catch (error) {
-                console.error('File parse error:', error);
-                status.textContent = 'Ошибка чтения файла: ' + error.message;
+                console.error('Файлды талдау қатесі (File parse error):', error);
+                status.textContent = 'Файлды оқу қатесі (Error reading file): ' + error.message;
                 status.style.color = 'red';
                 actions.style.display = 'none';
             }
@@ -1161,11 +1216,11 @@ class UIController {
             reportGen.downloadReport(this.loadedReportData, format, filename);
 
             setTimeout(() => {
-                status.textContent = 'Готово! Файл должен скачаться.';
+                status.textContent = 'Дайын! Файл жүктелуі керек (Ready! File should download).';
                 status.style.color = 'green';
             }, 1000);
         } else {
-            status.textContent = 'Ошибка: Генератор отчетов не найден.';
+            status.textContent = 'Қате: Есеп генераторы табылмады (Error: Report generator not found).';
             status.style.color = 'red';
         }
     }
@@ -1190,7 +1245,7 @@ class UIController {
                 }
             }
         } catch (e) {
-            console.error('Error checking progress', e);
+            console.error('Прогресті тексеру қатесі (Error checking progress)', e);
         }
 
         // Fallbacks provided directly in template literal for better readability
@@ -1264,6 +1319,7 @@ class UIController {
         setTimeout(() => {
             container.style.transition = 'opacity 0.3s';
             container.style.opacity = '1';
+            this.focusHeading();
         }, 10);
     }
 
@@ -1405,6 +1461,7 @@ class UIController {
                 if (aiContent) aiContent.innerHTML = '<div class="loading-spinner-sm"></div>';
             }
 
+            this.focusHeading();
         }, 500);
     }
 
@@ -1558,7 +1615,15 @@ class UIController {
                                         </div>
                                      `).join('')}
                                 </div>
-                            ` : `<p class="text-center text-secondary">${t('noHistory')}</p>`}
+                             ` : `
+                                <div class="empty-state">
+                                    <span class="material-symbols-rounded empty-icon">history</span>
+                                    <p>${t('noHistory')}</p>
+                                    <button class="btn btn-primary btn-sm mt-4" onclick="app.showTestTypeSelection()">
+                                        ${t('startTest')}
+                                    </button>
+                                </div>
+                            `}
                         </div>
                     </div>
                 </div>
@@ -1577,6 +1642,7 @@ class UIController {
                 }, 1000);
             }, 500);
         }
+        this.focusHeading();
     }
 
     /**
@@ -1718,17 +1784,19 @@ class UIController {
      * @param {Array} options.actions - Array of action buttons [{text, class, onClick}]
      * @param {boolean} options.closeOnOutsideClick - Close when clicking outside
      */
-    showModal({ title, content, actions = [], closeOnOutsideClick = true }) {
-        const modalId = 'genericModal';
-        let modal = document.getElementById(modalId);
+    showModal({ title, content, actions = [], closeOnOutsideClick = true, icon = null, type = 'default', id = 'genericModal', overlayClass = 'modal-overlay' }) {
+        let modal = document.getElementById(id);
 
         if (modal) modal.remove();
 
         modal = document.createElement('div');
-        modal.id = modalId;
-        modal.className = 'modal-overlay fade-in';
+        modal.id = id;
+        modal.className = `${overlayClass} modal-type-${type}`;
 
-        const closeHandler = () => modal.remove();
+        const closeHandler = () => {
+            modal.classList.remove('active');
+            setTimeout(() => modal.remove(), 300);
+        };
 
         if (closeOnOutsideClick) {
             modal.onclick = (e) => {
@@ -1738,13 +1806,16 @@ class UIController {
 
         const buttonsHtml = actions.map((btn, index) => {
             const btnClass = btn.class || 'btn-secondary';
-            return `<button class="btn ${btnClass}" id="modalBtn${index}">${btn.text}</button>`;
+            return `<button class="btn ${btnClass}" id="${id}Btn${index}">${btn.text}</button>`;
         }).join('');
 
         modal.innerHTML = `
             <div class="modal-content glass">
-                <span class="modal-close">&times;</span>
-                ${title ? `<h2 class="modal-title">${title}</h2>` : ''}
+                <button class="modal-close material-symbols-rounded" aria-label="Close">close</button>
+                <div class="modal-header">
+                    ${icon ? `<span class="material-symbols-rounded modal-type-icon">${icon}</span>` : ''}
+                    ${title ? `<h2 class="modal-title">${title}</h2>` : ''}
+                </div>
                 <div class="modal-body">${content}</div>
                 ${actions.length > 0 ? `<div class="modal-actions">${buttonsHtml}</div>` : ''}
             </div>
@@ -1752,13 +1823,17 @@ class UIController {
 
         document.body.appendChild(modal);
 
+        // Animation
+        setTimeout(() => modal.classList.add('active'), 10);
+
         // Bind events
         modal.querySelector('.modal-close').onclick = closeHandler;
 
         actions.forEach((btn, index) => {
-            const el = document.getElementById(`modalBtn${index}`);
+            const el = document.getElementById(`${id}Btn${index}`);
             if (el && btn.onClick) {
-                el.onclick = () => {
+                el.onclick = (e) => {
+                    if (e) e.stopPropagation();
                     btn.onClick();
                     if (btn.closeAfter !== false) closeHandler();
                 };
@@ -1772,10 +1847,15 @@ class UIController {
     showAlert(message, title = null) {
         const t = this.i18n.t.bind(this.i18n);
         this.showModal({
+            id: 'alertModal',
+            overlayClass: 'alert-overlay', // Protection from app.closeModal()
             title: title || t('attention') || 'Внимание',
             content: `<p>${message}</p>`,
+            icon: 'warning',
+            type: 'warning',
+            closeOnOutsideClick: false,
             actions: [
-                { text: 'OK', class: 'btn-primary', onClick: () => { } }
+                { text: t('ok') || 'OK', class: 'btn-primary', onClick: () => { } }
             ]
         });
     }

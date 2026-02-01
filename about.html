@@ -14,8 +14,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.googleusercontent.com; connect-src 'self' https://accounts.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;">
     <meta name="theme-color" content="#4a90e2">
     <meta name="author" content="Ахмедьянов Саламат КПО 9/22-2">
+    <meta name="description" content="Подробная информация о системе анализа личности Neural Constellation.">
+
+    <!-- SEO & Social Media -->
+    <meta property="og:title" content="О системе - Neural Constellation">
+    <meta property="og:description" content="Узнайте, как работает наша система анализа личностных предпочтений.">
+    <meta property="og:type" content="article">
+
     <title>О системе - Neural Constellation</title>
 
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
@@ -36,6 +45,10 @@
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/accessibility.css">
+
+    <!-- Resource Loader -->
+    <script src="js/services/resource-loader.js"></script>
 </head>
 
 <body class="dark-theme">
@@ -43,38 +56,42 @@
 
 
 
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link visually-hidden-focusable">Перейти к основному содержанию</a>
+
     <!-- Cosmic Navigation -->
-    <nav class="cosmic-nav" id="cosmicNav">
+    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Главная навигация">
         <!-- Desktop Collapse Button -->
-        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Expand Navigation"
+        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Свернуть навигацию"
             title="Развернуть панель">
             <span class="material-symbols-rounded">chevron_left</span>
         </button>
 
         <div class="nav-header">
-            <div class="nav-logo" id="navLogo"><span class="material-symbols-rounded">hub</span></div>
+            <div class="nav-logo" id="navLogo" aria-hidden="true"><span class="material-symbols-rounded">hub</span>
+            </div>
             <div class="nav-tagline" id="navTagline">Neural Constellation</div>
         </div>
 
-        <div class="nav-items" id="navItems">
-            <a href="index.html" class="nav-item">
-                <div class="nav-icon"><span class="material-symbols-rounded">home</span></div>
+        <div class="nav-items" id="navItems" role="menubar">
+            <a href="index.html" class="nav-item" role="menuitem">
+                <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">home</span></div>
                 <span class="nav-text" data-i18n="navHome">Главная</span>
 
             </a>
-            <a href="index.html" class="nav-item" onclick="localStorage.setItem('startTest', 'true')">
-                <div class="nav-icon"><span class="material-symbols-rounded">science</span></div>
+            <a href="index.html" class="nav-item" onclick="localStorage.setItem('startTest', 'true')" role="menuitem">
+                <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">science</span></div>
                 <span class="nav-text" data-i18n="navStartTest">Начать тест</span>
 
             </a>
-            <a href="profile.html" class="nav-item">
-                <div class="nav-icon"><span class="material-symbols-rounded">person</span></div>
+            <a href="profile.html" class="nav-item" role="menuitem">
+                <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">person</span></div>
                 <span class="nav-text" data-i18n="navProfile">Профиль</span>
 
             </a>
 
-            <a href="about.html" class="nav-item active">
-                <div class="nav-icon"><span class="material-symbols-rounded">info</span></div>
+            <a href="about.html" class="nav-item active" role="menuitem">
+                <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">info</span></div>
                 <span class="nav-text" data-i18n="navAbout">О системе</span>
 
             </a>
@@ -82,14 +99,25 @@
     </nav>
 
     <div class="app-wrapper has-nav" id="appWrapper">
-        <header class="app-header">
+        <header class="app-header" role="banner">
             <div class="container">
                 <div class="header-content">
-                    <div class="header-main"></div>
+                    <div class="header-main">
+                        <h1 class="logo" id="appName">Система самопознания</h1>
+                        <p class="tagline" id="tagline">Анализ личностных предпочтений и направлений развития</p>
+                    </div>
                     <div class="header-controls">
-                        <div class="language-selector" id="languageSelector"></div>
+                        <div class="language-selector" id="languageSelector" aria-label="Выбор языка"></div>
+
+                        <!-- Accessibility Button -->
+                        <button class="btn-icon header-btn accessibility-trigger" id="accessBtn"
+                            aria-label="Настройки доступности" title="Доступность"
+                            onclick="window.accessibilityService.toggleModal(true)">
+                            <span class="material-symbols-rounded">accessibility_new</span>
+                        </button>
+
                         <!-- Navigation Toggle (Now in controls) -->
-                        <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
+                        <button class="nav-toggle" id="navToggle" aria-label="Открыть меню навигации">
                             <div class="nav-toggle-icon">
                                 <span></span>
                                 <span></span>
@@ -101,15 +129,15 @@
             </div>
         </header>
 
-        <main class="app-main">
+        <main class="app-main" id="main-content" role="main" aria-label="О проекте" aria-labelledby="page-title">
             <div class="container">
                 <div class="about-content">
                     <!-- Page Header -->
                     <div class="page-header">
-                        <a href="index.html" class="btn-back">
+                        <a href="index.html" class="btn-back" aria-label="Назад на главную">
                             <span data-i18n="back">Назад</span>
                         </a>
-                        <h1 class="page-title" data-i18n="aboutTitle">О системе</h1>
+                        <h1 id="page-title" class="page-title" data-i18n="aboutTitle">О системе</h1>
                         <div style="width: 100px;"></div>
                     </div>
 
@@ -126,21 +154,21 @@
 
                     <!-- Features Grid -->
                     <h2 class="text-2xl font-bold mb-6 gradient-text" data-i18n="featuresTitle">Что вас ждет</h2>
-                    <div class="feature-grid mb-8">
-                        <div class="feature-card">
-                            <span class="feature-icon material-symbols-rounded">theater_comedy</span>
+                    <div class="feature-grid mb-8" role="list" aria-label="Возможности системы">
+                        <div class="feature-card" role="listitem">
+                            <span class="feature-icon material-symbols-rounded" aria-hidden="true">theater_comedy</span>
                             <h3 data-i18n="featInteractive">Интерактивные сценарии</h3>
                             <p data-i18n="featInteractiveDesc">12 глубоких интерактивных сценариев с множеством путей
                                 развития</p>
                         </div>
-                        <div class="feature-card">
-                            <span class="feature-icon material-symbols-rounded">psychology</span>
+                        <div class="feature-card" role="listitem">
+                            <span class="feature-icon material-symbols-rounded" aria-hidden="true">psychology</span>
                             <h3 data-i18n="featPattern">Анализ паттернов</h3>
                             <p data-i18n="featPatternDesc">Комплексный анализ когнитивных паттернов и стилей принятия
                                 решений</p>
                         </div>
-                        <div class="feature-card">
-                            <span class="feature-icon material-symbols-rounded">monitoring</span>
+                        <div class="feature-card" role="listitem">
+                            <span class="feature-icon material-symbols-rounded" aria-hidden="true">monitoring</span>
                             <h3 data-i18n="feat3D">Визуальный профиль</h3>
                             <p data-i18n="feat3DDesc">Динамический 3D-профиль личности в виде нейронного созвездия</p>
                         </div>
@@ -152,44 +180,106 @@
                             <h2 class="card-title gradient-text" data-i18n="dimensionsTitle">Измерения анализа</h2>
                         </div>
                         <div class="card-body">
-                            <div class="dimension-grid">
-                                <div class="dimension-card">
-                                    <div class="dim-icon"><span class="material-symbols-rounded">rocket_launch</span>
+                            <div class="dimension-grid" role="list" aria-label="Измерения анализа">
+                                <div class="dimension-card" role="listitem">
+                                    <div class="dim-icon" aria-hidden="true"><span
+                                            class="material-symbols-rounded">rocket_launch</span>
                                     </div>
                                     <h4 data-i18n="strategicName">Стратегиялық ойлау</h4>
                                     <p data-i18n="dimStrategyDesc">Ұзақ мерзімді жоспарлау және жүйелі ойлау қабілеті.
                                     </p>
                                 </div>
-                                <div class="dimension-card">
-                                    <div class="dim-icon"><span class="material-symbols-rounded">explore</span></div>
+                                <div class="dimension-card" role="listitem">
+                                    <div class="dim-icon" aria-hidden="true"><span
+                                            class="material-symbols-rounded">explore</span></div>
                                     <h4 data-i18n="explorerName">Зерттеуші</h4>
                                     <p data-i18n="dimResearchDesc">Жаңа тәжірибеге ашықтық және белгісізді зерттеуге
                                         құштарлық.</p>
                                 </div>
-                                <div class="dimension-card">
-                                    <div class="dim-icon"><span class="material-symbols-rounded">diversity_3</span>
+                                <div class="dimension-card" role="listitem">
+                                    <div class="dim-icon" aria-hidden="true"><span
+                                            class="material-symbols-rounded">diversity_3</span>
                                     </div>
                                     <h4 data-i18n="individualismName">Жекешілдік</h4>
                                     <p data-i18n="dimIndividualismDesc">Тәуелсіздік пен ұжымдық ойлау арасындағы
                                         тепе-теңдік.</p>
                                 </div>
-                                <div class="dimension-card">
-                                    <div class="dim-icon"><span class="material-symbols-rounded">memory</span></div>
+                                <div class="dimension-card" role="listitem">
+                                    <div class="dim-icon" aria-hidden="true"><span
+                                            class="material-symbols-rounded">memory</span></div>
                                     <h4 data-i18n="rationalityName">Рационалдық</h4>
                                     <p data-i18n="dimRationalityDesc">Шешім қабылдауда логика мен талдауға басымдық
                                         беру.</p>
                                 </div>
-                                <div class="dimension-card">
-                                    <div class="dim-icon"><span class="material-symbols-rounded">settings_suggest</span>
+                                <div class="dimension-card" role="listitem">
+                                    <div class="dim-icon" aria-hidden="true"><span
+                                            class="material-symbols-rounded">settings_suggest</span>
                                     </div>
                                     <h4 data-i18n="controlName">Бақылау</h4>
                                     <p data-i18n="dimControlDesc">Жағдай мен қоршаған ортаны басқаруға ұмтылу.</p>
                                 </div>
-                                <div class="dimension-card">
-                                    <div class="dim-icon"><span class="material-symbols-rounded">self_improvement</span>
+                                <div class="dimension-card" role="listitem">
+                                    <div class="dim-icon" aria-hidden="true"><span
+                                            class="material-symbols-rounded">self_improvement</span>
                                     </div>
                                     <h4 data-i18n="meaningName">Мағына іздеу</h4>
                                     <p data-i18n="dimMeaningDesc">Іс-әрекеттер мен оқиғалардан терең мағына іздеу.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accessibility Section -->
+                    <div class="about-section">
+                        <div class="container">
+                            <h2 class="section-title" data-i18n="accessTitle">Настройки доступности</h2>
+                            <p class="section-subtitle" style="margin-bottom: 2rem;">
+                                Мы стремимся сделать систему максимально доступной для всех пользователей.
+                            </p>
+                            <div class="about-grid">
+                                <div class="dimension-card">
+                                    <div class="dim-icon" aria-hidden="true">
+                                        <span class="material-symbols-rounded">visibility</span>
+                                    </div>
+                                    <h4 data-i18n="contrastLabel">Контрастность</h4>
+                                    <p>Поддержка режима высокой контрастности для людей с нарушениями зрения.</p>
+                                </div>
+                                <div class="dimension-card">
+                                    <div class="dim-icon" aria-hidden="true">
+                                        <span class="material-symbols-rounded">text_fields</span>
+                                    </div>
+                                    <h4 data-i18n="textSizeLabel">Размер текста</h4>
+                                    <p>Возможность масштабирования интерфейса и изменения размера шрифта.</p>
+                                </div>
+                                <div class="dimension-card">
+                                    <div class="dim-icon" aria-hidden="true">
+                                        <span class="material-symbols-rounded">keyboard</span>
+                                    </div>
+                                    <h4 data-i18n="navStartTest">Управление</h4>
+                                    <p>Полная навигация с помощью клавиатуры и поддержка горячих клавиш (Alt+1, Alt+T, и
+                                        др.).</p>
+                                </div>
+                                <div class="dimension-card">
+                                    <div class="dim-icon" aria-hidden="true">
+                                        <span class="material-symbols-rounded">volume_up</span>
+                                    </div>
+                                    <h4 data-i18n="audioFeedbackLabel">Звук</h4>
+                                    <p>Звуковое подтверждение действий и озвучивание важных изменений состояния.</p>
+                                </div>
+                                <div class="dimension-card">
+                                    <div class="dim-icon" aria-hidden="true">
+                                        <span class="material-symbols-rounded">auto_awesome_motion</span>
+                                    </div>
+                                    <h4 data-i18n="simplifiedLabel">Упрощение</h4>
+                                    <p>Удаление отвлекающих визуальных эффектов и упрощение структуры для лучшей
+                                        концентрации.</p>
+                                </div>
+                                <div class="dimension-card">
+                                    <div class="dim-icon" aria-hidden="true">
+                                        <span class="material-symbols-rounded">record_voice_over</span>
+                                    </div>
+                                    <h4 data-i18n="readingLabel">Чтение</h4>
+                                    <p>Синтез речи для автоматического прочтения ваших результатов и рекомендаций.</p>
                                 </div>
                             </div>
                         </div>
@@ -200,7 +290,7 @@
         </main>
 
         <!-- Footer -->
-        <footer class="app-footer">
+        <footer class="app-footer" role="contentinfo">
             <div class="container">
                 <p>
                     <span data-i18n="project">Дипломный проект</span> &copy; 2026
@@ -211,41 +301,118 @@
     </div>
 
     <!-- Theme Toggle (Floating) -->
-    <div class="theme-toggle" id="themeToggle" title="Тема">
-        <span class="theme-icon material-symbols-rounded">light_mode</span>
+    <div class="theme-toggle" id="themeToggle" title="Тема" role="button" tabindex="0" aria-label="Переключить тему"
+        onkeypress="if(event.key==='Enter') this.click();">
+        <span class="theme-icon material-symbols-rounded" aria-hidden="true">light_mode</span>
+    </div>
+
+    <!-- Accessibility Modal -->
+    <div class="modal" id="accessModal" aria-hidden="true" role="dialog" aria-modal="true"
+        aria-labelledby="accessTitle">
+        <div class="modal-overlay" onclick="window.accessibilityService.toggleModal(false)"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="accessTitle" data-i18n="accessTitle">Настройки доступности</h3>
+                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)"
+                    aria-label="Закрыть">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="contrastSelect" data-i18n="contrastLabel">Контрастность</label>
+                    <div class="select-wrapper">
+                        <select id="contrastSelect" class="form-select"
+                            onchange="window.accessibilityService.setContrast(this.value)">
+                            <option value="normal" data-i18n="contrastNormal">Обычная</option>
+                            <option value="high" data-i18n="contrastHigh">Высокая</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="textSizeSelect" data-i18n="textSizeLabel">Размер текста</label>
+                    <div class="select-wrapper">
+                        <select id="textSizeSelect" class="form-select"
+                            onchange="window.accessibilityService.setTextSize(this.value)">
+                            <option value="small" data-i18n="textSizeSmall">Мелкий</option>
+                            <option value="normal" data-i18n="textSizeNormal">Обычный</option>
+                            <option value="large" data-i18n="textSizeLarge">Крупный</option>
+                            <option value="extra-large" data-i18n="textSizeExtraLarge">Очень крупный</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="animCheck" onchange="window.accessibilityService.toggleAnimations()">
+                        <span data-i18n="animationsLabel">Анимации интерфейса</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="audioCheck" onchange="window.accessibilityService.toggleAudio()">
+                        <span data-i18n="audioFeedbackLabel">Звуковое сопровождение</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="simplifiedCheck"
+                            onchange="window.accessibilityService.toggleSimplified()">
+                        <span data-i18n="simplifiedLabel">Упрощенный режим</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="readingCheck" onchange="window.accessibilityService.toggleReading()">
+                        <span data-i18n="readingLabel">Озвучивание результатов</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="voiceControlCheck" onchange="window.voiceControl.toggle()">
+                        <span data-i18n="voiceControlLabel">Голосовое управление</span>
+                    </label>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Scripts -->
-    <script src="js/services/storage.js"></script>
-    <script src="js/services/localization.js"></script>
+    <script src="js/services/storage.js" defer></script>
+    <script src="js/services/localization.js" defer></script>
+    <script src="js/services/audio-feedback.js" defer></script>
+    <script src="js/services/keyboard-navigation.js" defer></script>
+    <script src="js/services/accessibility-service.js" defer></script>
+    <script src="js/services/voice-control.js" defer></script>
     <script src="js/ui/navigation-controller.js" defer></script>
 
-    <!-- Three.js (CDN) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Production-safe logger -->
-    <script src="js/services/logger.js"></script>
+    <script src="js/services/logger.js" defer></script>
     <!-- Configuration must load first -->
-    <script src="js/config/config.js"></script>
-    <script src="js/vis/background-3d.js"></script>
+    <script src="js/config/config.js" defer></script>
+    <script src="js/vis/background-3d.js" defer></script>
 
     <script>
         // Initialize background and theme
-        document.addEventListener('DOMContentLoaded', () => {
-            // Apply saved theme (handled by CSS/JS usually, but ensuring here)
+        window.addEventListener('DOMContentLoaded', () => {
+            // Load Three.js lazily
+            window.resourceLoader.loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js')
+                .then(() => {
+                    if (typeof NeuralBackground !== 'undefined') {
+                        new NeuralBackground('background-canvas');
+                    }
+                })
+                .catch(err => console.error('Error loading Three.js:', err));
+
+            // Apply saved theme
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'light') {
                 document.body.classList.remove('dark-theme');
             }
-
-            // Init 3D background with checks
-            const initBg = () => {
-                if (typeof NeuralBackground !== 'undefined' && typeof THREE !== 'undefined') {
-                    new NeuralBackground('background-canvas');
-                } else {
-                    setTimeout(initBg, 100);
-                }
-            };
-            initBg();
         });
     </script>
 </body>

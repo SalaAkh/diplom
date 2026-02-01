@@ -61,14 +61,14 @@ class TestManager {
 
             // Try built-in data first
             if (typeof ADVANCED_SCENARIOS_DATA !== 'undefined' && ADVANCED_SCENARIOS_DATA && ADVANCED_SCENARIOS_DATA.questions) {
-                console.log('Using built-in ADVANCED_SCENARIOS_DATA');
+                console.log('Кірістірілген ADVANCED_SCENARIOS_DATA қолданылуда (Using built-in ADVANCED_SCENARIOS_DATA)');
                 data = ADVANCED_SCENARIOS_DATA;
             } else if (typeof window !== 'undefined' && window.ADVANCED_SCENARIOS_DATA && window.ADVANCED_SCENARIOS_DATA.questions) {
-                console.log('Using window.ADVANCED_SCENARIOS_DATA');
+                console.log('window.ADVANCED_SCENARIOS_DATA қолданылуда (Using window.ADVANCED_SCENARIOS_DATA)');
                 data = window.ADVANCED_SCENARIOS_DATA;
             } else {
                 // Try fetch
-                console.log('Fetching advanced-scenarios.json...');
+                console.log('advanced-scenarios.json алынуда... (Fetching advanced-scenarios.json...)');
                 try {
                     const response = await fetch('data/advanced-scenarios.json');
                     if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -236,6 +236,7 @@ class TestManager {
     recordBasicAnswer(choice, scenarioId) {
         if (this.isTransitioning) return;
         this.isTransitioning = true;
+        if (window.audioFeedback) window.audioFeedback.playClick();
 
         // Validation moved from app.js
         const choiceData = { scenarioId, choice };
@@ -271,6 +272,7 @@ class TestManager {
     recordAdvancedAnswer(choice, questionId) {
         if (this.isTransitioning) return;
         this.isTransitioning = true;
+        if (window.audioFeedback) window.audioFeedback.playClick();
 
         this.analyzer.recordChoice(questionId, choice);
 
@@ -386,11 +388,12 @@ class TestManager {
      */
     finishTest() {
         this.app.state = 'results';
+        if (window.audioFeedback) window.audioFeedback.playSuccess();
 
         // Clear progress from storage since test is finished
         if (this.storage) {
             this.storage.clearAll(); // Clears 'testProgress'
-            console.log('✅ Test finished, progress cleared');
+            console.log('✅ Тест аяқталды, прогресс тазартылды (✅ Test finished, progress cleared)');
         }
 
         if (this.ui) {

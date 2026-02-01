@@ -63,6 +63,12 @@ body {
     min-height: 100vh;
 }
 
+.dark-theme #app {
+    background: rgba(20, 20, 35, 0.2);
+    /* Further reduced to 0.2 */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 body:not(.dark-theme) #background-canvas {
     opacity: 0.4;
     /* Increased opacity to make dark particles visible */
@@ -137,10 +143,10 @@ body:not(.dark-theme) #background-canvas {
 }
 
 #app {
-    background: transparent !important;
-    /* Allow cards to handle background */
-    backdrop-filter: none;
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.01);
+    /* Maximum transparency */
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border: 1px solid var(--border-color);
     border-radius: 20px;
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
@@ -270,32 +276,105 @@ body:not(.dark-theme) .google-signin-container {
 }
 
 .btn-primary:active {
-    transform: translateY(-1px);
+    transform: translateY(-1px) scale(0.98);
+}
+
+/* Button Shine Effect */
+.btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -100%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: rotate(30deg);
+    transition: none;
+    pointer-events: none;
+}
+
+.btn:hover::after {
+    left: 150%;
+    transition: left 0.7s ease-in-out;
 }
 
 .btn-secondary {
-    background: rgba(255, 255, 255, 0.05);
-    color: #00c6fb;
-    border: 2px solid #00c6fb;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 15px rgba(0, 198, 251, 0.2);
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 0 10px rgba(255, 255, 255, 0.1);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
 }
 
-/* Ensure secondary style overrides primary gradient even if size class is present */
+/* Pulse effect for visibility */
+.btn-secondary.btn-xl {
+    animation: btnPulse 3s infinite;
+}
+
+@keyframes btnPulse {
+    0% {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(255, 255, 255, 0.2);
+    }
+
+    70% {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+
+    100% {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+/* Specific overrides for large secondary buttons */
 .btn-secondary.btn-xl,
 .btn-secondary.btn-lg {
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid #00c6fb;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    font-weight: 700;
+}
+
+/* Light Theme Adjustments - darker glass or outline */
+body:not(.dark-theme) .btn-secondary {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: #005bea;
+    color: #005bea;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .btn-secondary:hover,
 .btn-secondary.btn-xl:hover,
 .btn-secondary.btn-lg:hover {
-    background: linear-gradient(135deg, rgba(0, 198, 251, 0.1), rgba(0, 91, 234, 0.1));
-    color: #00d2ff;
-    border-color: #00d2ff;
-    box-shadow: 0 6px 20px rgba(0, 198, 251, 0.4);
-    transform: translateY(-2px);
+    background: #ffffff;
+    color: #005bea !important;
+    border-color: #ffffff;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    transform: translateY(-4px) scale(1.02);
+}
+
+.btn-secondary:hover .material-symbols-rounded {
+    animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Scenario Screen */
@@ -2035,110 +2114,151 @@ select:focus-visible {
 }
 
 .language-btn {
-    background: var(--card-bg);
-    border: 2px solid var(--border-color);
-    padding: 0.6rem 1rem;
-    border-radius: calc(var(--border-radius) / 2);
+    background: rgba(74, 144, 226, 0.04);
+    border: 1px solid rgba(74, 144, 226, 0.2);
+    padding: 0.6rem 1.2rem;
+    border-radius: 100px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    transition: var(--transition);
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    transition: all var(--duration-normal, 0.3s) var(--ease-out, ease);
+    color: var(--text-color);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+
 .language-btn:hover {
-    border-color: var(--primary-color);
-    background: rgba(74, 144, 226, 0.05);
+    background: rgba(74, 144, 226, 0.15);
+    border-color: var(--primary-color, #4a90e2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(74, 144, 226, 0.2);
 }
+
+.language-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
 
 .language-flag {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 16px;
+    width: 22px;
+    height: 15px;
     overflow: hidden;
-    border-radius: 2px;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.language-btn:hover .language-flag {
+    transform: scale(1.1);
 }
 
 .language-flag svg {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
 }
 
 .language-name {
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-color);
+    letter-spacing: 0.02em;
 }
 
 .language-arrow {
-    font-size: 0.7rem;
-    color: var(--text-light);
-    transition: transform 0.3s;
+    font-size: 0.8rem;
+    color: var(--primary-color, #4a90e2);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
+.language-menu.show~.language-btn .language-arrow {
+    transform: rotate(180deg);
+}
+
 
 .language-menu {
     position: absolute;
-    top: calc(100% + 0.5rem);
+    top: calc(100% + 0.8rem);
     right: 0;
-    background: var(--card-bg);
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-hover);
-    min-width: 180px;
+    background: rgba(15, 23, 42, 0.6);
+    /* Deeper but transparent */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    /* More rounded menu */
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+    min-width: 210px;
     display: none;
     z-index: 1000;
     overflow: hidden;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    padding: 0.8rem;
 }
 
 .language-menu.show {
     display: block;
-    animation: slideDown 0.3s ease;
+    animation: menuAppear 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-@keyframes slideDown {
+@keyframes menuAppear {
     from {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(20px) scale(0.9);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 }
 
+
 .language-option {
     width: 100%;
-    padding: 0.8rem 1rem;
+    padding: 0.85rem 1.2rem;
     background: transparent;
     border: none;
+    border-radius: 100px;
+    /* Full pill shape for options */
     text-align: left;
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    transition: var(--transition);
+    gap: 0.8rem;
+    transition: all 0.2s ease;
     color: var(--text-color);
+    margin-bottom: 4px;
+}
+
+.language-option:last-child {
+    margin-bottom: 0;
 }
 
 .language-option:hover {
-    background: var(--bg-color);
+    background: rgba(74, 144, 226, 0.15);
+    color: var(--primary-color, #4a90e2);
 }
 
 .language-option.active {
-    background: rgba(74, 144, 226, 0.1);
-    font-weight: 600;
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.2), rgba(0, 198, 251, 0.1));
+    color: var(--primary-color, #4a90e2);
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.1);
 }
 
 .language-check {
-    color: var(--primary-color);
-    font-weight: 700;
+    margin-left: auto;
+    color: var(--primary-color, #4a90e2);
+    font-size: 1.1rem;
 }
+
 
 /* Theme Toggle */
 .theme-toggle {

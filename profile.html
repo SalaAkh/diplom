@@ -14,8 +14,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.googleusercontent.com; connect-src 'self' https://accounts.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;">
     <meta name="theme-color" content="#4a90e2">
     <meta name="author" content="Ахмедьянов Саламат КПО 9/22-2">
+    <meta name="description" content="Ваш личный профиль в системе Neural Constellation.">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- SEO & Social Media -->
+    <meta property="og:title" content="Профиль - Neural Constellation">
+    <meta property="og:type" content="website">
+
     <title>Профиль - Neural Constellation</title>
 
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
@@ -29,10 +38,8 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
-    <!-- PDF Generation (CDN) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
-        integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Resource Loader -->
+    <script src="js/services/resource-loader.js"></script>
 
     <!-- Стили -->
     <!-- Стили - Design System First -->
@@ -46,6 +53,7 @@
     <link rel="stylesheet" href="css/gamification.css">
     <link rel="stylesheet" href="css/google-auth.css">
     <link rel="stylesheet" href="css/transitions.css">
+    <link rel="stylesheet" href="css/accessibility.css">
 </head>
 
 <body class="dark-theme">
@@ -61,38 +69,42 @@
 
 
 
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link visually-hidden-focusable">Перейти к основному содержанию</a>
+
     <!-- Cosmic Navigation -->
-    <nav class="cosmic-nav" id="cosmicNav">
+    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Главная навигация">
         <!-- Desktop Collapse Button -->
-        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Expand Navigation"
+        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Свернуть навигацию"
             title="Развернуть панель">
             <span class="material-symbols-rounded">chevron_left</span>
         </button>
 
         <div class="nav-header">
-            <div class="nav-logo" id="navLogo"><span class="material-symbols-rounded">hub</span></div>
+            <div class="nav-logo" id="navLogo" aria-hidden="true"><span class="material-symbols-rounded">hub</span>
+            </div>
             <div class="nav-tagline" id="navTagline">Neural Constellation</div>
         </div>
 
-        <div class="nav-items" id="navItems">
-            <a href="index.html" class="nav-item">
-                <div class="nav-icon"><span class="material-symbols-rounded">home</span></div>
+        <div class="nav-items" id="navItems" role="menubar">
+            <a href="index.html" class="nav-item" role="menuitem">
+                <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">home</span></div>
                 <span class="nav-text" data-i18n="navHome">Home</span>
 
             </a>
-            <a href="index.html#test" class="nav-item">
-                <div class="nav-icon"><span class="material-symbols-rounded">science</span></div>
+            <a href="index.html#test" class="nav-item" role="menuitem">
+                <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">science</span></div>
                 <span class="nav-text" data-i18n="navStartTest">Start Test</span>
 
             </a>
-            <a href="profile.html" class="nav-item active">
-                <div class="nav-icon"><span class="material-symbols-rounded">person</span></div>
+            <a href="profile.html" class="nav-item active" role="menuitem">
+                <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">person</span></div>
                 <span class="nav-text" data-i18n="navProfile">Profile</span>
 
             </a>
 
-            <a href="about.html" class="nav-item">
-                <div class="nav-icon"><span class="material-symbols-rounded">info</span></div>
+            <a href="about.html" class="nav-item" role="menuitem">
+                <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">info</span></div>
                 <span class="nav-text" data-i18n="navAbout">About</span>
 
             </a>
@@ -100,14 +112,25 @@
     </nav>
 
     <div class="app-wrapper has-nav" id="appWrapper">
-        <header class="app-header">
+        <header class="app-header" role="banner">
             <div class="container">
                 <div class="header-content">
-                    <div class="header-main"></div>
+                    <div class="header-main">
+                        <h1 class="logo" id="appName">Система самопознания</h1>
+                        <p class="tagline" id="tagline">Анализ личностных предпочтений и направлений развития</p>
+                    </div>
                     <div class="header-controls">
-                        <div class="language-selector" id="languageSelector"></div>
+                        <div class="language-selector" id="languageSelector" aria-label="Выбор языка"></div>
+
+                        <!-- Accessibility Button -->
+                        <button class="btn-icon header-btn accessibility-trigger" id="accessBtn"
+                            aria-label="Настройки доступности" title="Доступность"
+                            onclick="window.accessibilityService.toggleModal(true)">
+                            <span class="material-symbols-rounded">accessibility_new</span>
+                        </button>
+
                         <!-- Navigation Toggle (Now in controls) -->
-                        <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
+                        <button class="nav-toggle" id="navToggle" aria-label="Открыть меню навигации">
                             <div class="nav-toggle-icon">
                                 <span></span>
                                 <span></span>
@@ -119,15 +142,15 @@
             </div>
         </header>
 
-        <main class="app-main">
+        <main class="app-main" id="main-content" role="main" aria-label="Контент профиля">
             <div class="container">
-                <div id="app">
+                <div id="app" aria-live="polite" aria-atomic="true">
                     <!-- Profile content will be injected here -->
                 </div>
             </div>
         </main>
 
-        <footer class="app-footer">
+        <footer class="app-footer" role="contentinfo">
             <div class="container">
                 <p id="footerText"></p>
                 <p class="footer-note" id="footerNote"></p>
@@ -136,43 +159,137 @@
     </div>
 
     <!-- Theme Toggle (Floating) -->
-    <div class="theme-toggle" id="themeToggle" data-i18n-title="theme" title="Тақырып">
-        <span class="theme-icon material-symbols-rounded">light_mode</span>
+    <div class="theme-toggle" id="themeToggle" data-i18n-title="theme" title="Тақырып" role="button" tabindex="0"
+        aria-label="Переключить тему" onkeypress="if(event.key==='Enter') this.click();">
+        <span class="theme-icon material-symbols-rounded" aria-hidden="true">light_mode</span>
+    </div>
+
+    <!-- Accessibility Modal -->
+    <div class="modal" id="accessModal" aria-hidden="true" role="dialog" aria-modal="true"
+        aria-labelledby="accessTitle">
+        <div class="modal-overlay" onclick="window.accessibilityService.toggleModal(false)"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="accessTitle" data-i18n="accessTitle">Настройки доступности</h3>
+                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)"
+                    aria-label="Закрыть">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="contrastSelect" data-i18n="contrastLabel">Контрастность</label>
+                    <div class="select-wrapper">
+                        <select id="contrastSelect" class="form-select"
+                            onchange="window.accessibilityService.setContrast(this.value)">
+                            <option value="normal" data-i18n="contrastNormal">Обычная</option>
+                            <option value="high" data-i18n="contrastHigh">Высокая</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="textSizeSelect" data-i18n="textSizeLabel">Размер текста</label>
+                    <div class="select-wrapper">
+                        <select id="textSizeSelect" class="form-select"
+                            onchange="window.accessibilityService.setTextSize(this.value)">
+                            <option value="small" data-i18n="textSizeSmall">Мелкий</option>
+                            <option value="normal" data-i18n="textSizeNormal">Обычный</option>
+                            <option value="large" data-i18n="textSizeLarge">Крупный</option>
+                            <option value="extra-large" data-i18n="textSizeExtraLarge">Очень крупный</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="animCheck" onchange="window.accessibilityService.toggleAnimations()">
+                        <span data-i18n="animationsLabel">Анимации интерфейса</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="audioCheck" onchange="window.accessibilityService.toggleAudio()">
+                        <span data-i18n="audioFeedbackLabel">Звуковое сопровождение</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="simplifiedCheck"
+                            onchange="window.accessibilityService.toggleSimplified()">
+                        <span data-i18n="simplifiedLabel">Упрощенный режим</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="readingCheck" onchange="window.accessibilityService.toggleReading()">
+                        <span data-i18n="readingLabel">Озвучивание результатов</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="voiceControlCheck" onchange="window.voiceControl.toggle()">
+                        <span data-i18n="voiceControlLabel">Голосовое управление</span>
+                    </label>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Scripts - Full stack for app.js -->
-    <!-- Chart.js (CDN - Required for graphs) -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
     <!-- Production-safe logger -->
-    <script src="js/services/logger.js"></script>
+    <script src="js/services/logger.js" defer></script>
     <!-- Configuration must load first -->
-    <script src="js/config/config.js"></script>
-    <script src="js/services/storage.js"></script>
-    <script src="js/services/localization.js"></script>
-    <script src="js/services/auth.js"></script>
-    <script src="js/data/scenarios-data.js"></script>
-    <script src="js/data/advanced-scenarios-data.js"></script>
-    <script src="js/analysis/analysis.js"></script>
-    <script src="js/analysis/advanced-analysis.js"></script>
-    <script src="js/data/dynamic-scenarios.js"></script>
-    <script src="js/vis/visualization.js"></script>
+    <script src="js/config/config.js" defer></script>
+    <script src="js/services/storage.js" defer></script>
+    <script src="js/services/localization.js" defer></script>
+    <script src="js/services/auth.js" defer></script>
+    <script src="js/data/scenarios-data.js" defer></script>
+    <script src="js/data/advanced-scenarios-data.js" defer></script>
+    <script src="js/analysis/analysis.js" defer></script>
+    <script src="js/analysis/advanced-analysis.js" defer></script>
+    <script src="js/data/dynamic-scenarios.js" defer></script>
+    <script src="js/vis/visualization.js" defer></script>
 
     <!-- Refactored Modules - MUST load before app.js -->
-    <script src="js/ui/ui-controller.js"></script>
-    <script src="js/managers/test-manager.js"></script>
-    <script src="js/managers/results-manager.js"></script>
-    <script src="js/analysis/report-generator.js"></script>
+    <script src="js/ui/ui-controller.js" defer></script>
+    <script src="js/managers/test-manager.js" defer></script>
+    <script src="js/managers/results-manager.js" defer></script>
+    <script src="js/analysis/report-generator.js" defer></script>
 
     <script src="js/analysis/evolution-tracker.js" defer></script>
     <script src="js/ui/navigation-controller.js" defer></script>
-    <!-- Three.js (CDN) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="js/services/feedback-system.js"></script>
-    <script src="js/services/feedback-service.js"></script>
-    <script src="js/vis/background-3d.js"></script>
+    <script src="js/services/feedback-system.js" defer></script>
+    <script src="js/services/feedback-service.js" defer></script>
+    <script src="js/vis/background-3d.js" defer></script>
+    <script src="js/services/audio-feedback.js" defer></script>
+    <script src="js/services/keyboard-navigation.js" defer></script>
+    <script src="js/services/accessibility-service.js" defer></script>
+    <script src="js/services/voice-control.js" defer></script>
+
+    <!-- Тяжелые библиотеки загружаются лениво через ResourceLoader -->
+    <script>
+        const heavyLibs = [
+            'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+            'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
+        ];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            window.resourceLoader.loadScripts(heavyLibs)
+                .then(() => {
+                    console.log('Heavy libraries loaded in profile');
+                    window.dispatchEvent(new CustomEvent('threejs-loaded'));
+                })
+                .catch(err => console.error('Error loading libraries:', err));
+        });
+    </script>
 
     <!-- Main App Logic -->
-    <script src="js/app.js"></script>
+    <script src="js/app.js" defer></script>
 </body>
 
 </html>

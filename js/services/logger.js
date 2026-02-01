@@ -1,6 +1,6 @@
 /**
- * Production-safe Logger
- * Автоматически отключает логи в production
+ * Өндіріске қауіпсіз логгер (Production-safe Logger)
+ * Өндіріс режимінде логтарды автоматты түрде өшіреді (Automatically disables logs in production)
  */
 
 const IS_PRODUCTION = window.location.hostname !== 'localhost' &&
@@ -9,13 +9,13 @@ const IS_PRODUCTION = window.location.hostname !== 'localhost' &&
 
 const logger = {
     log: IS_PRODUCTION ? () => { } : console.log.bind(console),
-    warn: console.warn.bind(console), // Всегда показываем warnings
-    error: console.error.bind(console), // Всегда показываем errors
+    warn: console.warn.bind(console), // Ескертулерді әрқашан көрсетеміз (Always show warnings)
+    error: console.error.bind(console), // Қателерді әрқашан көрсетеміз (Always show errors)
     debug: IS_PRODUCTION ? () => { } : console.log.bind(console, '[DEBUG]'),
     info: IS_PRODUCTION ? () => { } : console.info.bind(console)
 };
 
-// Экспорт для использования в других модулях
+// Басқа модульдерде қолдану үшін экспорттау (Export for use in other modules)
 if (typeof window !== 'undefined') {
     window.logger = logger;
 }
