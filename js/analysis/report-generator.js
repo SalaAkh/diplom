@@ -125,12 +125,14 @@ class ReportGenerator {
 
         // Use custom padding based on the page to fix alignment issues
         // Profile page needs less padding than Index page due to different CSS interference
-        let currentPaddingLeft = '260px';
+        let currentPaddingLeft = '250px';
         let currentTotalWidth = '1016px';
+        let currentPaddingRight = '5px';
 
         if (isProfilePage) {
             currentPaddingLeft = '250px';
             currentTotalWidth = '980px';
+            currentPaddingRight = '5px';
         }
 
         const printWrapperStyle = format === 'pdf'
