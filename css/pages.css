@@ -100,6 +100,7 @@
     max-width: 600px;
     margin: 0 auto;
     line-height: var(--leading-relaxed);
+    text-align: justify;
 }
 
 .feature-grid {
@@ -151,6 +152,7 @@
     font-size: var(--text-base);
     color: var(--text-secondary);
     line-height: var(--leading-relaxed);
+    text-align: justify;
 }
 
 /* Dimension Cards */
@@ -274,11 +276,16 @@
     color: var(--text-secondary);
     line-height: var(--leading-relaxed);
     flex-grow: 1;
+    text-align: justify;
 }
 
 /* ============================================
    PROFILE PAGE SPECIFIC
    ============================================ */
+
+.section-subtitle {
+    text-align: justify;
+}
 
 .profile-hero {
     text-align: center;

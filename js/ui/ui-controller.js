@@ -1415,7 +1415,7 @@ class UIController {
                         <!-- Profile Card -->
                          <div class="result-card profile-card">
                             <h2>${profile.type}</h2>
-                            <p class="profile-summary">${profile.summary}</p>
+                            <p class="profile-summary" style="text-align: justify;">${profile.summary}</p>
                             <div class="tags-container">
                                 ${profile.traits.map(trait => `<span class="tag">${trait}</span>`).join('')}
                             </div>
@@ -1493,7 +1493,7 @@ class UIController {
                     <h3>🎯 ${t('personalityType')}</h3>
                     <div class="personality-type-card">
                         <h4>${aiAnalysis.personalityType.name}</h4>
-                        <p>${aiAnalysis.personalityType.description}</p>
+                        <p style="text-align: justify;">${aiAnalysis.personalityType.description}</p>
                         <div class="confidence-badge">${t('confidence')} ${confidence}%</div>
                     </div>
                 </div>
@@ -1507,7 +1507,7 @@ class UIController {
                 html += `
                     <div class="insight-item insight-${insight.importance}">
                         <h4>${insight.title}</h4>
-                        <p>${insight.text}</p>
+                        <p style="text-align: justify;">${insight.text}</p>
                     </div>
                 `;
             });
@@ -1569,13 +1569,13 @@ class UIController {
                                 <canvas id="evolutionChart" class="crisp-chart"></canvas>
                             </div>
                             ${evolutionReport && evolutionReport.insights ? `
-                                <div class="evolution-insights mt-4">
-                                    <h3 class="text-lg font-semibold mb-2">${t('keyInsights') || 'Ключевые инсайты'}</h3>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="evolution-insights mt-8">
+                                    <h3 class="text-lg font-semibold mb-4">${t('keyInsights') || 'Ключевые инсайты'}</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         ${evolutionReport.insights.slice(0, 2).map(insight => `
-                                            <div class="insight-card ${insight.type || 'neutral'}" style="background: rgba(var(--primary-rgb), 0.05); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--primary-color);">
-                                                <h4 style="margin: 0 0 0.5rem 0; color: var(--primary-color);">${insight.title}</h4>
-                                                <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">${insight.text}</p>
+                                            <div class="insight-card ${insight.type || 'neutral'}" style="background: rgba(var(--primary-rgb), 0.05); padding: 1.25rem; border-radius: 12px; border-left: 4px solid var(--primary-color);">
+                                                <h4 style="margin: 0 0 0.75rem 0; color: var(--primary-color);">${insight.title}</h4>
+                                                <p style="margin: 0; font-size: 0.95rem; opacity: 0.9; line-height: 1.5; text-align: justify;">${insight.text}</p>
                                             </div>
                                         `).join('')}
                                     </div>

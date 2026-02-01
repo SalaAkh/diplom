@@ -161,6 +161,8 @@ class ReportGenerator {
             text-align: center; /* Центрирование всего текста */
         }
         
+        p { text-align: justify; }
+        
         /* Table Styles for DOC compatibility */
         table { border-collapse: collapse; width: 100%; margin: 0 auto; }
         td, th { padding: 10px; vertical-align: top; text-align: center; }
@@ -404,7 +406,7 @@ class ReportGenerator {
             <span class="ai-badge">AI ANALYTICS</span>
             <h2 style="border:none; margin-bottom:10px;">${t('personalityType')}</h2>
             <h3 style="color:#005bea; font-size:22px; margin-top:0;">${data.aiAnalysis.personalityType.name}</h3>
-            <p style="color:#4a5568; margin-top:10px; line-height:1.7;">${data.aiAnalysis.personalityType.description}</p>
+            <p style="color:#4a5568; margin-top:10px; line-height:1.7; text-align: justify;">${data.aiAnalysis.personalityType.description}</p>
         </div>
     </div>
     ` : ''}
