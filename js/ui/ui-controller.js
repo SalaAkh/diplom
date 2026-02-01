@@ -1375,6 +1375,14 @@ class UIController {
                          </div>
                     </div>
                 </div>
+
+                <div class="results-actions-bottom animate-in" style="animation-delay: 0.6s">
+                    <button class="btn btn-xl btn-primary pulse-animation" onclick="app.downloadResults('pdf')">
+                        <span class="material-symbols-rounded">picture_as_pdf</span>
+                        ${t('downloadResults') || 'Download PDF'}
+                    </button>
+                </div>
+            </div>
     `;
 
             container.innerHTML = content;

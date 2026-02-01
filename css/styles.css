@@ -842,6 +842,368 @@ h3 {
     }
 }
 
+/* ========================================
+   УЛУЧШЕННАЯ ДОСТУПНОСТЬ (A11y)
+   ======================================== */
+
+/* Улучшенные focus states для всех интерактивных элементов */
+*:focus {
+    outline: none;
+    /* Убираем стандартный outline */
+}
+
+*:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Специфичные focus states для кнопок */
+.btn:focus-visible {
+    outline: 3px solid rgba(0, 198, 251, 0.8);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(0, 198, 251, 0.2);
+}
+
+.option-btn:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    transform: translateX(5px);
+}
+
+/* Focus для ссылок */
+a:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    text-decoration: underline;
+}
+
+/* Focus для input полей */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 1px;
+    border-color: var(--primary-color);
+}
+
+/* ========================================
+   ПОДДЕРЖКА PREFERS-REDUCED-MOTION
+   ======================================== */
+
+/* Уважаем предпочтения пользователя по анимациям */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* Отключаем shimmer эффект */
+    .progress-fill::after {
+        animation: none;
+    }
+
+    /* Отключаем анимацию спиннера */
+    .spinner,
+    .loading-spinner {
+        animation: none;
+    }
+}
+
+/* ========================================
+   LOADING STATES
+   ======================================== */
+
+/* Cosmic Loading State */
+.loading-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-color);
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+}
+
+.loading-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.cosmic-spinner {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cosmic-spinner::before,
+.cosmic-spinner::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid transparent;
+}
+
+.cosmic-spinner::before {
+    width: 100%;
+    height: 100%;
+    border-top-color: #00c6fb;
+    border-bottom-color: #005bea;
+    animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+}
+
+.cosmic-spinner::after {
+    width: 70%;
+    height: 70%;
+    border-left-color: #7b68ee;
+    border-right-color: #ff00de;
+    animation: spin-reverse 1s linear infinite;
+}
+
+.loading-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--text-color);
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #00c6fb, #7b68ee, #00c6fb);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer-text 3s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spin-reverse {
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes shimmer-text {
+    to {
+        background-position: 200% center;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Loading spinner компонент */
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    gap: 1rem;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 198, 251, 0.2);
+    border-top-color: #00c6fb;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.spinner-text {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+/* Скрытый текст для screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Skip to main content link */
+.skip-to-main {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 0 0 4px 0;
+    z-index: 10000;
+    transition: top 0.3s;
+}
+
+.skip-to-main:focus {
+    top: 0;
+}
+
+/* ========================================
+   УЛУЧШЕННЫЕ TOAST УВЕДОМЛЕНИЯ
+   ======================================== */
+
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    min-width: 300px;
+    max-width: 400px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    pointer-events: auto;
+    animation: slideInRight 0.3s ease-out;
+    backdrop-filter: blur(10px);
+}
+
+.toast.toast-success {
+    border-left: 4px solid var(--success-color);
+}
+
+.toast.toast-error {
+    border-left: 4px solid var(--danger-color);
+}
+
+.toast.toast-warning {
+    border-left: 4px solid #f39c12;
+}
+
+.toast.toast-info {
+    border-left: 4px solid var(--primary-color);
+}
+
+.toast-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.toast-success .toast-icon {
+    color: var(--success-color);
+}
+
+.toast-error .toast-icon {
+    color: var(--danger-color);
+}
+
+.toast-warning .toast-icon {
+    color: #f39c12;
+}
+
+.toast-info .toast-icon {
+    color: var(--primary-color);
+}
+
+.toast-message {
+    flex: 1;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.toast-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.toast.toast-exit {
+    animation: slideOutRight 0.3s ease-out forwards;
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+/* Мобильная адаптация toast */
+@media (max-width: 768px) {
+    .toast-container {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+    }
+
+    .toast {
+        min-width: auto;
+        max-width: none;
+    }
+}
+
+
 /* Error messages */
 .error-message {
     background: rgba(231, 76, 60, 0.1);
@@ -2047,24 +2409,7 @@ h3 {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Loading animation */
-.loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.loading::after {
-    content: '';
-    width: 40px;
-    height: 40px;
-    border: 4px solid var(--border-color);
-    border-top-color: var(--primary-color);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
+/* Old loading styles removed - using premium cosmic-loading component above */
 
 @keyframes spin {
     to {

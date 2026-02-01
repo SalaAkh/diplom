@@ -616,3 +616,32 @@
         width: 100%;
     }
 }
+
+/* Results Bottom Actions */
+.results-actions-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 0;
+    margin-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.results-actions-bottom .btn-xl {
+    min-width: 320px;
+    height: 70px;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    border-radius: 35px;
+}
+
+@media (max-width: 600px) {
+    .results-actions-bottom .btn-xl {
+        width: 100%;
+        min-width: unset;
+        font-size: 1.2rem;
+    }
+}

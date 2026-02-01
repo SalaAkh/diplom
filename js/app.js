@@ -500,14 +500,9 @@ class PersonalityTestApp {
                 const path = window.location.pathname;
                 const page = path.split('/').pop().toLowerCase();
 
-                // Только на главной странице показываем интро
-                if (!page || page === 'index.html' || page === '') {
-                    this.showIntro();
-                } else if (page === 'profile.html' || page === 'profile') {
-                    this.showProfile();
-                }
-                // Для about.html ничего не делаем, контент статический
-
+                this.state = 'intro';
+                this.showIntro();
+                this.hideMainLoading();
             }, 100);
 
         } catch (error) {
@@ -552,28 +547,34 @@ class PersonalityTestApp {
 
                         this.state = 'intro';
                         this.showIntro();
+                        this.hideMainLoading();
                     }, 100);
 
-                    debugLog('Приложение инициализировано с использованием встроенных данных');
-                    return; // Успешно инициализировано
-                } catch (recoveryError) {
-                    console.error('Ошибка при восстановлении:', recoveryError);
+                } catch (error) {
+                    criticalError('Ошибка инициализации:', error);
+                    const errorMessage = error.message || 'Неизвестная ошибка';
+                    criticalError('Детали ошибки:', errorMessage);
+                    this.showError(errorMessage);
                 }
             }
 
-            // Показываем более информативное сообщение об ошибке
-            let userMessage = 'Не удалось загрузить данные сценариев. ';
-            if (errorMessage.includes('встроенные данные недоступны')) {
-                userMessage += 'Проблема с загрузкой резервных данных. ';
-                userMessage += 'Попробуйте перезагрузить страницу или используйте локальный сервер.';
-            } else if (errorMessage.includes('пусты или имеют неверный формат')) {
-                userMessage += 'Данные имеют неверный формат. ';
-                userMessage += 'Проверьте файл scenarios.json или используйте встроенные данные.';
-            } else {
-                userMessage += 'Убедитесь, что файл scenarios.json существует или используйте локальный сервер для запуска приложения.';
-            }
+            // Restore general error handling if recovery failed
+            this.showError('Не удалось загрузить данные сценариев. Пожалуйста, перезагрузите страницу.');
+        }
+    }
 
-            this.showError(userMessage);
+    /**
+     * Плавное скрытие загрузочного экрана
+     */
+    hideMainLoading() {
+        const loader = document.getElementById('mainLoading');
+        if (loader) {
+            loader.classList.add('fade-out');
+            setTimeout(() => {
+                if (loader.parentNode) {
+                    loader.parentNode.removeChild(loader);
+                }
+            }, 600);
         }
     }
 
