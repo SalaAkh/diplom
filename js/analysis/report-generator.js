@@ -120,17 +120,25 @@ class ReportGenerator {
         // PDF Specific: Consistent width for A4
         const pdfWidth = '800px';
 
-        // Check if we are potentially on index.html (or root) to apply specific fix for global style interference
-        const isIndexPage = typeof window !== 'undefined' && (window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname === '/diplom/');
+        // Detect current page to apply specific layout fixes
+        const isProfilePage = typeof window !== 'undefined' && window.location.pathname.includes('profile.html');
 
-        // Create explicit wrapper style for index page alignment
-        // We use margin: 0 auto for centering, but add large padding-left to compensate for aggressive cut-off
-        const printWrapperStyle = (format === 'pdf' && isIndexPage)
-            ? 'style="margin: 0 auto !important; width: 800px !important; display: block !important; padding-left: 100px !important;"'
+        // Use custom padding based on the page to fix alignment issues
+        // Profile page needs less padding than Index page due to different CSS interference
+        let currentPaddingLeft = '260px';
+        let currentTotalWidth = '1016px';
+
+        if (isProfilePage) {
+            currentPaddingLeft = '250px';
+            currentTotalWidth = '980px';
+        }
+
+        const printWrapperStyle = format === 'pdf'
+            ? `style="margin: 0 auto !important; width: ${currentTotalWidth} !important; display: block !important; padding: 40px 40px 40px ${currentPaddingLeft} !important; box-sizing: border-box !important; background: #fff !important;"`
             : '';
 
         const bodyStyle = format === 'pdf' ?
-            `width: ${pdfWidth}; margin: 0 auto; padding: 20px; background: #ffffff; box-sizing: border-box;` :
+            `width: ${currentTotalWidth}; margin: 0 auto; padding: 0; background: #ffffff; box-sizing: border-box;` :
             (format === 'doc' ? 'width: 100%; margin: 0; padding: 0; background: #ffffff;' : 'max-width: 800px; margin: 40px auto; padding: 40px; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border-radius: 16px;');
 
         let html = `
@@ -171,8 +179,7 @@ class ReportGenerator {
             margin-left: auto; 
             margin-right: auto; 
             border-radius: 16px;
-            width: 96%;
-            max-width: 800px; 
+            width: 98%;
             page-break-inside: avoid;
             text-align: center; 
         }
@@ -193,6 +200,9 @@ class ReportGenerator {
             box-shadow: 0 4px 12px rgba(14, 165, 233, 0.08);
             page-break-inside: avoid;
             text-align: center;
+            width: 98%;
+            margin-left: auto;
+            margin-right: auto;
         }
         .summary-section h2 {
             color: #0369a1;
@@ -480,7 +490,7 @@ class ReportGenerator {
         const fullHtml = this.generateHTMLReport(data, 'pdf');
 
         const opt = {
-            margin: [10, 10, 24.5, 10], // Margins (Top, Right, Bottom, Left)
+            margin: [10, 0, 24.5, 10], // Reduced Right margin to 0
             filename: this.currentFilename,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: {
@@ -489,7 +499,7 @@ class ReportGenerator {
                 logging: false,
                 letterRendering: true,
                 allowTaint: false,
-                windowWidth: 1300, // A4 width at 96 DPI
+                windowWidth: (typeof window !== 'undefined' && window.location.pathname.includes('profile.html')) ? 900 : 1016,
                 scrollY: 0,
                 scrollX: 0
             },
