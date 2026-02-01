@@ -119,6 +119,16 @@ class ReportGenerator {
 
         // PDF Specific: Consistent width for A4
         const pdfWidth = '800px';
+
+        // Check if we are potentially on index.html (or root) to apply specific fix for global style interference
+        const isIndexPage = typeof window !== 'undefined' && (window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname === '/diplom/');
+
+        // Create explicit wrapper style for index page alignment
+        // We use margin: 0 auto for centering, but add large padding-left to compensate for aggressive cut-off
+        const printWrapperStyle = (format === 'pdf' && isIndexPage)
+            ? 'style="margin: 0 auto !important; width: 800px !important; display: block !important; padding-left: 100px !important;"'
+            : '';
+
         const bodyStyle = format === 'pdf' ?
             `width: ${pdfWidth}; margin: 0 auto; padding: 20px; background: #ffffff; box-sizing: border-box;` :
             (format === 'doc' ? 'width: 100%; margin: 0; padding: 0; background: #ffffff;' : 'max-width: 800px; margin: 40px auto; padding: 40px; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border-radius: 16px;');
@@ -156,7 +166,7 @@ class ReportGenerator {
         
         .section {
             background: #fff;
-            padding: 40px; /* Увеличил отступ внутри секции (было 20px) */
+            padding: 40px;
             margin-bottom: 25px;
             margin-left: auto; 
             margin-right: auto; 
@@ -165,6 +175,41 @@ class ReportGenerator {
             max-width: 800px; 
             page-break-inside: avoid;
             text-align: center; 
+        }
+        .section p {
+            text-align: justify;
+            text-indent: 1.5em;
+            margin-top: 10px;
+        }
+
+        /* Beautiful Summary Section */
+        .summary-section {
+            background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+            border: 1px solid #bae6fd;
+            border-top: 4px solid #0ea5e9;
+            padding: 40px;
+            margin-bottom: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.08);
+            page-break-inside: avoid;
+            text-align: center;
+        }
+        .summary-section h2 {
+            color: #0369a1;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+        .summary-section p {
+            color: #334155;
+            font-size: 15px;
+            line-height: 1.8;
+            text-align: justify;
+            text-indent: 1.5em;
+            margin: 0;
         }
 
         .stat-card-doc {
@@ -184,7 +229,7 @@ class ReportGenerator {
             page-break-inside: avoid; 
             justify-content: center; 
         }
-        .stat-card { flex: 1; background: #f8fafc; padding: 15px; border-radius: 12px; text-align: center; max-width: 250px; }
+        .stat-card { flex: 1; background: #f8fafc; padding: 15px; border-radius: 12px; text-align: center; max-width: 250px; margin: 0 auto; }
         
         .score-row { 
             margin-bottom: 15px; 
@@ -207,12 +252,13 @@ class ReportGenerator {
         .ai-card {
             background: linear-gradient(to right, #f0f7ff, #ffffff);
             border: 1px solid #bae6fd;
-            padding: 30px; /* Увеличил отступ в карточке AI */
+            padding: 30px;
             border-radius: 20px;
             position: relative;
             page-break-inside: avoid;
             break-inside: avoid;
             text-align: center;
+            margin: 0 auto;
         }
         .ai-badge {
             background: #0ea5e9;
@@ -228,7 +274,7 @@ class ReportGenerator {
         }
 
         .recommendation {
-            padding: 30px; /* Сделал отступы шире (было 15px) */
+            padding: 30px;
             margin-bottom: 20px;
             background: #ffffff;
             border: 1px solid #e2e8f0;
@@ -237,14 +283,15 @@ class ReportGenerator {
             page-break-inside: avoid;
             break-inside: avoid;
             text-align: center;
-            /* Убрал ограничение ширины max-width: 90%, теперь блок будет шире */
+            margin-left: auto;
+            margin-right: auto;
         }
         .recommendation h3 { color: #0369a1; margin: 0 0 5px 0; font-size: 16px; font-weight: 800; text-align: center; }
         .recommendation p { color: #475569; margin: 0; font-size: 14px; text-align: justify; text-indent: 1.5em; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <div id="print-wrapper">
+    <div id="print-wrapper" ${printWrapperStyle}>
     <div class="header">
         <h1>${t('reportTitle')}</h1>
         ${data.profile && data.profile.name ? `<p style="font-size: 18px; margin-bottom: 5px;">${data.profile.name}</p>` : ''}
@@ -294,7 +341,7 @@ class ReportGenerator {
     </div>
     `) : ''}
 
-    <div class="section">
+    <div class="summary-section">
         <h2>${t('summaryLabel')}</h2>
         <p>${data.profile ? data.profile.summary : ''}</p>
     </div>

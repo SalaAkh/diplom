@@ -1324,9 +1324,11 @@ class UIController {
 
         // Initial Loading State
         container.innerHTML = `
-            <div class="loading-results">
-                <div class="loading-spinner"></div>
-                <p>${t('processingResults') || 'Processing results...'}</p>
+            <div class="loading-wrapper" style="position: absolute; background: transparent;">
+                <div class="loading-content">
+                    <div class="cosmic-spinner"></div>
+                    <p class="loading-text" style="font-size: 1.1rem; margin-top: 1.5rem;">${t('processingResults') || 'Нәтижелер өңделуде...'}</p>
+                </div>
             </div>
     `;
 

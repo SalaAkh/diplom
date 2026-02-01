@@ -14,6 +14,7 @@ class TestManager {
         this.testMode = null; // 'basic' or 'advanced'
         this.currentScenarioStartTime = null;
         this.currentSituationalStep = {}; // {questionId: stepIndex}
+        this.isTransitioning = false; // Flag to prevent rapid clicking
     }
 
     /**
@@ -25,6 +26,7 @@ class TestManager {
         this.completedScenarios = [];
         this.currentSituationalStep = {};
         this.testMode = null;
+        this.isTransitioning = false;
     }
 
     /**
@@ -150,6 +152,8 @@ class TestManager {
      * Show next question/scenario based on mode
      */
     showNext() {
+        this.isTransitioning = false; // Reset transition flag to allow new input
+
         if (this.testMode === 'advanced') {
             this.showAdvancedQuestion();
         } else {
@@ -230,6 +234,9 @@ class TestManager {
      * Record Answer (Basic)
      */
     recordBasicAnswer(choice, scenarioId) {
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+
         // Validation moved from app.js
         const choiceData = { scenarioId, choice };
 
@@ -262,6 +269,9 @@ class TestManager {
      * Record Answer (Advanced - Scenario Type)
      */
     recordAdvancedAnswer(choice, questionId) {
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+
         this.analyzer.recordChoice(questionId, choice);
 
         setTimeout(() => {
@@ -275,6 +285,9 @@ class TestManager {
      * Record Answer (Advanced - Scale Type)
      */
     recordScaleAnswer(questionId, value) {
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+
         this.analyzer.recordScaleAnswer(questionId, value);
 
         setTimeout(() => {
@@ -291,6 +304,9 @@ class TestManager {
      * Record Answer (Advanced - Open Type)
      */
     recordOpenAnswer(questionId, text) {
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+
         // Analyzer doesn't store open answers in basic version, 
         // but assuming AdvancedAnalyzer does or we just store in storage
         // For now, assume AdvancedAnalyzer has a method or we fallback
@@ -313,7 +329,13 @@ class TestManager {
      * Record Answer (Advanced - Situational Type)
      */
     recordSituationalAnswer(questionId, stepId, choice) {
-        if (!this.analyzer) return;
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+
+        if (!this.analyzer) {
+            this.isTransitioning = false;
+            return;
+        }
 
         // Record locally (if separate tracking needed) and in analyzer
         if (this.analyzer.recordSituationalAnswer) {

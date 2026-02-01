@@ -450,6 +450,13 @@ class PersonalityTestApp {
             // Инициализация визуализатора
             this.visualizer = new ResultsVisualizer('radarChartContainer');
 
+            // Инициализация генератора отчетов (важно для PDF)
+            if (typeof ReportGenerator !== 'undefined') {
+                this.reportGenerator = new ReportGenerator();
+            } else {
+                console.warn('ReportGenerator not loaded');
+            }
+
             // Инициализация сервиса обратной связи
             // Инициализация сервиса обратной связи
             if (typeof FeedbackService !== 'undefined') {
@@ -500,8 +507,13 @@ class PersonalityTestApp {
                 const path = window.location.pathname;
                 const page = path.split('/').pop().toLowerCase();
 
-                this.state = 'intro';
-                this.showIntro();
+                if (page === 'profile.html' || page === 'profile') {
+                    this.showProfile();
+                } else {
+                    this.state = 'intro';
+                    this.showIntro();
+                }
+
                 this.hideMainLoading();
             }, 100);
 
@@ -545,8 +557,16 @@ class PersonalityTestApp {
                         };
                         initBackground3D();
 
-                        this.state = 'intro';
-                        this.showIntro();
+                        const path = window.location.pathname;
+                        const page = path.split('/').pop().toLowerCase();
+
+                        if (page === 'profile.html' || page === 'profile') {
+                            this.showProfile();
+                        } else {
+                            this.state = 'intro';
+                            this.showIntro();
+                        }
+
                         this.hideMainLoading();
                     }, 100);
 

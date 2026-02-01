@@ -182,14 +182,13 @@ class ResultsManager {
             : {};
         const stats = { ...analyzerStats, ...gamificationStats };
 
-        // Lazy load ReportGenerator if needed
+        // Use the shared instance from app.js to ensure consistency
         let reportGen = this.app.reportGenerator;
 
-        // Force check window.ReportGenerator (last resort) and re-instantiate if needed
+        // Fallback: If not found, try to create a new one from global window.ReportGenerator
         if (!reportGen && typeof window !== 'undefined' && window.ReportGenerator) {
-            console.log('ResultsManager: Lazy initializing ReportGenerator');
+            console.log('ResultsManager: Creating new ReportGenerator instance');
             reportGen = new window.ReportGenerator();
-            // Cache it if possible
             this.app.reportGenerator = reportGen;
         }
 
@@ -256,20 +255,8 @@ class ResultsManager {
         if (reportGen) {
             reportGen.downloadReport(reportData, format, filename);
         } else {
-            console.warn('ReportGenerator not found even after lazy init, falling back to simple JSON export');
-
-            // Simple fallback (JSON only)
-            const finalFilename = filename.endsWith('.json') ? filename : filename + '.json';
-
-            const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = finalFilename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            console.error('CRITICAL: ReportGenerator instance not found. Cannot generate report.');
+            alert('Ошибка: Модуль генерации отчетов не загружен.');
         }
     }
 }
