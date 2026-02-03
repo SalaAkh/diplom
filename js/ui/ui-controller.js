@@ -1568,7 +1568,7 @@ class UIController {
                                         ${evolutionReport.recommendations ? evolutionReport.recommendations.slice(0, 2).map(rec => `
                                             <div class="insight-card ${rec.type === 'leverage' ? 'positive' : 'attention'}" style="background: rgba(var(--primary-rgb), 0.05); padding: 1.25rem; border-radius: 12px; border-left: 4px solid ${rec.type === 'leverage' ? '#10b981' : '#f59e0b'};">
                                                 <h4 style="margin: 0 0 0.75rem 0; color: ${rec.type === 'leverage' ? '#10b981' : '#f59e0b'};">
-                                                    ${rec.type === 'leverage' ? '🚀 ' + (t('keepItUp') || 'Так держать!') : '⚠️ ' + (t('payAttention') || 'Обратите внимание')}
+                                                    ${rec.type === 'leverage' ? '🚀 Так держать!' : '⚠️ Обратите внимание'}
                                                 </h4>
                                                 <p style="margin: 0; font-size: 0.95rem; opacity: 0.9; line-height: 1.5; text-align: justify;">${rec.text}</p>
                                             </div>
@@ -1579,6 +1579,11 @@ class UIController {
                         </div>
                     </div>
                     ` : ''}
+                    
+                    <!-- Profile Extensions: Comparative Analysis, Goals, AI Advisor -->
+                    <div id="profileExtensionsContainer">
+                        ${window.profileExtensions ? window.profileExtensions.getAllSections() : ''}
+                    </div>
                     
                     <!-- History List -->
                     <div class="cosmic-card">
@@ -1638,6 +1643,11 @@ class UIController {
             }, 500);
         }
         this.focusHeading();
+
+        // Initialize profile extensions (Comparative Analysis chart, etc.)
+        if (window.profileExtensions && typeof window.profileExtensions.initAfterRender === 'function') {
+            window.profileExtensions.initAfterRender();
+        }
     }
 
     /**
@@ -1647,10 +1657,33 @@ class UIController {
     renderEvolutionChart(history) {
         const t = (key) => (window.t ? window.t(key) : key);
         const ctx = document.getElementById('evolutionChart');
+
+        // Retry mechanism for Chart.js
+        if (typeof Chart === 'undefined') {
+            console.log('Chart.js not ready, retrying in 500ms...');
+            setTimeout(() => this.renderEvolutionChart(history), 500);
+            return;
+        }
+
         if (!ctx || !history || !history.sessions) return;
 
         // 1. Limit to last 10 sessions to prevent overcrowding
         const recentSessions = history.sessions.slice(-10);
+
+        // Define labels for the X-axis (Dates)
+        const labels = recentSessions.map((s, i) => {
+            if (s.date) {
+                try {
+                    return new Date(s.date).toLocaleDateString(this.i18n.currentLang || 'ru', {
+                        day: 'numeric',
+                        month: 'short'
+                    });
+                } catch (e) {
+                    return `Test ${i + 1}`;
+                }
+            }
+            return `Test ${i + 1}`;
+        });
 
         // 2. Identify ALL unique dimensions across these sessions
         const allKeys = new Set();
@@ -1948,23 +1981,57 @@ class UIController {
      * @param {string} message 
      * @param {string} defaultValue 
      * @param {Function} onSubmit 
+     * @param {string} title - Optional title
      */
-    showPrompt(message, defaultValue = '', onSubmit) {
+    showPrompt(message, defaultValue = '', onSubmit, title = null) {
         const t = this.i18n.t.bind(this.i18n);
         const inputId = 'promptInput';
 
+        let displayTitle = title;
+        if (!displayTitle) {
+            const translated = t('inputRequired');
+            // If translation returns key or is empty, use Russian fallback
+            if (!translated || translated === 'inputRequired') {
+                displayTitle = 'Ввод данных';
+            } else {
+                displayTitle = translated;
+            }
+        }
+
         this.showModal({
-            title: t('inputRequired') || 'Ввод данных',
+            title: `<span class="text-gradient">${displayTitle}</span>`,
             content: `
-                <p>${message}</p>
-                <input type="text" id="${inputId}" class="form-control" value="${defaultValue}" style="width: 100%; margin-top: 10px;">
+                <div style="padding: 0.5rem 0;">
+                    <p style="margin-bottom: 1rem; opacity: 0.9;">${message}</p>
+                    <div class="input-wrapper" style="position: relative;">
+                        <input type="text" id="${inputId}" class="form-control cosmic-input" 
+                            value="${defaultValue}" 
+                            style="width: 100%; padding: 0.8rem 1rem; border-radius: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-size: 1rem; outline: none; transition: all 0.3s ease;">
+                        <div style="position: absolute; bottom: -2px; left: 0; width: 0%; height: 2px; background: var(--primary-color); transition: width 0.3s ease;" id="inputFocusLine"></div>
+                    </div>
+                </div>
+                <script>
+                    setTimeout(() => {
+                        const input = document.getElementById('${inputId}');
+                        const line = document.getElementById('inputFocusLine');
+                        if (input) {
+                            input.focus();
+                            input.select();
+                            input.addEventListener('focus', () => line.style.width = '100%');
+                            input.addEventListener('blur', () => line.style.width = '0%');
+                            input.addEventListener('keypress', (e) => {
+                                if (e.key === 'Enter') document.querySelector('#genericModal .btn-primary').click();
+                            });
+                        }
+                    }, 100);
+                </script>
             `,
             actions: [
-                { text: t('cancel') || 'Отмена', class: 'btn-secondary', onClick: () => { } },
+                { text: t('cancel') || 'Отмена', class: 'btn-ghost', onClick: () => { } },
                 {
-                    text: 'OK',
+                    text: 'Сохранить', // Save
                     class: 'btn-primary',
-                    closeAfter: false, // Handle manually
+                    closeAfter: false,
                     onClick: () => {
                         const val = document.getElementById(inputId).value;
                         if (onSubmit) {
@@ -1976,12 +2043,6 @@ class UIController {
                 }
             ]
         });
-
-        // Focus input
-        setTimeout(() => {
-            const input = document.getElementById(inputId);
-            if (input) input.focus();
-        }, 100);
     }
 
     showError(message) {

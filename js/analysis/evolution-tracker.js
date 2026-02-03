@@ -324,7 +324,27 @@ class EvolutionTracker {
      */
     generateEvolutionRecommendations(evolution) {
         const recommendations = [];
-        const t = (key) => (window.t ? window.t(key) : key);
+        // Direct translations with fallbacks
+        const translations = {
+            recGrowth: 'Продолжайте развивать {dim}. Ваш рост в этой области стабилен и перспективен.',
+            recDecline: 'Обратите внимание на {dim}. Наблюдается снижение, возможно, стоит вернуться к практике в этой области.',
+            recStable: 'Ваш профиль стабилен. Это отличная основа для дальнейшего развития.',
+            strategicName: 'Стратегическое мышление',
+            explorerName: 'Исследовательский интерес',
+            individualismName: 'Индивидуализм',
+            rationalityName: 'Рациональность',
+            adaptationName: 'Адаптивность',
+            meaningName: 'Поиск смысла',
+            intuitionName: 'Интуиция',
+            utilityName: 'Практичность'
+        };
+        const t = (key) => {
+            if (window.t) {
+                const val = window.t(key);
+                if (val && val !== key) return val;
+            }
+            return translations[key] || key;
+        };
 
         if (evolution.trends) {
             Object.keys(evolution.trends).forEach(dimension => {
@@ -351,7 +371,7 @@ class EvolutionTracker {
         if (recommendations.length === 0 && evolution.overallComparison) {
             recommendations.push({
                 type: 'leverage',
-                text: t('recStable') || 'Ваш профиль стабилен. Это отличная основа для дальнейшего развития. Попробуйте новые форматы обучения.'
+                text: 'Ваш профиль стабилен. Это отличная основа для дальнейшего развития.'
             });
         }
 
