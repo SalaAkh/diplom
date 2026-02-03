@@ -65,12 +65,7 @@ class PersonalityTestApp {
 
         this.i18n = typeof i18n !== 'undefined' ? i18n : new LocalizationManager();
 
-        // Проверка и инициализация опциональных модулей с fallback
-        this.gamification = this.initializeOptionalModule('GamificationSystem', () => {
-            const gm = new GamificationSystem();
-            gm.initialize();
-            return gm;
-        });
+
 
         this.social = this.initializeOptionalModule('SocialFeatures', () => {
             const sf = new SocialFeatures();
@@ -79,8 +74,6 @@ class PersonalityTestApp {
         });
 
         this.advancedAnalytics = this.initializeOptionalModule('AdvancedAnalytics', () => new AdvancedAnalytics());
-        this.reportGenerator = this.initializeOptionalModule('ReportGenerator', () => new ReportGenerator());
-        this.aiCoach = this.initializeOptionalModule('AICoach', () => new AICoach());
 
         // Модули контроля качества
         this.testReliability = this.initializeOptionalModule('TestReliability', () => new TestReliability());
@@ -126,7 +119,7 @@ class PersonalityTestApp {
     checkDependencies() {
         const dependencies = {
             chartjs: typeof Chart !== 'undefined',
-            threejs: typeof THREE !== 'undefined' || (typeof window !== 'undefined' && window.THREE),
+            threejs: true, // 3D disabled - always pass
             storage: typeof StorageManager !== 'undefined',
             analyzer: typeof PersonalityAnalyzer !== 'undefined',
             visualizer: typeof ResultsVisualizer !== 'undefined',
@@ -367,9 +360,8 @@ class PersonalityTestApp {
                     criticalError('МАҢЫЗДЫ ТӘУЕЛДІЛІКТЕР ЖОҚ (CRITICAL DEPENDENCIES MISSING):', critical);
                     this.showDependencyError(critical);
                     return;
-                } else if (depsCheck.missing.includes('threejs')) {
-                    debugWarn('Three.js not loaded. 3D features will be disabled.');
-                    // We can proceed, just without 3D
+                    debugWarn('Three.js check skipped.');
+                    // 3D features removed
                 }
             }
 
@@ -451,12 +443,7 @@ class PersonalityTestApp {
             // Инициализация визуализатора
             this.visualizer = new ResultsVisualizer('radarChartContainer');
 
-            // Инициализация генератора отчетов (важно для PDF)
-            if (typeof ReportGenerator !== 'undefined') {
-                this.reportGenerator = new ReportGenerator();
-            } else {
-                console.warn('ReportGenerator not loaded');
-            }
+
 
             // Инициализация сервиса обратной связи
             // Инициализация сервиса обратной связи
@@ -478,28 +465,14 @@ class PersonalityTestApp {
                 // Инициализируем UI (включая селектор языка)
                 this.initUI();
 
-                // Инициализация 3D фона - ждем загрузки Three.js ES модуля
-                console.log('[Қосымша] Фонды инициализациялау әрекеті. NeuralBackground қолжетімді: ([App] Attempting to initialize background. NeuralBackground available:)', typeof NeuralBackground !== 'undefined', 'THREE қолжетімді (available):', typeof THREE !== 'undefined');
-                const initBackground3D = () => {
-                    if (typeof NeuralBackground !== 'undefined' && typeof THREE !== 'undefined') {
-                        console.log('[Қосымша] NeuralBackground инициализациялануда... ([App] Initializing NeuralBackground...)');
-                        this.background3D = new NeuralBackground('background-canvas');
-                    } else if (typeof NeuralBackground !== 'undefined') {
-                        // THREE еще не загружен, ждем
-                        console.log('[App] NeuralBackground available, waiting for THREE...');
-                        const initBg = () => {
-                            console.log('[App] THREE loaded, initializing NeuralBackground...');
-                            this.background3D = new NeuralBackground('background-canvas');
-                            window.removeEventListener('threejs-loaded', initBg);
-                        };
-                        window.addEventListener('threejs-loaded', initBg);
-                    } else {
-                        // NeuralBackground еще не загружен (defer script), пробуем позже
-                        console.log('[App] NeuralBackground not available yet, retrying in 100ms...');
-                        setTimeout(initBackground3D, 100);
-                    }
-                };
-                initBackground3D();
+                // Инициализация фоновых частиц (ParticleBackground)
+                if (typeof ParticleBackground !== 'undefined') {
+                    setTimeout(() => {
+                        new ParticleBackground('background-canvas');
+                    }, 100);
+                }
+
+
 
                 // Регистрация Service Worker для PWA
                 this.registerServiceWorker();
@@ -542,21 +515,14 @@ class PersonalityTestApp {
                         document.documentElement.lang = currentLang;
                         this.initUI();
 
-                        // Инициализация 3D фона - ждем загрузки Three.js
-                        const initBackground3D = () => {
-                            if (typeof NeuralBackground !== 'undefined' && typeof THREE !== 'undefined') {
-                                this.background3D = new NeuralBackground('background-canvas');
-                            } else if (typeof NeuralBackground !== 'undefined') {
-                                const initBg = () => {
-                                    this.background3D = new NeuralBackground('background-canvas');
-                                    window.removeEventListener('threejs-loaded', initBg);
-                                };
-                                window.addEventListener('threejs-loaded', initBg);
-                            } else {
-                                setTimeout(initBackground3D, 100);
-                            }
-                        };
-                        initBackground3D();
+                        // Инициализация фоновых частиц для внутренних страниц (fallback)
+                        if (typeof ParticleBackground !== 'undefined') {
+                            setTimeout(() => {
+                                new ParticleBackground('background-canvas');
+                            }, 100);
+                        }
+
+
 
                         const path = window.location.pathname;
                         const page = path.split('/').pop().toLowerCase();
@@ -1491,102 +1457,7 @@ class PersonalityTestApp {
         container.innerHTML = html;
     }
 
-    /**
-     * Отображение прогресса геймификации
-     * @param {string} containerId - ID контейнера
-     * @param {Object} result - Результат прохождения теста
-     */
-    displayGamificationProgress(containerId, result) {
-        const container = document.getElementById(containerId);
-        if (!container || !this.gamification) return;
 
-        const progress = this.gamification.getUserProgress();
-        const newAchievements = result ? result.achievements : [];
-
-        let html = `
-            <div class="gamification-progress">
-                <div class="level-info">
-                    <div class="level-badge">
-                        <span class="level-number">${progress.level}</span>
-                        <span class="level-label">${this.i18n.t('levelLabel')}</span>
-                    </div>
-                    <div class="xp-info">
-                        <div class="xp-bar">
-                            <div class="xp-fill" style="width: ${progress.progressPercent}%"></div>
-                        </div>
-                        <div class="xp-text">
-                            <span>${progress.experience} XP</span>
-                            <span>${this.i18n.t('xpToNext')} ${progress.xpToNext} XP</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="streak-info">
-                    <span class="streak-icon">🔥</span>
-                    <span class="streak-text">${this.i18n.t('streakLabel')} ${progress.streak}</span>
-                </div>
-                
-                <div class="achievements-summary">
-                    <h3>${this.i18n.t('achievementsTitle')} ${progress.achievements} / ${progress.totalAchievements}</h3>
-                    <div class="achievements-grid">
-        `;
-
-        // Показываем последние 6 достижений
-        const unlockedAchievements = this.gamification.achievements
-            .filter(a => a.unlocked)
-            .sort((a, b) => new Date(b.unlockedAt) - new Date(a.unlockedAt))
-            .slice(0, 6);
-
-        unlockedAchievements.forEach(achievement => {
-            html += `
-                <div class="achievement-badge ${achievement.rarity || 'common'}" title="${achievement.description}">
-                    <span class="achievement-icon">${achievement.icon || '🏆'}</span>
-                    <span class="achievement-name">${achievement.name}</span>
-                </div>
-            `;
-        });
-
-        html += `
-                    </div>
-                </div>
-        `;
-
-        // Показываем новые достижения
-        if (newAchievements && newAchievements.length > 0) {
-            html += `
-                <div class="new-achievements">
-                    <h3>${this.i18n.t('newAchievements')}</h3>
-            `;
-            newAchievements.forEach(achievement => {
-                html += `
-                    <div class="achievement-unlocked ${achievement.rarity || 'common'}">
-                        <span class="achievement-icon-large">${achievement.icon || '🏆'}</span>
-                        <div>
-                            <h4>${achievement.name}</h4>
-                            <p>${achievement.description}</p>
-                            <span class="xp-reward">+${achievement.xpReward || 0} XP</span>
-                        </div>
-                    </div>
-                `;
-            });
-            html += `</div>`;
-        }
-
-        html += `</div>`;
-        container.innerHTML = html;
-
-        // Анимация появления новых достижений
-        if (newAchievements && newAchievements.length > 0) {
-            setTimeout(() => {
-                const newAchievementElements = container.querySelectorAll('.achievement-unlocked');
-                newAchievementElements.forEach((el, index) => {
-                    setTimeout(() => {
-                        el.classList.add('animate-in');
-                    }, index * 200);
-                });
-            }, 100);
-        }
-    }
 
     /**
      * Обработка выбора опции в сценарии (Базовый тест)

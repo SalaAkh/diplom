@@ -324,24 +324,34 @@ class EvolutionTracker {
      */
     generateEvolutionRecommendations(evolution) {
         const recommendations = [];
+        const t = (key) => (window.t ? window.t(key) : key);
 
         if (evolution.trends) {
             Object.keys(evolution.trends).forEach(dimension => {
                 const trend = evolution.trends[dimension];
 
-                if (trend.direction === 'increasing' && trend.rate > 0.05) {
+                // Lowered threshold from 0.05 to 0.02 to show more insights
+                if (trend.direction === 'increasing' && trend.rate > 0.02) {
                     recommendations.push({
                         dimension: dimension,
                         type: 'leverage',
-                        text: `Продолжайте развивать ${dimension}. Ваш рост в этой области стабилен и перспективен.`
+                        text: (t('recGrowth') || 'Продолжайте развивать {dim}. Ваш рост в этой области стабилен и перспективен.').replace('{dim}', t(`${dimension}Name`) || dimension)
                     });
-                } else if (trend.direction === 'decreasing' && Math.abs(trend.rate) > 0.05) {
+                } else if (trend.direction === 'decreasing' && Math.abs(trend.rate) > 0.02) {
                     recommendations.push({
                         dimension: dimension,
                         type: 'attention',
-                        text: `Обратите внимание на ${dimension}. Наблюдается снижение, возможно, стоит вернуться к практике в этой области.`
+                        text: (t('recDecline') || 'Обратите внимание на {dim}. Наблюдается снижение, возможно, стоит вернуться к практике в этой области.').replace('{dim}', t(`${dimension}Name`) || dimension)
                     });
                 }
+            });
+        }
+
+        // Add a default recommendation if nothing else triggered but we have data
+        if (recommendations.length === 0 && evolution.overallComparison) {
+            recommendations.push({
+                type: 'leverage',
+                text: t('recStable') || 'Ваш профиль стабилен. Это отличная основа для дальнейшего развития. Попробуйте новые форматы обучения.'
             });
         }
 

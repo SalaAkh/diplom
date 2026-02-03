@@ -169,94 +169,27 @@ class ResultsManager {
 
     /**
      * Download Results
-     * @param {string} format 'json', 'html', 'text', 'pdf'
+     * @param {string} format 'html', 'text'
      */
     downloadResults(format = 'html') {
-        const profile = this.analyzer.generateProfile();
-        const scores = this.analyzer.getPercentageScores();
-        const normalizedScores = this.analyzer.getNormalizedScores();
-        // Получаем расширенную статистику, включая геймификацию
-        const analyzerStats = this.analyzer.getStatistics();
-        const gamificationStats = (this.app.gamification && typeof this.app.gamification.getUserProgress === 'function')
-            ? this.app.gamification.getUserProgress()
-            : {};
-        const stats = { ...analyzerStats, ...gamificationStats };
+        // 1. Determine Data Source
+        // Use activeResults if available (viewing history or current test)
+        // Otherwise fallback to live analyzer data
+        const sourceData = this.app.activeResults || {};
 
-        // Use the shared instance from app.js to ensure consistency
-        let reportGen = this.app.reportGenerator;
+        const profile = sourceData.profile || this.analyzer.generateProfile();
+        const scores = sourceData.scores || this.analyzer.getPercentageScores();
+        const normalizedScores = sourceData.normalizedScores || this.analyzer.getNormalizedScores();
 
-        // Fallback: If not found, try to create a new one from global window.ReportGenerator
-        if (!reportGen && typeof window !== 'undefined' && window.ReportGenerator) {
-            console.log('ResultsManager: Жаңа ReportGenerator данасын жасау (Creating new ReportGenerator instance)');
-            reportGen = new window.ReportGenerator();
-            this.app.reportGenerator = reportGen;
+        // 2. Prepare Statistics
+        let stats = sourceData.statistics;
+        if (!stats) {
+            // Fallback: Calculate fresh statistics
+            stats = this.analyzer.getStatistics();
         }
 
-        const lang = window.i18n ? window.i18n.getLanguage() : 'ru';
-        const user = this.auth ? this.auth.getCurrentUser() : null;
-        let filename = null;
-
-        if (user) {
-            const history = this.auth.getTestHistory();
-            if (history && history.length > 0) {
-                const lastTest = history[history.length - 1];
-                const safeTitle = (lastTest.title || `Test #${history.length}`).replace(/[^a-zа-яё0-9\s-]/gi, '_');
-                const dateStart = new Date().toISOString().split('T')[0];
-                filename = `${user.username}_${safeTitle}_${dateStart}_${lang}.${format === 'pdf' ? 'pdf' : format === 'json' ? 'json' : format === 'text' ? 'txt' : 'html'}`;
-            }
-        }
-
-        if (!filename) {
-            filename = `personality-report-${new Date().toISOString().split('T')[0]}_${lang}.${format === 'pdf' ? 'pdf' : format === 'json' ? 'json' : format === 'text' ? 'txt' : 'html'}`;
-        }
-
-        const t = (key) => (window.t ? window.t(key) : key);
-
-        // Ensure profile has user name
-        if (user && profile) {
-            profile.name = user.name || user.username;
-            profile.username = user.username;
-        }
-
-        const reportData = {
-            title: t('reportTitle'),
-            userLogin: user ? user.username : (window.t ? window.t('navGuest') : 'Guest'),
-            date: new Date().toLocaleString(lang === 'kk' ? 'kk-KZ' : lang === 'ru' ? 'ru-RU' : 'en-US'),
-            statistics: stats,
-            profile: profile,
-            scores: scores,
-            normalizedScores: normalizedScores,
-            aiAnalysis: null
-        };
-
-        // Try to get AI analysis from history if available
-        if (user) {
-            const history = this.auth.getTestHistory();
-            if (history && history.length > 0) {
-                const lastTest = history[history.length - 1];
-                if (lastTest.aiAnalysis) {
-                    reportData.aiAnalysis = lastTest.aiAnalysis;
-                }
-            }
-        }
-
-        // Попытка захватить изображение графика для отчета
-        if (this.app.visualizer && this.app.visualizer.charts && this.app.visualizer.charts.radar) {
-            try {
-                // Используем белый фон для экспорта изображения, так как PDF белый
-                // Но Chart.js toBase64Image сохраняет текущее состояние canvas.
-                // Если canvas прозрачный, он будет прозрачным и в PDF.
-                reportData.chartImage = this.app.visualizer.charts.radar.toBase64Image();
-            } catch (e) {
-                console.warn('График кескінін түсіру мүмкін болмады (Failed to capture chart image):', e);
-            }
-        }
-
-        if (reportGen) {
-            reportGen.downloadReport(reportData, format, filename);
-        } else {
-            console.error('МАҢЫЗДЫ ҚАТЕ: ReportGenerator данасы табылмады. Есепті жасау мүмкін емес (CRITICAL: ReportGenerator instance not found. Cannot generate report).');
-            alert('Қате: Есептерді жасау модулі жүктелген жоқ (Error: Report generation module not loaded).');
-        }
+        // HTML download is not supported - ReportGenerator removed
+        console.log('HTML export feature has been removed.');
+        alert(window.t ? window.t('exportNotAvailable') || 'HTML export not available' : 'HTML export not available');
     }
 }

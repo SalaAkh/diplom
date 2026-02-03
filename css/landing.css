@@ -669,3 +669,355 @@ body:not(.dark-theme) .step-arrow {
         min-width: unset;
     }
 }
+
+/* --- Expanded Content Styles (Refined Premium) --- */
+
+/* Scroll Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.mission-section,
+.methodology-section,
+.value-section {
+    animation: fadeInUp 0.8s ease-out forwards;
+    animation-timeline: view();
+    animation-range: entry 10% cover 30%;
+}
+
+/* 1. Mission Section Polish */
+.mission-section {
+    padding: 8rem 2rem;
+    text-align: center;
+    position: relative;
+    background: radial-gradient(circle at center, rgba(var(--primary-rgb), 0.08) 0%, transparent 60%);
+}
+
+.mission-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Distinct border */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    /* Deeper shadow */
+}
+
+/* Bigger Title as requested */
+.mission-content .section-badge {
+    display: inline-block;
+    font-size: 1.2rem;
+    padding: 0.8rem 2.5rem;
+    border-radius: 100px;
+    background: rgba(var(--primary-rgb), 0.15);
+    color: var(--primary-color);
+    font-weight: 800;
+    /* Extra bold */
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    /* Wider spacing */
+    margin-bottom: 2.5rem;
+    border: 2px solid rgba(var(--primary-rgb), 0.3);
+    box-shadow: 0 0 25px rgba(var(--primary-rgb), 0.25);
+    /* Glow */
+}
+
+.mission-text {
+    font-size: 1.6rem;
+    line-height: 1.6;
+    font-weight: 400;
+    color: var(--text-primary);
+    background: linear-gradient(180deg, var(--text-primary) 0%, rgba(var(--text-primary-rgb), 0.7) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    /* Fix lint error */
+}
+
+/* --- CTA Section (Premium Aesthetic) --- */
+.cta-section {
+    padding: 10rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-top: 4rem;
+}
+
+/* Glow effect behind CTA */
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, rgba(var(--primary-rgb), 0.2) 0%, transparent 70%);
+    filter: blur(60px);
+    z-index: -1;
+}
+
+.cta-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 5rem 3rem;
+    border-radius: 40px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.cta-content h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    /* Neon gradient */
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+}
+
+.cta-content p {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Pulse Animation for Button */
+.pulse-animation {
+    box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.7);
+    animation: pulse-primary 2s infinite;
+}
+
+@keyframes pulse-primary {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 20px rgba(var(--primary-rgb), 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0);
+    }
+}
+
+
+/* 2. Science/Methodology Section Polish */
+.methodology-section {
+    padding: 8rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.methodology-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Side by side on desktop */
+    align-items: center;
+    gap: 5rem;
+}
+
+.methodology-text {
+    position: relative;
+    text-align: left;
+}
+
+.methodology-subtitle {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-left: 0;
+    padding-left: 1.2rem;
+    /* Align with science-item padding */
+}
+
+.methodology-text>p {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    padding-left: 1.2rem;
+    /* Align with science-item padding */
+}
+
+/* Science Grid - 3 distinct blocks */
+.science-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    /* Responsive grid */
+    gap: 1.5rem;
+}
+
+.science-item {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.5rem 1.2rem;
+    border-radius: 16px;
+    border: 1px solid rgba(var(--primary-rgb), 0.1);
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.science-item:hover {
+    transform: translateY(-5px);
+    background: rgba(var(--primary-rgb), 0.1);
+    /* Highlight on hover */
+    border-color: var(--primary-color);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.science-item h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.science-item p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.methodology-visual {
+    position: relative;
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.holo-circle {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--primary-rgb), 0.3);
+    box-shadow: 0 0 40px rgba(var(--primary-rgb), 0.1), inset 0 0 40px rgba(var(--primary-rgb), 0.05);
+    animation: spin 30s linear infinite;
+}
+
+.holo-circle::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--primary-color);
+}
+
+.holo-circle.delayed {
+    width: 280px;
+    height: 280px;
+    border-color: rgba(var(--accent-rgb), 0.3);
+    animation-direction: reverse;
+    animation-duration: 25s;
+    border-style: dashed;
+}
+
+/* 3. Value Section Polish */
+.value-section {
+    padding: 8rem 2rem;
+    max-width: 1250px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.value-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+    margin-top: 5rem;
+}
+
+.value-card {
+    padding: 3rem 2rem;
+    border-radius: 24px;
+    background: rgba(var(--card-bg-rgb), 0.4);
+    border: 1px solid var(--border-color);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.value-card:hover {
+    transform: translateY(-12px);
+    background: rgba(var(--card-bg-rgb), 0.7);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    border-color: rgba(var(--primary-rgb), 0.5);
+}
+
+.value-icon {
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    filter: drop-shadow(0 0 20px rgba(var(--primary-rgb), 0.2));
+    transition: transform 0.3s ease;
+}
+
+.value-card:hover .value-icon {
+    transform: scale(1.15) rotate(5deg);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 900px) {
+    .methodology-wrapper {
+        grid-template-columns: 1fr;
+        /* Stack on mobile */
+        text-align: center;
+        gap: 3rem;
+    }
+
+    .methodology-text>p {
+        border-left: none;
+        border-top: 3px solid rgba(var(--primary-rgb), 0.5);
+        padding-top: 1rem;
+        padding-left: 0;
+    }
+
+    .science-grid {
+        /* Force 1 column on very small screens if needed, but auto-fit handles it */
+        text-align: left;
+    }
+
+    .mission-text {
+        font-size: 1.3rem;
+    }
+
+    .mission-content {
+        padding: 2.5rem 1.5rem;
+    }
+}

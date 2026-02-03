@@ -392,26 +392,22 @@
 
     <!-- Production-safe logger -->
     <script src="js/services/logger.js" defer></script>
-    <!-- Configuration must load first -->
     <script src="js/config/config.js" defer></script>
-    <script src="js/vis/background-3d.js" defer></script>
+    <script src="js/vis/particles-background.js" defer></script>
+
 
     <script>
-        // Initialize background and theme
+        // Initialize theme and background
         window.addEventListener('DOMContentLoaded', () => {
-            // Load Three.js lazily
-            window.resourceLoader.loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js')
-                .then(() => {
-                    if (typeof NeuralBackground !== 'undefined') {
-                        new NeuralBackground('background-canvas');
-                    }
-                })
-                .catch(err => console.error('Error loading Three.js:', err));
-
             // Apply saved theme
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'light') {
                 document.body.classList.remove('dark-theme');
+            }
+
+            // Initialize Particles
+            if (typeof ParticleBackground !== 'undefined') {
+                new ParticleBackground('background-canvas');
             }
         });
     </script>

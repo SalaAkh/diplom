@@ -21,7 +21,7 @@ const STATIC_CACHE_URLS = [
   './css/layout.css',
   './css/styles.css',
   './css/pages.css',
-  './css/gamification.css',
+
   './css/themes.css',
   './js/services/storage.js',
   './js/services/localization.js',
@@ -32,13 +32,7 @@ const STATIC_CACHE_URLS = [
   './js/analysis/advanced-analysis.js',
   './js/data/dynamic-scenarios.js',
   './js/vis/visualization.js',
-  './js/vis/visualization-3d.js',
-  './js/ui/navigation-controller.js',
-  './js/vis/background-3d.js',
-  './js/services/gamification.js',
-  './js/analysis/evolution-tracker.js',
-  './js/analysis/report-generator.js',
-  './js/vis/3d-visualization.js',
+
   './js/analysis/ai-analysis.js',
   './js/analysis/ai-coach.js',
   './js/analysis/ml-engine.js',

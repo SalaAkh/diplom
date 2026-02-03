@@ -1204,11 +1204,28 @@ class UIController {
         if (!this.loadedReportData) return;
 
         const status = document.getElementById('conversionStatus');
+        status.textContent = `Конвертация в ${format.toUpperCase()}...`;
+        status.style.color = 'var(--text-primary)';
 
-        // ReportGenerator has been removed
-        status.textContent = 'Report generation feature has been removed.';
-        status.style.color = 'var(--text-secondary)';
-        alert(this.i18n.t('exportNotAvailable') || 'HTML/PDF export is not available.');
+        // Use global window.ReportGenerator if available
+        let reportGen = this.app.reportGenerator;
+        if (!reportGen && typeof window !== 'undefined' && window.ReportGenerator) {
+            reportGen = new window.ReportGenerator();
+        }
+
+        if (reportGen) {
+            // Use original filename base
+            const filename = `${this.loadedFilenameBase}.${format}`;
+            reportGen.downloadReport(this.loadedReportData, format, filename);
+
+            setTimeout(() => {
+                status.textContent = 'Дайын! Файл жүктелуі керек (Ready! File should download).';
+                status.style.color = 'green';
+            }, 1000);
+        } else {
+            status.textContent = 'Қате: Есеп генераторы табылмады (Error: Report generator not found).';
+            status.style.color = 'red';
+        }
     }
 
     showTestTypeSelection() {
@@ -1554,25 +1571,16 @@ class UIController {
                             <div style="height: 300px; width: 100%; position: relative;">
                                 <canvas id="evolutionChart" class="crisp-chart"></canvas>
                             </div>
-                            ${evolutionReport && (evolutionReport.insights || evolutionReport.recommendations) ? `
+                            ${evolutionReport && evolutionReport.insights ? `
                                 <div class="evolution-insights mt-8">
                                     <h3 class="text-lg font-semibold mb-4">${t('keyInsights') || 'Ключевые инсайты'}</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        ${evolutionReport.insights ? evolutionReport.insights.slice(0, 2).map(insight => `
+                                        ${evolutionReport.insights.slice(0, 2).map(insight => `
                                             <div class="insight-card ${insight.type || 'neutral'}" style="background: rgba(var(--primary-rgb), 0.05); padding: 1.25rem; border-radius: 12px; border-left: 4px solid var(--primary-color);">
                                                 <h4 style="margin: 0 0 0.75rem 0; color: var(--primary-color);">${insight.title}</h4>
                                                 <p style="margin: 0; font-size: 0.95rem; opacity: 0.9; line-height: 1.5; text-align: justify;">${insight.text}</p>
                                             </div>
-                                        `).join('') : ''}
-                                        
-                                        ${evolutionReport.recommendations ? evolutionReport.recommendations.slice(0, 2).map(rec => `
-                                            <div class="insight-card ${rec.type === 'leverage' ? 'positive' : 'attention'}" style="background: rgba(var(--primary-rgb), 0.05); padding: 1.25rem; border-radius: 12px; border-left: 4px solid ${rec.type === 'leverage' ? '#10b981' : '#f59e0b'};">
-                                                <h4 style="margin: 0 0 0.75rem 0; color: ${rec.type === 'leverage' ? '#10b981' : '#f59e0b'};">
-                                                    ${rec.type === 'leverage' ? '🚀 ' + (t('keepItUp') || 'Так держать!') : '⚠️ ' + (t('payAttention') || 'Обратите внимание')}
-                                                </h4>
-                                                <p style="margin: 0; font-size: 0.95rem; opacity: 0.9; line-height: 1.5; text-align: justify;">${rec.text}</p>
-                                            </div>
-                                        `).join('') : ''}
+                                        `).join('')}
                                     </div>
                                 </div>
                             ` : ''}
@@ -1652,9 +1660,44 @@ class UIController {
         // 1. Limit to last 10 sessions to prevent overcrowding
         const recentSessions = history.sessions.slice(-10);
 
+        // --- DEBUG: Inject raw data viewer ---
+        const container = ctx.parentElement.parentElement; // .card-body
+        let debugDiv = document.getElementById('evolution-debug');
+        if (!debugDiv) {
+            debugDiv = document.createElement('div');
+            debugDiv.id = 'evolution-debug';
+            debugDiv.style.marginTop = '20px';
+            debugDiv.style.fontSize = '10px';
+            debugDiv.style.color = '#aaa';
+            container.appendChild(debugDiv);
+        }
+
+        // Dump the last session's scores for inspection
+        const lastSession = recentSessions[recentSessions.length - 1];
+        const debugData = {
+            date: lastSession ? lastSession.date : 'N/A',
+            scores: lastSession ? lastSession.scores : null,
+            normalized: lastSession ? lastSession.normalizedScores : null,
+            debug_info: "Look here to see if values are 0 or nested objects"
+        };
+        debugDiv.innerHTML = `
+            <details>
+                <summary>🔧 Debug Data (Click to view raw values)</summary>
+                <div style="background: #111; padding: 10px; border-radius: 4px; overflow: auto; max-height: 200px;">
+                    <pre>${JSON.stringify(debugData, null, 2)}</pre>
+                </div>
+            </details>
+        `;
+        // -------------------------------------
+
+        // Prepare labels (Dates)
+        const labels = recentSessions.map((session, index) => {
+            const date = new Date(session.date);
+            return date.toLocaleDateString();
+        });
+
         // 2. Identify ALL unique dimensions across these sessions
         const allKeys = new Set();
-
         recentSessions.forEach(session => {
             const params = session.normalizedScores || session.scores || {};
             Object.keys(params).forEach(k => allKeys.add(k));

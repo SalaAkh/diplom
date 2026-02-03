@@ -1,29 +1,121 @@
 /**
- * Сервис для работы с обратной связью
+ * Объединённый модуль обратной связи
+ * Содержит FeedbackSystem (хранение) и FeedbackService (UI)
+ * 
+ * Автор: Ахмедьянов Саламат КПО 9/22-2
+ * Дата: 2026
  */
-console.log('Кері байланыс қызметі жүктелуде... (FeedbackService script loading...)');
-// Mock class if FeedbackSystem is missing
-class FeedbackSystemMock {
+
+// ============================================
+// FeedbackSystem - базовый класс для хранения отзывов
+// ============================================
+class FeedbackSystem {
     constructor() {
-        console.warn('Using FeedbackSystemMock');
+        this.storageKey = 'neural_constellation_feedback';
+        this.feedbacks = this.loadFeedbacks();
     }
-    createFeedbackForm() {
-        return '<div class="p-4 text-center">Feedback system is currently simplified.</div>';
+
+    /**
+     * Загружает сохраненные отзывы из localStorage
+     */
+    loadFeedbacks() {
+        try {
+            const saved = localStorage.getItem(this.storageKey);
+            return saved ? JSON.parse(saved) : [];
+        } catch (e) {
+            console.error('Error loading feedbacks:', e);
+            return [];
+        }
     }
+
+    /**
+     * Сохраняет текущий список отзывов в localStorage
+     */
+    saveFeedbacks() {
+        try {
+            localStorage.setItem(this.storageKey, JSON.stringify(this.feedbacks));
+        } catch (e) {
+            console.error('Error saving feedbacks:', e);
+        }
+    }
+
+    /**
+     * Отправляет новый отзыв
+     * @param {Object} feedbackData - Данные отзыва
+     * @returns {Promise<boolean>} - Результат отправки
+     */
+    async submitFeedback(feedbackData) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const newFeedback = {
+                    id: Date.now().toString(),
+                    date: new Date().toISOString(),
+                    rating: feedbackData.rating,
+                    text: feedbackData.text || '',
+                    userId: feedbackData.userId || 'anonymous',
+                    source: feedbackData.source || 'web_app'
+                };
+
+                this.feedbacks.push(newFeedback);
+                this.saveFeedbacks();
+                resolve(true);
+            }, 300);
+        });
+    }
+
+    /**
+     * Сохраняет отзыв (синхронный вариант для FeedbackService)
+     */
     saveFeedback(data) {
-        console.log('Feedback saved (mock):', data);
-        return true;
+        try {
+            const newFeedback = {
+                id: Date.now().toString(),
+                date: new Date().toISOString(),
+                ...data
+            };
+            this.feedbacks.push(newFeedback);
+            this.saveFeedbacks();
+            return true;
+        } catch (e) {
+            console.error('Error saving feedback:', e);
+            return false;
+        }
+    }
+
+    /**
+     * Возвращает все отзывы
+     */
+    getAllFeedbacks() {
+        return this.feedbacks;
+    }
+
+    /**
+     * Подсчитывает среднюю оценку
+     */
+    getAverageRating() {
+        if (this.feedbacks.length === 0) return 0;
+        const sum = this.feedbacks.reduce((acc, f) => acc + (Number(f.rating) || 0), 0);
+        return (sum / this.feedbacks.length).toFixed(1);
+    }
+
+    /**
+     * Создаёт HTML формы обратной связи (заглушка)
+     */
+    createFeedbackForm() {
+        return '<div class="p-4 text-center">Feedback form placeholder</div>';
     }
 }
 
+// ============================================
+// FeedbackService - UI сервис для работы с формой
+// ============================================
 class FeedbackService {
     constructor(i18n, auth, analyzer, ui) {
         this.i18n = i18n;
         this.auth = auth;
         this.analyzer = analyzer;
         this.ui = ui;
-        // Use real system or mock
-        this.feedbackSystem = typeof FeedbackSystem !== 'undefined' ? new FeedbackSystem() : new FeedbackSystemMock();
+        this.feedbackSystem = new FeedbackSystem();
     }
 
     /**
@@ -35,14 +127,11 @@ class FeedbackService {
         if (!container || !this.feedbackSystem) return;
 
         try {
-            // Safe execution
             const formHtml = this.feedbackSystem.createFeedbackForm({
                 normalizedScores: this.analyzer && typeof this.analyzer.getNormalizedScores === 'function' ? this.analyzer.getNormalizedScores() : {},
                 profile: this.analyzer && typeof this.analyzer.generateProfile === 'function' ? this.analyzer.generateProfile() : {}
             });
             container.innerHTML = formHtml;
-
-            // Инициализация обработчиков рейтингов
             this._initRatingHandlers(container);
         } catch (e) {
             console.error('Error showing feedback form:', e);
@@ -63,7 +152,6 @@ class FeedbackService {
                 const type = btn.dataset.type;
                 const rating = parseInt(btn.dataset.rating);
 
-                // Обновляем состояние кнопок
                 ratingButtons.forEach(b => {
                     if (b.dataset.type === type) {
                         b.classList.remove('active');
@@ -74,7 +162,6 @@ class FeedbackService {
                 });
 
                 ratings[type] = rating;
-                // Сохраняем во временное хранилище контейнера или в класс
                 container.dataset.ratings = JSON.stringify(ratings);
             });
         });
@@ -134,5 +221,5 @@ class FeedbackService {
 }
 
 // Экспорт для глобального использования
+window.FeedbackSystem = FeedbackSystem;
 window.FeedbackService = FeedbackService;
-console.log('Кері байланыс қызметі жүктелді және терезеге экспортталды (FeedbackService loaded and exported to window)');

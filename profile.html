@@ -50,7 +50,7 @@
     <link rel="stylesheet" href="css/pages.css">
     <link rel="stylesheet" href="css/themes.css">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/gamification.css">
+
     <link rel="stylesheet" href="css/google-auth.css">
     <link rel="stylesheet" href="css/transitions.css">
     <link rel="stylesheet" href="css/accessibility.css">
@@ -258,13 +258,12 @@
     <script src="js/ui/ui-controller.js" defer></script>
     <script src="js/managers/test-manager.js" defer></script>
     <script src="js/managers/results-manager.js" defer></script>
-    <script src="js/analysis/report-generator.js" defer></script>
+    <script src="js/vis/particles-background.js" defer></script>
 
     <script src="js/analysis/evolution-tracker.js" defer></script>
     <script src="js/ui/navigation-controller.js" defer></script>
-    <script src="js/services/feedback-system.js" defer></script>
-    <script src="js/services/feedback-service.js" defer></script>
-    <script src="js/vis/background-3d.js" defer></script>
+    <script src="js/services/feedback.js" defer></script>
+
     <script src="js/services/audio-feedback.js" defer></script>
     <script src="js/services/keyboard-navigation.js" defer></script>
     <script src="js/services/accessibility-service.js" defer></script>
@@ -272,19 +271,10 @@
 
     <!-- Тяжелые библиотеки загружаются лениво через ResourceLoader -->
     <script>
-        const heavyLibs = [
-            'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
-            'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
-            'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
-        ];
-
         window.addEventListener('DOMContentLoaded', () => {
-            window.resourceLoader.loadScripts(heavyLibs)
-                .then(() => {
-                    console.log('Heavy libraries loaded in profile');
-                    window.dispatchEvent(new CustomEvent('threejs-loaded'));
-                })
-                .catch(err => console.error('Error loading libraries:', err));
+            window.resourceLoader.loadScripts(['https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js'])
+                .then(() => console.log('Chart.js loaded in profile'))
+                .catch(err => console.error('Error loading Chart.js:', err));
         });
     </script>
 

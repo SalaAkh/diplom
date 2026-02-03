@@ -48,7 +48,7 @@ class ErrorHandler {
         };
 
         // Логирование для разработки
-        if (DEBUG) {
+        if (window.DEBUG) {
             console.group(`%c[Error Handler] ${context}`, 'color: #e74c3c; font-weight: bold');
             console.error('Error:', error);
             console.log('Context:', context);
@@ -132,7 +132,7 @@ class ErrorHandler {
         // }
 
         // Для разработки просто логируем
-        if (DEBUG) {
+        if (window.DEBUG) {
             console.log('[Error Reporter] Error logged:', errorInfo);
         }
     }

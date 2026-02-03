@@ -18,4 +18,7 @@ const logger = {
 // Басқа модульдерде қолдану үшін экспорттау (Export for use in other modules)
 if (typeof window !== 'undefined') {
     window.logger = logger;
+    // Define global DEBUG flag
+    window.DEBUG = !IS_PRODUCTION || localStorage.getItem('debug') === 'true' ||
+        (typeof URLSearchParams !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === 'true');
 }

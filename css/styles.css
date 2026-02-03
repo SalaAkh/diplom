@@ -3461,3 +3461,77 @@ select:focus-visible {
     display: flex;
     gap: 10px;
 }
+/* ============================================
+   Download Buttons Styling
+   ============================================ */
+.btn-download-action {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.btn-download-action:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-download-action:active {
+    transform: translateY(0);
+}
+
+/* HTML Button - Subtle Orange Tint */
+.btn-download-html {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 126, 95, 0.05));
+    border-color: rgba(255, 126, 95, 0.3);
+}
+
+.btn-download-html:hover {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 126, 95, 0.15));
+    border-color: rgba(255, 126, 95, 0.6);
+    box-shadow: 0 4px 15px rgba(255, 126, 95, 0.15);
+    color: var(--text-color);
+}
+
+.btn-download-html .material-symbols-rounded {
+    color: #ff7e5f;
+}
+
+/* Doc Button - Subtle Blue Tint */
+.btn-download-doc {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(74, 144, 226, 0.05));
+    border-color: rgba(74, 144, 226, 0.3);
+}
+
+.btn-download-doc:hover {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(74, 144, 226, 0.15));
+    border-color: rgba(74, 144, 226, 0.6);
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.15);
+    color: var(--text-color);
+}
+
+.btn-download-doc .material-symbols-rounded {
+    color: #4a90e2;
+}
+
+/* Dark Theme Adjustments */
+.dark-theme .btn-download-action {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .btn-download-action:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
