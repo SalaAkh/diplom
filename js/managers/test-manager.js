@@ -166,9 +166,9 @@ class TestManager {
 
         // Try to restore progress
         const savedProgress = this.storage.loadProgress();
-        if (savedProgress && savedProgress.mode === 'cognitive') {
-            this.currentQuestionIndex = savedProgress.currentIndex || 0;
-            this.cognitiveAnswers = savedProgress.data?.cognitive || [];
+        if (savedProgress && (savedProgress.testMode === 'cognitive' || savedProgress.mode === 'cognitive')) {
+            this.currentQuestionIndex = savedProgress.currentQuestionIndex || 0;
+            this.cognitiveAnswers = savedProgress.choices?.cognitive || [];
             console.log('Restored cognitive test progress:', this.currentQuestionIndex);
         }
 

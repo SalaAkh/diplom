@@ -586,7 +586,7 @@ class PersonalityTestApp {
             // AND it doesn't look like advanced (no scales/situational keys)
             const isAdvancedData = !Array.isArray(choices) && (choices.scales || choices.situational || choices.open);
 
-            if ((savedProgress.testMode === 'basic' || !savedProgress.testMode) && !isAdvancedData) {
+            if ((savedProgress.testMode === 'basic' || !savedProgress.testMode) && !isAdvancedData && savedProgress.testMode !== 'cognitive' && savedProgress.mode !== 'cognitive') {
                 this.testMode = 'basic';
                 if (this.testManager) this.testManager.testMode = 'basic';
 
@@ -632,6 +632,12 @@ class PersonalityTestApp {
                 }
 
                 this.currentScenarioIndex = savedProgress.currentQuestionIndex || 0;
+            }
+            // Restore cognitive test progress
+            else if (savedProgress.testMode === 'cognitive' || savedProgress.mode === 'cognitive') {
+                this.testMode = 'cognitive';
+                if (this.testManager) this.testManager.testMode = 'cognitive';
+                console.log('✅ Cognitive test progress detected');
             }
         }
     }
@@ -967,6 +973,15 @@ class PersonalityTestApp {
             // Restore saved progress
             const savedProgress = this.storage.loadProgress();
             if (savedProgress && savedProgress.choices) {
+                // Check if this is cognitive test
+                if (savedProgress.testMode === 'cognitive' || (savedProgress.mode === 'cognitive')) {
+                    console.log('🧠 Cognitive test progress found, restoring via TestManager...');
+                    if (this.testManager && typeof this.testManager.startCognitiveTest === 'function') {
+                        this.testManager.startCognitiveTest();
+                        return;
+                    }
+                }
+
                 // Restore test mode
                 let testMode = savedProgress.testMode;
 
@@ -1095,6 +1110,7 @@ class PersonalityTestApp {
                         this.testManager.currentScenarioIndex = savedProgress.currentQuestionIndex || savedProgress.choices.length;
                     }
                 }
+
 
                 this.testManager.showNext();
             } else {
