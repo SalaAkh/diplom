@@ -183,6 +183,8 @@ class UIController {
             questionHTML = this.renderOpenQuestion(question, currentLang, t);
         } else if (question.type === 'situational') {
             questionHTML = this.renderSituationalQuestion(question, currentLang, t);
+        } else if (question.type === 'cognitive') {
+            questionHTML = this.renderCognitiveQuestion(question, currentLang, t);
         } else {
             questionHTML = `<p>Unknown question type: ${question.type}</p>`;
         }
@@ -255,6 +257,24 @@ class UIController {
                 <h2>${title}</h2>
                 ${context ? `<p class="question-context">${context}</p>` : ''}
                 <p class="question-description">${description}</p>
+                <div class="options-container">${optionsHTML}</div>
+            </div>
+        `;
+    }
+
+    renderCognitiveQuestion(question, lang, t) {
+        const title = this.getScenarioText(question.text);
+
+        const optionsHTML = question.options.map(opt => `
+            <button class="option-btn" onclick="app.handleCognitiveAnswer('${opt.id}', '${question.id}')">
+                <span class="option-label" style="text-transform: uppercase;">${opt.id}</span>
+                <span class="option-text">${this.getScenarioText(opt.text)}</span>
+            </button>
+        `).join('');
+
+        return `
+            <div class="question-content">
+                <h2>${title}</h2>
                 <div class="options-container">${optionsHTML}</div>
             </div>
         `;
@@ -2043,6 +2063,39 @@ class UIController {
                 }
             ]
         });
+    }
+
+    /**
+     * Show Test Type Selection Screen
+     */
+    showTestTypeSelection() {
+        const container = document.getElementById('app');
+        if (!container) return;
+
+        container.style.opacity = '0';
+
+        if (typeof TestSelectionView !== 'undefined') {
+            const view = new TestSelectionView({
+                onSelectBasic: () => this.app.startBasicTest(),
+                onSelectAdvanced: () => this.app.startAdvancedTest(),
+                onSelectCognitive: () => this.app.startCognitiveTest(),
+                onBack: () => this.app.showIntro()
+            });
+
+            container.innerHTML = view.getHTML();
+
+            // Trigger afterRender to bind events
+            if (typeof view.afterRender === 'function') {
+                view.afterRender();
+            }
+
+            setTimeout(() => {
+                container.style.opacity = '1';
+            }, 50);
+        } else {
+            console.error('TestSelectionView not loaded. Make sure js/ui/views/TestSelectionView.js is included.');
+            this.showError('Test selection view failed to load. Please refresh the page.');
+        }
     }
 
     showError(message) {

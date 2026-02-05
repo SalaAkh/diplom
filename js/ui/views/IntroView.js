@@ -61,11 +61,139 @@ class IntroView extends BaseView {
             </section>
             
             <section class="landing-cta">
+                <style>
+                    .landing-cta {
+                        margin: 6rem 0;
+                        padding: 0 2rem;
+                    }
+                    .cta-content {
+                        max-width: 900px;
+                        margin: 0 auto;
+                        padding: 4rem 3rem;
+                        background: linear-gradient(135deg, rgba(147, 51, 234, 0.15), rgba(192, 38, 211, 0.15));
+                        border: 2px solid rgba(147, 51, 234, 0.3);
+                        border-radius: 32px;
+                        text-align: center;
+                        position: relative;
+                        overflow: hidden;
+                    }
+                    .cta-content::before {
+                        content: '';
+                        position: absolute;
+                        top: -50%;
+                        left: -50%;
+                        width: 200%;
+                        height: 200%;
+                        background: radial-gradient(circle, rgba(147, 51, 234, 0.1) 0%, transparent 70%);
+                        animation: rotate 20s linear infinite;
+                    }
+                    @keyframes rotate {
+                        from { transform: rotate(0deg); }
+                        to { transform: rotate(360deg); }
+                    }
+                    .cta-content > * {
+                        position: relative;
+                        z-index: 1;
+                    }
+                    .cta-title {
+                        font-size: 2.5rem;
+                        font-weight: 700;
+                        background: linear-gradient(135deg, #9333ea, #c026d3, #9333ea);
+                        background-size: 200% auto;
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                        margin-bottom: 1.5rem;
+                        animation: shimmer 3s linear infinite;
+                    }
+                    @keyframes shimmer {
+                        to { background-position: 200% center; }
+                    }
+                    .cta-text {
+                        font-size: 1.2rem;
+                        line-height: 1.8;
+                        opacity: 0.9;
+                        margin-bottom: 2.5rem;
+                        max-width: 700px;
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+                    .cta-content .btn {
+                        padding: 1.25rem 3rem;
+                        font-size: 1.2rem;
+                        font-weight: 600;
+                        background: linear-gradient(135deg, #9333ea, #c026d3);
+                        border: none;
+                        border-radius: 16px;
+                        color: white;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 0.75rem;
+                        box-shadow: 0 10px 40px rgba(147, 51, 234, 0.3);
+                    }
+                    .cta-content .btn:hover {
+                        transform: translateY(-4px) scale(1.02);
+                        box-shadow: 0 15px 50px rgba(147, 51, 234, 0.5);
+                    }
+                    .cta-content .btn .material-symbols-rounded {
+                        font-size: 1.5rem;
+                        animation: pulse 2s ease-in-out infinite;
+                    }
+                    @keyframes pulse {
+                        0%, 100% { transform: scale(1); }
+                        50% { transform: scale(1.1); }
+                    }
+                    .cta-decorative-icons {
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        top: 0;
+                        left: 0;
+                        pointer-events: none;
+                        opacity: 0.1;
+                    }
+                    .cta-decorative-icons .material-symbols-rounded {
+                        position: absolute;
+                        font-size: 3rem;
+                        color: #9333ea;
+                    }
+                    .cta-decorative-icons .icon-1 {
+                        top: 10%;
+                        left: 10%;
+                        animation: float 6s ease-in-out infinite;
+                    }
+                    .cta-decorative-icons .icon-2 {
+                        top: 20%;
+                        right: 15%;
+                        animation: float 7s ease-in-out infinite 1s;
+                    }
+                    .cta-decorative-icons .icon-3 {
+                        bottom: 15%;
+                        left: 15%;
+                        animation: float 8s ease-in-out infinite 2s;
+                    }
+                    .cta-decorative-icons .icon-4 {
+                        bottom: 10%;
+                        right: 10%;
+                        animation: float 9s ease-in-out infinite 3s;
+                    }
+                    @keyframes float {
+                        0%, 100% { transform: translateY(0px) rotate(0deg); }
+                        50% { transform: translateY(-20px) rotate(10deg); }
+                    }
+                </style>
                 <div class="cta-content">
+                    <div class="cta-decorative-icons">
+                        <span class="material-symbols-rounded icon-1">psychology</span>
+                        <span class="material-symbols-rounded icon-2">auto_awesome</span>
+                        <span class="material-symbols-rounded icon-3">insights</span>
+                        <span class="material-symbols-rounded icon-4">stars</span>
+                    </div>
                     <h2 class="cta-title">${this.t('ctaTitle')}</h2>
                     <p class="cta-text">${this.t('ctaText')}</p>
                     <button class="btn btn-primary btn-lg" id="ctaStartBtn">
-                        <span class="material-symbols-rounded">psychology</span>
+                        <span class="material-symbols-rounded">rocket_launch</span>
                         ${this.t('startTest')}
                     </button>
                 </div>

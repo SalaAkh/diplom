@@ -9,9 +9,10 @@ class TestManager {
         this.scenarios = [];
         this.advancedQuestions = [];
         this.completedScenarios = [];
+        this.cognitiveAnswers = [];
         this.currentScenarioIndex = 0;
         this.currentQuestionIndex = 0;
-        this.testMode = null; // 'basic' or 'advanced'
+        this.testMode = null; // 'basic' or 'advanced' or 'cognitive'
         this.currentScenarioStartTime = null;
         this.currentSituationalStep = {}; // {questionId: stepIndex}
         this.isTransitioning = false; // Flag to prevent rapid clicking
@@ -25,6 +26,7 @@ class TestManager {
         this.currentQuestionIndex = 0;
         this.completedScenarios = [];
         this.currentSituationalStep = {};
+        this.cognitiveAnswers = [];
         this.testMode = null;
         this.isTransitioning = false;
     }
@@ -149,6 +151,32 @@ class TestManager {
     }
 
     /**
+     * Start Cognitive Test
+     */
+    startCognitiveTest() {
+        this.testMode = 'cognitive';
+        this.currentQuestionIndex = 0;
+        this.cognitiveAnswers = [];
+
+        if (!window.COGNITIVE_QUESTIONS) {
+            console.error('Cognitive questions not loaded');
+            alert('Test data not loaded');
+            return;
+        }
+
+        // Try to restore progress
+        const savedProgress = this.storage.loadProgress();
+        if (savedProgress && savedProgress.mode === 'cognitive') {
+            this.currentQuestionIndex = savedProgress.currentIndex || 0;
+            this.cognitiveAnswers = savedProgress.data?.cognitive || [];
+            console.log('Restored cognitive test progress:', this.currentQuestionIndex);
+        }
+
+        this.app.state = 'testing';
+        this.showNext();
+    }
+
+    /**
      * Show next question/scenario based on mode
      */
     showNext() {
@@ -156,6 +184,8 @@ class TestManager {
 
         if (this.testMode === 'advanced') {
             this.showAdvancedQuestion();
+        } else if (this.testMode === 'cognitive') {
+            this.showCognitiveQuestion();
         } else {
             this.showBasicScenario();
         }
@@ -197,6 +227,29 @@ class TestManager {
                 percent: Math.round(progress)
             });
             this.currentScenarioStartTime = Date.now();
+        }
+    }
+
+    /**
+     * Logic for Cognitive Question Selection
+     */
+    showCognitiveQuestion() {
+        const questions = window.COGNITIVE_QUESTIONS;
+        if (!questions || this.currentQuestionIndex >= questions.length) {
+            this.finishTest();
+            return;
+        }
+
+        const question = { ...questions[this.currentQuestionIndex], type: 'cognitive' };
+        const total = questions.length;
+        const progress = ((this.currentQuestionIndex + 1) / total) * 100;
+
+        if (this.ui) {
+            this.ui.showQuestion(question, {
+                current: this.currentQuestionIndex + 1,
+                total: total,
+                percent: progress
+            });
         }
     }
 
@@ -384,6 +437,35 @@ class TestManager {
     }
 
     /**
+     * Record Answer (Cognitive)
+     */
+    recordCognitiveAnswer(choiceId, questionId) {
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+        if (window.audioFeedback) window.audioFeedback.playClick();
+
+        const questions = window.COGNITIVE_QUESTIONS;
+        const question = questions.find(q => q.id === questionId);
+
+        if (question) {
+            const choice = question.options.find(o => o.id === choiceId);
+            this.cognitiveAnswers.push({
+                questionId: questionId,
+                choice: choice // Includes type
+            });
+        }
+
+        setTimeout(() => {
+            this.currentQuestionIndex++;
+            // Save progress
+            this.storage.saveProgress({
+                cognitive: this.cognitiveAnswers
+            }, this.testMode, this.currentQuestionIndex);
+            this.showNext();
+        }, 300);
+    }
+
+    /**
      * Finish Test
      */
     finishTest() {
@@ -394,6 +476,14 @@ class TestManager {
         if (this.storage) {
             this.storage.clearAll(); // Clears 'testProgress'
             console.log('✅ Тест аяқталды, прогресс тазартылды (✅ Test finished, progress cleared)');
+        }
+
+        if (this.testMode === 'cognitive') {
+            if (this.app.showCognitiveResults && window.cognitiveService) {
+                const results = window.cognitiveService.analyze(this.cognitiveAnswers);
+                this.app.showCognitiveResults(results);
+                return;
+            }
         }
 
         if (this.ui) {

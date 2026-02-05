@@ -1547,6 +1547,278 @@ class PersonalityTestApp {
     /**
      * Удаление теста
      */
+    /**
+     * Start Cognitive Test
+     */
+    startCognitiveTest() {
+        if (this.testManager) {
+            this.testManager.startCognitiveTest();
+        }
+    }
+
+    /**
+     * Handle Cognitive Answer
+     */
+    handleCognitiveAnswer(choiceId, questionId) {
+        if (this.testManager) {
+            this.testManager.recordCognitiveAnswer(choiceId, questionId);
+        }
+    }
+
+    /**
+     * Show Cognitive Test Results
+     */
+    showCognitiveResults(results) {
+        if (!results) return;
+
+        // Save to profile/storage if needed
+        if (this.storage) {
+            this.storage.saveCognitiveResults(results);
+        }
+
+        const t = this.i18n.t.bind(this.i18n);
+        const container = document.getElementById('app');
+        if (!container) return;
+
+        const lang = this.i18n.getLanguage();
+        const details = results.details || {};
+        const title = details.title && details.title[lang] ? details.title[lang] : results.dominant;
+        const desc = details.description && details.description[lang] ? details.description[lang] : '';
+        const tips = details.tips && details.tips[lang] ? details.tips[lang] : '';
+
+        // Determine dominant style for icon
+        const styleIcons = {
+            visual: 'visibility',
+            auditory: 'hearing',
+            kinesthetic: 'sports_martial_arts'
+        };
+        const dominantIcon = styleIcons[results.dominant] || 'psychology';
+
+        container.innerHTML = `
+            <style>
+                .cognitive-results {
+                    padding: 2rem;
+                    max-width: 900px;
+                    margin: 0 auto;
+                    animation: fadeInUp 0.6s ease;
+                }
+                @keyframes fadeInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(30px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                .results-hero {
+                    text-align: center;
+                    margin-bottom: 3rem;
+                    padding: 3rem 2rem;
+                    background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(192, 38, 211, 0.1));
+                    border-radius: 24px;
+                    border: 1px solid rgba(147, 51, 234, 0.3);
+                }
+                .results-hero-icon {
+                    width: 100px;
+                    height: 100px;
+                    margin: 0 auto 1.5rem;
+                    background: linear-gradient(135deg, #9333ea, #c026d3);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 3rem;
+                    box-shadow: 0 10px 40px rgba(147, 51, 234, 0.4);
+                    animation: pulse 2s infinite;
+                }
+                @keyframes pulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.05); }
+                }
+                .results-hero h1 {
+                    font-size: 2.5rem;
+                    font-weight: 700;
+                    background: linear-gradient(135deg, #9333ea, #c026d3);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    margin-bottom: 1rem;
+                }
+                .results-hero p {
+                    font-size: 1.2rem;
+                    opacity: 0.9;
+                    line-height: 1.6;
+                }
+                .breakdown-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 1.5rem;
+                    margin-bottom: 3rem;
+                }
+                .breakdown-item {
+                    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+                    border: 1px solid rgba(255,255,255,0.1);
+                    border-radius: 20px;
+                    padding: 2rem 1.5rem;
+                    text-align: center;
+                    transition: all 0.3s ease;
+                }
+                .breakdown-item:hover {
+                    transform: translateY(-5px);
+                    border-color: rgba(147, 51, 234, 0.5);
+                    box-shadow: 0 10px 30px rgba(147, 51, 234, 0.2);
+                }
+                .breakdown-item.dominant {
+                    border: 2px solid #9333ea;
+                    box-shadow: 0 8px 32px rgba(147, 51, 234, 0.3);
+                }
+                .breakdown-label {
+                    font-size: 0.9rem;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    opacity: 0.7;
+                    margin-bottom: 0.5rem;
+                }
+                .breakdown-value {
+                    font-size: 3rem;
+                    font-weight: 700;
+                    background: linear-gradient(135deg, #9333ea, #c026d3);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    margin-bottom: 0.5rem;
+                }
+                .breakdown-bar {
+                    width: 100%;
+                    height: 8px;
+                    background: rgba(255,255,255,0.1);
+                    border-radius: 4px;
+                    overflow: hidden;
+                    margin-top: 1rem;
+                }
+                .breakdown-bar-fill {
+                    height: 100%;
+                    background: linear-gradient(90deg, #9333ea, #c026d3);
+                    border-radius: 4px;
+                    transition: width 1s ease;
+                    animation: fillBar 1.5s ease;
+                }
+                @keyframes fillBar {
+                    from { width: 0%; }
+                }
+                .tips-section {
+                    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+                    border: 1px solid rgba(255,255,255,0.1);
+                    border-radius: 20px;
+                    padding: 2rem;
+                    margin-bottom: 2rem;
+                }
+                .tips-section h3 {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #9333ea;
+                }
+                .tips-section p {
+                    font-size: 1.05rem;
+                    line-height: 1.8;
+                    opacity: 0.9;
+                }
+                .action-buttons {
+                    display: flex;
+                    gap: 1rem;
+                    flex-wrap: wrap;
+                }
+                .action-buttons button {
+                    flex: 1;
+                    min-width: 200px;
+                    padding: 1rem 2rem;
+                    font-size: 1.1rem;
+                    font-weight: 600;
+                    border-radius: 12px;
+                    border: none;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.5rem;
+                }
+                .btn-primary-gradient {
+                    background: linear-gradient(135deg, #9333ea, #c026d3);
+                    color: white;
+                }
+                .btn-primary-gradient:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 30px rgba(147, 51, 234, 0.4);
+                }
+                .btn-secondary-outline {
+                    background: transparent;
+                    border: 2px solid rgba(147, 51, 234, 0.5);
+                    color: #9333ea;
+                }
+                .btn-secondary-outline:hover {
+                    background: rgba(147, 51, 234, 0.1);
+                    border-color: #9333ea;
+                }
+            </style>
+            <div class="cognitive-results">
+                <div class="results-hero">
+                    <div class="results-hero-icon">
+                        <span class="material-symbols-rounded">${dominantIcon}</span>
+                    </div>
+                    <h1>${title}</h1>
+                    <p>${desc}</p>
+                </div>
+
+                <div class="breakdown-grid">
+                    <div class="breakdown-item ${results.dominant === 'visual' ? 'dominant' : ''}">
+                        <div class="breakdown-label">👁️ Visual</div>
+                        <div class="breakdown-value">${results.breakdown.visual}%</div>
+                        <div class="breakdown-bar">
+                            <div class="breakdown-bar-fill" style="width: ${results.breakdown.visual}%"></div>
+                        </div>
+                    </div>
+                    <div class="breakdown-item ${results.dominant === 'auditory' ? 'dominant' : ''}">
+                        <div class="breakdown-label">🎧 Auditory</div>
+                        <div class="breakdown-value">${results.breakdown.auditory}%</div>
+                        <div class="breakdown-bar">
+                            <div class="breakdown-bar-fill" style="width: ${results.breakdown.auditory}%"></div>
+                        </div>
+                    </div>
+                    <div class="breakdown-item ${results.dominant === 'kinesthetic' ? 'dominant' : ''}">
+                        <div class="breakdown-label">🤸 Kinesthetic</div>
+                        <div class="breakdown-value">${results.breakdown.kinesthetic}%</div>
+                        <div class="breakdown-bar">
+                            <div class="breakdown-bar-fill" style="width: ${results.breakdown.kinesthetic}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tips-section">
+                    <h3>
+                        <span class="material-symbols-rounded">tips_and_updates</span>
+                        ${t('learningTips')}
+                    </h3>
+                    <p>${tips}</p>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-primary-gradient" onclick="app.showProfile()">
+                        <span class="material-symbols-rounded">person</span>
+                        ${t('goToProfile')}
+                    </button>
+                    <button class="btn-secondary-outline" onclick="app.showTestTypeSelection()">
+                        <span class="material-symbols-rounded">refresh</span>
+                        ${t('takeAnotherTest')}
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
     deleteTest(index) {
         const t = this.i18n.t.bind(this.i18n);
         this.ui.showConfirm(

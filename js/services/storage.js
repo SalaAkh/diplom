@@ -186,6 +186,40 @@ class StorageManager {
     }
 
     /**
+     * Save Cognitive Test Results
+     * @param {Object} results
+     */
+    saveCognitiveResults(results) {
+        if (!this.isStorageAvailable) return false;
+        try {
+            const data = {
+                results: results,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('cognitiveTestResults', JSON.stringify(data));
+            return true;
+        } catch (error) {
+            console.error('Error saving cognitive results:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Load Cognitive Test Results
+     * @returns {Object|null}
+     */
+    loadCognitiveResults() {
+        if (!this.isStorageAvailable) return null;
+        try {
+            const data = localStorage.getItem('cognitiveTestResults');
+            return data ? JSON.parse(data).results : null;
+        } catch (error) {
+            console.error('Error loading cognitive results:', error);
+            return null;
+        }
+    }
+
+    /**
      * Сохранение прогресса прохождения теста
      * @param {Array|Object} choices - Массив выборов или объект с данными прогресса
      * @param {string} testMode - Режим теста ('basic' или 'advanced')

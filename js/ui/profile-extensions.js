@@ -584,6 +584,115 @@ class ProfileExtensions {
     }
 
     /**
+     * Рендер секции Карьеры
+     */
+    renderCareerSection() {
+        const lang = this.getLang();
+        const scores = this.getLatestScores();
+
+        if (!scores || !window.careerService) {
+            return '';
+        }
+
+        const matches = window.careerService.getTopCareers(scores, 3);
+        const titles = { kk: 'Ілеспе мамандықтар', ru: 'Карьерный навигатор', en: 'Career Navigator' };
+        const subtitle = { kk: 'Сіздің профиліңіз келесі мамандықтарға сәйкес келеді', ru: 'Ваш профиль наиболее совместим с этими профессиями', en: 'Your profile matches these professions best' };
+
+        let careersHtml = `
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                ${matches.map((career, index) => `
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 1.25rem; border-radius: 16px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: ${index === 0 ? 'var(--primary-color)' : 'rgba(255,255,255,0.1)'};"></div>
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                            <div>
+                                <h4 style="margin: 0; font-size: 1.1rem; color: #fff;">${career.title[lang] || career.title.ru}</h4>
+                                <span style="font-size: 0.8rem; opacity: 0.6; display: block; margin-top: 0.25rem;">${career.category}</span>
+                            </div>
+                            <div style="background: rgba(var(--primary-rgb), 0.1); color: var(--primary-color); padding: 4px 8px; border-radius: 8px; font-weight: 600; font-size: 0.9rem;">
+                                ${career.matchPercent}%
+                            </div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden;">
+                            <div style="width: ${career.matchPercent}%; height: 100%; background: var(--gradient-primary); border-radius: 3px;"></div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        return `
+            <div class="cosmic-card mb-6 fade-in delay-2" id="careerSection">
+                <div class="card-header">
+                    <h2 class="card-title">🚀 ${titles[lang]}</h2>
+                </div>
+                <div class="card-body">
+                    <p style="margin-bottom: 1.5rem; opacity: 0.7;">${subtitle[lang]}</p>
+                    ${careersHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Render Cognitive Style Section
+     */
+    renderCognitiveSection() {
+        // Try load from storage
+        let results = null;
+        try {
+            if (typeof StorageManager !== 'undefined') {
+                const storage = new StorageManager();
+                results = storage.loadCognitiveResults();
+            } else if (window.app && window.app.storage) {
+                results = window.app.storage.loadCognitiveResults();
+            }
+        } catch (e) { console.warn('Coult not load cognitive results', e); }
+
+        if (!results) return '';
+
+        const lang = this.getLang();
+        const titles = { kk: 'Когнитивтік стиль', ru: 'Когнитивный стиль', en: 'Cognitive Style' };
+        const subtitle = {
+            kk: 'Ақпаратты қабылдау және өңдеу стилі',
+            ru: 'Стиль восприятия и обработки информации',
+            en: 'Information perception and processing style'
+        };
+
+        const details = results.details || {};
+        const title = details.title && details.title[lang] ? details.title[lang] : results.dominant;
+        const desc = details.description && details.description[lang] ? details.description[lang] : '';
+
+        return `
+            <div class="cosmic-card mb-6 fade-in delay-2" id="cognitiveSection" style="border-left: 4px solid var(--accent-color);">
+                <div class="card-header">
+                    <h2 class="card-title">🧠 ${titles[lang]}</h2>
+                    <span style="background: var(--accent-color); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 0.9rem;">${title}</span>
+                </div>
+                <div class="card-body">
+                    <p style="margin-bottom: 1.5rem; opacity: 0.7;">${subtitle[lang]}</p>
+                    
+                     <div class="chart-container" style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 80px; text-align: center; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--secondary-color);">${results.breakdown.visual}%</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">Visual</div>
+                        </div>
+                        <div style="flex: 1; min-width: 80px; text-align: center; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--secondary-color);">${results.breakdown.auditory}%</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">Auditory</div>
+                        </div>
+                        <div style="flex: 1; min-width: 80px; text-align: center; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--secondary-color);">${results.breakdown.kinesthetic}%</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">Kinesthetic</div>
+                        </div>
+                    </div>
+                    
+                    <p style="opacity: 0.9; line-height: 1.6; text-align: justify;">${desc}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
      * Рендер секции AI-советника
      */
     renderAIAdvisorSection() {
@@ -677,9 +786,26 @@ class ProfileExtensions {
                     color: #fff !important;
                     box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2) !important;
                 }
+                @keyframes pulse-glow {
+                    0% { box-shadow: 0 0 5px rgba(var(--primary-rgb), 0.3); }
+                    50% { box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.6); }
+                    100% { box-shadow: 0 0 5px rgba(var(--primary-rgb), 0.3); }
+                }
+                .evolution-badge {
+                    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                    color: white;
+                    padding: 4px 12px;
+                    border-radius: 20px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    margin-left: 10px;
+                    box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.4);
+                    animation: pulse-glow 2s infinite;
+                }
             </style>
         `;
-        return styles + this.renderComparativeSection() + this.renderGoalsSection() + this.renderAIAdvisorSection();
+        // Ensure binding context if methods are called directly
+        return styles + this.renderComparativeSection() + this.renderGoalsSection() + this.renderCareerSection() + this.renderCognitiveSection() + this.renderAIAdvisorSection();
     }
 
     /**
