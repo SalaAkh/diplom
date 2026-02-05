@@ -15,7 +15,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.googleusercontent.com; connect-src 'self' https://accounts.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;">
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.googleusercontent.com https://upload.wikimedia.org; connect-src 'self' https://accounts.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;">
     <meta name="theme-color" content="#4a90e2">
     <meta name="author" content="Ахмедьянов Саламат КПО 9/22-2">
     <meta name="description" content="Ваш личный профиль в системе Neural Constellation.">
@@ -264,7 +264,14 @@
 
     <script src="js/analysis/evolution-tracker.js" defer></script>
 
-    <!-- New Modules: Comparative Analysis, Goals, AI Advisor -->
+    <!-- New Modules: Comparative Analysis, Goals, AI Advisor, Celebrity, Detailed Tests, Content -->
+    <script src="js/data/celebrity-profiles.js" defer></script>
+    <script src="js/services/celebrity-service.js" defer></script>
+    <script src="js/data/detailed-tests-data.js" defer></script>
+    <script src="js/services/detailed-tests-service.js" defer></script>
+    <script src="js/services/compatibility-service.js" defer></script>
+    <script src="js/data/content-database.js" defer></script>
+    <script src="js/services/content-service.js" defer></script>
     <script src="js/services/career-service.js" defer></script>
     <script src="js/analysis/comparative-analysis.js" defer></script>
     <script src="js/services/goals-service.js" defer></script>

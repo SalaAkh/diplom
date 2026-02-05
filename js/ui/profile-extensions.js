@@ -693,6 +693,1292 @@ class ProfileExtensions {
     }
 
     /**
+     * Рендер секции похожих знаменитостей
+     */
+    renderCelebritySection() {
+        const lang = this.getLang();
+        const titles = {
+            kk: 'Сіз кімге ұқсайсыз',
+            ru: 'На кого вы похожи',
+            en: 'Who You Resemble'
+        };
+        const subtitles = {
+            kk: 'Сіздің профиліңізге ұқсас танымал тұлғалар',
+            ru: 'Известные личности со схожим профилем',
+            en: 'Famous personalities with a similar profile'
+        };
+        const noDataText = {
+            kk: 'Салыстыру үшін алдымен тестті аяқтаңыз',
+            ru: 'Пройдите тест для сравнения со знаменитостями',
+            en: 'Complete a test to compare with celebrities'
+        };
+        const matchText = {
+            kk: 'ұқсастық',
+            ru: 'сходство',
+            en: 'match'
+        };
+        const categories = {
+            all: { kk: 'Барлығы', ru: 'Все', en: 'All' },
+            business: { kk: 'Бизнесмендер', ru: 'Бизнесмены', en: 'Business' },
+            science: { kk: 'Ғалымдар', ru: 'Учёные', en: 'Scientists' },
+            actors: { kk: 'Актёрлер', ru: 'Актёры', en: 'Actors' },
+            athletes: { kk: 'Спортшылар', ru: 'Спортсмены', en: 'Athletes' },
+            musicians: { kk: 'Музыканттар', ru: 'Музыканты', en: 'Musicians' },
+            leaders: { kk: 'Көшбасшылар', ru: 'Лидеры', en: 'Leaders' }
+        };
+
+        if (!this.hasData() || !window.celebrityService) {
+            return this.renderNoDataCard(lang, 'celebrity');
+        }
+
+        const scores = this.getLatestScores();
+        const celebrities = window.celebrityService.findSimilarCelebrities(scores, 6);
+
+        if (!celebrities || celebrities.length === 0) {
+            return `
+                <div class="profile-card" style="margin-bottom: 2rem;">
+                    <div class="card-header">
+                        <h3><span class="material-symbols-rounded">star</span> ${titles[lang]}</h3>
+                    </div>
+                    <div class="card-body">
+                        <p style="text-align: center; opacity: 0.7;">${noDataText[lang]}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Генерация опций категорий
+        const categoryOptions = Object.entries(categories)
+            .map(([id, names]) => `<option value="${id}">${names[lang]}</option>`)
+            .join('');
+
+        // Генерация карточек знаменитостей
+        const celebrityCards = celebrities.map(celeb => {
+            const matchColor = celeb.matchPercent >= 70 ? 'var(--success-color)' :
+                celeb.matchPercent >= 50 ? 'var(--warning-color)' : 'var(--primary-color)';
+
+            const achievementsList = Array.isArray(celeb.achievements)
+                ? celeb.achievements.slice(0, 3).join(' • ')
+                : celeb.achievements;
+
+            return `
+                <div class="celebrity-card" data-celebrity-id="${celeb.id}" style="
+                    background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+                    border-radius: 16px;
+                    padding: 1.2rem;
+                    display: flex;
+                    gap: 1rem;
+                    align-items: center;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.3)';"
+                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';"
+                   onclick="window.profileExtensions.showCelebrityDetails('${celeb.id}')">
+                    <div style="
+                        width: 64px;
+                        height: 64px;
+                        border-radius: 50%;
+                        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                        overflow: hidden;
+                        border: 2px solid rgba(255,255,255,0.2);
+                    ">
+                        ${celeb.photoUrl
+                    ? `<img src="${celeb.photoUrl}" alt="${celeb.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\\'material-symbols-rounded\\' style=\\'font-size: 28px; color: white;\\'>person</span>';">`
+                    : `<span class="material-symbols-rounded" style="font-size: 28px; color: white;">person</span>`
+                }
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${celeb.name}</h4>
+                            <span style="
+                                background: ${matchColor};
+                                color: white;
+                                padding: 2px 8px;
+                                border-radius: 12px;
+                                font-size: 0.75rem;
+                                font-weight: 600;
+                                flex-shrink: 0;
+                                margin-left: 8px;
+                            ">${celeb.matchPercent}% ${matchText[lang]}</span>
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--primary-color); margin-bottom: 4px;">${celeb.categoryName}</div>
+                        <p style="margin: 0; font-size: 0.85rem; opacity: 0.8; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${celeb.bio}</p>
+                        <div style="font-size: 0.75rem; opacity: 0.6; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${achievementsList}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        return `
+            <div class="profile-card" style="margin-bottom: 2rem;">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <h3 style="margin: 0;"><span class="material-symbols-rounded" style="color: var(--primary-color);">star</span> ${titles[lang]}</h3>
+                    <select class="cosmic-select" id="celebrityCategoryFilter" onchange="window.profileExtensions.filterCelebrities(this.value)" style="
+                        padding: 0.5rem 1rem;
+                        border-radius: 20px;
+                        border: 1px solid rgba(255,255,255,0.2);
+                        background: rgba(255,255,255,0.05);
+                        color: white;
+                        font-size: 0.85rem;
+                        cursor: pointer;
+                    ">
+                        ${categoryOptions}
+                    </select>
+                </div>
+                <p style="opacity: 0.7; margin-bottom: 1.5rem; font-size: 0.9rem;">${subtitles[lang]}</p>
+                <div id="celebrityCardsContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+                    ${celebrityCards}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Фильтр знаменитостей по категории
+     */
+    filterCelebrities(category) {
+        const scores = this.getLatestScores();
+        if (!scores || !window.celebrityService) return;
+
+        const celebrities = window.celebrityService.findSimilarCelebrities(scores, 6, category === 'all' ? null : category);
+        const container = document.getElementById('celebrityCardsContainer');
+        if (!container) return;
+
+        const lang = this.getLang();
+        const matchText = { kk: 'ұқсастық', ru: 'сходство', en: 'match' };
+
+        if (celebrities.length === 0) {
+            container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; opacity: 0.7;">Нет знаменитостей в этой категории</p>`;
+            return;
+        }
+
+        container.innerHTML = celebrities.map(celeb => {
+            const matchColor = celeb.matchPercent >= 70 ? 'var(--success-color)' :
+                celeb.matchPercent >= 50 ? 'var(--warning-color)' : 'var(--primary-color)';
+            const achievementsList = Array.isArray(celeb.achievements)
+                ? celeb.achievements.slice(0, 3).join(' • ')
+                : celeb.achievements;
+
+            return `
+                <div class="celebrity-card" data-celebrity-id="${celeb.id}" style="
+                    background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+                    border-radius: 16px;
+                    padding: 1.2rem;
+                    display: flex;
+                    gap: 1rem;
+                    align-items: center;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.3)';"
+                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';"
+                   onclick="window.profileExtensions.showCelebrityDetails('${celeb.id}')">
+                    <div style="
+                        width: 64px;
+                        height: 64px;
+                        border-radius: 50%;
+                        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                        overflow: hidden;
+                        border: 2px solid rgba(255,255,255,0.2);
+                    ">
+                        ${celeb.photoUrl
+                    ? `<img src="${celeb.photoUrl}" alt="${celeb.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\\'material-symbols-rounded\\' style=\\'font-size: 28px; color: white;\\'>person</span>';">`
+                    : `<span class="material-symbols-rounded" style="font-size: 28px; color: white;">person</span>`
+                }
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: white;">${celeb.name}</h4>
+                            <span style="
+                                background: ${matchColor};
+                                color: white;
+                                padding: 2px 8px;
+                                border-radius: 12px;
+                                font-size: 0.75rem;
+                                font-weight: 600;
+                                flex-shrink: 0;
+                            ">${celeb.matchPercent}% ${matchText[lang]}</span>
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--primary-color); margin-bottom: 4px;">${celeb.categoryName}</div>
+                        <p style="margin: 0; font-size: 0.85rem; opacity: 0.8; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${celeb.bio}</p>
+                        <div style="font-size: 0.75rem; opacity: 0.6; margin-top: 6px;">${achievementsList}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    /**
+     * Показать детали знаменитости в модальном окне
+     */
+    showCelebrityDetails(celebrityId) {
+        if (!window.celebrityService || !window.app?.ui) return;
+
+        const scores = this.getLatestScores();
+        const comparison = window.celebrityService.getDetailedComparison(scores, celebrityId);
+        if (!comparison) return;
+
+        const lang = this.getLang();
+        const celeb = comparison.celebrity;
+
+        const dimensionBars = comparison.dimensions.map(d => `
+            <div style="margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px;">
+                    <span>${d.name}</span>
+                    <span style="opacity: 0.7;">${d.user}% vs ${d.celebrity}%</span>
+                </div>
+                <div style="display: flex; gap: 4px; height: 8px;">
+                    <div style="flex: 1; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                        <div style="height: 100%; width: ${d.user}%; background: var(--primary-color); border-radius: 4px;"></div>
+                    </div>
+                    <div style="flex: 1; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                        <div style="height: 100%; width: ${d.celebrity}%; background: var(--secondary-color); border-radius: 4px;"></div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        const strengthsHtml = comparison.strengths.length > 0
+            ? `<div style="margin-top: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border-radius: 12px; border-left: 3px solid var(--success-color);">
+                <strong style="color: var(--success-color);">✓ Общие сильные стороны:</strong> ${comparison.strengths.join(', ')}
+            </div>`
+            : '';
+
+        const content = `
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: center;">
+                <div style="
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    overflow: hidden;
+                    border: 3px solid rgba(255,255,255,0.2);
+                ">
+                    ${celeb.photoUrl
+                ? `<img src="${celeb.photoUrl}" alt="${celeb.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<span style=\\'font-size: 36px; color: white;\\'>👤</span>';">`
+                : '<span style="font-size: 36px; color: white;">👤</span>'
+            }
+                </div>
+                <div>
+                    <h3 style="margin: 0 0 4px 0;">${celeb.name}</h3>
+                    <div style="color: var(--primary-color); font-size: 0.9rem;">${celeb.categoryName}</div>
+                    <div style="
+                        margin-top: 8px;
+                        display: inline-block;
+                        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                        padding: 4px 12px;
+                        border-radius: 20px;
+                        font-size: 0.9rem;
+                        font-weight: 600;
+                    ">${comparison.overallMatch}% совпадение</div>
+                </div>
+            </div>
+            <p style="opacity: 0.9; line-height: 1.6; margin-bottom: 1.5rem;">${celeb.bio}</p>
+            <h4 style="margin-bottom: 1rem;">Сравнение профилей</h4>
+            <div style="margin-bottom: 8px; display: flex; gap: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 12px; height: 12px; background: var(--primary-color); border-radius: 2px;"></span> Вы</span>
+                <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 12px; height: 12px; background: var(--secondary-color); border-radius: 2px;"></span> ${celeb.name}</span>
+            </div>
+            ${dimensionBars}
+            ${strengthsHtml}
+        `;
+
+        window.app.ui.showModal({
+            title: celeb.name,
+            content: content,
+            actions: [{ text: 'Закрыть', class: 'btn-primary', closeAfter: true, onClick: () => { } }]
+        });
+    }
+
+    /**
+     * Рендер секции детальных тестов
+     */
+    renderDetailedTestsSection() {
+        const lang = this.getLang();
+        const titles = {
+            kk: 'Терең тесттер',
+            ru: 'Детальные тесты',
+            en: 'Detailed Tests'
+        };
+        const subtitles = {
+            kk: 'Өзіңіздің жеке қасиеттеріңізді тереңірек зерттеңіз',
+            ru: 'Исследуйте свои качества глубже',
+            en: 'Explore your qualities more deeply'
+        };
+        const startText = { kk: 'Бастау', ru: 'Начать', en: 'Start' };
+        const viewResultsText = { kk: 'Нәтижелер', ru: 'Результаты', en: 'Results' };
+        const notCompletedText = { kk: 'Өтілмеген', ru: 'Не пройден', en: 'Not completed' };
+
+        if (!window.detailedTestsService) {
+            return '';
+        }
+
+        const tests = window.detailedTestsService.getAvailableTests();
+        if (!tests || tests.length === 0) {
+            return '';
+        }
+
+        const testCards = tests.map(test => {
+            const hasResults = test.hasResults;
+            const latestResults = hasResults ? window.detailedTestsService.getLatestResults(test.id) : null;
+
+            return `
+                <div class="detailed-test-card" style="
+                    background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+                    border-radius: 16px;
+                    padding: 1.5rem;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                ">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 12px;
+                            background: ${test.color};
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            flex-shrink: 0;
+                        ">
+                            <span class="material-symbols-rounded" style="color: white; font-size: 24px;">${test.icon}</span>
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 style="margin: 0 0 4px 0; font-size: 1rem; font-weight: 600;">${test.name}</h4>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">${test.questionCount} вопросов • ${test.duration} мин</div>
+                        </div>
+                    </div>
+                    
+                    <p style="margin: 0; font-size: 0.85rem; opacity: 0.8; line-height: 1.5;">${test.description}</p>
+                    
+                    ${hasResults ? `
+                        <div style="
+                            background: rgba(255,255,255,0.05);
+                            border-radius: 12px;
+                            padding: 1rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                        ">
+                            <div>
+                                <div style="font-size: 0.75rem; opacity: 0.6;">Последний результат</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: ${test.color};">${latestResults?.overallScore || 0}%</div>
+                            </div>
+                            <div style="
+                                padding: 4px 12px;
+                                background: ${latestResults?.overallScore >= 70 ? 'rgba(34, 197, 94, 0.2)' : latestResults?.overallScore >= 40 ? 'rgba(251, 191, 36, 0.2)' : 'rgba(239, 68, 68, 0.2)'};
+                                color: ${latestResults?.overallScore >= 70 ? 'var(--success-color)' : latestResults?.overallScore >= 40 ? 'var(--warning-color)' : 'var(--danger-color)'};
+                                border-radius: 20px;
+                                font-size: 0.8rem;
+                                font-weight: 600;
+                            ">${latestResults?.overallInterpretation?.label || ''}</div>
+                        </div>
+                    ` : `
+                        <div style="
+                            background: rgba(255,255,255,0.03);
+                            border-radius: 12px;
+                            padding: 1rem;
+                            text-align: center;
+                            font-size: 0.85rem;
+                            opacity: 0.6;
+                        ">${notCompletedText[lang]}</div>
+                    `}
+                    
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button onclick="window.profileExtensions.startDetailedTest('${test.id}')" style="
+                            flex: 1;
+                            padding: 0.75rem;
+                            border-radius: 10px;
+                            border: none;
+                            background: linear-gradient(135deg, ${test.color}, ${test.color}cc);
+                            color: white;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 0.5rem;
+                        " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                            <span class="material-symbols-rounded" style="font-size: 18px;">play_arrow</span>
+                            ${startText[lang]}
+                        </button>
+                        ${hasResults ? `
+                            <button onclick="window.profileExtensions.showDetailedTestResults('${test.id}')" style="
+                                padding: 0.75rem 1rem;
+                                border-radius: 10px;
+                                border: 1px solid rgba(255,255,255,0.2);
+                                background: transparent;
+                                color: white;
+                                font-weight: 500;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                            " onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+                                ${viewResultsText[lang]}
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        return `
+            <div class="profile-card" style="margin-bottom: 2rem;">
+                <div class="card-header">
+                    <h3><span class="material-symbols-rounded" style="color: var(--primary-color);">quiz</span> ${titles[lang]}</h3>
+                </div>
+                <p style="opacity: 0.7; margin-bottom: 1.5rem; font-size: 0.9rem;">${subtitles[lang]}</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+                    ${testCards}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Начать детальный тест
+     */
+    startDetailedTest(testId) {
+        const test = window.detailedTestsService?.getTestById(testId);
+        if (!test) return;
+
+        // Показываем модальное окно с тестом
+        this.showDetailedTestModal(test);
+    }
+
+    /**
+     * Показать модальное окно с детальным тестом
+     */
+    showDetailedTestModal(test) {
+        if (!window.app?.ui) return;
+
+        const lang = this.getLang();
+        const answerScale = window.detailedTestsService.getAnswerScale();
+
+        // Состояние теста
+        let currentQuestion = 0;
+        const answers = {};
+        const questions = test.questions;
+
+        const renderQuestion = (index) => {
+            const q = questions[index];
+            const scaleButtons = answerScale.map(s => `
+                <button 
+                    class="scale-btn ${answers[q.id] === s.value ? 'selected' : ''}" 
+                    data-value="${s.value}"
+                    style="
+                        padding: 0.75rem 0.5rem;
+                        border-radius: 8px;
+                        border: 1px solid ${answers[q.id] === s.value ? 'var(--primary-color)' : 'rgba(255,255,255,0.2)'};
+                        background: ${answers[q.id] === s.value ? 'rgba(var(--primary-rgb), 0.2)' : 'rgba(255,255,255,0.05)'};
+                        color: white;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        font-size: 0.75rem;
+                        text-align: center;
+                    "
+                    onclick="window.profileExtensions._selectAnswer('${q.id}', ${s.value})"
+                >${s.label}</button>
+            `).join('');
+
+            return `
+                <div style="margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.85rem; opacity: 0.7;">
+                        <span>${test.dimensionNames[q.dimension]}</span>
+                        <span>${index + 1} / ${questions.length}</span>
+                    </div>
+                    <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-bottom: 1.5rem;">
+                        <div style="height: 100%; width: ${((index + 1) / questions.length) * 100}%; background: var(--primary-color); border-radius: 2px; transition: width 0.3s ease;"></div>
+                    </div>
+                    <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem;">${q.text}</p>
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem;" id="scaleButtons">
+                        ${scaleButtons}
+                    </div>
+                </div>
+            `;
+        };
+
+        // Сохраняем состояние теста
+        this._currentTest = { test, currentQuestion, answers, questions };
+
+        const content = `
+            <div id="testQuestionContainer">
+                ${renderQuestion(0)}
+            </div>
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button id="prevQuestionBtn" style="
+                    flex: 1;
+                    padding: 0.75rem;
+                    border-radius: 10px;
+                    border: 1px solid rgba(255,255,255,0.2);
+                    background: transparent;
+                    color: white;
+                    cursor: pointer;
+                    display: none;
+                " onclick="window.profileExtensions._prevQuestion()">← Назад</button>
+                <button id="nextQuestionBtn" style="
+                    flex: 2;
+                    padding: 0.75rem;
+                    border-radius: 10px;
+                    border: none;
+                    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                    color: white;
+                    font-weight: 600;
+                    cursor: pointer;
+                " onclick="window.profileExtensions._nextQuestion()">Далее →</button>
+            </div>
+        `;
+
+        window.app.ui.showModal({
+            title: test.name,
+            content: content,
+            persistent: true,
+            actions: []
+        });
+    }
+
+    /**
+     * Выбор ответа
+     */
+    _selectAnswer(questionId, value) {
+        if (!this._currentTest) return;
+        this._currentTest.answers[questionId] = value;
+
+        // Обновляем UI кнопок
+        document.querySelectorAll('.scale-btn').forEach(btn => {
+            const btnValue = parseInt(btn.dataset.value);
+            btn.style.border = btnValue === value ? '1px solid var(--primary-color)' : '1px solid rgba(255,255,255,0.2)';
+            btn.style.background = btnValue === value ? 'rgba(var(--primary-rgb), 0.2)' : 'rgba(255,255,255,0.05)';
+        });
+    }
+
+    /**
+     * Следующий вопрос
+     */
+    _nextQuestion() {
+        if (!this._currentTest) return;
+
+        const { test, questions, answers } = this._currentTest;
+        const currentQ = questions[this._currentTest.currentQuestion];
+
+        if (!answers[currentQ.id]) {
+            // Требуем ответ
+            return;
+        }
+
+        if (this._currentTest.currentQuestion < questions.length - 1) {
+            this._currentTest.currentQuestion++;
+            this._updateQuestionUI();
+        } else {
+            // Завершаем тест
+            this._finishDetailedTest();
+        }
+    }
+
+    /**
+     * Предыдущий вопрос
+     */
+    _prevQuestion() {
+        if (!this._currentTest || this._currentTest.currentQuestion <= 0) return;
+        this._currentTest.currentQuestion--;
+        this._updateQuestionUI();
+    }
+
+    /**
+     * Обновить UI вопроса
+     */
+    _updateQuestionUI() {
+        if (!this._currentTest) return;
+
+        const { test, questions, answers, currentQuestion } = this._currentTest;
+        const q = questions[currentQuestion];
+        const answerScale = window.detailedTestsService.getAnswerScale();
+
+        const container = document.getElementById('testQuestionContainer');
+        if (!container) return;
+
+        const scaleButtons = answerScale.map(s => `
+            <button 
+                class="scale-btn" 
+                data-value="${s.value}"
+                style="
+                    padding: 0.75rem 0.5rem;
+                    border-radius: 8px;
+                    border: 1px solid ${answers[q.id] === s.value ? 'var(--primary-color)' : 'rgba(255,255,255,0.2)'};
+                    background: ${answers[q.id] === s.value ? 'rgba(var(--primary-rgb), 0.2)' : 'rgba(255,255,255,0.05)'};
+                    color: white;
+                    cursor: pointer;
+                    font-size: 0.75rem;
+                    text-align: center;
+                "
+                onclick="window.profileExtensions._selectAnswer('${q.id}', ${s.value})"
+            >${s.label}</button>
+        `).join('');
+
+        container.innerHTML = `
+            <div style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.85rem; opacity: 0.7;">
+                    <span>${test.dimensionNames[q.dimension]}</span>
+                    <span>${currentQuestion + 1} / ${questions.length}</span>
+                </div>
+                <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-bottom: 1.5rem;">
+                    <div style="height: 100%; width: ${((currentQuestion + 1) / questions.length) * 100}%; background: var(--primary-color); border-radius: 2px;"></div>
+                </div>
+                <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem;">${q.text}</p>
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem;">
+                    ${scaleButtons}
+                </div>
+            </div>
+        `;
+
+        // Обновляем кнопки навигации
+        const prevBtn = document.getElementById('prevQuestionBtn');
+        const nextBtn = document.getElementById('nextQuestionBtn');
+
+        if (prevBtn) {
+            prevBtn.style.display = currentQuestion > 0 ? 'block' : 'none';
+        }
+        if (nextBtn) {
+            nextBtn.textContent = currentQuestion >= questions.length - 1 ? 'Завершить ✓' : 'Далее →';
+        }
+    }
+
+    /**
+     * Завершить детальный тест
+     */
+    _finishDetailedTest() {
+        if (!this._currentTest) return;
+
+        const { test, answers } = this._currentTest;
+        const results = window.detailedTestsService.calculateResults(test.id, answers);
+
+        if (results) {
+            window.detailedTestsService.saveTestResults(results);
+            this.showDetailedTestResults(test.id);
+        }
+
+        this._currentTest = null;
+    }
+
+    /**
+     * Показать результаты детального теста
+     */
+    showDetailedTestResults(testId) {
+        if (!window.app?.ui || !window.detailedTestsService) return;
+
+        const results = window.detailedTestsService.getLatestResults(testId);
+        if (!results) return;
+
+        const recommendations = window.detailedTestsService.getRecommendations(testId);
+
+        const dimensionBars = Object.entries(results.dimensions).map(([key, dim]) => {
+            const color = dim.score >= 70 ? 'var(--success-color)' : dim.score >= 40 ? 'var(--warning-color)' : 'var(--danger-color)';
+            return `
+                <div style="margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.9rem;">
+                        <span>${dim.name}</span>
+                        <span style="font-weight: 600; color: ${color};">${dim.score}%</span>
+                    </div>
+                    <div style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                        <div style="height: 100%; width: ${dim.score}%; background: ${color}; border-radius: 4px;"></div>
+                    </div>
+                    <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 4px;">${dim.interpretation.description}</div>
+                </div>
+            `;
+        }).join('');
+
+        const recsHtml = recommendations.length > 0 ? `
+            <h4 style="margin: 1.5rem 0 1rem 0;">Рекомендации</h4>
+            ${recommendations.map(r => `
+                <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 0.75rem; border-left: 3px solid ${r.level === 'high' ? 'var(--success-color)' : r.level === 'low' ? 'var(--warning-color)' : 'var(--primary-color)'};">
+                    <div style="font-weight: 600; margin-bottom: 4px;">${r.dimension}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;">${r.tip}</div>
+                </div>
+            `).join('')}
+        ` : '';
+
+        const content = `
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div style="
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 1rem auto;
+                ">
+                    <span style="font-size: 2.5rem; font-weight: 700; color: white;">${results.overallScore}%</span>
+                </div>
+                <div style="font-size: 1.2rem; font-weight: 600;">${results.overallInterpretation.label}</div>
+                <div style="font-size: 0.9rem; opacity: 0.7;">${results.overallInterpretation.description}</div>
+            </div>
+            
+            <h4 style="margin-bottom: 1rem;">Результаты по измерениям</h4>
+            ${dimensionBars}
+            ${recsHtml}
+        `;
+
+        window.app.ui.showModal({
+            title: `Результаты: ${results.testName}`,
+            content: content,
+            actions: [{ text: 'Закрыть', class: 'btn-primary', closeAfter: true, onClick: () => { } }]
+        });
+    }
+
+    /**
+     * Рендер секции совместимости
+     */
+    renderCompatibilitySection() {
+        const lang = this.getLang();
+        const scores = this.getLatestScores();
+
+        if (!scores || !window.compatibilityService) {
+            return '';
+        }
+
+        const titles = {
+            kk: 'Үйлесімділік болжамы',
+            ru: 'Прогноз совместимости',
+            en: 'Compatibility Forecast'
+        };
+        const subtitles = {
+            kk: 'Белгілі тұлғалармен үйлесімділігіңізді тексеріңіз',
+            ru: 'Проверьте свою совместимость со знаменитостями',
+            en: 'Check your compatibility with celebrities'
+        };
+        const selectText = { kk: 'Таңдаңыз', ru: 'Выберите', en: 'Select' };
+        const compareText = { kk: 'Салыстыру', ru: 'Сравнить', en: 'Compare' };
+
+        // Получаем список знаменитостей
+        const celebrities = window.CELEBRITY_PROFILES?.profiles || [];
+        const celebrityOptions = celebrities.map(c => {
+            const name = typeof c.name === 'object' ? (c.name[lang] || c.name.ru) : c.name;
+            return `<option value="${c.id}">${name}</option>`;
+        }).join('');
+
+        // Топ-3 совместимых
+        const topCompatible = window.compatibilityService.findMostCompatibleCelebrities(scores, 3);
+
+        const topCardsHtml = topCompatible.map(item => {
+            const name = typeof item.celebrity.name === 'object'
+                ? (item.celebrity.name[lang] || item.celebrity.name.ru)
+                : item.celebrity.name;
+            const scoreColor = item.overallScore >= 70 ? 'var(--success-color)' :
+                item.overallScore >= 50 ? 'var(--warning-color)' : 'var(--danger-color)';
+
+            return `
+                <div class="compat-card" style="
+                    background: rgba(255,255,255,0.05);
+                    border-radius: 12px;
+                    padding: 1rem;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    border: 1px solid rgba(255,255,255,0.1);
+                " onclick="window.profileExtensions.showCompatibilityDetails('${item.celebrity.id}')"
+                   onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='var(--primary-color)'"
+                   onmouseout="this.style.transform='none';this.style.borderColor='rgba(255,255,255,0.1)'">
+                    <div style="
+                        width: 60px;
+                        height: 60px;
+                        border-radius: 50%;
+                        background: linear-gradient(135deg, ${scoreColor}, ${scoreColor}aa);
+                        margin: 0 auto 0.75rem auto;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 1.2rem;
+                        font-weight: 700;
+                        color: white;
+                    ">${item.overallScore}%</div>
+                    <div style="font-weight: 600; font-size: 0.9rem;">${name}</div>
+                    <div style="font-size: 0.75rem; opacity: 0.6; margin-top: 4px;">${item.label}</div>
+                </div>
+            `;
+        }).join('');
+
+        return `
+            <div class="profile-card" style="margin-bottom: 2rem;">
+                <div class="card-header">
+                    <h3><span class="material-symbols-rounded" style="color: var(--primary-color);">diversity_3</span> ${titles[lang]}</h3>
+                </div>
+                <p style="opacity: 0.7; margin-bottom: 1.5rem; font-size: 0.9rem;">${subtitles[lang]}</p>
+                
+                <!-- Топ совместимых -->
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="font-size: 0.95rem; margin-bottom: 1rem; opacity: 0.9;">🏆 Топ совместимости</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem;">
+                        ${topCardsHtml}
+                    </div>
+                </div>
+                
+                <!-- Сравнение с выбранной знаменитостью -->
+                <div style="
+                    background: rgba(255,255,255,0.03);
+                    border-radius: 12px;
+                    padding: 1.25rem;
+                    border: 1px solid rgba(255,255,255,0.08);
+                ">
+                    <div style="font-size: 0.9rem; margin-bottom: 1rem; opacity: 0.8;">Сравниться с:</div>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <select id="compatCelebritySelect" style="
+                            flex: 1;
+                            padding: 0.75rem 1rem;
+                            border-radius: 10px;
+                            border: 1px solid rgba(255,255,255,0.2);
+                            background: rgba(255,255,255,0.05);
+                            color: white;
+                            font-size: 0.9rem;
+                            cursor: pointer;
+                        ">
+                            <option value="">${selectText[lang]}...</option>
+                            ${celebrityOptions}
+                        </select>
+                        <button onclick="window.profileExtensions.compareCelebrity()" style="
+                            padding: 0.75rem 1.5rem;
+                            border-radius: 10px;
+                            border: none;
+                            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                            color: white;
+                            font-weight: 600;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            gap: 0.5rem;
+                        ">
+                            <span class="material-symbols-rounded" style="font-size: 18px;">compare</span>
+                            ${compareText[lang]}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Сравнить со знаменитостью (по выбору)
+     */
+    compareCelebrity() {
+        const select = document.getElementById('compatCelebritySelect');
+        if (!select || !select.value) return;
+        this.showCompatibilityDetails(select.value);
+    }
+
+    /**
+     * Показать детали совместимости
+     */
+    showCompatibilityDetails(celebrityId) {
+        if (!window.app?.ui || !window.compatibilityService) return;
+
+        const scores = this.getLatestScores();
+        if (!scores) return;
+
+        const result = window.compatibilityService.compareWithCelebrity(scores, celebrityId);
+        if (!result) return;
+
+        const lang = this.getLang();
+        const name = typeof result.celebrity.name === 'object'
+            ? (result.celebrity.name[lang] || result.celebrity.name.ru)
+            : result.celebrity.name;
+
+        // Gauge
+        const gaugeColor = result.overallScore >= 70 ? 'var(--success-color)' :
+            result.overallScore >= 50 ? 'var(--warning-color)' : 'var(--danger-color)';
+        const rotation = (result.overallScore / 100) * 180 - 90;
+
+        // Dimension bars
+        const dimBars = Object.entries(result.dimensions).map(([dim, score]) => {
+            const dimLabel = window.compatibilityService.dimensionLabels[lang]?.[dim] || dim;
+            const barColor = score >= 70 ? 'var(--success-color)' : score >= 50 ? 'var(--warning-color)' : 'var(--danger-color)';
+            return `
+                <div style="margin-bottom: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px;">
+                        <span>${dimLabel}</span>
+                        <span style="font-weight: 600;">${score}%</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                        <div style="height: 100%; width: ${score}%; background: ${barColor}; border-radius: 3px;"></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Synergies and conflicts
+        const synergiesHtml = result.synergies.length > 0 ? `
+            <div style="margin-top: 1rem;">
+                <div style="font-weight: 600; color: var(--success-color); margin-bottom: 0.5rem;">💚 Области синергии</div>
+                ${result.synergies.map(s => `
+                    <div style="padding: 0.5rem; background: rgba(34,197,94,0.1); border-radius: 8px; margin-bottom: 0.5rem; font-size: 0.85rem;">
+                        ${s.dimension} (${s.score}%)
+                    </div>
+                `).join('')}
+            </div>
+        ` : '';
+
+        const conflictsHtml = result.conflicts.length > 0 ? `
+            <div style="margin-top: 1rem;">
+                <div style="font-weight: 600; color: var(--warning-color); margin-bottom: 0.5rem;">⚠️ Области напряжения</div>
+                ${result.conflicts.map(c => `
+                    <div style="padding: 0.5rem; background: rgba(251,191,36,0.1); border-radius: 8px; margin-bottom: 0.5rem; font-size: 0.85rem;">
+                        ${c.dimension} (${c.score}%)
+                    </div>
+                `).join('')}
+            </div>
+        ` : '';
+
+        // Recommendations
+        const recommendations = window.compatibilityService.generateRecommendations(result);
+        const recsHtml = recommendations.length > 0 ? `
+            <h4 style="margin: 1.5rem 0 1rem 0;">Рекомендации по взаимодействию</h4>
+            ${recommendations.map(r => `
+                <div style="
+                    padding: 1rem;
+                    background: rgba(255,255,255,0.05);
+                    border-radius: 10px;
+                    margin-bottom: 0.75rem;
+                    border-left: 3px solid ${r.type === 'synergy' ? 'var(--success-color)' : 'var(--warning-color)'};
+                ">
+                    <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">${r.dimension}</div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">${r.advice}</div>
+                </div>
+            `).join('')}
+        ` : '';
+
+        const content = `
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <!-- Gauge circle -->
+                <div style="
+                    width: 120px;
+                    height: 120px;
+                    border-radius: 50%;
+                    background: conic-gradient(${gaugeColor} 0deg, ${gaugeColor} ${result.overallScore * 3.6}deg, rgba(255,255,255,0.1) ${result.overallScore * 3.6}deg);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 1rem auto;
+                    position: relative;
+                ">
+                    <div style="
+                        width: 90px;
+                        height: 90px;
+                        border-radius: 50%;
+                        background: var(--bg-secondary);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: column;
+                    ">
+                        <span style="font-size: 2rem; font-weight: 700;">${result.overallScore}%</span>
+                    </div>
+                </div>
+                <div style="font-size: 1.1rem; font-weight: 600;">${result.label}</div>
+                <div style="font-size: 0.9rem; opacity: 0.7;">с ${name}</div>
+            </div>
+            
+            <h4 style="margin-bottom: 1rem;">По измерениям</h4>
+            ${dimBars}
+            ${synergiesHtml}
+            ${conflictsHtml}
+            ${recsHtml}
+        `;
+
+        window.app.ui.showModal({
+            title: `Совместимость с ${name}`,
+            content: content,
+            actions: [{ text: 'Закрыть', class: 'btn-primary', closeAfter: true, onClick: () => { } }]
+        });
+    }
+
+    /**
+     * Рендер секции персонализированного контента
+     */
+    renderContentSection() {
+        const lang = this.getLang();
+        const scores = this.getLatestScores();
+
+        if (!scores || !window.contentService) {
+            return '';
+        }
+
+        const titles = {
+            kk: 'Дамуға арналған контент',
+            ru: 'Контент для развития',
+            en: 'Content for Growth'
+        };
+        const tabLabels = {
+            kk: { books: 'Кітаптар', courses: 'Курстар', exercises: 'Жаттығулар' },
+            ru: { books: 'Книги', courses: 'Курсы', exercises: 'Упражнения' },
+            en: { books: 'Books', courses: 'Courses', exercises: 'Exercises' }
+        };
+        const addToPlanText = { kk: 'Жоспарға қосу', ru: 'В план', en: 'Add to plan' };
+        const inPlanText = { kk: 'Жоспарда', ru: 'В плане', en: 'In plan' };
+
+        // Получаем рекомендации
+        const books = window.contentService.getRecommendedBooks(scores, 4);
+        const courses = window.contentService.getRecommendedCourses(scores, 3);
+        const exercises = window.contentService.getExercises(null, 3);
+
+        // Карточки книг
+        const booksHtml = books.map(book => `
+            <div class="content-card" style="
+                background: rgba(255,255,255,0.05);
+                border-radius: 12px;
+                padding: 1rem;
+                border: 1px solid rgba(255,255,255,0.1);
+            ">
+                <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                    <span style="font-size: 2rem;">${book.icon}</span>
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0 0 4px 0; font-size: 0.95rem;">${book.title}</h4>
+                        <div style="font-size: 0.8rem; opacity: 0.6;">${book.author}</div>
+                    </div>
+                </div>
+                <p style="margin: 0.75rem 0; font-size: 0.85rem; opacity: 0.8; line-height: 1.4;">${book.description}</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="
+                        font-size: 0.75rem;
+                        padding: 4px 8px;
+                        background: rgba(255,255,255,0.1);
+                        border-radius: 6px;
+                    ">${book.difficultyLabel}</span>
+                    <button onclick="window.profileExtensions.togglePlan('${book.id}')" style="
+                        padding: 6px 12px;
+                        border-radius: 8px;
+                        border: none;
+                        background: ${book.inPlan ? 'var(--success-color)' : 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))'};
+                        color: white;
+                        font-size: 0.8rem;
+                        cursor: pointer;
+                    ">${book.inPlan ? inPlanText[lang] : addToPlanText[lang]}</button>
+                </div>
+            </div>
+        `).join('');
+
+        // Карточки курсов
+        const coursesHtml = courses.map(course => `
+            <div class="content-card" style="
+                background: rgba(255,255,255,0.05);
+                border-radius: 12px;
+                padding: 1rem;
+                border: 1px solid rgba(255,255,255,0.1);
+            ">
+                <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                    <span style="font-size: 2rem;">${course.icon}</span>
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0 0 4px 0; font-size: 0.95rem;">${course.title}</h4>
+                        <div style="font-size: 0.8rem; opacity: 0.6;">${course.platform} • ${course.duration}</div>
+                    </div>
+                </div>
+                <p style="margin: 0.75rem 0; font-size: 0.85rem; opacity: 0.8; line-height: 1.4;">${course.description}</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="
+                        font-size: 0.75rem;
+                        padding: 4px 8px;
+                        background: rgba(255,255,255,0.1);
+                        border-radius: 6px;
+                    ">${course.difficultyLabel}</span>
+                    <button onclick="window.profileExtensions.togglePlan('${course.id}')" style="
+                        padding: 6px 12px;
+                        border-radius: 8px;
+                        border: none;
+                        background: ${course.inPlan ? 'var(--success-color)' : 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))'};
+                        color: white;
+                        font-size: 0.8rem;
+                        cursor: pointer;
+                    ">${course.inPlan ? inPlanText[lang] : addToPlanText[lang]}</button>
+                </div>
+            </div>
+        `).join('');
+
+        // Карточки упражнений
+        const exercisesHtml = exercises.map(ex => `
+            <div class="content-card" style="
+                background: rgba(255,255,255,0.05);
+                border-radius: 12px;
+                padding: 1rem;
+                border: 1px solid rgba(255,255,255,0.1);
+            ">
+                <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                    <span style="font-size: 2rem;">${ex.icon}</span>
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0 0 4px 0; font-size: 0.95rem;">${ex.title}</h4>
+                        <div style="font-size: 0.8rem; opacity: 0.6;">${ex.duration} • ${ex.frequency === 'daily' ? 'Ежедневно' : ex.frequency}</div>
+                    </div>
+                </div>
+                <p style="margin: 0.75rem 0; font-size: 0.85rem; opacity: 0.8; line-height: 1.4;">${ex.description}</p>
+                <button onclick="window.profileExtensions.showExerciseDetails('${ex.id}')" style="
+                    width: 100%;
+                    padding: 8px;
+                    border-radius: 8px;
+                    border: 1px solid rgba(255,255,255,0.2);
+                    background: transparent;
+                    color: white;
+                    font-size: 0.85rem;
+                    cursor: pointer;
+                ">Подробнее →</button>
+            </div>
+        `).join('');
+
+        return `
+            <div class="profile-card" style="margin-bottom: 2rem;">
+                <div class="card-header">
+                    <h3><span class="material-symbols-rounded" style="color: var(--primary-color);">auto_stories</span> ${titles[lang]}</h3>
+                </div>
+                
+                <!-- Табы -->
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+                    <button class="content-tab active" data-tab="books" onclick="window.profileExtensions.switchContentTab('books')" style="
+                        padding: 0.5rem 1rem;
+                        border-radius: 8px 8px 0 0;
+                        border: none;
+                        background: var(--primary-color);
+                        color: white;
+                        font-weight: 600;
+                        cursor: pointer;
+                    ">📚 ${tabLabels[lang].books}</button>
+                    <button class="content-tab" data-tab="courses" onclick="window.profileExtensions.switchContentTab('courses')" style="
+                        padding: 0.5rem 1rem;
+                        border-radius: 8px 8px 0 0;
+                        border: none;
+                        background: rgba(255,255,255,0.1);
+                        color: white;
+                        font-weight: 500;
+                        cursor: pointer;
+                    ">🎓 ${tabLabels[lang].courses}</button>
+                    <button class="content-tab" data-tab="exercises" onclick="window.profileExtensions.switchContentTab('exercises')" style="
+                        padding: 0.5rem 1rem;
+                        border-radius: 8px 8px 0 0;
+                        border: none;
+                        background: rgba(255,255,255,0.1);
+                        color: white;
+                        font-weight: 500;
+                        cursor: pointer;
+                    ">🏃 ${tabLabels[lang].exercises}</button>
+                </div>
+                
+                <!-- Контент табов -->
+                <div id="contentTabBooks" class="content-tab-pane" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem;">
+                    ${booksHtml}
+                </div>
+                <div id="contentTabCourses" class="content-tab-pane" style="display: none; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem;">
+                    ${coursesHtml}
+                </div>
+                <div id="contentTabExercises" class="content-tab-pane" style="display: none; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem;">
+                    ${exercisesHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Переключить таб контента
+     */
+    switchContentTab(tabName) {
+        // Скрываем все панели
+        document.querySelectorAll('.content-tab-pane').forEach(pane => {
+            pane.style.display = 'none';
+        });
+
+        // Сбрасываем стили табов
+        document.querySelectorAll('.content-tab').forEach(tab => {
+            tab.style.background = 'rgba(255,255,255,0.1)';
+        });
+
+        // Показываем выбранную панель
+        const paneId = 'contentTab' + tabName.charAt(0).toUpperCase() + tabName.slice(1);
+        const pane = document.getElementById(paneId);
+        if (pane) {
+            pane.style.display = 'grid';
+        }
+
+        // Активируем таб
+        const activeTab = document.querySelector(`.content-tab[data-tab="${tabName}"]`);
+        if (activeTab) {
+            activeTab.style.background = 'var(--primary-color)';
+        }
+    }
+
+    /**
+     * Добавить/убрать из плана
+     */
+    togglePlan(contentId) {
+        if (!window.contentService) return;
+
+        const progress = window.contentService.getProgress();
+        if (progress.inPlan?.includes(contentId)) {
+            window.contentService.removeFromPlan(contentId);
+        } else {
+            window.contentService.addToPlan(contentId);
+        }
+
+        // Обновляем отображение (простое обновление страницы)
+        location.reload();
+    }
+
+    /**
+     * Показать детали упражнения
+     */
+    showExerciseDetails(exerciseId) {
+        if (!window.app?.ui || !window.contentService) return;
+
+        const exercises = window.contentService.getExercises();
+        const ex = exercises.find(e => e.id === exerciseId);
+        if (!ex) return;
+
+        const instructionsList = ex.instructions.map((step, i) => `
+            <div style="display: flex; gap: 0.75rem; margin-bottom: 1rem;">
+                <div style="
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 50%;
+                    background: var(--primary-color);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 600;
+                    flex-shrink: 0;
+                ">${i + 1}</div>
+                <div style="font-size: 0.95rem; line-height: 1.5;">${step}</div>
+            </div>
+        `).join('');
+
+        const content = `
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <span style="font-size: 4rem;">${ex.icon}</span>
+                <div style="margin-top: 0.5rem; opacity: 0.7;">${ex.duration} • ${ex.difficultyLabel}</div>
+            </div>
+            <p style="font-size: 1rem; line-height: 1.6; margin-bottom: 1.5rem;">${ex.description}</p>
+            <h4 style="margin-bottom: 1rem;">Как выполнять:</h4>
+            ${instructionsList}
+        `;
+
+        window.app.ui.showModal({
+            title: ex.title,
+            content: content,
+            actions: [
+                { text: 'Добавить в план', class: 'btn-primary', closeAfter: true, onClick: () => window.contentService.addToPlan(exerciseId) },
+                { text: 'Закрыть', closeAfter: true, onClick: () => { } }
+            ]
+        });
+    }
+
+    /**
      * Рендер секции AI-советника
      */
     renderAIAdvisorSection() {
@@ -805,7 +2091,7 @@ class ProfileExtensions {
             </style>
         `;
         // Ensure binding context if methods are called directly
-        return styles + this.renderComparativeSection() + this.renderGoalsSection() + this.renderCareerSection() + this.renderCognitiveSection() + this.renderAIAdvisorSection();
+        return styles + this.renderCelebritySection() + this.renderDetailedTestsSection() + this.renderCompatibilitySection() + this.renderContentSection() + this.renderComparativeSection() + this.renderGoalsSection() + this.renderCareerSection() + this.renderCognitiveSection() + this.renderAIAdvisorSection();
     }
 
     /**
