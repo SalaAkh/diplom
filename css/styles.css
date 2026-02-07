@@ -3535,3 +3535,168 @@ select:focus-visible {
     background: rgba(255, 255, 255, 0.1);
 }
 
+/* ========================================
+   Archetype Card Styles
+   ======================================== */
+
+.archetype-section {
+    margin-bottom: 2rem;
+}
+
+.archetype-card {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1), 
+        rgba(99, 102, 241, 0.15));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--archetype-color, #6366f1);
+    border-radius: 20px;
+    padding: 2rem;
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    transition: all 0.3s ease;
+}
+
+.archetype-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--archetype-color, #6366f1);
+}
+
+.archetype-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.archetype-icon-wrapper {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    background: var(--archetype-color, #6366f1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+}
+
+.archetype-icon {
+    font-size: 40px;
+    color: white;
+}
+
+.archetype-content {
+    flex: 1;
+}
+
+.archetype-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--archetype-color, #6366f1);
+    margin-bottom: 0.5rem;
+}
+
+.archetype-name {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+}
+
+.archetype-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+.archetype-celebrities {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.celebrities-label {
+    color: var(--text-light);
+}
+
+.celebrities-names {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.archetype-match {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.match-label {
+    color: var(--text-light);
+}
+
+.match-value {
+    font-weight: 700;
+    color: var(--archetype-color, #6366f1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .archetype-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+    
+    .archetype-icon-wrapper {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .archetype-icon {
+        font-size: 30px;
+    }
+    
+    .archetype-name {
+        font-size: 1.5rem;
+    }
+    
+    .archetype-description {
+        font-size: 1rem;
+    }
+    
+    .archetype-celebrities {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+/* Light theme adjustments */
+body:not(.dark-theme) .archetype-card {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.9), 
+        rgba(255, 255, 255, 0.7));
+    border-color: var(--archetype-color, #6366f1);
+}
+

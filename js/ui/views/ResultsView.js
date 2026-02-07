@@ -41,6 +41,8 @@ class ResultsView extends BaseView {
                     <p class="results-subtitle">${this.t('yourProfile')}</p>
                 </header>
                 
+                ${this.getArchetypeHTML()}
+                
                 <section class="results-section" id="profileSection">
                     <h2 class="section-title">${this.t('visualProfile')}</h2>
                     <div class="chart-container" id="radarChartContainer"></div>
@@ -144,6 +146,46 @@ class ResultsView extends BaseView {
         if (value > -0.2) return 'balanced';
         if (value > -0.5) return 'medium-low';
         return 'low';
+    }
+
+    /**
+     * HTML блока архетипа личности
+     * @returns {string}
+     */
+    getArchetypeHTML() {
+        const archetype = this.results.profile?.archetype;
+        if (!archetype) {
+            return '';
+        }
+
+        const celebrities = archetype.celebrities && archetype.celebrities.length > 0
+            ? archetype.celebrities.slice(0, 2).join(', ')
+            : '';
+
+        return `
+            <section class="results-section archetype-section" id="archetypeSection">
+                <div class="archetype-card" style="--archetype-color: ${archetype.color}">
+                    <div class="archetype-icon-wrapper">
+                        <span class="material-symbols-rounded archetype-icon">${archetype.icon}</span>
+                    </div>
+                    <div class="archetype-content">
+                        <div class="archetype-label">${this.t('yourArchetype') || 'Ваш Архетип'}</div>
+                        <h2 class="archetype-name">${this.escapeHTML(archetype.name)}</h2>
+                        <p class="archetype-description">${this.escapeHTML(archetype.description)}</p>
+                        ${celebrities ? `
+                            <div class="archetype-celebrities">
+                                <span class="celebrities-label">${this.t('similarTo') || 'Похожи на'}:</span>
+                                <span class="celebrities-names">${this.escapeHTML(celebrities)}</span>
+                            </div>
+                        ` : ''}
+                        <div class="archetype-match">
+                            <span class="match-label">${this.t('matchScore') || 'Соответствие'}:</span>
+                            <span class="match-value">${archetype.matchScore}%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        `;
     }
 
     /**

@@ -295,5 +295,9 @@
     "logout": "Logout",
     "logoutAccount": "Logout from account",
     "callToAction": "Call to action",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "yourArchetype": "Your Archetype",
+    "similarTo": "Similar to",
+    "matchScore": "Match",
+    "dimensionScores": "Dimension Scores"
 }

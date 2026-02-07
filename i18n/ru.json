@@ -295,5 +295,9 @@
     "logout": "Выйти",
     "logoutAccount": "Выйти из аккаунта",
     "callToAction": "Призыв к действию",
-    "notifications": "Уведомления"
+    "notifications": "Уведомления",
+    "yourArchetype": "Ваш Архетип",
+    "similarTo": "Похожи на",
+    "matchScore": "Соответствие",
+    "dimensionScores": "Оценки по измерениям"
 }

@@ -421,13 +421,20 @@ class PersonalityAnalyzer {
         // Генерация рекомендаций (использует категории)
         profile.recommendations = this.generateRecommendations(scores, profile.categories);
 
-        // Добавляем тип профиля (название топ-категории)
-        profile.type = profile.categories.length > 0
-            ? profile.categories[0].name
-            : (window.t ? window.t('balancedProfile') : "Сбалансированный профиль");
-
         // Добавляем traits (черты характера) на основе доминирующих измерений
         profile.traits = this.extractTraits(scores, profile.dimensions);
+
+        // Определяем архетип личности
+        if (window.archetypeService) {
+            profile.archetype = window.archetypeService.determineArchetype(scores);
+            // Для обратной совместимости сохраняем имя архетипа в type
+            profile.type = profile.archetype.name;
+        } else {
+            // Fallback: используем название топ-категории
+            profile.type = profile.categories.length > 0
+                ? profile.categories[0].name
+                : (window.t ? window.t('balancedProfile') : "Сбалансированный профиль");
+        }
 
         return profile;
     }

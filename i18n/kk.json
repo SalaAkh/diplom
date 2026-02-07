@@ -295,5 +295,9 @@
     "logout": "Шығу",
     "logoutAccount": "Аккаунттан шығу",
     "callToAction": "Әрекетке шақыру",
-    "notifications": "Хабарландырулар"
+    "notifications": "Хабарландырулар",
+    "yourArchetype": "Сіздің Архетипіңіз",
+    "similarTo": "Ұқсайсыз",
+    "matchScore": "Сәйкестік",
+    "dimensionScores": "Өлшемдер бойынша бағалар"
 }
