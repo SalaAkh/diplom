@@ -36,7 +36,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
 
     <!-- Resource Loader -->
     <script src="js/services/resource-loader.js"></script>
@@ -90,11 +90,6 @@
             <a href="index.html" class="nav-item" role="menuitem">
                 <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">home</span></div>
                 <span class="nav-text" data-i18n="navHome">Home</span>
-
-            </a>
-            <a href="index.html#test" class="nav-item" role="menuitem">
-                <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">science</span></div>
-                <span class="nav-text" data-i18n="navStartTest">Start Test</span>
 
             </a>
             <a href="profile.html" class="nav-item active" role="menuitem">
@@ -259,24 +254,20 @@
     <script src="js/managers/test-manager.js" defer></script>
     <script src="js/managers/results-manager.js" defer></script>
     <script src="js/vis/particles-background.js" defer></script>
-    <script src="js/data/cognitive-questions.js" defer></script>
-    <script src="js/services/cognitive-service.js" defer></script>
+
 
     <script src="js/analysis/evolution-tracker.js" defer></script>
 
     <!-- New Modules: Comparative Analysis, Goals, AI Advisor, Celebrity, Detailed Tests, Content -->
     <script src="js/data/celebrity-profiles.js" defer></script>
     <script src="js/services/celebrity-service.js" defer></script>
-    <script src="js/data/detailed-tests-data.js" defer></script>
-    <script src="js/services/detailed-tests-service.js" defer></script>
-    <script src="js/services/compatibility-service.js" defer></script>
-    <script src="js/data/content-database.js" defer></script>
-    <script src="js/services/content-service.js" defer></script>
-    <script src="js/services/career-service.js" defer></script>
     <script src="js/analysis/comparative-analysis.js" defer></script>
-    <script src="js/services/goals-service.js" defer></script>
-    <script src="js/services/ai-advisor.js" defer></script>
     <script src="js/ui/profile-extensions.js" defer></script>
+
+    <!-- View Components for Report Generation -->
+    <script src="js/ui/views/BaseView.js" defer></script>
+    <script src="js/ui/views/ResultsView.js" defer></script>
+    <script src="js/services/report-generator.js" defer></script>
 
     <script src="js/ui/navigation-controller.js" defer></script>
     <script src="js/services/feedback.js" defer></script>

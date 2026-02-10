@@ -18,7 +18,8 @@
             adaptationName: "Адаптивность",
             meaningName: "Поиск смысла",
             intuitionName: "Интуиция",
-            utilityName: "Практичность"
+            utilityName: "Практичность",
+            resultsDownloaded: "Результаты успешно скачаны"
         },
         en: {
             keepItUp: "Keep it up!",
@@ -34,7 +35,8 @@
             adaptationName: "Adaptability",
             meaningName: "Search for Meaning",
             intuitionName: "Intuition",
-            utilityName: "Utility"
+            utilityName: "Utility",
+            resultsDownloaded: "Results downloaded successfully"
         },
         kk: {
             keepItUp: "Жарайсыз!",
@@ -50,7 +52,8 @@
             adaptationName: "Бейімделгіштік",
             meaningName: "Мағына іздеу",
             intuitionName: "Интуиция",
-            utilityName: "Практикалық"
+            utilityName: "Практикалық",
+            resultsDownloaded: "Нәтижелер сәтті жүктелді"
         }
     };
 

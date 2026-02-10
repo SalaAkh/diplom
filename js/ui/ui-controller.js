@@ -183,8 +183,7 @@ class UIController {
             questionHTML = this.renderOpenQuestion(question, currentLang, t);
         } else if (question.type === 'situational') {
             questionHTML = this.renderSituationalQuestion(question, currentLang, t);
-        } else if (question.type === 'cognitive') {
-            questionHTML = this.renderCognitiveQuestion(question, currentLang, t);
+
         } else {
             questionHTML = `<p>Unknown question type: ${question.type}</p>`;
         }
@@ -262,23 +261,7 @@ class UIController {
         `;
     }
 
-    renderCognitiveQuestion(question, lang, t) {
-        const title = this.getScenarioText(question.text);
 
-        const optionsHTML = question.options.map(opt => `
-            <button class="option-btn" onclick="app.handleCognitiveAnswer('${opt.id}', '${question.id}')">
-                <span class="option-label" style="text-transform: uppercase;">${opt.id}</span>
-                <span class="option-text">${this.getScenarioText(opt.text)}</span>
-            </button>
-        `).join('');
-
-        return `
-            <div class="question-content">
-                <h2>${title}</h2>
-                <div class="options-container">${optionsHTML}</div>
-            </div>
-        `;
-    }
 
     renderScenarioQuestion(question, lang, t) {
         const title = this.getScenarioText(question.title);
@@ -1620,16 +1603,16 @@ class UIController {
                                                     <h3 class="font-bold text-lg m-0">
                                                         ${test.title || `${t('testNumber')} ${history.length - index}`}
                                                     </h3>
-                                                    <button class="btn btn-ghost btn-sm p-1" onclick="app.renameTest(${index})" title="${t('rename') || 'Переименовать'}">
+                                                    <button class="btn btn-ghost btn-sm p-1 test-rename-btn" data-test-index="${index}" title="${t('rename') || 'Переименовать'}">
                                                         ✏️
                                                     </button>
-                                                    <button class="btn btn-ghost btn-sm p-1 text-red-500" onclick="app.deleteTest(${index})" title="${t('deleteTest') || 'Удалить'}">
+                                                    <button class="btn btn-ghost btn-sm p-1 text-red-500 test-delete-btn" data-test-index="${index}" title="${t('deleteTest') || 'Удалить'}">
                                                         🗑️
                                                     </button>
                                                 </div>
                                                 <span class="text-sm text-secondary">${new Date(test.date).toLocaleDateString()}</span>
                                             </div>
-                                             <button class="btn btn-secondary btn-sm" onclick="app.viewTestResults(${index})">
+                                             <button class="btn btn-secondary btn-sm test-view-btn" data-test-index="${index}">
                                                 ${t('viewResults')}
                                              </button>
                                         </div>
@@ -1651,18 +1634,42 @@ class UIController {
         `;
 
         if (showEvolution) {
-            // Give DOM time to settle (avoid blurry charts due to initial scale/layout)
-            setTimeout(() => {
+            // Use requestAnimationFrame to coordinate with browser render cycle
+            requestAnimationFrame(() => {
                 this.renderEvolutionChart(evolutionHistory);
-                // Second pass to fix any sizing glitches after animations (e.g. fade-in)
-                setTimeout(() => {
-                    if (this.evolutionChartInstance) {
-                        this.evolutionChartInstance.resize();
-                    }
-                }, 1000);
-            }, 500);
+                // Chart.js with responsive:true handles resize via ResizeObserver
+            });
         }
         this.focusHeading();
+
+        // Add event delegation for test history buttons
+        // Reuse container variable from line 1514
+        if (container) {
+            // Remove existing listeners to avoid duplicates
+            if (this.handleTestHistoryClick) {
+                container.removeEventListener('click', this.handleTestHistoryClick);
+            }
+            // Add new listener
+            this.handleTestHistoryClick = (e) => {
+                const target = e.target.closest('button');
+                if (!target) return;
+
+                const index = parseInt(target.dataset.testIndex);
+                if (isNaN(index)) return;
+
+                if (target.classList.contains('test-rename-btn')) {
+                    e.preventDefault();
+                    this.app.renameTest(index);
+                } else if (target.classList.contains('test-delete-btn')) {
+                    e.preventDefault();
+                    this.app.deleteTest(index);
+                } else if (target.classList.contains('test-view-btn')) {
+                    e.preventDefault();
+                    this.app.viewTestResults(index);
+                }
+            };
+            container.addEventListener('click', this.handleTestHistoryClick);
+        }
 
         // Initialize profile extensions (Comparative Analysis chart, etc.)
         if (window.profileExtensions && typeof window.profileExtensions.initAfterRender === 'function') {
@@ -1801,6 +1808,7 @@ class UIController {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                animation: { duration: 0 },
                 layout: {
                     padding: { left: 10, right: 30, top: 20, bottom: 10 }
                 },

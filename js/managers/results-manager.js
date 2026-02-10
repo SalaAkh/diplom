@@ -188,8 +188,47 @@ class ResultsManager {
             stats = this.analyzer.getStatistics();
         }
 
-        // HTML download is not supported - ReportGenerator removed
-        console.log('HTML export feature has been removed.');
-        alert(window.t ? window.t('exportNotAvailable') || 'HTML export not available' : 'HTML export not available');
+        // 3. Generate HTML Report
+        try {
+            // Lazy load ReportGenerator if not present in app
+            // Or use global if not registered
+            let generator;
+            if (this.app.reportGenerator) {
+                generator = this.app.reportGenerator;
+            } else if (window.ReportGenerator) {
+                generator = new window.ReportGenerator(this.app);
+                // Register for future use
+                this.app.reportGenerator = generator;
+            }
+
+            if (generator) {
+                const htmlContent = generator.generateHTML({
+                    profile,
+                    scores,
+                    normalizedScores,
+                    statistics: stats
+                });
+
+                const filename = `personality-results-${Date.now()}.html`;
+                generator.download(filename, htmlContent);
+
+                // Toast notification
+                if (this.app.toast) {
+                    this.app.toast.show(window.t ? window.t('resultsDownloaded') || 'Результаты скачаны' : 'Result downloaded', 'success');
+                }
+            } else {
+                console.error('ReportGenerator not available');
+                alert('Export service not available');
+            }
+
+        } catch (error) {
+            console.error('Export failed:', error);
+            alert('Export failed: ' + error.message);
+        }
     }
+}
+
+// Export to global scope for non-module usage
+if (typeof window !== 'undefined') {
+    window.ResultsManager = ResultsManager;
 }

@@ -8,7 +8,7 @@ class ParticleNetwork {
             containerId: options.containerId || 'particles-container',
             particleColor: options.particleColor || 'rgba(100, 149, 237, 0.5)',
             lineColor: options.lineColor || 'rgba(100, 149, 237, 0.15)',
-            particleAmount: options.particleAmount || 60,
+            particleAmount: options.particleAmount || 40,
             defaultSpeed: options.defaultSpeed || 0.5,
             ...options
         };
@@ -20,6 +20,7 @@ class ParticleNetwork {
         this.particles = [];
         this.animationFrame = null;
         this.container = null;
+        this._resizeTimer = null;
 
         this.init();
     }
@@ -52,7 +53,11 @@ class ParticleNetwork {
         this.ctx = this.canvas.getContext('2d');
 
         this.resize();
-        window.addEventListener('resize', () => this.resize());
+        // Debounced resize to avoid reflow storms
+        window.addEventListener('resize', () => {
+            clearTimeout(this._resizeTimer);
+            this._resizeTimer = setTimeout(() => this.resize(), 300);
+        });
 
         this.createParticles();
         this.animate();
@@ -83,6 +88,10 @@ class ParticleNetwork {
     animate() {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
+        // Cache threshold squared to avoid Math.sqrt per pair
+        const maxDist = 150;
+        const maxDistSq = maxDist * maxDist;
+
         // Update and draw particles
         this.particles.forEach((p, index) => {
             p.x += p.vx;
@@ -98,17 +107,18 @@ class ParticleNetwork {
             this.ctx.fillStyle = this.options.particleColor;
             this.ctx.fill();
 
-            // Connect lines
+            // Connect lines (using distance² to avoid Math.sqrt)
             for (let j = index + 1; j < this.particles.length; j++) {
                 const p2 = this.particles[j];
                 const dx = p.x - p2.x;
                 const dy = p.y - p2.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+                const distSq = dx * dx + dy * dy;
 
-                if (distance < 150) {
+                if (distSq < maxDistSq) {
+                    const distance = Math.sqrt(distSq);
                     this.ctx.beginPath();
                     this.ctx.strokeStyle = this.options.lineColor;
-                    this.ctx.lineWidth = 0.5 * (1 - distance / 150);
+                    this.ctx.lineWidth = 0.5 * (1 - distance / maxDist);
                     this.ctx.moveTo(p.x, p.y);
                     this.ctx.lineTo(p2.x, p2.y);
                     this.ctx.stroke();
@@ -120,6 +130,7 @@ class ParticleNetwork {
     }
 
     destroy() {
+        clearTimeout(this._resizeTimer);
         cancelAnimationFrame(this.animationFrame);
         if (this.canvas && this.canvas.parentNode) {
             this.canvas.parentNode.removeChild(this.canvas);
@@ -131,7 +142,7 @@ class ParticleNetwork {
 window.initParticles = () => {
     // Only init if not mobile for better performance, or reduce count
     const isMobile = window.innerWidth < 768;
-    const count = isMobile ? 30 : 80;
+    const count = isMobile ? 25 : 50;
 
     // Check for dark mode to adjust colors
     const isDark = document.body.classList.contains('dark-theme');

@@ -496,3 +496,8 @@ class TestManager {
         }
     }
 }
+
+// Export to global scope for non-module usage
+if (typeof window !== 'undefined') {
+    window.TestManager = TestManager;
+}

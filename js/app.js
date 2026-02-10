@@ -457,39 +457,38 @@ class PersonalityTestApp {
             this.checkSavedProgress();
 
             // Инициализация UI элементов (после загрузки DOM)
-            setTimeout(() => {
-                // Убеждаемся, что язык применён правильно ПЕРЕД инициализацией UI
+            // Split into two rAF frames to avoid long-running single frame
+            requestAnimationFrame(() => {
+                // Frame 1: Language + UI init
                 const currentLang = this.i18n.getLanguage();
                 document.documentElement.lang = currentLang;
-
-                // Инициализируем UI (включая селектор языка)
                 this.initUI();
 
                 // Инициализация фоновых частиц (ParticleBackground)
                 if (typeof ParticleBackground !== 'undefined') {
-                    setTimeout(() => {
+                    requestAnimationFrame(() => {
                         new ParticleBackground('background-canvas');
-                    }, 100);
+                    });
                 }
-
-
 
                 // Регистрация Service Worker для PWA
                 this.registerServiceWorker();
 
-                // Проверка текущей страницы
-                const path = window.location.pathname;
-                const page = path.split('/').pop().toLowerCase();
+                // Frame 2: Page routing + hide loading (deferred to next frame)
+                requestAnimationFrame(() => {
+                    const path = window.location.pathname;
+                    const page = path.split('/').pop().toLowerCase();
 
-                if (page === 'profile.html' || page === 'profile') {
-                    this.showProfile();
-                } else {
-                    this.state = 'intro';
-                    this.showIntro();
-                }
+                    if (page === 'profile.html' || page === 'profile') {
+                        this.showProfile();
+                    } else {
+                        this.state = 'intro';
+                        this.showIntro();
+                    }
 
-                this.hideMainLoading();
-            }, 100);
+                    this.hideMainLoading();
+                });
+            });
 
         } catch (error) {
             criticalError('Инициализация қатесі (Initialization error):', error);
@@ -510,16 +509,16 @@ class PersonalityTestApp {
                     this.visualizer = new ResultsVisualizer('radarChartContainer');
                     this.checkSavedProgress();
 
-                    setTimeout(() => {
+                    requestAnimationFrame(() => {
                         const currentLang = this.i18n.getLanguage();
                         document.documentElement.lang = currentLang;
                         this.initUI();
 
                         // Инициализация фоновых частиц для внутренних страниц (fallback)
                         if (typeof ParticleBackground !== 'undefined') {
-                            setTimeout(() => {
+                            requestAnimationFrame(() => {
                                 new ParticleBackground('background-canvas');
-                            }, 100);
+                            });
                         }
 
 
@@ -535,7 +534,7 @@ class PersonalityTestApp {
                         }
 
                         this.hideMainLoading();
-                    }, 100);
+                    });
 
                 } catch (error) {
                     criticalError('Инициализация қатесі (Initialization error):', error);
@@ -2176,9 +2175,27 @@ function initializeApp() {
 
     debugLog('Кірістірілген деректер табылды (Embedded data found via):', dataSource);
 
+    // Check if all required classes are loaded
+    const requiredClasses = ['UIController', 'TestManager', 'ResultsManager', 'StorageManager', 'AuthManager'];
+    const missingClasses = requiredClasses.filter(className => typeof window[className] === 'undefined');
+
+    if (missingClasses.length > 0) {
+        debugWarn(`Waiting for classes to load: ${missingClasses.join(', ')}`);
+        if (initAttempts < MAX_INIT_ATTEMPTS) {
+            setTimeout(initializeApp, 200);
+        } else {
+            criticalError('Required classes not loaded:', missingClasses);
+        }
+        return;
+    }
+
     // Все готово, инициализируем
     try {
         app = new PersonalityTestApp();
+        window.app = app; // Expose to global scope for onclick handlers
+        console.log('✅ window.app initialized:', window.app);
+        console.log('✅ app.renameTest exists:', typeof app.renameTest);
+        console.log('✅ app.deleteTest exists:', typeof app.deleteTest);
         // Вызываем init() после создания экземпляра
         if (app && typeof app.init === 'function') {
             app.init().catch(error => {
