@@ -457,37 +457,36 @@ class PersonalityTestApp {
             this.checkSavedProgress();
 
             // Инициализация UI элементов (после загрузки DOM)
-            // Split into two rAF frames to avoid long-running single frame
+            // Optimized: Single rAF for faster initialization
             requestAnimationFrame(() => {
-                // Frame 1: Language + UI init
+                // Set language
                 const currentLang = this.i18n.getLanguage();
                 document.documentElement.lang = currentLang;
+
+                // Initialize UI
                 this.initUI();
 
-                // Инициализация фоновых частиц (ParticleBackground)
+                // Initialize background particles
                 if (typeof ParticleBackground !== 'undefined') {
-                    requestAnimationFrame(() => {
-                        new ParticleBackground('background-canvas');
-                    });
+                    new ParticleBackground('background-canvas');
                 }
 
-                // Регистрация Service Worker для PWA
+                // Register Service Worker for PWA
                 this.registerServiceWorker();
 
-                // Frame 2: Page routing + hide loading (deferred to next frame)
-                requestAnimationFrame(() => {
-                    const path = window.location.pathname;
-                    const page = path.split('/').pop().toLowerCase();
+                // Route to page
+                const path = window.location.pathname;
+                const page = path.split('/').pop().toLowerCase();
 
-                    if (page === 'profile.html' || page === 'profile') {
-                        this.showProfile();
-                    } else {
-                        this.state = 'intro';
-                        this.showIntro();
-                    }
+                if (page === 'profile.html' || page === 'profile') {
+                    this.showProfile();
+                } else {
+                    this.state = 'intro';
+                    this.showIntro();
+                }
 
-                    this.hideMainLoading();
-                });
+                // Hide loading screen
+                this.hideMainLoading();
             });
 
         } catch (error) {
@@ -509,19 +508,16 @@ class PersonalityTestApp {
                     this.visualizer = new ResultsVisualizer('radarChartContainer');
                     this.checkSavedProgress();
 
+                    // Optimized: Single rAF for faster initialization (error recovery)
                     requestAnimationFrame(() => {
                         const currentLang = this.i18n.getLanguage();
                         document.documentElement.lang = currentLang;
                         this.initUI();
 
-                        // Инициализация фоновых частиц для внутренних страниц (fallback)
+                        // Initialize background particles (fallback)
                         if (typeof ParticleBackground !== 'undefined') {
-                            requestAnimationFrame(() => {
-                                new ParticleBackground('background-canvas');
-                            });
+                            new ParticleBackground('background-canvas');
                         }
-
-
 
                         const path = window.location.pathname;
                         const page = path.split('/').pop().toLowerCase();
@@ -1834,7 +1830,7 @@ class PersonalityTestApp {
         `;
     }
 
-    deleteTest(index) {
+    deleteTest(index, triggerElement = null) {
         const t = this.i18n.t.bind(this.i18n);
         this.ui.showConfirm(
             t('confirmDelete') || 'Вы уверены, что хотите удалить этот тест?',
@@ -1842,7 +1838,40 @@ class PersonalityTestApp {
                 if (this.auth.deleteTest(index)) {
                     this.showProfile(); // Обновляем UI
                 }
-            }
+            },
+            null,
+            triggerElement
+        );
+    }
+
+    /**
+     * Удаление выбранных тестов
+     * @param {Array<number>} indices - Массив индексов тестов для удаления
+     * @param {HTMLElement} triggerElement - Элемент, вызвавший действие
+     */
+    deleteSelectedTests(indices, triggerElement = null) {
+        const t = this.i18n.t.bind(this.i18n);
+        const count = indices.length;
+
+        if (count === 0) return;
+
+        const message = count === 1
+            ? (t('confirmDelete') || 'Вы уверены, что хотите удалить этот тест?')
+            : (t('confirmDeleteMultiple')?.replace('{count}', count) || `Вы уверены, что хотите удалить ${count} тестов?`);
+
+        this.ui.showConfirm(
+            message,
+            () => {
+                if (this.auth.deleteMultipleTests(indices)) {
+                    this.showProfile(); // Обновляем UI
+                    this.ui.showAlert(
+                        t('success') || 'Успешно',
+                        t('testsDeleted')?.replace('{count}', count) || `Удалено тестов: ${count}`
+                    );
+                }
+            },
+            null,
+            triggerElement
         );
     }
 

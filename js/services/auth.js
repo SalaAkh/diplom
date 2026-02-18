@@ -468,6 +468,35 @@ class AuthManager {
         this.updateUser(user);
         return true;
     }
+
+    /**
+     * Удаление нескольких тестов из истории
+     * @param {Array<number>} indices - Массив индексов тестов
+     */
+    deleteMultipleTests(indices) {
+        const user = this.getCurrentUser();
+        if (!user || !user.testHistory || !Array.isArray(indices) || indices.length === 0) {
+            return false;
+        }
+
+        // Сортируем индексы в обратном порядке для корректного удаления
+        const sortedIndices = [...indices].sort((a, b) => b - a);
+
+        let deletedCount = 0;
+        sortedIndices.forEach(index => {
+            if (user.testHistory[index]) {
+                user.testHistory.splice(index, 1);
+                deletedCount++;
+            }
+        });
+
+        if (deletedCount > 0) {
+            this.updateUser(user);
+            return true;
+        }
+
+        return false;
+    }
 }
 
 // Экспорт для использования в других модулях

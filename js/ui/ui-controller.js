@@ -5,6 +5,7 @@
 class UIController {
     constructor(app) {
         this.app = app;
+        this.selectedTests = new Set(); // Track selected tests for batch delete
     }
 
     /**
@@ -183,7 +184,8 @@ class UIController {
             questionHTML = this.renderOpenQuestion(question, currentLang, t);
         } else if (question.type === 'situational') {
             questionHTML = this.renderSituationalQuestion(question, currentLang, t);
-
+        } else if (question.type === 'cognitive') {
+            questionHTML = this.renderCognitiveQuestion(question, currentLang, t);
         } else {
             questionHTML = `<p>Unknown question type: ${question.type}</p>`;
         }
@@ -396,6 +398,23 @@ class UIController {
                 ${stepsIndicator}
                 <h2>${title}</h2>
                 <p class="question-description">${description}</p>
+                <div class="options-container">${optionsHTML}</div>
+            </div>
+        `;
+    }
+
+    renderCognitiveQuestion(question, lang, t) {
+        const questionText = this.getScenarioText(question.text);
+
+        const optionsHTML = question.options.map(opt => `
+            <button class="option-btn" onclick="app.handleCognitiveAnswer('${opt.id}', ${question.id})">
+                <span class="option-text">${this.getScenarioText(opt.text)}</span>
+            </button>
+        `).join('');
+
+        return `
+            <div class="question-content cognitive-question">
+                <h2>${questionText}</h2>
                 <div class="options-container">${optionsHTML}</div>
             </div>
         `;
@@ -1517,6 +1536,12 @@ class UIController {
         const t = this.i18n.t.bind(this.i18n);
         const lang = this.i18n.getLanguage();
 
+        // Initialize selected tests tracking for batch delete
+        if (!this.selectedTests) {
+            this.selectedTests = new Set();
+        }
+        this.selectedTests.clear(); // Reset selection on profile view
+
         // Fetch Evolution History for the chart
         const evolutionHistory = this.app.auth ? this.app.auth.getEvolutionHistory() : null;
         const showEvolution = evolutionHistory && evolutionHistory.sessions && evolutionHistory.sessions.length >= 2;
@@ -1595,9 +1620,20 @@ class UIController {
                         </div>
                         <div class="card-body">
                             ${history.length > 0 ? `
+                                <!-- Batch Delete Controls -->
+                                <div class="test-history-controls" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 1rem;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="selectAllTests" class="test-checkbox-all" style="width: 18px; height: 18px; cursor: pointer;">
+                                        <span>${t('selectAll') || 'Выбрать все'}</span>
+                                    </label>
+                                    <button class="btn btn-danger btn-sm" id="deleteSelectedBtn" style="display: none;">
+                                        🗑️ ${t('deleteSelected') || 'Удалить выбранные'} (<span id="selectedCount">0</span>)
+                                    </button>
+                                </div>
                                 <div class="history-list">
                                     ${history.map((test, index) => `
-                                        <div class="history-item">
+                                        <div class="history-item" data-test-index="${index}">
+                                            <input type="checkbox" class="test-checkbox" data-test-index="${index}" style="width: 18px; height: 18px; cursor: pointer; margin-right: 12px;">
                                             <div class="history-info">
                                                 <div class="flex items-center gap-2">
                                                     <h3 class="font-bold text-lg m-0">
@@ -1662,13 +1698,102 @@ class UIController {
                     this.app.renameTest(index);
                 } else if (target.classList.contains('test-delete-btn')) {
                     e.preventDefault();
-                    this.app.deleteTest(index);
+                    // Pass the button element for positioning the modal near it
+                    this.app.deleteTest(index, target);
                 } else if (target.classList.contains('test-view-btn')) {
                     e.preventDefault();
                     this.app.viewTestResults(index);
                 }
             };
             container.addEventListener('click', this.handleTestHistoryClick);
+
+            // Batch delete functionality
+            const selectAllCheckbox = document.getElementById('selectAllTests');
+            const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
+
+            console.log('Batch delete init:', {
+                selectAllCheckbox: selectAllCheckbox ? 'found' : 'NOT FOUND',
+                deleteSelectedBtn: deleteSelectedBtn ? 'found' : 'NOT FOUND',
+                testCheckboxCount: document.querySelectorAll('.test-checkbox').length
+            });
+
+            // Handle individual test checkbox changes
+            const testCheckboxes = document.querySelectorAll('.test-checkbox');
+            testCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    const index = parseInt(e.target.dataset.testIndex);
+                    console.log('Checkbox changed:', index, 'checked:', e.target.checked);
+                    if (e.target.checked) {
+                        this.selectedTests.add(index);
+                    } else {
+                        this.selectedTests.delete(index);
+                    }
+                    this.updateBatchDeleteUI();
+                });
+            });
+
+            // Handle "Select All" checkbox
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('change', (e) => {
+                    const isChecked = e.target.checked;
+                    console.log('Select All clicked:', isChecked, 'Total checkboxes:', testCheckboxes.length);
+                    testCheckboxes.forEach(checkbox => {
+                        checkbox.checked = isChecked;
+                        const index = parseInt(checkbox.dataset.testIndex);
+                        console.log('Setting checkbox', index, 'to', isChecked);
+                        if (isChecked) {
+                            this.selectedTests.add(index);
+                        } else {
+                            this.selectedTests.delete(index);
+                        }
+                    });
+                    this.updateBatchDeleteUI();
+                });
+            }
+
+            // Handle "Delete Selected" button
+            if (deleteSelectedBtn) {
+                deleteSelectedBtn.addEventListener('click', () => {
+                    const indices = Array.from(this.selectedTests);
+                    console.log('Delete selected clicked:', indices);
+                    this.app.deleteSelectedTests(indices, deleteSelectedBtn);
+                });
+            }
+        }
+    }
+
+    /**
+     * Update batch delete UI (button visibility and counter)
+     */
+    updateBatchDeleteUI() {
+        const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
+        const selectedCount = document.getElementById('selectedCount');
+        const selectAllCheckbox = document.getElementById('selectAllTests');
+        const testCheckboxes = document.querySelectorAll('.test-checkbox');
+
+        if (deleteSelectedBtn && selectedCount) {
+            const count = this.selectedTests.size;
+            selectedCount.textContent = count;
+            deleteSelectedBtn.style.display = count > 0 ? 'block' : 'none';
+
+            // Update history items visual state
+            testCheckboxes.forEach(checkbox => {
+                const index = parseInt(checkbox.dataset.testIndex);
+                const historyItem = checkbox.closest('.history-item');
+                if (historyItem) {
+                    if (this.selectedTests.has(index)) {
+                        historyItem.classList.add('selected');
+                    } else {
+                        historyItem.classList.remove('selected');
+                    }
+                }
+            });
+
+            // Update "Select All" checkbox state
+            if (selectAllCheckbox && testCheckboxes.length > 0) {
+                selectAllCheckbox.checked = this.selectedTests.size === testCheckboxes.length;
+                selectAllCheckbox.indeterminate = this.selectedTests.size > 0 && this.selectedTests.size < testCheckboxes.length;
+            }
         }
 
         // Initialize profile extensions (Comparative Analysis chart, etc.)
@@ -1901,8 +2026,9 @@ class UIController {
      * @param {string} options.content - HTML content
      * @param {Array} options.actions - Array of action buttons [{text, class, onClick}]
      * @param {boolean} options.closeOnOutsideClick - Close when clicking outside
+     * @param {HTMLElement} options.triggerElement - Element that triggered the modal (for positioning)
      */
-    showModal({ title, content, actions = [], closeOnOutsideClick = true, icon = null, type = 'default', id = 'genericModal', overlayClass = 'modal-overlay' }) {
+    showModal({ title, content, actions = [], closeOnOutsideClick = true, icon = null, type = 'default', id = 'genericModal', overlayClass = 'modal-overlay', triggerElement = null }) {
         let modal = document.getElementById(id);
 
         if (modal) modal.remove();
@@ -1927,8 +2053,58 @@ class UIController {
             return `<button class="btn ${btnClass}" id="${id}Btn${index}">${btn.text}</button>`;
         }).join('');
 
+        // Calculate position if trigger element is provided
+        let positionStyle = '';
+        if (triggerElement) {
+            const rect = triggerElement.getBoundingClientRect();
+            const modalWidth = 500; // max-width from CSS
+            const modalHeight = 250; // approximate modal height
+            const spacing = 15; // spacing from button
+
+            // Calculate initial position next to the button
+            let top = rect.top + window.scrollY;
+            let left = rect.right + spacing + window.scrollX;
+
+            // Check if modal would go off-screen to the right
+            if (left + modalWidth > window.innerWidth) {
+                // Try positioning to the left of the button
+                left = rect.left + window.scrollX - modalWidth - spacing;
+
+                // If still doesn't fit, center it horizontally
+                if (left < 0) {
+                    left = Math.max(10, (window.innerWidth - modalWidth) / 2);
+                }
+            }
+
+            // Vertical positioning: center modal vertically relative to the button
+            top = rect.top + window.scrollY + (rect.height / 2) - (modalHeight / 2);
+
+            // Make sure modal doesn't go above viewport
+            if (top < window.scrollY + 10) {
+                top = window.scrollY + 10;
+            }
+
+            // Make sure modal doesn't go below viewport
+            if (top + modalHeight > window.scrollY + window.innerHeight - 10) {
+                top = window.scrollY + window.innerHeight - modalHeight - 10;
+            }
+
+            console.log('🎯 Modal positioning:', {
+                buttonRect: { top: rect.top, left: rect.left, width: rect.width, height: rect.height },
+                calculatedTop: top,
+                calculatedLeft: left,
+                scrollY: window.scrollY,
+                scrollX: window.scrollX,
+                windowSize: { width: window.innerWidth, height: window.innerHeight }
+            });
+
+            modal.classList.add('modal-positioned');
+            // Apply position directly as inline styles instead of CSS variables
+            positionStyle = `style="position: absolute !important; top: ${top}px !important; left: ${left}px !important; transform: translate(0, 0) !important; margin: 0 !important;"`;
+        }
+
         modal.innerHTML = `
-            <div class="modal-content glass">
+            <div class="modal-content glass" ${positionStyle}>
                 <button class="modal-close material-symbols-rounded" aria-label="Close">close</button>
                 <div class="modal-header">
                     ${icon ? `<span class="material-symbols-rounded modal-type-icon">${icon}</span>` : ''}
@@ -1983,12 +2159,14 @@ class UIController {
      * @param {string} message 
      * @param {Function} onConfirm 
      * @param {Function} onCancel 
+     * @param {HTMLElement} triggerElement - Element that triggered this confirmation
      */
-    showConfirm(message, onConfirm, onCancel = null) {
+    showConfirm(message, onConfirm, onCancel = null, triggerElement = null) {
         const t = this.i18n.t.bind(this.i18n);
         this.showModal({
             title: t('confirmation') || 'Подтверждение',
             content: `<p>${message}</p>`,
+            triggerElement: triggerElement,
             actions: [
                 {
                     text: t('cancel') || 'Отмена',

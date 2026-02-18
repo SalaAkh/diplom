@@ -6,14 +6,15 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10000;
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .modal-overlay.active,
@@ -41,16 +42,18 @@
     width: 95%;
     max-width: 500px;
     position: relative;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    transform: translateY(30px);
-    transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.5s ease;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    transform: translateY(-20px) scale(0.95);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: all;
 }
 
 .modal-overlay.active .modal-content,
 .alert-overlay.active .modal-content {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
 }
 
 .modal-content.glass {
@@ -62,6 +65,14 @@
 [data-theme="dark"] .modal-content.glass {
     background: rgba(15, 23, 42, 0.9);
 }
+
+/* Positioned Modal Support */
+.modal-positioned {
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+}
+
+/* Inline styles will handle positioning for .modal-positioned .modal-content */
 
 .modal-overlay .modal-header,
 .alert-overlay .modal-header {

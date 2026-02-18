@@ -168,8 +168,8 @@ class TestManager {
         const savedProgress = this.storage.loadProgress();
         if (savedProgress && (savedProgress.testMode === 'cognitive' || savedProgress.mode === 'cognitive')) {
             this.currentQuestionIndex = savedProgress.currentQuestionIndex || 0;
-            this.cognitiveAnswers = savedProgress.choices?.cognitive || [];
-            console.log('Restored cognitive test progress:', this.currentQuestionIndex);
+            this.cognitiveAnswers = savedProgress.cognitive || [];
+            console.log('Restored cognitive test progress:', this.currentQuestionIndex, 'answers:', this.cognitiveAnswers.length);
         }
 
         this.app.state = 'testing';
