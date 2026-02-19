@@ -144,18 +144,61 @@
                                 глубины вашего 'Я'. Через серию интерактивных дилемм мы раскроем паттерны вашего
                                 мышления, которые обычно скрыты в повседневной рутине.</p>
 
-                            <div class="diploma-info"
-                                style="margin-top: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-                                <h3 data-i18n="diplomaTitle"
-                                    style="font-size: 1.1rem; line-height: 1.5; margin-bottom: 0.5rem; color: var(--text-primary);">
-                                    Дипломдық жоба: Интерактивті таңдау сценарийлері негізінде пайдаланушының жеке
-                                    қалаулары мен даму бағыттарын талдау жүйесін әзірлеу</h3>
-                                <p data-i18n="diplomaTech"
-                                    style="color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.9rem;">
-                                    HTML, CSS, JS бағдарламалау тілдерінде</p>
-                                <p data-i18n="diplomaAuthor"
-                                    style="font-weight: 600; color: var(--primary); font-size: 0.95rem;">Авторы:
-                                    Ахмедьянов Саламат КПО 9/22-2</p>
+                            <div class="diploma-info" style="
+                                    margin-top: 2rem;
+                                    padding: 0;
+                                    background: linear-gradient(135deg, rgba(74,144,226,0.08) 0%, rgba(126,87,194,0.08) 100%);
+                                    border-radius: 16px;
+                                    border: 1px solid rgba(74,144,226,0.25);
+                                    overflow: hidden;
+                                    box-shadow: 0 4px 24px rgba(74,144,226,0.08);
+                                ">
+                                <!-- Top accent bar -->
+                                <div
+                                    style="height: 3px; background: linear-gradient(90deg, var(--primary, #4a90e2), #7e57c2, var(--primary, #4a90e2));">
+                                </div>
+
+                                <div style="padding: 1.5rem;">
+                                    <!-- Badge row -->
+                                    <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem;">
+                                        <span class="material-symbols-rounded"
+                                            style="font-size: 1.2rem; color: var(--primary, #4a90e2);"
+                                            aria-hidden="true">school</span>
+                                        <span data-i18n="diplomaBadge"
+                                            style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary, #4a90e2); opacity: 0.9;">Дипломдық
+                                            жоба</span>
+                                    </div>
+
+                                    <!-- Title -->
+                                    <h3 data-i18n="diplomaTitle"
+                                        style="font-size: 1rem; line-height: 1.6; margin-bottom: 1rem; color: var(--text-primary); font-weight: 600;">
+                                        Интерактивті таңдау сценарийлері негізінде пайдаланушының жеке қалаулары мен
+                                        даму бағыттарын талдау жүйесін әзірлеу</h3>
+
+                                    <!-- Divider -->
+                                    <div style="height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 1rem;">
+                                    </div>
+
+                                    <!-- Meta row -->
+                                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span class="material-symbols-rounded"
+                                                style="font-size: 1rem; color: var(--text-secondary);"
+                                                aria-hidden="true">code</span>
+                                            <p data-i18n="diplomaTech"
+                                                style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">
+                                                HTML, CSS, JS бағдарламалау тілдерінде</p>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span class="material-symbols-rounded"
+                                                style="font-size: 1rem; color: var(--primary, #4a90e2);"
+                                                aria-hidden="true">person</span>
+                                            <p data-i18n="diplomaAuthor"
+                                                style="font-weight: 600; color: var(--primary, #4a90e2); font-size: 0.9rem; margin: 0;">
+                                                Авторы: Ахмедьянов Саламат КПО 9/22-2</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -366,6 +409,7 @@
     <!-- Scripts -->
     <script src="js/services/storage.js" defer></script>
     <script src="js/services/localization.js" defer></script>
+    <script src="js/services/localization-patch.js" defer></script>
     <script src="js/services/audio-feedback.js" defer></script>
     <script src="js/services/keyboard-navigation.js" defer></script>
     <script src="js/services/accessibility-service.js" defer></script>

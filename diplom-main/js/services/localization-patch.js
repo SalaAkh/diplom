@@ -21,10 +21,11 @@
             utilityName: "Практичность",
             resultsDownloaded: "Результаты успешно скачаны",
             // Diploma info
-            diplomaTitle: "Дипломдық жоба: Интерактивті таңдау сценарийлері негізінде пайдаланушының жеке қалаулары мен даму бағыттарын талдау жүйесін әзірлеу",
-            diplomaTech: "HTML, CSS, JS бағдарламалау тілдерінде",
-            diplomaAuthor: "Авторы: Ахмедьянов Саламат КПО 9/22-2",
-            diplomaDate: "2026 жыл",
+            diplomaBadge: "Дипломная работа",
+            diplomaTitle: "Разработка системы анализа личностных предпочтений и направлений развития пользователя на основе интерактивных сценариев выбора",
+            diplomaTech: "Разработано на HTML, CSS, JavaScript",
+            diplomaAuthor: "Автор: Ахмедьянов Саламат КПО 9/22-2",
+            diplomaDate: "2026 год",
             // Accessibility (about page)
             accessTitle: "Настройки доступности",
             accessSubtitle: "Мы стремимся сделать систему максимально доступной для всех пользователей.",
@@ -54,10 +55,11 @@
             utilityName: "Utility",
             resultsDownloaded: "Results downloaded successfully",
             // Diploma info
-            diplomaTitle: "Дипломдық жоба: Интерактивті таңдау сценарийлері негізінде пайдаланушының жеке қалаулары мен даму бағыттарын талдау жүйесін әзірлеу",
-            diplomaTech: "HTML, CSS, JS бағдарламалау тілдерінде",
-            diplomaAuthor: "Авторы: Ахмедьянов Саламат КПО 9/22-2",
-            diplomaDate: "2026 жыл",
+            diplomaBadge: "Thesis Project",
+            diplomaTitle: "Development of a user personality preference and growth direction analysis system based on interactive choice scenarios",
+            diplomaTech: "Built with HTML, CSS, JavaScript",
+            diplomaAuthor: "Author: Akhmedyanov Salamat, KPO 9/22-2",
+            diplomaDate: "2026",
             // Accessibility (about page)
             accessTitle: "Accessibility Settings",
             accessSubtitle: "We strive to make the system as accessible as possible for all users.",
@@ -87,7 +89,8 @@
             utilityName: "Практикалық",
             resultsDownloaded: "Нәтижелер сәтті жүктелді",
             // Diploma info
-            diplomaTitle: "Дипломдық жоба: Интерактивті таңдау сценарийлері негізінде пайдаланушының жеке қалаулары мен даму бағыттарын талдау жүйесін әзірлеу",
+            diplomaBadge: "Дипломдық жоба",
+            diplomaTitle: "Интерактивті таңдау сценарийлері негізінде пайдаланушының жеке қалаулары мен даму бағыттарын талдау жүйесін әзірлеу",
             diplomaTech: "HTML, CSS, JS бағдарламалау тілдерінде",
             diplomaAuthor: "Авторы: Ахмедьянов Саламат КПО 9/22-2",
             diplomaDate: "2026 жыл",
@@ -115,6 +118,15 @@
                 Object.assign(window.i18n.translations[lang], patches[lang]);
             });
             console.log('Localization patch applied successfully.');
+
+            // Re-apply translations to all data-i18n elements in the DOM
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const translated = window.i18n.t(key);
+                if (translated && translated !== key) {
+                    el.textContent = translated;
+                }
+            });
         } else {
             console.log('Waiting for i18n to load...');
             setTimeout(applyPatch, 100);
