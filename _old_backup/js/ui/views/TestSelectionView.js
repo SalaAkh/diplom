@@ -303,7 +303,7 @@ class TestSelectionView extends BaseView {
                     </li>
                     <li>
                         <span class="material-symbols-rounded">auto_awesome</span>
-                        ${this.t('cognitiveFeature3')}
+                        ${this.t('cognitiveFeature2')}
                     </li>
                 </ul>
                 

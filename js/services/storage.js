@@ -205,6 +205,29 @@ class StorageManager {
     }
 
     /**
+     * Update Cognitive Test Title
+     * @param {string} title - New title
+    */
+    updateCognitiveTestTitle(title) {
+        if (!this.isStorageAvailable) return false;
+        try {
+            const dataStr = localStorage.getItem('cognitiveTestResults');
+            if (dataStr) {
+                const data = JSON.parse(dataStr);
+                if (data.results) {
+                    data.results.title = title;
+                    localStorage.setItem('cognitiveTestResults', JSON.stringify(data));
+                    return true;
+                }
+            }
+            return false;
+        } catch (error) {
+            console.error('Error updating cognitive title:', error);
+            return false;
+        }
+    }
+
+    /**
      * Load Cognitive Test Results
      * @returns {Object|null}
      */

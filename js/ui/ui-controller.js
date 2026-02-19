@@ -57,10 +57,7 @@ class UIController {
         this.applyTheme();
         this.initEasterEggs();
 
-        // Init Google Sign-In if auth available
-        if (this.app.auth && typeof this.app.auth.initGoogleSignIn === 'function') {
-            this.app.auth.initGoogleSignIn();
-        }
+        this.initEasterEggs();
     }
 
     // ================= START SCENARIO UI =================
@@ -645,13 +642,6 @@ class UIController {
                         <button class="auth-tab" onclick="app.showRegisterForm(event)">${t('register')}</button>
                     </div>
                     
-                    <div class="google-signin-container">
-                        <div id="googleSignInButton"></div>
-                        <div class="auth-divider">
-                            <span>${t('or')}</span>
-                        </div>
-                    </div>
-                    
                     <div id="authFormContainer">
                         ${this.getLoginForm()}
                     </div>
@@ -663,16 +653,6 @@ class UIController {
                 </div>
             </div>
         `;
-
-        setTimeout(() => {
-            if (this.app.auth && typeof this.app.auth.initGoogleSignIn === 'function') {
-                const initialized = this.app.auth.initGoogleSignIn();
-                if (!initialized) {
-                    const googleContainer = document.querySelector('.google-signin-container');
-                    if (googleContainer) googleContainer.style.display = 'none';
-                }
-            }
-        }, 100);
     }
 
     getLoginForm() {
@@ -1316,6 +1296,24 @@ class UIController {
                         </div>
                         <button class="btn btn-primary">${t('startAdvancedTest') || 'Начать углубленный тест'}</button>
                     </div>
+
+                    <div class="test-type-card cognitive" onclick="app.startCognitiveTest()">
+                        <div class="test-type-icon">🧠</div>
+                        <h2>${t('cognitiveTest') || 'Когнитивный стиль'}</h2>
+                        <div class="test-type-info">
+                            <p class="test-count">${t('questionsCount') || 'Вопросов'}: <strong>15</strong></p>
+                            <p class="test-time">${t('estimatedTime') || 'Время'}: <strong>~10 ${t('minutes') || 'минут'}</strong></p>
+                        </div>
+                        <div class="test-type-description">
+                            <p>${t('cognitiveTestDescription') || 'Определите свой стиль обучения и мышления'}</p>
+                            <ul>
+                                <li>${t('cognitiveFeature1') || 'Визуальный, аудиальный, кинестетический'}</li>
+                                <li>${t('cognitiveFeature2') || 'Советы по обучению'}</li>
+                                <li>${t('cognitiveFeature3') || 'Индивидуальный подход'}</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-primary">${t('startCognitiveTest') || 'Начать тест'}</button>
+                    </div>
                 </div>
                 
                 <div class="test-selection-actions">
@@ -1619,55 +1617,107 @@ class UIController {
                              <h2 class="card-title">${t('testHistory')}</h2>
                         </div>
                         <div class="card-body">
-                            ${history.length > 0 ? `
-                                <!-- Batch Delete Controls -->
-                                <div class="test-history-controls" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 1rem;">
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                        <input type="checkbox" id="selectAllTests" class="test-checkbox-all" style="width: 18px; height: 18px; cursor: pointer;">
-                                        <span>${t('selectAll') || 'Выбрать все'}</span>
-                                    </label>
-                                    <button class="btn btn-danger btn-sm" id="deleteSelectedBtn" style="display: none;">
-                                        🗑️ ${t('deleteSelected') || 'Удалить выбранные'} (<span id="selectedCount">0</span>)
-                                    </button>
-                                </div>
-                                <div class="history-list">
-                                    ${history.map((test, index) => `
-                                        <div class="history-item" data-test-index="${index}">
-                                            <input type="checkbox" class="test-checkbox" data-test-index="${index}" style="width: 18px; height: 18px; cursor: pointer; margin-right: 12px;">
+                            ${(() => {
+                const cogRes = this.app.storage ? this.app.storage.loadCognitiveResults() : null;
+                const hasHistory = history.length > 0;
+                const hasCognitive = !!cogRes;
+
+                if (!hasHistory && !hasCognitive) {
+                    return `
+                                        <div class="empty-state">
+                                            <span class="material-symbols-rounded empty-icon">history</span>
+                                            <p>${t('noHistory')}</p>
+                                            <button class="btn btn-primary btn-sm mt-4" onclick="app.showTestTypeSelection()">
+                                                ${t('startTest')}
+                                            </button>
+                                        </div>
+                                    `;
+                }
+
+                let itemsHTML = '';
+
+                // Render Cognitive Test Item
+                if (hasCognitive) {
+                    // Check for Cognitive Test Results
+                    const cognitiveResults = this.app.storage.loadCognitiveResults();
+                    if (cognitiveResults) {
+                        const date = new Date(cognitiveResults.timestamp);
+                        const cogDate = date.toLocaleDateString() === 'Invalid Date' ? new Date().toLocaleDateString() : date.toLocaleDateString();
+                        const cogTitle = `${t('testNumber')} ${history.length + 1}`; // Numbering like other tests
+
+                        itemsHTML += `
+                                        <div class="history-item" data-test-type="cognitive">
+                                            <input type="checkbox" class="test-checkbox" data-test-type="cognitive" style="width: 18px; height: 18px; cursor: pointer; margin-right: 12px;">
                                             <div class="history-info">
                                                 <div class="flex items-center gap-2">
                                                     <h3 class="font-bold text-lg m-0">
-                                                        ${test.title || `${t('testNumber')} ${history.length - index}`}
+                                                        ${cogTitle}
                                                     </h3>
-                                                    <button class="btn btn-ghost btn-sm p-1 test-rename-btn" data-test-index="${index}" title="${t('rename') || 'Переименовать'}">
+                                                    <button class="btn btn-ghost btn-sm p-1 test-rename-btn" data-test-type="cognitive" title="${t('rename') || 'Переименовать'}">
                                                         ✏️
                                                     </button>
-                                                    <button class="btn btn-ghost btn-sm p-1 text-red-500 test-delete-btn" data-test-index="${index}" title="${t('deleteTest') || 'Удалить'}">
+                                                    <button class="btn btn-ghost btn-sm p-1 text-red-500 test-delete-btn" data-test-type="cognitive" title="${t('deleteTest') || 'Удалить'}">
                                                         🗑️
                                                     </button>
                                                 </div>
-                                                <span class="text-sm text-secondary">${new Date(test.date).toLocaleDateString()}</span>
+                                                <div class="text-sm text-secondary">
+                                                    ${cogDate} • <span class="text-primary">${(cognitiveResults.results && cognitiveResults.results.title) ? cognitiveResults.results.title : (cognitiveResults.dominant || t('cognitiveTest'))}</span>
+                                                </div>
                                             </div>
-                                             <button class="btn btn-secondary btn-sm test-view-btn" data-test-index="${index}">
+                                             <button class="btn btn-secondary btn-sm test-view-btn" data-test-type="cognitive">
                                                 ${t('viewResults')}
                                              </button>
                                         </div>
-                                     `).join('')}
-                                </div>
-                             ` : `
-                                <div class="empty-state">
-                                    <span class="material-symbols-rounded empty-icon">history</span>
-                                    <p>${t('noHistory')}</p>
-                                    <button class="btn btn-primary btn-sm mt-4" onclick="app.showTestTypeSelection()">
-                                        ${t('startTest')}
-                                    </button>
-                                </div>
-                            `}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
+                                    `;
+                    }
+                } // End if (hasCognitive)
+
+                // Render Regular History Items
+                itemsHTML += history.map((test, index) => `
+                                    <div class="history-item" data-test-index="${index}">
+                                        <input type="checkbox" class="test-checkbox" data-test-index="${index}" style="width: 18px; height: 18px; cursor: pointer; margin-right: 12px;">
+                                        <div class="history-info">
+                                            <div class="flex items-center gap-2">
+                                                <h3 class="font-bold text-lg m-0">
+                                                    ${test.title || `${t('testNumber')} ${history.length - index}`}
+                                                </h3>
+                                                <button class="btn btn-ghost btn-sm p-1 test-rename-btn" data-test-index="${index}" title="${t('rename') || 'Переименовать'}">
+                                                    ✏️
+                                                </button>
+                                                <button class="btn btn-ghost btn-sm p-1 text-red-500 test-delete-btn" data-test-index="${index}" title="${t('deleteTest') || 'Удалить'}">
+                                                    🗑️
+                                                </button>
+                                            </div>
+                                            <span class="text-sm text-secondary">${new Date(test.date).toLocaleDateString()}</span>
+                                        </div>
+                                         <button class="btn btn-secondary btn-sm test-view-btn" data-test-index="${index}">
+                                            ${t('viewResults')}
+                                         </button>
+                                    </div>
+                                `).join('');
+
+                return `
+                                    <!-- Batch Delete Controls -->
+                                    <div class="test-history-controls" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 1rem;">
+                                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                            <input type="checkbox" id="selectAllTests" class="test-checkbox-all" style="width: 18px; height: 18px; cursor: pointer;">
+                                            <span>${t('selectAll') || 'Выбрать все'}</span>
+                                        </label>
+                                        <button class="btn btn-danger btn-sm" id="deleteSelectedBtn" style="display: none;">
+                                            🗑️ ${t('deleteSelected') || 'Удалить выбранные'} (<span id="selectedCount">0</span>)
+                                        </button>
+                                    </div>
+                                    <div class="history-list">
+                                        ${itemsHTML}
+                                    </div>
+                                `;
+            })()
+            }
+                        </div >
+                    </div >
+                </div >
+            </div >
+            `;
 
         if (showEvolution) {
             // Use requestAnimationFrame to coordinate with browser render cycle
@@ -1690,6 +1740,22 @@ class UIController {
                 const target = e.target.closest('button');
                 if (!target) return;
 
+                // Handle Cognitive Test clicks
+                if (target.dataset.testType === 'cognitive') {
+                    if (target.classList.contains('test-delete-btn')) {
+                        e.preventDefault();
+                        this.app.deleteCognitiveTest(target);
+                    } else if (target.classList.contains('test-view-btn')) {
+                        e.preventDefault();
+                        this.app.showCognitiveResults(this.app.storage.loadCognitiveResults());
+                    } else if (target.classList.contains('test-rename-btn')) {
+                        e.preventDefault();
+                        this.app.renameCognitiveTest(target);
+                    }
+                    return;
+                }
+
+                // Handle Regular Tests
                 const index = parseInt(target.dataset.testIndex);
                 if (isNaN(index)) return;
 
@@ -1721,12 +1787,12 @@ class UIController {
             const testCheckboxes = document.querySelectorAll('.test-checkbox');
             testCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', (e) => {
-                    const index = parseInt(e.target.dataset.testIndex);
-                    console.log('Checkbox changed:', index, 'checked:', e.target.checked);
+                    const id = e.target.dataset.testType === 'cognitive' ? 'cognitive' : parseInt(e.target.dataset.testIndex);
+                    console.log('Checkbox changed:', id, 'checked:', e.target.checked);
                     if (e.target.checked) {
-                        this.selectedTests.add(index);
+                        this.selectedTests.add(id);
                     } else {
-                        this.selectedTests.delete(index);
+                        this.selectedTests.delete(id);
                     }
                     this.updateBatchDeleteUI();
                 });
@@ -1735,16 +1801,15 @@ class UIController {
             // Handle "Select All" checkbox
             if (selectAllCheckbox) {
                 selectAllCheckbox.addEventListener('change', (e) => {
-                    const isChecked = e.target.checked;
-                    console.log('Select All clicked:', isChecked, 'Total checkboxes:', testCheckboxes.length);
-                    testCheckboxes.forEach(checkbox => {
-                        checkbox.checked = isChecked;
-                        const index = parseInt(checkbox.dataset.testIndex);
-                        console.log('Setting checkbox', index, 'to', isChecked);
-                        if (isChecked) {
-                            this.selectedTests.add(index);
+                    const checked = e.target.checked;
+                    console.log('Select All clicked:', checked, 'Total checkboxes:', testCheckboxes.length);
+                    testCheckboxes.forEach(cb => {
+                        cb.checked = checked;
+                        const id = cb.dataset.testType === 'cognitive' ? 'cognitive' : parseInt(cb.dataset.testIndex);
+                        if (checked) {
+                            this.selectedTests.add(id);
                         } else {
-                            this.selectedTests.delete(index);
+                            this.selectedTests.delete(id);
                         }
                     });
                     this.updateBatchDeleteUI();
@@ -1760,6 +1825,9 @@ class UIController {
                 });
             }
         }
+
+        // Initialize batch delete UI state and Profile Extensions
+        this.updateBatchDeleteUI();
     }
 
     /**
@@ -1778,10 +1846,10 @@ class UIController {
 
             // Update history items visual state
             testCheckboxes.forEach(checkbox => {
-                const index = parseInt(checkbox.dataset.testIndex);
+                const id = checkbox.dataset.testType === 'cognitive' ? 'cognitive' : parseInt(checkbox.dataset.testIndex);
                 const historyItem = checkbox.closest('.history-item');
                 if (historyItem) {
-                    if (this.selectedTests.has(index)) {
+                    if (this.selectedTests.has(id)) {
                         historyItem.classList.add('selected');
                     } else {
                         historyItem.classList.remove('selected');
@@ -1831,10 +1899,10 @@ class UIController {
                         month: 'short'
                     });
                 } catch (e) {
-                    return `Test ${i + 1}`;
+                    return `Test ${i + 1} `;
                 }
             }
-            return `Test ${i + 1}`;
+            return `Test ${i + 1} `;
         });
 
         // 2. Identify ALL unique dimensions across these sessions
@@ -1902,7 +1970,7 @@ class UIController {
 
             if (hasData || (isCore && datasets.length < 4)) {
                 datasets.push({
-                    label: t(`${dim}Name`) || dim,
+                    label: t(`${dim} Name`) || dim,
                     data: data,
                     borderColor: colors[colorIndex % colors.length],
                     backgroundColor: colors[colorIndex % colors.length],
@@ -1961,7 +2029,7 @@ class UIController {
                         displayColors: true,
                         callbacks: {
                             label: function (context) {
-                                return ` ${context.dataset.label}: ${context.parsed.y > 0 ? '+' : ''}${Math.round(context.parsed.y)}%`;
+                                return ` ${context.dataset.label}: ${context.parsed.y > 0 ? '+' : ''}${Math.round(context.parsed.y)}% `;
                             }
                         }
                     }
@@ -2035,7 +2103,7 @@ class UIController {
 
         modal = document.createElement('div');
         modal.id = id;
-        modal.className = `${overlayClass} modal-type-${type}`;
+        modal.className = `${overlayClass} modal - type - ${type} `;
 
         const closeHandler = () => {
             modal.classList.remove('active');
@@ -2050,7 +2118,7 @@ class UIController {
 
         const buttonsHtml = actions.map((btn, index) => {
             const btnClass = btn.class || 'btn-secondary';
-            return `<button class="btn ${btnClass}" id="${id}Btn${index}">${btn.text}</button>`;
+            return `< button class="btn ${btnClass}" id = "${id}Btn${index}" > ${btn.text}</button > `;
         }).join('');
 
         // Calculate position if trigger element is provided
@@ -2100,11 +2168,11 @@ class UIController {
 
             modal.classList.add('modal-positioned');
             // Apply position directly as inline styles instead of CSS variables
-            positionStyle = `style="position: absolute !important; top: ${top}px !important; left: ${left}px !important; transform: translate(0, 0) !important; margin: 0 !important;"`;
+            positionStyle = `style = "position: absolute !important; top: ${top}px !important; left: ${left}px !important; transform: translate(0, 0) !important; margin: 0 !important;"`;
         }
 
         modal.innerHTML = `
-            <div class="modal-content glass" ${positionStyle}>
+            < div class="modal-content glass" ${positionStyle}>
                 <button class="modal-close material-symbols-rounded" aria-label="Close">close</button>
                 <div class="modal-header">
                     ${icon ? `<span class="material-symbols-rounded modal-type-icon">${icon}</span>` : ''}
@@ -2112,8 +2180,8 @@ class UIController {
                 </div>
                 <div class="modal-body">${content}</div>
                 ${actions.length > 0 ? `<div class="modal-actions">${buttonsHtml}</div>` : ''}
-            </div>
-        `;
+            </div >
+            `;
 
         document.body.appendChild(modal);
 
@@ -2124,7 +2192,7 @@ class UIController {
         modal.querySelector('.modal-close').onclick = closeHandler;
 
         actions.forEach((btn, index) => {
-            const el = document.getElementById(`${id}Btn${index}`);
+            const el = document.getElementById(`${id}Btn${index} `);
             if (el && btn.onClick) {
                 el.onclick = (e) => {
                     if (e) e.stopPropagation();
@@ -2144,7 +2212,7 @@ class UIController {
             id: 'alertModal',
             overlayClass: 'alert-overlay', // Protection from app.closeModal()
             title: title || t('attention') || 'Внимание',
-            content: `<p>${message}</p>`,
+            content: `< p > ${message}</p > `,
             icon: 'warning',
             type: 'warning',
             closeOnOutsideClick: false,
@@ -2165,7 +2233,7 @@ class UIController {
         const t = this.i18n.t.bind(this.i18n);
         this.showModal({
             title: t('confirmation') || 'Подтверждение',
-            content: `<p>${message}</p>`,
+            content: `< p > ${message}</p > `,
             triggerElement: triggerElement,
             actions: [
                 {
@@ -2205,9 +2273,9 @@ class UIController {
         }
 
         this.showModal({
-            title: `<span class="text-gradient">${displayTitle}</span>`,
+            title: `< span class="text-gradient" > ${displayTitle}</span > `,
             content: `
-                <div style="padding: 0.5rem 0;">
+            < div style = "padding: 0.5rem 0;" >
                     <p style="margin-bottom: 1rem; opacity: 0.9;">${message}</p>
                     <div class="input-wrapper" style="position: relative;">
                         <input type="text" id="${inputId}" class="form-control cosmic-input" 
@@ -2215,14 +2283,14 @@ class UIController {
                             style="width: 100%; padding: 0.8rem 1rem; border-radius: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-size: 1rem; outline: none; transition: all 0.3s ease;">
                         <div style="position: absolute; bottom: -2px; left: 0; width: 0%; height: 2px; background: var(--primary-color); transition: width 0.3s ease;" id="inputFocusLine"></div>
                     </div>
-                </div>
-                <script>
+                </div >
+            <script>
                     setTimeout(() => {
                         const input = document.getElementById('${inputId}');
-                        const line = document.getElementById('inputFocusLine');
-                        if (input) {
-                            input.focus();
-                            input.select();
+                const line = document.getElementById('inputFocusLine');
+                if (input) {
+                    input.focus();
+                input.select();
                             input.addEventListener('focus', () => line.style.width = '100%');
                             input.addEventListener('blur', () => line.style.width = '0%');
                             input.addEventListener('keypress', (e) => {
@@ -2230,8 +2298,8 @@ class UIController {
                             });
                         }
                     }, 100);
-                </script>
-            `,
+            </script>
+        `,
             actions: [
                 { text: t('cancel') || 'Отмена', class: 'btn-ghost', onClick: () => { } },
                 {
@@ -2288,12 +2356,12 @@ class UIController {
         const container = document.getElementById('app');
         if (container) {
             container.innerHTML = `
-                <div class="error-screen">
+            < div class="error-screen" >
                     <h1>Ошибка</h1>
                     <p class="error-message">${message}</p>
                     <button class="btn btn-primary" onclick="location.reload()">Обновить</button>
-                </div>
-             `;
+                </div >
+            `;
         }
     }
 }

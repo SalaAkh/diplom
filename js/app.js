@@ -1186,6 +1186,10 @@ class PersonalityTestApp {
      * Скачивание результатов
      */
     downloadResults(format = 'html') {
+        if (this.testMode === 'cognitive' && this.resultsManager) {
+            const results = this.activeResults || (this.storage ? this.storage.loadCognitiveResults() : null);
+            return this.resultsManager.downloadCognitiveResults(results);
+        }
         if (this.resultsManager) {
             this.resultsManager.downloadResults(format);
         }
@@ -1385,6 +1389,82 @@ class PersonalityTestApp {
     }
 
     /**
+     * Delete Cognitive Test
+     */
+    deleteCognitiveTest(targetElement = null) {
+        // Simple confirm for now, or use custom modal if available
+        if (!confirm(this.i18n.t('confirmDelete') || 'Вы уверены, что хотите удалить этот тест?')) return;
+
+        localStorage.removeItem('cognitiveTestResults');
+
+        if (this.toast) {
+            this.toast.show(this.i18n.t('testDeleted') || 'Тест удален', 'success');
+        }
+
+        // Refresh profile
+        this.showProfile();
+    }
+
+    /**
+     * Rename Cognitive Test
+     * @param {HTMLElement} targetElement - Button element for positioning
+     */
+    renameCognitiveTest(targetElement = null) {
+        const currentResults = this.storage.loadCognitiveResults();
+        if (!currentResults) return;
+
+        const currentTitle = currentResults.results.title || (currentResults.dominant || this.i18n.t('cognitiveTest'));
+        const newTitle = prompt(this.i18n.t('enterNewName') || 'Введите новое название', currentTitle);
+
+        if (newTitle && newTitle.trim() !== '') {
+            if (this.storage.updateCognitiveTestTitle(newTitle.trim())) {
+                if (this.toast) {
+                    this.toast.show(this.i18n.t('testRenamed') || 'Тест переименован', 'success');
+                }
+                this.showProfile();
+            }
+        }
+    }
+
+    /**
+     * Delete Selected Tests
+     * @param {Array} ids - Array of test indices or 'cognitive'
+     * @param {HTMLElement} targetElement - Button element for positioning
+     */
+    deleteSelectedTests(ids, targetElement = null) {
+        if (!ids || ids.length === 0) return;
+
+        if (!confirm(this.i18n.t('confirmDeleteSelected') || `Вы уверены, что хотите удалить выбранные тесты (${ids.length})?`)) return;
+
+        let cognitiveDeleted = false;
+        const numericIndices = [];
+
+        ids.forEach(id => {
+            if (id === 'cognitive') {
+                localStorage.removeItem('cognitiveTestResults');
+                cognitiveDeleted = true;
+            } else {
+                const index = parseInt(id);
+                if (!isNaN(index)) {
+                    numericIndices.push(index);
+                }
+            }
+        });
+
+        let historyDeleted = false;
+        if (numericIndices.length > 0 && this.auth) {
+            historyDeleted = this.auth.deleteMultipleTests(numericIndices);
+        }
+
+        if (cognitiveDeleted || historyDeleted) {
+            if (this.toast) {
+                this.toast.show(this.i18n.t('testsDeleted') || 'Тесты удалены', 'success');
+            }
+            this.showProfile();
+        }
+    }
+
+    /**
      * Отображение социального сравнения
      * @param {string} containerId - ID контейнера
      * @param {Object} scores - Оценки пользователя
@@ -1562,6 +1642,7 @@ class PersonalityTestApp {
      * Start Cognitive Test
      */
     startCognitiveTest() {
+        this.testMode = 'cognitive';
         if (this.testManager) {
             this.testManager.startCognitiveTest();
         }
@@ -1586,6 +1667,7 @@ class PersonalityTestApp {
         if (this.storage) {
             this.storage.saveCognitiveResults(results);
         }
+        this.activeResults = results;
 
         const t = this.i18n.t.bind(this.i18n);
         const container = document.getElementById('app');
@@ -1817,13 +1899,17 @@ class PersonalityTestApp {
                 </div>
 
                 <div class="action-buttons">
-                    <button class="btn-primary-gradient" onclick="app.showProfile()">
+                    <button class="btn-primary-gradient" onclick="app.downloadResults('html')">
+                        <span class="material-symbols-rounded">download</span>
+                        ${t('downloadResults') || 'Нәтижелерді жүктеу (HTML)'}
+                    </button>
+                    <button class="btn-secondary-outline" onclick="app.showProfile()">
                         <span class="material-symbols-rounded">person</span>
-                        ${t('goToProfile')}
+                        ${t('goToProfile') || 'Профильге өту'}
                     </button>
                     <button class="btn-secondary-outline" onclick="app.showTestTypeSelection()">
                         <span class="material-symbols-rounded">refresh</span>
-                        ${t('takeAnotherTest')}
+                        ${t('takeAnotherTest') || 'Басқа тест тапсыру'}
                     </button>
                 </div>
             </div>

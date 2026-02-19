@@ -213,11 +213,6 @@
     "simplifiedLabel": "Simplified Mode",
     "readingLabel": "Read Results Aloud",
     "voiceControlLabel": "Voice Control",
-    "accessSubtitle": "We strive to make the system as accessible as possible for all users.",
-    "contrastDesc": "High contrast mode support for people with visual impairments.",
-    "textSizeDesc": "Ability to scale the interface and change font size.",
-    "audioFeedbackDesc": "Audio confirmation of actions and voicing of important state changes.",
-    "readingDesc": "Speech synthesis for automatic reading of your results and recommendations.",
     "save": "Save",
     "cancel": "Cancel",
     "chooseAvatar": "Choose Avatar",
@@ -304,9 +299,5 @@
     "yourArchetype": "Your Archetype",
     "similarTo": "Similar to",
     "matchScore": "Match",
-    "dimensionScores": "Dimension Scores",
-    "diplomaTitle": "Дипломдық жоба: Интерактивті таңдау сценарийлері негізінде пайдаланушының жеке қалаулары мен даму бағыттарын талдау жүйесін әзірлеу",
-    "diplomaAuthor": "Авторы: Ахмедьянов Саламат КПО 9/22-2",
-    "diplomaTech": "HTML, CSS, JS бағдарламалау тілдерінде",
-    "diplomaDate": "2026 жыл"
+    "dimensionScores": "Dimension Scores"
 }

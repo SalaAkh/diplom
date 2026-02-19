@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <!--
-  "Профиль" беті
+  Страница "Профиль"
   
-  Дипломдық жоба: Интерактивті таңдау сценарийлері негізінде пайдаланушының
-  тұлғалық қасиеттері мен даму бағыттарын талдайтын бағдарламалық жүйені
-  HTML, CSS, JS бағдарламалау тілдерінде әзірлеу
+  Дипломный проект: Разработка программной системы анализа личностных предпочтений 
+  и направлений развития пользователя на основе интерактивных сценариев выбора, 
+  на языках программирования HTML, CSS, JS
   
   Автор: Ахмедьянов Саламат КПО 9/22-2
+  Дата: 2026
 -->
 <html lang="kk">
 
@@ -17,7 +18,7 @@
         content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.googleusercontent.com https://upload.wikimedia.org; connect-src 'self' https://accounts.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;">
     <meta name="theme-color" content="#4a90e2">
     <meta name="author" content="Ахмедьянов Саламат КПО 9/22-2">
-    <meta name="description" content="Neural Constellation жүйесіндегі сіздің жеке профиліңіз.">
+    <meta name="description" content="Ваш личный профиль в системе Neural Constellation.">
     <meta name="robots" content="noindex, nofollow">
 
     <!-- SEO & Social Media -->
@@ -69,13 +70,13 @@
 
 
     <!-- Skip Link -->
-    <a href="#main-content" class="skip-link visually-hidden-focusable">Негізгі мазмұнға өту</a>
+    <a href="#main-content" class="skip-link visually-hidden-focusable">Перейти к основному содержанию</a>
 
     <!-- Cosmic Navigation -->
-    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Басты навигация">
+    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Главная навигация">
         <!-- Desktop Collapse Button -->
-        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Навигацияны жию"
-            title="Панельді жайю">
+        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Свернуть навигацию"
+            title="Развернуть панель">
             <span class="material-symbols-rounded">chevron_left</span>
         </button>
 
@@ -110,21 +111,21 @@
             <div class="container">
                 <div class="header-content">
                     <div class="header-main">
-                        <h1 class="logo" id="appName">Өзін-өзі тану жүйесі</h1>
-                        <p class="tagline" id="tagline">Жеке қалауларды және даму бағыттарын талдау</p>
+                        <h1 class="logo" id="appName">Система самопознания</h1>
+                        <p class="tagline" id="tagline">Анализ личностных предпочтений и направлений развития</p>
                     </div>
                     <div class="header-controls">
-                        <div class="language-selector" id="languageSelector" aria-label="Тіл таңдау"></div>
+                        <div class="language-selector" id="languageSelector" aria-label="Выбор языка"></div>
 
                         <!-- Accessibility Button -->
                         <button class="btn-icon header-btn accessibility-trigger" id="accessBtn"
-                            aria-label="Қолжетімділік параметрлері" title="Қолжетімділік"
+                            aria-label="Настройки доступности" title="Доступность"
                             onclick="window.accessibilityService.toggleModal(true)">
                             <span class="material-symbols-rounded">accessibility_new</span>
                         </button>
 
                         <!-- Navigation Toggle (Now in controls) -->
-                        <button class="nav-toggle" id="navToggle" aria-label="Навигация мәзірін ашу">
+                        <button class="nav-toggle" id="navToggle" aria-label="Открыть меню навигации">
                             <div class="nav-toggle-icon">
                                 <span></span>
                                 <span></span>
@@ -136,7 +137,7 @@
             </div>
         </header>
 
-        <main class="app-main" id="main-content" role="main" aria-label="Профиль мазмұны">
+        <main class="app-main" id="main-content" role="main" aria-label="Контент профиля">
             <div class="container">
                 <div id="app" aria-live="polite" aria-atomic="true">
                     <!-- Profile content will be injected here -->
@@ -154,7 +155,7 @@
 
     <!-- Theme Toggle (Floating) -->
     <div class="theme-toggle" id="themeToggle" data-i18n-title="theme" title="Тақырып" role="button" tabindex="0"
-        aria-label="Тақырыпты ауыстыру" onkeypress="if(event.key==='Enter') this.click();">
+        aria-label="Переключить тему" onkeypress="if(event.key==='Enter') this.click();">
         <span class="theme-icon material-symbols-rounded" aria-hidden="true">light_mode</span>
     </div>
 
@@ -164,31 +165,32 @@
         <div class="modal-overlay" onclick="window.accessibilityService.toggleModal(false)"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="accessTitle" data-i18n="accessTitle">Қолжетімділік параметрлері</h3>
-                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)" aria-label="Жабу">
+                <h3 id="accessTitle" data-i18n="accessTitle">Настройки доступности</h3>
+                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)"
+                    aria-label="Закрыть">
                     <span class="material-symbols-rounded">close</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="contrastSelect" data-i18n="contrastLabel">Контрасттылық</label>
+                    <label for="contrastSelect" data-i18n="contrastLabel">Контрастность</label>
                     <div class="select-wrapper">
                         <select id="contrastSelect" class="form-select"
                             onchange="window.accessibilityService.setContrast(this.value)">
-                            <option value="normal" data-i18n="contrastNormal">Қалыпты</option>
-                            <option value="high" data-i18n="contrastHigh">Жоғары</option>
+                            <option value="normal" data-i18n="contrastNormal">Обычная</option>
+                            <option value="high" data-i18n="contrastHigh">Высокая</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="textSizeSelect" data-i18n="textSizeLabel">Мәтін өлшемі</label>
+                    <label for="textSizeSelect" data-i18n="textSizeLabel">Размер текста</label>
                     <div class="select-wrapper">
                         <select id="textSizeSelect" class="form-select"
                             onchange="window.accessibilityService.setTextSize(this.value)">
-                            <option value="small" data-i18n="textSizeSmall">Кішкентай</option>
-                            <option value="normal" data-i18n="textSizeNormal">Қалыпты</option>
-                            <option value="large" data-i18n="textSizeLarge">Үлкен</option>
-                            <option value="extra-large" data-i18n="textSizeExtraLarge">Өте үлкен</option>
+                            <option value="small" data-i18n="textSizeSmall">Мелкий</option>
+                            <option value="normal" data-i18n="textSizeNormal">Обычный</option>
+                            <option value="large" data-i18n="textSizeLarge">Крупный</option>
+                            <option value="extra-large" data-i18n="textSizeExtraLarge">Очень крупный</option>
                         </select>
                     </div>
                 </div>
@@ -196,21 +198,36 @@
                     <label class="checkbox-label"
                         style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                         <input type="checkbox" id="animCheck" onchange="window.accessibilityService.toggleAnimations()">
-                        <span data-i18n="animationsLabel">Інтерфейс анимациялары</span>
+                        <span data-i18n="animationsLabel">Анимации интерфейса</span>
                     </label>
                 </div>
                 <div class="form-group checkbox-group">
                     <label class="checkbox-label"
                         style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                         <input type="checkbox" id="audioCheck" onchange="window.accessibilityService.toggleAudio()">
-                        <span data-i18n="audioFeedbackLabel">Дыбыстық сүйемелдеу</span>
+                        <span data-i18n="audioFeedbackLabel">Звуковое сопровождение</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="simplifiedCheck"
+                            onchange="window.accessibilityService.toggleSimplified()">
+                        <span data-i18n="simplifiedLabel">Упрощенный режим</span>
                     </label>
                 </div>
                 <div class="form-group checkbox-group">
                     <label class="checkbox-label"
                         style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                         <input type="checkbox" id="readingCheck" onchange="window.accessibilityService.toggleReading()">
-                        <span data-i18n="readingLabel">Нәтижелерді дауыстап оқу</span>
+                        <span data-i18n="readingLabel">Озвучивание результатов</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="voiceControlCheck" onchange="window.voiceControl.toggle()">
+                        <span data-i18n="voiceControlLabel">Голосовое управление</span>
                     </label>
                 </div>
             </div>
@@ -249,9 +266,6 @@
 
     <!-- View Components for Report Generation -->
     <script src="js/ui/views/BaseView.js" defer></script>
-    <script src="js/ui/views/IntroView.js" defer></script>
-    <script src="js/ui/views/TestSelectionView.js" defer></script>
-    <script src="js/ui/views/ScenarioView.js" defer></script>
     <script src="js/ui/views/ResultsView.js" defer></script>
     <script src="js/services/report-generator.js" defer></script>
 

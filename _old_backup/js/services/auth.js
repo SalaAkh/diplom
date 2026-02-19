@@ -11,8 +11,147 @@ class AuthManager {
         this.currentUser = null;
         this.usersKey = 'personalityTestUsers';
         this.sessionKey = 'currentSession';
+        // Пытаемся загрузить Client ID из localStorage
+        this.googleClientId = localStorage.getItem('googleClientId');
+
         // Инициализируем трекер эволюции
         this.evolutionTracker = typeof EvolutionTracker !== 'undefined' ? new EvolutionTracker() : null;
+
+        // Инициализируем Google Sign-In после загрузки API
+        if (typeof window !== 'undefined') {
+            // Ждём загрузки Google API
+            if (window.google && window.google.accounts) {
+                this.initGoogleSignIn();
+            } else {
+                // Если API ещё не загружен, ждём
+                window.addEventListener('load', () => {
+                    if (window.google && window.google.accounts) {
+                        this.initGoogleSignIn();
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * Проверка конфигурации Google Sign-In
+     * @returns {boolean} true если Google Sign-In настроен
+     */
+    isGoogleSignInConfigured() {
+        // Проверяем наличие Client ID
+        if (!this.googleClientId || this.googleClientId === 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+            return false;
+        }
+
+        // Проверяем наличие Google API
+        if (typeof window === 'undefined' || !window.google || !window.google.accounts) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Инициализация Google Sign-In
+     */
+    initGoogleSignIn() {
+        // Проверяем конфигурацию перед инициализацией
+        if (!this.isGoogleSignInConfigured()) {
+            debugLog('Google Sign-In бапталмаған немесе API жүктелмеген (Google Sign-In not configured or API not loaded)');
+            return false;
+        }
+
+        try {
+            window.google.accounts.id.initialize({
+                client_id: this.googleClientId,
+                callback: this.handleGoogleSignIn.bind(this)
+            });
+
+            // Показываем кнопку входа, если она есть
+            try {
+                window.google.accounts.id.renderButton(
+                    document.getElementById('googleSignInButton'),
+                    { theme: 'outline', size: 'large' }
+                );
+            } catch (renderError) {
+                debugLog('Google Sign-In батырмасын көрсету мүмкін болмады (Failed to render Google Sign-In button):', renderError);
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Google Sign-In инициализациялау қатесі (Error initializing Google Sign-In):', error);
+            return false;
+        }
+    }
+
+    /**
+     * Обработка входа через Google
+     * @param {Object} response - Ответ от Google
+     */
+    handleGoogleSignIn(response) {
+        try {
+            // Декодируем JWT токен (упрощённая версия для демо)
+            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+
+            const googleUser = {
+                id: payload.sub,
+                username: payload.name || payload.email.split('@')[0],
+                email: payload.email,
+                picture: payload.picture,
+                provider: 'google',
+                createdAt: new Date().toISOString(),
+                lastLogin: new Date().toISOString(),
+                testHistory: [],
+                profile: null
+            };
+
+            // Проверяем, существует ли пользователь
+            const users = this.getAllUsers();
+            let existingUser = users.find(u => u.email === googleUser.email || u.id === googleUser.id);
+
+            if (existingUser) {
+                // Обновляем последний вход
+                existingUser.lastLogin = new Date().toISOString();
+                existingUser.picture = googleUser.picture;
+                this.saveUsers(users);
+                this.currentUser = existingUser;
+            } else {
+                // Создаём нового пользователя
+                users.push(googleUser);
+                this.saveUsers(users);
+                this.currentUser = googleUser;
+            }
+
+            // Сохраняем сессию
+            localStorage.setItem(this.sessionKey, JSON.stringify(this.currentUser));
+
+            // Обновляем UI
+            if (typeof app !== 'undefined') {
+                app.state = 'intro';
+                app.showIntro();
+            }
+
+            return {
+                success: true,
+                user: this.currentUser
+            };
+        } catch (error) {
+            console.error('Google Sign-In қатесі (Google Sign-In error):', error);
+            return {
+                success: false,
+                error: 'Google арқылы кіру қатесі (Error logging in via Google)'
+            };
+        }
+    }
+
+    /**
+     * Установка Google Client ID
+     * @param {string} clientId - Google Client ID
+     */
+    setGoogleClientId(clientId) {
+        this.googleClientId = clientId;
+        localStorage.setItem('googleClientId', clientId);
+        this.initGoogleSignIn();
     }
 
     /**

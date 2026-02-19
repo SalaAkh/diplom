@@ -226,6 +226,116 @@ class ResultsManager {
             alert('Export failed: ' + error.message);
         }
     }
+
+    /**
+     * Download Cognitive Test Results
+     * @param {Object} results - Cognitive test results
+     */
+    downloadCognitiveResults(results) {
+        if (!results) return;
+
+        try {
+            const t = this.i18n.t.bind(this.i18n);
+            const lang = this.i18n.getLanguage();
+            const details = results.details || {};
+            const title = details.title && details.title[lang] ? details.title[lang] : results.dominant;
+            const desc = details.description && details.description[lang] ? details.description[lang] : '';
+            const tips = details.tips && details.tips[lang] ? details.tips[lang] : '';
+
+            const htmlContent = `
+<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${t('cognitiveTest')} - ${t('resultsTitle')}</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #1a1a2e; background: #f5f5f5; padding: 30px 20px; }
+        .page-wrap { max-width: 800px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #9333ea, #c026d3); color: white; text-align: center; padding: 40px 30px 30px; }
+        .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+        .header .date { opacity: 0.85; font-size: 0.95rem; }
+        .content { padding: 30px; }
+        .result-card { background: #faf5ff; border-radius: 12px; padding: 28px; margin-bottom: 24px; border: 1px solid #e9d5ff; }
+        .dominant-title { font-size: 1.5rem; font-weight: 700; color: #7c3aed; margin-bottom: 10px; }
+        .dominant-desc { color: #555; font-size: 1rem; line-height: 1.7; }
+        .breakdown { display: flex; justify-content: space-around; margin-top: 28px; gap: 16px; }
+        .breakdown-item { text-align: center; flex: 1; background: white; border-radius: 10px; padding: 16px 10px; border: 1px solid #e9d5ff; }
+        .breakdown-label { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #7c3aed; margin-bottom: 6px; }
+        .breakdown-value { font-size: 2rem; font-weight: 700; color: #9333ea; }
+        .bar-container { background: #e9d5ff; height: 8px; border-radius: 4px; margin-top: 8px; overflow: hidden; }
+        .bar-fill { height: 100%; background: linear-gradient(90deg, #9333ea, #c026d3); border-radius: 4px; }
+        .tips { background: #f0f4f8; padding: 24px; border-radius: 12px; border-left: 5px solid #9333ea; margin-bottom: 24px; }
+        .tips h3 { color: #7c3aed; margin-bottom: 10px; font-size: 1.1rem; }
+        .tips p { color: #444; font-size: 0.97rem; line-height: 1.8; }
+        .footer { text-align: center; padding: 24px 30px; background: #f8f5ff; border-top: 1px solid #e9d5ff; color: #888; font-size: 0.85rem; }
+        .footer p { margin-bottom: 4px; }
+        .footer .brand { color: #9333ea; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="page-wrap">
+        <div class="header">
+            <h1>${t('cognitiveTest')}</h1>
+            <div class="date">${new Date().toLocaleDateString(lang === 'kk' ? 'kk-KZ' : lang === 'ru' ? 'ru-RU' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+        </div>
+        <div class="content">
+            <div class="result-card">
+                <h2 class="dominant-title">${title}</h2>
+                <p class="dominant-desc">${desc}</p>
+                <div class="breakdown">
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">${t('cognitiveVisual')}</div>
+                        <div class="breakdown-value">${results.breakdown.visual}%</div>
+                        <div class="bar-container"><div class="bar-fill" style="width: ${results.breakdown.visual}%"></div></div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">${t('cognitiveAuditory')}</div>
+                        <div class="breakdown-value">${results.breakdown.auditory}%</div>
+                        <div class="bar-container"><div class="bar-fill" style="width: ${results.breakdown.auditory}%"></div></div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">${t('cognitiveKinesthetic')}</div>
+                        <div class="breakdown-value">${results.breakdown.kinesthetic}%</div>
+                        <div class="bar-container"><div class="bar-fill" style="width: ${results.breakdown.kinesthetic}%"></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="tips">
+                <h3>${t('learningTips')}</h3>
+                <p>${tips}</p>
+            </div>
+        </div>
+        <div class="footer">
+            <p>${t('reportGeneratedBy')}</p>
+            <p>Ахмедьянов Саламат КПО 9/22-2 &nbsp;&bull;&nbsp; ${lang === 'kk' ? 'Дипломдық жоба' : lang === 'en' ? 'Diploma Project' : 'Дипломный проект'}</p>
+            <p class="brand">© 2026 Neural Constellation</p>
+        </div>
+    </div>
+</body>
+</html>`;
+
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `cognitive-style-${Date.now()}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            // Toast notification
+            if (this.app.toast) {
+                this.app.toast.show(t('resultsDownloaded') || 'Результаты скачаны', 'success');
+            }
+
+        } catch (error) {
+            console.error('Cognitive export failed:', error);
+            alert('Export failed: ' + error.message);
+        }
+    }
 }
 
 // Export to global scope for non-module usage

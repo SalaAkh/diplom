@@ -44,7 +44,17 @@ class ProfileExtensions {
                 }
             }
 
-            // Способ 2: Напрямую из localStorage
+            // Способ 2: Напрямую из localStorage (для анонимных пользователей)
+            const anonymousData = localStorage.getItem('personalityTestResults');
+            if (anonymousData) {
+                const parsed = JSON.parse(anonymousData);
+                if (parsed.results && parsed.results.scores) {
+                    this._cachedScores = parsed.results.normalizedScores || parsed.results.scores;
+                    return this._cachedScores;
+                }
+            }
+
+            // Способ 3: Из списка пользователей (для зарегистрированных, если auth не сработал)
             const usersData = localStorage.getItem('personalityTestUsers');
             if (usersData) {
                 const users = JSON.parse(usersData);
@@ -152,16 +162,22 @@ class ProfileExtensions {
                 kk: 'AI-кеңесші үшін тестті өтіңіз',
                 ru: 'Пройдите тест для AI-советника',
                 en: 'Complete a test for AI Advisor'
+            },
+            celebrity: {
+                kk: 'Салыстыру үшін алдымен тестті аяқтаңыз',
+                ru: 'Пройдите тест для сравнения со знаменитостями',
+                en: 'Complete a test to compare with celebrities'
             }
         };
 
         const titles = {
             comparative: { kk: 'Салыстырмалы талдау', ru: 'Сравнительный анализ', en: 'Comparative Analysis' },
             goals: { kk: 'Менің мақсаттарым', ru: 'Мои цели', en: 'My Goals' },
-            advisor: { kk: 'AI-кеңесші', ru: 'AI-советник', en: 'AI Advisor' }
+            advisor: { kk: 'AI-кеңесші', ru: 'AI-советник', en: 'AI Advisor' },
+            celebrity: { kk: 'Сіз кімге ұқсайсыз', ru: 'На кого вы похожи', en: 'Who You Resemble' }
         };
 
-        const icons = { comparative: '📊', goals: '🎯', advisor: '🤖' };
+        const icons = { comparative: '📊', goals: '🎯', advisor: '🤖', celebrity: '⭐' };
 
         return `
             <div class="cosmic-card mb-6 fade-in">

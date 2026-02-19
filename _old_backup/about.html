@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <!--
-  "О жоба туралы" беті - Enhanced UI/UX
+  Страница "О проекте" - Enhanced UI/UX
   
-  Дипломдық жоба: Интерактивті таңдау сценарийлері негізінде пайдаланушының жеке қалаулары 
-  мен даму бағыттарын талдау жүйесін әзірлеу, 
-  HTML, CSS, JS бағдарламалау тілдерінде
+  Дипломный проект: Разработка программной системы анализа личностных предпочтений 
+  и направлений развития пользователя на основе интерактивных сценариев выбора, 
+  на языках программирования HTML, CSS, JS
   
-  Авторы: Ахмедьянов Саламат КПО 9/22-2
+  Автор: Ахмедьянов Саламат КПО 9/22-2
+  Дата: 2026
 -->
 <html lang="kk">
 
@@ -17,14 +18,14 @@
         content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.googleusercontent.com; connect-src 'self' https://accounts.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;">
     <meta name="theme-color" content="#4a90e2">
     <meta name="author" content="Ахмедьянов Саламат КПО 9/22-2">
-    <meta name="description" content="Neural Constellation тұлғаны талдау жүйесі туралы толық ақпарат.">
+    <meta name="description" content="Подробная информация о системе анализа личности Neural Constellation.">
 
     <!-- SEO & Social Media -->
-    <meta property="og:title" content="Жүйе туралы - Neural Constellation">
-    <meta property="og:description" content="Біздің тұлғалық қалауларды талдау жүйеміз қалай жұмыс істейтінін біліңіз.">
+    <meta property="og:title" content="О системе - Neural Constellation">
+    <meta property="og:description" content="Узнайте, как работает наша система анализа личностных предпочтений.">
     <meta property="og:type" content="article">
 
-    <title>Жүйе туралы - Neural Constellation</title>
+    <title>О системе - Neural Constellation</title>
 
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 
@@ -56,13 +57,13 @@
 
 
     <!-- Skip Link -->
-    <a href="#main-content" class="skip-link visually-hidden-focusable">Негізгі мазмұнға өту</a>
+    <a href="#main-content" class="skip-link visually-hidden-focusable">Перейти к основному содержанию</a>
 
     <!-- Cosmic Navigation -->
-    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Басты навигация">
+    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Главная навигация">
         <!-- Desktop Collapse Button -->
-        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Навигацияны жию"
-            title="Панельді жайю">
+        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Свернуть навигацию"
+            title="Развернуть панель">
             <span class="material-symbols-rounded">chevron_left</span>
         </button>
 
@@ -86,7 +87,7 @@
 
             <a href="about.html" class="nav-item active" role="menuitem">
                 <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">info</span></div>
-                <span class="nav-text" data-i18n="navAbout">Жүйе туралы</span>
+                <span class="nav-text" data-i18n="navAbout">О системе</span>
 
             </a>
         </div>
@@ -97,21 +98,21 @@
             <div class="container">
                 <div class="header-content">
                     <div class="header-main">
-                        <h1 class="logo" id="appName">Өзін-өзі тану жүйесі</h1>
-                        <p class="tagline" id="tagline">Жеке қалауларды және даму бағыттарын талдау</p>
+                        <h1 class="logo" id="appName">Система самопознания</h1>
+                        <p class="tagline" id="tagline">Анализ личностных предпочтений и направлений развития</p>
                     </div>
                     <div class="header-controls">
-                        <div class="language-selector" id="languageSelector" aria-label="Тіл таңдау"></div>
+                        <div class="language-selector" id="languageSelector" aria-label="Выбор языка"></div>
 
                         <!-- Accessibility Button -->
                         <button class="btn-icon header-btn accessibility-trigger" id="accessBtn"
-                            aria-label="Қолжетімділік параметрлері" title="Қолжетімділік"
+                            aria-label="Настройки доступности" title="Доступность"
                             onclick="window.accessibilityService.toggleModal(true)">
                             <span class="material-symbols-rounded">accessibility_new</span>
                         </button>
 
                         <!-- Navigation Toggle (Now in controls) -->
-                        <button class="nav-toggle" id="navToggle" aria-label="Навигация мәзірін ашу">
+                        <button class="nav-toggle" id="navToggle" aria-label="Открыть меню навигации">
                             <div class="nav-toggle-icon">
                                 <span></span>
                                 <span></span>
@@ -123,13 +124,13 @@
             </div>
         </header>
 
-        <main class="app-main" id="main-content" role="main" aria-label="Жоба туралы" aria-labelledby="page-title">
+        <main class="app-main" id="main-content" role="main" aria-label="О проекте" aria-labelledby="page-title">
             <div class="container">
                 <div class="about-content">
                     <!-- Page Header -->
                     <div class="page-header">
-                        <a href="index.html" class="btn-back" aria-label="Басты бетке қайту">
-                            <span data-i18n="back">Артқа</span>
+                        <a href="index.html" class="btn-back" aria-label="Назад на главную">
+                            <span data-i18n="back">Назад</span>
                         </a>
                         <h1 id="page-title" class="page-title" data-i18n="aboutTitle">О системе</h1>
                         <div style="width: 100px;"></div>
@@ -143,69 +144,12 @@
                                 использует передовые алгоритмы и психологические сценарии, чтобы помочь вам исследовать
                                 глубины вашего 'Я'. Через серию интерактивных дилемм мы раскроем паттерны вашего
                                 мышления, которые обычно скрыты в повседневной рутине.</p>
-
-                            <div class="diploma-info" style="
-                                    margin-top: 2rem;
-                                    padding: 0;
-                                    background: linear-gradient(135deg, rgba(74,144,226,0.08) 0%, rgba(126,87,194,0.08) 100%);
-                                    border-radius: 16px;
-                                    border: 1px solid rgba(74,144,226,0.25);
-                                    overflow: hidden;
-                                    box-shadow: 0 4px 24px rgba(74,144,226,0.08);
-                                ">
-                                <!-- Top accent bar -->
-                                <div
-                                    style="height: 3px; background: linear-gradient(90deg, var(--primary, #4a90e2), #7e57c2, var(--primary, #4a90e2));">
-                                </div>
-
-                                <div style="padding: 1.5rem;">
-                                    <!-- Badge row -->
-                                    <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem;">
-                                        <span class="material-symbols-rounded"
-                                            style="font-size: 1.2rem; color: var(--primary, #4a90e2);"
-                                            aria-hidden="true">school</span>
-                                        <span data-i18n="diplomaBadge"
-                                            style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary, #4a90e2); opacity: 0.9;">Дипломдық
-                                            жоба</span>
-                                    </div>
-
-                                    <!-- Title -->
-                                    <h3 data-i18n="diplomaTitle"
-                                        style="font-size: 1rem; line-height: 1.6; margin-bottom: 1rem; color: var(--text-primary); font-weight: 600;">
-                                        Интерактивті таңдау сценарийлері негізінде пайдаланушының жеке қалаулары мен
-                                        даму бағыттарын талдау жүйесін әзірлеу</h3>
-
-                                    <!-- Divider -->
-                                    <div style="height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 1rem;">
-                                    </div>
-
-                                    <!-- Meta row -->
-                                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                            <span class="material-symbols-rounded"
-                                                style="font-size: 1rem; color: var(--text-secondary);"
-                                                aria-hidden="true">code</span>
-                                            <p data-i18n="diplomaTech"
-                                                style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">
-                                                HTML, CSS, JS бағдарламалау тілдерінде</p>
-                                        </div>
-                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                            <span class="material-symbols-rounded"
-                                                style="font-size: 1rem; color: var(--primary, #4a90e2);"
-                                                aria-hidden="true">person</span>
-                                            <p data-i18n="diplomaAuthor"
-                                                style="font-weight: 600; color: var(--primary, #4a90e2); font-size: 0.9rem; margin: 0;">
-                                                Авторы: Ахмедьянов Саламат КПО 9/22-2</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
                     <!-- Features Grid -->
-                    <h2 class="text-2xl font-bold mb-6 gradient-text" data-i18n="featuresTitle">Сізді не күтеді</h2>
-                    <div class="feature-grid mb-8" role="list" aria-label="Жүйе мүмкіндіктері">
+                    <h2 class="text-2xl font-bold mb-6 gradient-text" data-i18n="featuresTitle">Что вас ждет</h2>
+                    <div class="feature-grid mb-8" role="list" aria-label="Возможности системы">
                         <div class="feature-card" role="listitem">
                             <span class="feature-icon material-symbols-rounded" aria-hidden="true">theater_comedy</span>
                             <h3 data-i18n="featInteractive">Интерактивные сценарии</h3>
@@ -231,7 +175,7 @@
                             <h2 class="card-title gradient-text" data-i18n="dimensionsTitle">Измерения анализа</h2>
                         </div>
                         <div class="card-body">
-                            <div class="dimension-grid" role="list" aria-label="Талдау өлшемдері">
+                            <div class="dimension-grid" role="list" aria-label="Измерения анализа">
                                 <div class="dimension-card" role="listitem">
                                     <div class="dim-icon" aria-hidden="true"><span
                                             class="material-symbols-rounded">rocket_launch</span>
@@ -283,43 +227,54 @@
                     <!-- Accessibility Section -->
                     <div class="about-section">
                         <div class="container">
-                            <h2 class="section-title" data-i18n="accessTitle">Қолжетімділік параметрлері</h2>
-                            <p class="section-subtitle" style="margin-bottom: 2rem;" data-i18n="accessSubtitle">Біз
-                                жүйені барлық пайдаланушылар үшін барынша қолжетімді етуге тырысамыз.</p>
+                            <h2 class="section-title" data-i18n="accessTitle">Настройки доступности</h2>
+                            <p class="section-subtitle" style="margin-bottom: 2rem;">
+                                Мы стремимся сделать систему максимально доступной для всех пользователей.
+                            </p>
                             <div class="about-grid">
                                 <div class="dimension-card">
                                     <div class="dim-icon" aria-hidden="true">
                                         <span class="material-symbols-rounded">visibility</span>
                                     </div>
-                                    <h4 data-i18n="contrastLabel">Контрасттылық</h4>
-                                    <p data-i18n="contrastDesc">Көру қабілеті бұзылған адамдар үшін жоғары контраст
-                                        режимін қолдау.</p>
+                                    <h4 data-i18n="contrastLabel">Контрастность</h4>
+                                    <p>Поддержка режима высокой контрастности для людей с нарушениями зрения.</p>
                                 </div>
                                 <div class="dimension-card">
                                     <div class="dim-icon" aria-hidden="true">
                                         <span class="material-symbols-rounded">text_fields</span>
                                     </div>
-                                    <h4 data-i18n="textSizeLabel">Мәтін өлшемі</h4>
-                                    <p data-i18n="textSizeDesc">Интерфейсті масштабтау және қаріп өлшемін өзгерту
-                                        мүмкіндігі.</p>
+                                    <h4 data-i18n="textSizeLabel">Размер текста</h4>
+                                    <p>Возможность масштабирования интерфейса и изменения размера шрифта.</p>
                                 </div>
-
+                                <div class="dimension-card">
+                                    <div class="dim-icon" aria-hidden="true">
+                                        <span class="material-symbols-rounded">keyboard</span>
+                                    </div>
+                                    <h4 data-i18n="navStartTest">Управление</h4>
+                                    <p>Полная навигация с помощью клавиатуры и поддержка горячих клавиш (Alt+1, Alt+T, и
+                                        др.).</p>
+                                </div>
                                 <div class="dimension-card">
                                     <div class="dim-icon" aria-hidden="true">
                                         <span class="material-symbols-rounded">volume_up</span>
                                     </div>
-                                    <h4 data-i18n="audioFeedbackLabel">Дыбыстық сүйемелдеу</h4>
-                                    <p data-i18n="audioFeedbackDesc">Әрекеттерді дыбыстық растау және маңызды күй
-                                        өзгерістерін дыбыстау.</p>
+                                    <h4 data-i18n="audioFeedbackLabel">Звук</h4>
+                                    <p>Звуковое подтверждение действий и озвучивание важных изменений состояния.</p>
                                 </div>
-
+                                <div class="dimension-card">
+                                    <div class="dim-icon" aria-hidden="true">
+                                        <span class="material-symbols-rounded">auto_awesome_motion</span>
+                                    </div>
+                                    <h4 data-i18n="simplifiedLabel">Упрощение</h4>
+                                    <p>Удаление отвлекающих визуальных эффектов и упрощение структуры для лучшей
+                                        концентрации.</p>
+                                </div>
                                 <div class="dimension-card">
                                     <div class="dim-icon" aria-hidden="true">
                                         <span class="material-symbols-rounded">record_voice_over</span>
                                     </div>
-                                    <h4 data-i18n="readingLabel">Нәтижелерді дауыстап оқу</h4>
-                                    <p data-i18n="readingDesc">Нәтижелер мен ұсыныстарды автоматты түрде оқу үшін сөйлеу
-                                        синтезі.</p>
+                                    <h4 data-i18n="readingLabel">Чтение</h4>
+                                    <p>Синтез речи для автоматического прочтения ваших результатов и рекомендаций.</p>
                                 </div>
                             </div>
                         </div>
@@ -333,17 +288,16 @@
         <footer class="app-footer" role="contentinfo">
             <div class="container">
                 <p>
-                    <span data-i18n="project">Дипломдық жоба</span> &copy; 2026
+                    <span data-i18n="project">Дипломный проект</span> &copy; 2026
                 </p>
-                <p class="footer-note" data-i18n="dataProcessed">Барлық деректер сіздің браузеріңізде жергілікті
-                    өңделеді</p>
+                <p class="footer-note" data-i18n="dataProcessed">Все данные обрабатываются локально в вашем браузере</p>
             </div>
         </footer>
     </div>
 
     <!-- Theme Toggle (Floating) -->
-    <div class="theme-toggle" id="themeToggle" title="Тақырып" role="button" tabindex="0"
-        aria-label="Тақырыпты ауыстыру" onkeypress="if(event.key==='Enter') this.click();">
+    <div class="theme-toggle" id="themeToggle" title="Тема" role="button" tabindex="0" aria-label="Переключить тему"
+        onkeypress="if(event.key==='Enter') this.click();">
         <span class="theme-icon material-symbols-rounded" aria-hidden="true">light_mode</span>
     </div>
 
@@ -353,31 +307,32 @@
         <div class="modal-overlay" onclick="window.accessibilityService.toggleModal(false)"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="accessTitle" data-i18n="accessTitle">Қолжетімділік параметрлері</h3>
-                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)" aria-label="Жабу">
+                <h3 id="accessTitle" data-i18n="accessTitle">Настройки доступности</h3>
+                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)"
+                    aria-label="Закрыть">
                     <span class="material-symbols-rounded">close</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="contrastSelect" data-i18n="contrastLabel">Контрасттылық</label>
+                    <label for="contrastSelect" data-i18n="contrastLabel">Контрастность</label>
                     <div class="select-wrapper">
                         <select id="contrastSelect" class="form-select"
                             onchange="window.accessibilityService.setContrast(this.value)">
-                            <option value="normal" data-i18n="contrastNormal">Қалыпты</option>
-                            <option value="high" data-i18n="contrastHigh">Жоғары</option>
+                            <option value="normal" data-i18n="contrastNormal">Обычная</option>
+                            <option value="high" data-i18n="contrastHigh">Высокая</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="textSizeSelect" data-i18n="textSizeLabel">Мәтін өлшемі</label>
+                    <label for="textSizeSelect" data-i18n="textSizeLabel">Размер текста</label>
                     <div class="select-wrapper">
                         <select id="textSizeSelect" class="form-select"
                             onchange="window.accessibilityService.setTextSize(this.value)">
-                            <option value="small" data-i18n="textSizeSmall">Кішкентай</option>
-                            <option value="normal" data-i18n="textSizeNormal">Қалыпты</option>
-                            <option value="large" data-i18n="textSizeLarge">Үлкен</option>
-                            <option value="extra-large" data-i18n="textSizeExtraLarge">Өте үлкен</option>
+                            <option value="small" data-i18n="textSizeSmall">Мелкий</option>
+                            <option value="normal" data-i18n="textSizeNormal">Обычный</option>
+                            <option value="large" data-i18n="textSizeLarge">Крупный</option>
+                            <option value="extra-large" data-i18n="textSizeExtraLarge">Очень крупный</option>
                         </select>
                     </div>
                 </div>
@@ -385,21 +340,36 @@
                     <label class="checkbox-label"
                         style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                         <input type="checkbox" id="animCheck" onchange="window.accessibilityService.toggleAnimations()">
-                        <span data-i18n="animationsLabel">Интерфейс анимациялары</span>
+                        <span data-i18n="animationsLabel">Анимации интерфейса</span>
                     </label>
                 </div>
                 <div class="form-group checkbox-group">
                     <label class="checkbox-label"
                         style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                         <input type="checkbox" id="audioCheck" onchange="window.accessibilityService.toggleAudio()">
-                        <span data-i18n="audioFeedbackLabel">Дыбыстық сүйемелдеу</span>
+                        <span data-i18n="audioFeedbackLabel">Звуковое сопровождение</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="simplifiedCheck"
+                            onchange="window.accessibilityService.toggleSimplified()">
+                        <span data-i18n="simplifiedLabel">Упрощенный режим</span>
                     </label>
                 </div>
                 <div class="form-group checkbox-group">
                     <label class="checkbox-label"
                         style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                         <input type="checkbox" id="readingCheck" onchange="window.accessibilityService.toggleReading()">
-                        <span data-i18n="readingLabel">Нәтижелерді дауыстап оқу</span>
+                        <span data-i18n="readingLabel">Озвучивание результатов</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="voiceControlCheck" onchange="window.voiceControl.toggle()">
+                        <span data-i18n="voiceControlLabel">Голосовое управление</span>
                     </label>
                 </div>
             </div>
@@ -409,7 +379,6 @@
     <!-- Scripts -->
     <script src="js/services/storage.js" defer></script>
     <script src="js/services/localization.js" defer></script>
-    <script src="js/services/localization-patch.js" defer></script>
     <script src="js/services/audio-feedback.js" defer></script>
     <script src="js/services/keyboard-navigation.js" defer></script>
     <script src="js/services/accessibility-service.js" defer></script>
