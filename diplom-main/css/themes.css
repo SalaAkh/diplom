@@ -1,0 +1,208 @@
+/**
+ * Система тем приложения
+ * Автор: Ахмедьянов Саламат КПО 9/22-2
+ * Дата: 2026
+ */
+
+/* Transition для плавного переключения тем */
+:root {
+    --theme-transition: background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+/* Light Theme (По умолчанию) */
+:root,
+body:not(.dark-theme) {
+    /* Основные цвета */
+    --theme-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --theme-bg-solid: #ffffff;
+    --theme-text: #1a1a2e;
+    --theme-text-light: #666;
+    --theme-primary: #4a90e2;
+    --theme-secondary: #7b68ee;
+    --theme-accent: #00c6fb;
+
+    /* Элементы UI */
+    --theme-card: rgba(255, 255, 255, 0.95);
+    --theme-card-hover: rgba(255, 255, 255, 1);
+    --theme-border: rgba(0, 0, 0, 0.1);
+    --theme-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    --theme-shadow-hover: 0 12px 48px 0 rgba(31, 38, 135, 0.25);
+
+    /* Header/Footer */
+    --theme-header-bg: rgba(255, 255, 255, 0.1);
+    --theme-header-border: rgba(255, 255, 255, 0.2);
+    --theme-footer-bg: rgba(255, 255, 255, 0.95);
+
+    /* Навигация */
+    --theme-nav-bg: rgba(255, 255, 255, 0.08);
+    --theme-nav-item-hover: rgba(255, 255, 255, 0.15);
+    --theme-nav-active: rgba(74, 144, 226, 0.2);
+
+    /* Кнопки */
+    --theme-btn-primary-bg: linear-gradient(135deg, #00c6fb, #005bea);
+    --theme-btn-primary-shadow: 0 4px 15px rgba(0, 91, 234, 0.4);
+    --theme-btn-secondary-bg: var(--theme-card);
+    --theme-btn-secondary-border: var(--theme-primary);
+
+    /* Прогресс */
+    --theme-progress-bg: var(--theme-card);
+    --theme-progress-fill: linear-gradient(90deg, #00c6fb, #005bea);
+
+    /* Специфичные */
+    --theme-success: #50c878;
+    --theme-warning: #f39c12;
+    --theme-danger: #e74c3c;
+    --theme-info: #3498db;
+}
+
+/* Dark Theme */
+.dark-theme {
+    /* Основные цвета */
+    --theme-bg: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+    --theme-bg-solid: #0f0f23;
+    --theme-text: #e0e0e0;
+    --theme-text-light: #a0a0a0;
+    --theme-primary: #00c6fb;
+    --theme-secondary: #9d8df1;
+    --theme-accent: #00e5ff;
+
+    /* Элементы UI */
+    --theme-card: rgba(20, 20, 40, 0.9);
+    --theme-card-hover: rgba(30, 30, 50, 0.95);
+    --theme-border: rgba(255, 255, 255, 0.1);
+    --theme-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    --theme-shadow-hover: 0 12px 48px 0 rgba(0, 0, 0, 0.7);
+
+    /* Header/Footer */
+    --theme-header-bg: rgba(15, 15, 35, 0.8);
+    --theme-header-border: rgba(255, 255, 255, 0.1);
+    --theme-footer-bg: rgba(15, 15, 35, 0.95);
+
+    /* Навигация */
+    --theme-nav-bg: rgba(0, 0, 0, 0.3);
+    --theme-nav-item-hover: rgba(255, 255, 255, 0.1);
+    --theme-nav-active: rgba(0, 198, 251, 0.2);
+
+    /* Кнопки */
+    --theme-btn-primary-bg: linear-gradient(135deg, #00c6fb, #005bea);
+    --theme-btn-primary-shadow: 0 4px 15px rgba(0, 198, 251, 0.5);
+    --theme-btn-secondary-bg: transparent;
+    --theme-btn-secondary-border: var(--theme-primary);
+
+    /* Прогресс */
+    --theme-progress-bg: rgba(15, 15, 35, 0.8);
+    --theme-progress-fill: linear-gradient(90deg, #00c6fb, #00e5ff);
+
+    /* Специфичные */
+    --theme-success: #4caf50;
+    --theme-warning: #ff9800;
+    --theme-danger: #f44336;
+    --theme-info: #2196f3;
+}
+
+/* Применение тем к элементам */
+body {
+    background: var(--theme-bg);
+    color: var(--theme-text);
+    transition: var(--theme-transition);
+}
+
+/* Header */
+.app-header {
+    background: var(--theme-header-bg);
+    border-bottom-color: var(--theme-header-border);
+}
+
+/* Cards */
+#app,
+.card,
+.results-section,
+.profile-section,
+.intro-content,
+.scenario-description {
+    background: var(--theme-card);
+    border-color: var(--theme-border);
+    box-shadow: var(--theme-shadow);
+    transition: var(--theme-transition);
+}
+
+#app:hover,
+.card:hover,
+.results-section:hover {
+    background: var(--theme-card-hover);
+    box-shadow: var(--theme-shadow-hover);
+}
+
+/* Navigation */
+.cosmic-nav {
+    background: var(--theme-nav-bg);
+}
+
+.nav-item:hover {
+    background: var(--theme-nav-item-hover);
+}
+
+.nav-item.active {
+    background: var(--theme-nav-active);
+}
+
+/* Buttons */
+.btn-primary {
+    background: var(--theme-btn-primary-bg);
+    box-shadow: var(--theme-btn-primary-shadow);
+}
+
+.btn-secondary {
+    background: var(--theme-btn-secondary-bg);
+    border-color: var(--theme-btn-secondary-border);
+    color: var(--theme-primary);
+}
+
+.btn-secondary:hover {
+    background: var(--theme-primary);
+    color: white;
+}
+
+/* Progress */
+.progress-bar {
+    background: var(--theme-progress-bg);
+}
+
+.progress-fill {
+    background: var(--theme-progress-fill);
+}
+
+/* Footer */
+.app-footer {
+    background: var(--theme-footer-bg);
+    color: var(--theme-text-light);
+}
+
+/* 3D Background opacity для светлой темы */
+body:not(.dark-theme) #background-canvas {
+    opacity: 0.5;
+}
+
+.dark-theme #background-canvas {
+    opacity: 0.6;
+}
+
+/* Специальные статусы */
+.success {
+    color: var(--theme-success);
+}
+
+.warning {
+    color: var(--theme-warning);
+}
+
+.danger {
+    color: var(--theme-danger);
+}
+
+.info {
+    color: var(--theme-info);
+}

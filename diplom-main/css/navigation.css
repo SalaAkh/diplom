@@ -1,0 +1,623 @@
+/**
+ * Cosmic Navigation System
+ * Sidebar/Bottom navigation with constellation theme
+ * 
+ * Автор: Ахмедьянов Саламат КПО 9/22-2
+ * Дата: 2026
+ */
+
+/* ============================================
+   NAVIGATION CONTAINER
+   ============================================ */
+
+.cosmic-nav {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 280px;
+    background: var(--card-bg);
+    backdrop-filter: blur(var(--blur-xl));
+    -webkit-backdrop-filter: blur(var(--blur-xl));
+    border-left: 1px solid var(--border-color);
+    z-index: var(--z-sticky);
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-6) var(--space-4);
+    transition: all var(--duration-normal) var(--ease-out);
+    transform: translateX(100%);
+    visibility: hidden;
+}
+
+.cosmic-nav.active {
+    transform: translateX(0);
+    visibility: visible;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    backdrop-filter: none;
+    z-index: calc(var(--z-sticky) - 1);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--duration-normal) var(--ease-out);
+}
+
+.nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Removed desktop persistent collapse logic */
+
+/* ============================================
+   NAVIGATION COLLAPSE BUTTON (Desktop)
+   ============================================ */
+
+.nav-collapse-btn {
+    position: absolute;
+    left: -12px;
+    top: var(--space-8);
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-full);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(var(--blur-md));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all var(--duration-quick) var(--ease-out);
+    color: var(--text-color);
+}
+
+.nav-collapse-btn .material-symbols-rounded {
+    font-size: 18px;
+    transform: rotate(180deg);
+}
+
+.nav-collapse-btn:hover {
+    background: var(--card-hover);
+    box-shadow: var(--shadow-md);
+    transform: scale(1.1);
+}
+
+.cosmic-nav.collapsed .nav-collapse-btn {
+    transform: rotate(0deg);
+}
+
+.cosmic-nav.collapsed .nav-collapse-btn:hover {
+    transform: rotate(0deg) scale(1.1);
+}
+
+
+/* ============================================
+   NAVIGATION HEADER
+   ============================================ */
+
+.nav-header {
+    margin-bottom: var(--space-8);
+    padding: var(--space-4);
+}
+
+.nav-logo {
+    font-family: var(--font-display);
+    font-size: var(--text-4xl);
+    font-weight: var(--weight-bold);
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--space-2);
+    filter: drop-shadow(0 0 15px rgba(0, 198, 251, 0.5));
+    display: flex;
+    align-items: center;
+    padding-right: var(--space-2);
+    /* Prevent icon clipping */
+}
+
+.nav-logo .material-symbols-rounded {
+    font-size: 36px;
+    font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 40;
+}
+
+.nav-tagline {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: var(--leading-snug);
+}
+
+/* ============================================
+   NAVIGATION ITEMS
+   ============================================ */
+
+.nav-items {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    transition: all var(--duration-quick) var(--ease-out);
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.cosmic-nav.collapsed .nav-item {
+    justify-content: center;
+    padding: var(--space-3);
+}
+
+.nav-text {
+    transition: opacity var(--duration-quick) var(--ease-out);
+}
+
+.nav-item::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(-90deg, var(--primary-color), transparent);
+    opacity: 0;
+    transition: all var(--duration-normal) var(--ease-out);
+}
+
+.nav-item:hover {
+    background: var(--input-focus);
+    color: var(--primary-color);
+    transform: translateX(-8px);
+}
+
+.nav-item:hover::before {
+    width: 6px;
+    opacity: 0.8;
+}
+
+.nav-item.active {
+    background: var(--input-focus);
+    color: var(--primary-color);
+    font-weight: var(--weight-bold);
+    box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.15);
+}
+
+.nav-item.active::before {
+    width: 6px;
+    opacity: 1;
+    background: var(--primary-color);
+}
+
+/* ============================================
+   NAVIGATION ICONS
+   ============================================ */
+
+.nav-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    text-decoration: none !important;
+    border-bottom: none !important;
+    transition: all var(--duration-quick) var(--ease-out);
+}
+
+.nav-icon .material-symbols-rounded {
+    font-size: 24px;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.nav-item.active .nav-icon .material-symbols-rounded {
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 8px var(--primary-color));
+    }
+
+    50% {
+        transform: scale(1.15);
+        filter: drop-shadow(0 0 12px var(--primary-color));
+    }
+}
+
+/* ============================================
+   CONSTELLATION CONNECTOR LINES
+   ============================================ */
+
+.nav-connector {
+    position: absolute;
+    left: -1px;
+    top: 50%;
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(-90deg, var(--primary-color), transparent);
+    opacity: 0;
+    transform: translateY(-50%);
+    transition: opacity var(--duration-normal) var(--ease-out);
+    pointer-events: none;
+}
+
+.nav-item.active .nav-connector {
+    opacity: 0.5;
+    animation: lineGlow 2s ease-in-out infinite;
+}
+
+@keyframes lineGlow {
+
+    0%,
+    100% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* ============================================
+   NAV FOOTER (User Profile / Theme Toggle)
+   ============================================ */
+
+.nav-footer {
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    background: var(--input-bg);
+}
+
+.nav-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+}
+
+.nav-user-info {
+    flex: 1;
+}
+
+.nav-username {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--text-color);
+}
+
+.nav-user-role {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+}
+
+/* ============================================
+   NAVIGATION TOGGLE BUTTON
+   ============================================ */
+
+.nav-toggle {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    background: rgba(74, 144, 226, 0.1);
+    border: 1px solid rgba(74, 144, 226, 0.3);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all var(--duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.15);
+}
+
+
+.nav-toggle:hover {
+    background: var(--primary-color, #4a90e2);
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(74, 144, 226, 0.3);
+    border-color: transparent;
+}
+
+.nav-toggle:hover .nav-toggle-icon span {
+    background: white !important;
+}
+
+.nav-toggle:active {
+    transform: scale(0.95);
+}
+
+.nav-toggle-icon {
+    width: 22px;
+    height: 22px;
+    position: relative;
+}
+
+.nav-toggle-icon span {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: var(--text-color);
+    left: 0;
+    border-radius: 4px;
+    transition: all var(--duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.nav-toggle-icon span:nth-child(1) {
+    top: 4px;
+    width: 70%;
+}
+
+.nav-toggle-icon span:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.nav-toggle-icon span:nth-child(3) {
+    bottom: 4px;
+    width: 50%;
+    right: 0;
+}
+
+.nav-toggle:hover .nav-toggle-icon span:nth-child(1) {
+    width: 100%;
+}
+
+.nav-toggle:hover .nav-toggle-icon span:nth-child(3) {
+    width: 100%;
+}
+
+.nav-toggle.active .nav-toggle-icon span:nth-child(1) {
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%) rotate(45deg);
+    background: white !important;
+}
+
+.nav-toggle.active .nav-toggle-icon span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+.nav-toggle.active .nav-toggle-icon span:nth-child(3) {
+    bottom: 50%;
+    width: 100%;
+    transform: translateY(50%) rotate(-45deg);
+    background: white !important;
+}
+
+
+/* ============================================
+   MAIN CONTENT ADJUSTMENT
+   ============================================ */
+
+.app-wrapper.has-nav {
+    margin-right: 0;
+    margin-left: 0;
+    transition: margin-right var(--duration-normal) var(--ease-out);
+}
+
+.app-wrapper.has-nav.nav-collapsed {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+/* ============================================
+   MOBILE NAVIGATION (Bottom Bar)
+   ============================================ */
+
+/* ============================================
+   MOBILE NAVIGATION (Side Drawer)
+   ============================================ */
+
+.nav-mobile-header {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-close-btn .material-symbols-rounded {
+    font-size: 24px;
+}
+
+.nav-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-mobile-controls {
+    display: flex;
+    gap: var(--space-3);
+}
+
+
+
+@media (max-width: 768px) {
+
+    .cosmic-nav,
+    .cosmic-nav.collapsed {
+        /* Target both to override desktop specificity */
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: auto;
+        bottom: 0;
+        width: 100% !important;
+        /* Force full width, override 80px */
+        height: 100vh;
+        z-index: 1000;
+        transform: translateX(100%);
+        flex-direction: column;
+        padding: var(--space-4);
+        border-right: none;
+        border-top: none;
+        background: rgba(15, 23, 42, 0.98);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        overflow-y: auto;
+    }
+
+    .cosmic-nav.active {
+        transform: translateX(0);
+    }
+
+    /* Force content to be visible even if 'collapsed' class is present */
+    .cosmic-nav.collapsed .nav-text,
+    .cosmic-nav.collapsed .nav-tagline,
+    .cosmic-nav.collapsed .nav-header,
+    .cosmic-nav.collapsed .nav-footer,
+    .cosmic-nav.collapsed .nav-auth-card {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        display: block !important;
+    }
+
+    .cosmic-nav.collapsed .nav-item {
+        justify-content: flex-start;
+        /* Reset center alignment */
+    }
+
+    .nav-mobile-header {
+        display: flex;
+        flex-shrink: 0;
+    }
+
+    .hide-mobile {
+        display: none !important;
+    }
+
+    .show-mobile {
+        display: flex !important;
+    }
+
+    .nav-items {
+        flex-direction: column;
+        gap: var(--space-2);
+        width: 100%;
+        flex-shrink: 0;
+    }
+
+    .nav-item {
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: var(--space-3);
+        text-align: left;
+        border-radius: var(--radius-lg);
+        width: 100%;
+    }
+
+    .nav-text {
+        display: block !important;
+        font-size: var(--text-lg);
+        opacity: 1;
+    }
+
+    .nav-icon {
+        font-size: 24px;
+        margin-right: var(--space-3);
+        /* Restore margin */
+    }
+
+    .nav-toggle {
+        z-index: 900;
+    }
+
+    .app-wrapper.has-nav {
+        margin-left: 0 !important;
+        padding-bottom: 0;
+    }
+
+    .nav-auth-card {
+        margin-top: var(--space-2);
+        flex-shrink: 0;
+        width: 100%;
+        display: block;
+        /* Ensure visibility */
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+.nav-item:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .cosmic-nav,
+    .nav-item,
+    .nav-item::before,
+    .app-wrapper.has-nav {
+        transition: none;
+    }
+
+    .nav-item.active .nav-icon {
+        animation: none;
+    }
+
+    .nav-item.active .nav-connector {
+        animation: none;
+    }
+}

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<!--
+  "Өзін-өзі тану жүйесі" қосымшасының басты беті
+  
+  Дипломдық жоба: Интерактивті таңдау сценарийлері негізінде пайдаланушының
+  тұлғалық қасиеттері мен даму бағыттарын талдайтын бағдарламалық жүйені
+  HTML, CSS, JS бағдарламалау тілдерінде әзірлеу
+  
+  Автор: Ахмедьянов Саламат КПО 9/22-2
+-->
+<html lang="kk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.googleusercontent.com https://upload.wikimedia.org; connect-src 'self' https://accounts.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;">
+    <meta name="theme-color" content="#4a90e2">
+    <meta name="description" content="Цифровая система для анализа личностных предпочтений и направлений развития">
+    <meta name="author" content="Ахмедьянов Саламат КПО 9/22-2">
+    <meta name="diploma-title"
+        content="Разработка программной системы анализа личностных предпочтений и направлений развития пользователя на основе интерактивных сценариев выбора, на языках программирования HTML, CSS, JS">
+
+    <!-- SEO & Social Media -->
+    <meta property="og:title" content="Система самопознания - Анализ личностных предпочтений">
+    <meta property="og:description"
+        content="Интерактивная система для глубокого анализа личности и направлений развития.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://personality-analysis.kz">
+    <meta property="og:image" content="https://personality-analysis.kz/assets/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="canonical" href="https://personality-analysis.kz">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebAppli0ц
+      "name": "Система самопознания",
+      "description": "Цифровая система для анализа личностных предпочтений на основе интерактивных сценариев.",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Ахмедьянов Саламат"
+      }
+    }
+    </script>
+
+    <title>Система самопознания - Дипломный Проект</title>
+
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+    <!-- Google Fonts - Inter & Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- Resource Loader (Kills render-blocking JS) -->
+    <script src="js/services/resource-loader.js"></script>
+
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Стили - Design System First -->
+    <link rel="stylesheet" href="css/design-tokens.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/google-auth.css">
+    <link rel="stylesheet" href="css/transitions.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="css/accessibility.css">
+</head>
+<!--приветик-->
+
+<body>
+
+
+    <div id="background-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+
+    <!-- Cosmic Loading Screen -->
+    <div class="loading-wrapper" id="mainLoading">
+        <div class="loading-content">
+            <div class="cosmic-spinner"></div>
+            <p class="loading-text" data-i18n="systemLoading">Жүйені жүктеу...</p>
+        </div>
+    </div>
+
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link visually-hidden-focusable">Перейти к основному содержанию</a>
+
+    <!-- Cosmic Navigation -->
+    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Главная навигация">
+        <!-- Desktop Collapse Button -->
+        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Свернуть навигацию"
+            title="Свернуть панель">
+            <span class="material-symbols-rounded">chevron_left</span>
+        </button>
+
+        <!-- Mobile Nav Header (Settings + Close) -->
+        <div class="nav-mobile-header show-mobile">
+            <button class="nav-close-btn" id="navCloseBtn" aria-label="Закрыть меню">
+                <span class="material-symbols-rounded">close</span>
+            </button>
+            <div class="nav-mobile-controls">
+                <!-- Language and Theme toggles moved here for mobile -->
+                <div class="language-wrapper" id="mobileLangContainer"></div>
+                <div class="theme-wrapper" id="mobileThemeContainer"></div>
+            </div>
+        </div>
+
+        <div class="nav-header hide-mobile">
+            <div class="nav-logo" id="navLogo" aria-hidden="true"><span class="material-symbols-rounded">hub</span>
+            </div>
+            <div class="nav-tagline" id="navTagline" data-i18n="navTagline">Neural Constellation</div>
+        </div>
+
+
+
+        <div class="nav-items" id="navItems" role="menubar">
+            <a href="index.html" class="nav-item active" data-screen="intro" role="menuitem">
+                <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">home</span></div>
+                <span class="nav-text" data-i18n="navHome">Home</span>
+
+            </a>
+            <a href="profile.html" class="nav-item" data-screen="profile" role="menuitem">
+                <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">person</span></div>
+                <span class="nav-text" data-i18n="navProfile">Profile</span>
+
+            </a>
+
+            <a href="about.html" class="nav-item" data-screen="about" role="menuitem">
+                <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">info</span></div>
+                <span class="nav-text" data-i18n="navAbout">About</span>
+
+            </a>
+        </div>
+
+        <div class="nav-footer">
+            <div class="nav-user" id="navUser" style="display: none;">
+                <div class="nav-avatar" id="navAvatar" aria-hidden="true">?</div>
+                <div class="nav-user-info">
+                    <div class="nav-username" id="navUsername">Guest</div>
+                    <div class="nav-user-role" data-i18n="navGuest">Explorer</div>
+                </div>
+                <button class="nav-logout-btn" onclick="app.logout()" title="Выйти" aria-label="Выйти из аккаунта">
+                    <span class="material-symbols-rounded">logout</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="app-wrapper has-nav" id="appWrapper">
+        <header class="app-header" role="banner">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-main">
+                        <h1 class="logo" id="appName"></h1>
+                        <p class="tagline" id="tagline"></p>
+                    </div>
+                    <div class="header-controls">
+                        <div class="language-selector" id="languageSelector" aria-label="Выбор языка"></div>
+
+                        <!-- Accessibility Button -->
+                        <button class="btn-icon header-btn accessibility-trigger" id="accessBtn"
+                            aria-label="Настройки доступности" title="Доступность"
+                            onclick="window.accessibilityService.toggleModal(true)">
+                            <span class="material-symbols-rounded">accessibility_new</span>
+                        </button>
+
+                        <!-- Navigation Toggle (Now in controls) -->
+                        <button class="nav-toggle" id="navToggle" aria-label="Открыть меню навигации">
+                            <div class="nav-toggle-icon">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="app-main" id="main-content" role="main" aria-label="Основной контент">
+            <div class="container">
+                <div id="app" aria-live="polite" aria-atomic="true">
+                    <!-- Контент приложения будет вставлен динамически -->
+                </div>
+
+                <!-- Шаблон лендинга (для редактирования текста в HTML) -->
+                <template id="landing-template">
+                    <div class="landing-page">
+                        <!-- Hero Section -->
+                        <section class="hero-section" aria-labelledby="hero-title">
+                            <div class="hero-content">
+                                <h1 id="hero-title" class="hero-title fade-in" data-i18n="landingHeroTitle">Познай свою
+                                    истинную природу
+                                </h1>
+                                <p class="hero-subtitle fade-in delay-1" data-i18n="landingHeroSubtitle">
+                                    Интеллектуальная система анализа личности, основанная на когнитивной психологии и
+                                    сценариях выбора.
+                                    Определите свои сильные стороны и векторы развития.
+                                </p>
+                                <div class="hero-cta fade-in delay-2" id="landing-actions">
+                                    <!-- Кнопки будут вставлены JS -->
+                                </div>
+                            </div>
+                            <div class="hero-visual fade-in delay-3" aria-hidden="true">
+                                <!-- Декоративные иконки -->
+                                <span class="material-symbols-rounded floating-icon">psychology</span>
+                                <span class="material-symbols-rounded floating-icon delay-1">fingerprint</span>
+                                <span class="material-symbols-rounded floating-icon delay-2">auto_graph</span>
+                            </div>
+                        </section>
+
+                        <!-- Features Section -->
+                        <section class="features-section" aria-labelledby="features-title">
+                            <h2 id="features-title" class="section-title" data-i18n="landingFeaturesTitle">Технологии
+                                самопознания</h2>
+                            <div class="features-grid">
+                                <div class="feature-card">
+                                    <span class="feature-icon" aria-hidden="true">🎭</span>
+                                    <h3 data-i18n="featInteractive">Интерактивные сценарии</h3>
+                                    <p data-i18n="featInteractiveDesc">12 глубоких интерактивных сценариев с множеством
+                                        путей развития</p>
+                                </div>
+                                <div class="feature-card">
+                                    <span class="feature-icon" aria-hidden="true">🧠</span>
+                                    <h3 data-i18n="featPattern">Анализ паттернов</h3>
+                                    <p data-i18n="featPatternDesc">Комплексный анализ когнитивных паттернов и стилей
+                                        принятия решений</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- NEW: Mission Section -->
+                        <section class="mission-section">
+                            <div class="mission-content">
+                                <span class="section-badge" data-i18n="missionTitle">Миссия проекта</span>
+                                <p class="mission-text" data-i18n="missionText">В эпоху информационного шума легко
+                                    потерять связь с собой. Наша цель — дать каждому инструмент для осознанного
+                                    самопознания. Это не просто тест, это цифровое зеркало, которое отражает ваши
+                                    истинные ценности, скрытые мотивы и потенциальные таланты, помогая принимать верные
+                                    жизненные решения.</p>
+                            </div>
+                        </section>
+
+                        <!-- NEW: Methodology Section -->
+                        <section class="methodology-section">
+                            <div class="methodology-wrapper">
+                                <div class="methodology-text">
+                                    <h2 class="section-title" data-i18n="methodologyTitle">Наука внутри</h2>
+                                    <h3 class="methodology-subtitle" data-i18n="methodologySubtitle">Больше, чем просто
+                                        вопросы</h3>
+                                    <p data-i18n="methodologyText" style="margin-bottom: 2rem;">В отличие от
+                                        классических тестов, где легко 'подгадать' правильный ответ, наша система
+                                        работает иначе:</p>
+
+                                    <div class="science-grid">
+                                        <div class="science-item">
+                                            <h4 data-i18n="sciencePsychTitle">Когнитивная психология</h4>
+                                            <p data-i18n="sciencePsychText">Анализ принятия решений в условиях
+                                                неопределенности выявляет истинные, а не декларируемые ценности.</p>
+                                        </div>
+                                        <div class="science-item">
+                                            <h4 data-i18n="scienceGameTitle">Теория игр</h4>
+                                            <p data-i18n="scienceGameText">Сценарные дилеммы ставят вас перед сложным
+                                                выбором, исключая социально ожидаемые ответы.</p>
+                                        </div>
+                                        <div class="science-item">
+                                            <h4 data-i18n="scienceDataTitle">Анализ данных</h4>
+                                            <p data-i18n="scienceDataText">Математическая модель строит профиль по 6
+                                                независимым осям, создавая уникальный 'отпечаток' личности.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="methodology-visual">
+                                    <div class="holo-circle"></div>
+                                    <div class="holo-circle delayed"></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- NEW: Value/Benefits Section -->
+                        <section class="value-section">
+                            <h2 class="section-title" data-i18n="valueTitle">Зачем это вам?</h2>
+                            <div class="value-grid">
+                                <div class="value-card">
+                                    <div class="value-icon">🚀</div>
+                                    <h3 data-i18n="valueCareerTitle">Карьерный навигатор</h3>
+                                    <p data-i18n="valueCareerText">Поймите, где ваши природные таланты раскроются
+                                        максимально: в управлении, творчестве, аналитике или предпринимательстве.</p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-icon">💡</div>
+                                    <h3 data-i18n="valueRelTitle">Понимание себя</h3>
+                                    <p data-i18n="valueRelText">Узнайте свои истинные драйверы: почему вы действуете
+                                        именно так? Что вас мотивирует, а что забирает энергию?</p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-icon">📈</div>
+                                    <h3 data-i18n="valueGrowthTitle">Точки роста</h3>
+                                    <p data-i18n="valueGrowthText">Получите персональную карту развития с конкретными
+                                        рекомендациями по soft skills, которые усилят вашу личность.</p>
+                                </div>
+                            </div>
+                        </section>
+
+
+                    </div>
+
+                    <!-- How It Works Section -->
+                    <section class="how-it-works-section" aria-labelledby="how-it-works-title">
+                        <h2 id="how-it-works-title" class="section-title" data-i18n="howItWorksTitle">Как это
+                            работает</h2>
+                        <div class="steps-container">
+                            <div class="step">
+                                <div class="step-number" aria-hidden="true">1</div>
+                                <h3 data-i18n="step1Title">Проходите тест</h3>
+                                <p data-i18n="step1Desc">Ответьте на 12 сценарных вопросов, выбирая близкие вам
+                                    варианты действий.</p>
+                            </div>
+                            <div class="step-arrow" aria-hidden="true">→</div>
+                            <div class="step">
+                                <div class="step-number" aria-hidden="true">2</div>
+                                <h3 data-i18n="step2Title">Алгоритм считает</h3>
+                                <p data-i18n="step2Desc">Система анализирует ваши ответы по 6 ключевым измерениям
+                                    личности.</p>
+                            </div>
+                            <div class="step-arrow" aria-hidden="true">→</div>
+                            <div class="step">
+                                <div class="step-number" aria-hidden="true">3</div>
+                                <h3 data-i18n="step3Title">Получаете профиль</h3>
+                                <p data-i18n="step3Desc">Детальный отчет и рекомендации по развитию
+                                    доступны мгновенно.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- CTA Section (Final Push) -->
+                    <section class="cta-section" aria-label="Призыв к действию">
+                        <div class="cta-content">
+                            <h2 data-i18n="ctaTitle">Откройте свой внутренний мир</h2>
+                            <p data-i18n="ctaText">Пройдите тест за 5-7 минут и получите детальный анализ вашей
+                                личности с персональными
+                                рекомендациями.</p>
+                            <!-- Динамические кнопки (Continue/Start) -->
+                            <div id="cta-actions">
+                                <button class="btn btn-primary btn-xl pulse-animation"
+                                    onclick="app.showTestTypeSelection()">
+                                    <span class="material-symbols-rounded" aria-hidden="true">play_arrow</span>
+                                    <span data-i18n="startTest">Начать тестирование</span>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+            </div>
+            </template>
+    </div>
+    </main>
+
+    <footer class="app-footer" role="contentinfo">
+        <div class="container">
+            <p id="footerText">Дипломдық жоба &copy; 2026</p>
+            <p class="footer-note" id="footerNote">Барлық деректер сіздің браузеріңізде жергілікті өңделеді</p>
+        </div>
+    </footer>
+    </div>
+
+    <!-- Theme Toggle (Floating) -->
+    <div class="theme-toggle" id="themeToggle" title="Тема" role="button" tabindex="0" aria-label="Переключить тему"
+        onkeypress="if(event.key==='Enter') this.click();">
+        <span class="theme-icon material-symbols-rounded" aria-hidden="true">light_mode</span>
+    </div>
+
+    <!-- Accessibility Modal -->
+    <div class="modal" id="accessModal" aria-hidden="true" role="dialog" aria-modal="true"
+        aria-labelledby="accessTitle">
+        <div class="modal-overlay" onclick="window.accessibilityService.toggleModal(false)"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="accessTitle" data-i18n="accessTitle">Қолжетімділік параметрлері</h3>
+                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)"
+                    aria-label="Закрыть">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="contrastSelect" data-i18n="contrastLabel">Контрасттылық</label>
+                    <div class="select-wrapper">
+                        <select id="contrastSelect" class="form-select"
+                            onchange="window.accessibilityService.setContrast(this.value)">
+                            <option value="normal" data-i18n="contrastNormal">Обычная</option>
+                            <option value="high" data-i18n="contrastHigh">Высокая</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="textSizeSelect" data-i18n="textSizeLabel">Размер текста</label>
+                    <div class="select-wrapper">
+                        <select id="textSizeSelect" class="form-select"
+                            onchange="window.accessibilityService.setTextSize(this.value)">
+                            <option value="small" data-i18n="textSizeSmall">Мелкий</option>
+                            <option value="normal" data-i18n="textSizeNormal">Обычный</option>
+                            <option value="large" data-i18n="textSizeLarge">Крупный</option>
+                            <option value="extra-large" data-i18n="textSizeExtraLarge">Очень крупный</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="animCheck" onchange="window.accessibilityService.toggleAnimations()">
+                        <span data-i18n="animationsLabel">Интерфейс анимациялары</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="audioCheck" onchange="window.accessibilityService.toggleAudio()">
+                        <span data-i18n="audioFeedbackLabel">Дыбыстық сүйемелдеу</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="readingCheck" onchange="window.accessibilityService.toggleReading()">
+                        <span data-i18n="readingLabel">Нәтижелерді дауыстап оқу</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript модули -->
+    <!-- Production-safe logger -->
+    <script src="js/services/logger.js"></script>
+
+    <!-- Core modules (загружаются первыми) -->
+    <script src="js/core/EventBus.js" defer></script>
+    <script src="js/core/AppState.js" defer></script>
+    <script src="js/services/data-loader.js" defer></script>
+
+    <!-- Новые утилиты для улучшенного UX -->
+    <script src="js/ui/toast-manager.js" defer></script>
+    <script src="js/services/error-handler.js" defer></script>
+
+    <!-- Google OAuth Config -->
+
+    <!-- Критические модули (загружаются последовательно) -->
+    <script src="js/services/localization.js" defer></script>
+    <script src="js/services/localization-patch.js" defer></script>
+    <script src="js/services/storage.js" defer></script>
+    <script src="js/services/auth.js" defer></script>
+    <script src="js/services/feedback.js" defer></script>
+    <script src="js/services/audio-feedback.js" defer></script>
+    <script src="js/services/keyboard-navigation.js" defer></script>
+    <script src="js/services/accessibility-service.js" defer></script>
+    <script src="js/services/voice-control.js" defer></script>
+
+    <script src="js/data/scenarios-data.js" defer></script>
+    <script src="js/data/advanced-scenarios-data.js" defer></script>
+    <script src="js/data/cognitive-test-data.js" defer></script>
+    <script src="js/analysis/analysis.js" defer></script>
+    <script src="js/analysis/advanced-analysis.js" defer></script>
+    <script src="js/data/dynamic-scenarios.js" defer></script>
+    <script src="js/vis/visualization.js" defer></script>
+    <script src="js/data/advanced-test-organizer.js" defer></script>
+
+    <script src="js/services/report-generator.js" defer></script>
+
+    <!-- Refactored Modules -->
+    <script src="js/ui/ui-controller.js" defer></script>
+    <script src="js/managers/test-manager.js" defer></script>
+    <script src="js/managers/results-manager.js" defer></script>
+
+
+    <!-- UI Views -->
+    <script src="js/ui/views/BaseView.js" defer></script>
+    <script src="js/ui/views/IntroView.js" defer></script>
+    <script src="js/ui/views/TestSelectionView.js" defer></script>
+    <script src="js/ui/views/ScenarioView.js" defer></script>
+    <script src="js/ui/views/ResultsView.js" defer></script>
+    <!-- <script src="js/ui/UIManager.js" defer></script> -->
+
+    <!-- Опциональные модули (только необходимые) -->
+    <script src="js/analysis/evolution-tracker.js" defer></script>
+    <script src="js/vis/particles-background.js" defer></script>
+
+    <!-- New Modules: Comparative Analysis, Goals, AI Advisor, Career, Celebrity, Detailed Tests, Content -->
+    <script src="js/data/celebrity-profiles.js" defer></script>
+    <script src="js/services/celebrity-service.js" defer></script>
+    <script src="js/analysis/comparative-analysis.js" defer></script>
+    <script src="js/ui/profile-extensions.js" defer></script>
+
+    <script src="js/ui/navigation-controller.js" defer></script>
+
+    <!-- Тяжелые библиотеки загружаются лениво через ResourceLoader -->
+    <script>
+        // Загружаем Chart.js после того как основной контент отрисован
+        window.addEventListener('DOMContentLoaded', () => {
+            window.resourceLoader.loadScripts(['https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js'])
+                .then(() => console.log('Chart.js loaded'))
+                .catch(err => console.error('Error loading Chart.js:', err));
+
+        });
+    </script>
+
+    <!-- Главный модуль приложения (загружается последним) -->
+    <script src="js/app.js" defer></script>
+</body>
+
+</html>
