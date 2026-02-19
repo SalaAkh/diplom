@@ -16,15 +16,15 @@
     <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.googleusercontent.com https://upload.wikimedia.org; connect-src 'self' https://accounts.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;">
     <meta name="theme-color" content="#4a90e2">
-    <meta name="description" content="Цифровая система для анализа личностных предпочтений и направлений развития">
+    <meta name="description" content="Жеке қалауларды және даму бағыттарын талдауға арналған цифрлық жүйе">
     <meta name="author" content="Ахмедьянов Саламат КПО 9/22-2">
     <meta name="diploma-title"
-        content="Разработка программной системы анализа личностных предпочтений и направлений развития пользователя на основе интерактивных сценариев выбора, на языках программирования HTML, CSS, JS">
+        content="Интерактивті таңдау сценарийлері негізінде пайдаланушының жеке қалаулары мен даму бағыттарын талдайтын бағдарламалық жүйені HTML, CSS, JS тілдерінде әзірлеу">
 
     <!-- SEO & Social Media -->
-    <meta property="og:title" content="Система самопознания - Анализ личностных предпочтений">
+    <meta property="og:title" content="Өзін-өзі тану жүйесі - Жеке қалауларды талдау">
     <meta property="og:description"
-        content="Интерактивная система для глубокого анализа личности и направлений развития.">
+        content="Тұлғаны тереңдей талдауға және даму бағыттарын анықтауға арналған интерактивті жүйе.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://personality-analysis.kz">
     <meta property="og:image" content="https://personality-analysis.kz/assets/og-image.jpg">
@@ -37,8 +37,8 @@
     {
       "@context": "https://schema.org",
       "@type": "WebAppli0ц
-      "name": "Система самопознания",
-      "description": "Цифровая система для анализа личностных предпочтений на основе интерактивных сценариев.",
+      "name": "Өзін-өзі тану жүйесі",
+      "description": "Интерактивті сценарийлер негізінде жеке қалауларды талдайтын цифрлық жүйе.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "All",
       "author": {
@@ -48,7 +48,7 @@
     }
     </script>
 
-    <title>Система самопознания - Дипломный Проект</title>
+    <title>Өзін-өзі тану жүйесі - Дипломдық жоба</title>
 
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 
@@ -96,19 +96,19 @@
     </div>
 
     <!-- Skip Link -->
-    <a href="#main-content" class="skip-link visually-hidden-focusable">Перейти к основному содержанию</a>
+    <a href="#main-content" class="skip-link visually-hidden-focusable">Негізгі мазмұнға өту</a>
 
     <!-- Cosmic Navigation -->
-    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Главная навигация">
+    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Басты навигация">
         <!-- Desktop Collapse Button -->
-        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Свернуть навигацию"
-            title="Свернуть панель">
+        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Навигацияны жию"
+            title="Панельді жию">
             <span class="material-symbols-rounded">chevron_left</span>
         </button>
 
         <!-- Mobile Nav Header (Settings + Close) -->
         <div class="nav-mobile-header show-mobile">
-            <button class="nav-close-btn" id="navCloseBtn" aria-label="Закрыть меню">
+            <button class="nav-close-btn" id="navCloseBtn" aria-label="Мәзірді жабу">
                 <span class="material-symbols-rounded">close</span>
             </button>
             <div class="nav-mobile-controls">
@@ -152,7 +152,7 @@
                     <div class="nav-username" id="navUsername">Guest</div>
                     <div class="nav-user-role" data-i18n="navGuest">Explorer</div>
                 </div>
-                <button class="nav-logout-btn" onclick="app.logout()" title="Выйти" aria-label="Выйти из аккаунта">
+                <button class="nav-logout-btn" onclick="app.logout()" title="Шығу" aria-label="Аккаунттан шығу">
                     <span class="material-symbols-rounded">logout</span>
                 </button>
             </div>
@@ -168,17 +168,17 @@
                         <p class="tagline" id="tagline"></p>
                     </div>
                     <div class="header-controls">
-                        <div class="language-selector" id="languageSelector" aria-label="Выбор языка"></div>
+                        <div class="language-selector" id="languageSelector" aria-label="Тіл таңдау"></div>
 
                         <!-- Accessibility Button -->
                         <button class="btn-icon header-btn accessibility-trigger" id="accessBtn"
-                            aria-label="Настройки доступности" title="Доступность"
+                            aria-label="Қолжетімділік параметрлері" title="Қолжетімділік"
                             onclick="window.accessibilityService.toggleModal(true)">
                             <span class="material-symbols-rounded">accessibility_new</span>
                         </button>
 
                         <!-- Navigation Toggle (Now in controls) -->
-                        <button class="nav-toggle" id="navToggle" aria-label="Открыть меню навигации">
+                        <button class="nav-toggle" id="navToggle" aria-label="Навигация мәзірін ашу">
                             <div class="nav-toggle-icon">
                                 <span></span>
                                 <span></span>
@@ -190,10 +190,10 @@
             </div>
         </header>
 
-        <main class="app-main" id="main-content" role="main" aria-label="Основной контент">
+        <main class="app-main" id="main-content" role="main" aria-label="Негізгі мазмұн">
             <div class="container">
                 <div id="app" aria-live="polite" aria-atomic="true">
-                    <!-- Контент приложения будет вставлен динамически -->
+                    <!-- Қосымша мазмұны динамикалық түрде енгізіледі -->
                 </div>
 
                 <!-- Шаблон лендинга (для редактирования текста в HTML) -->
@@ -377,8 +377,8 @@
     </div>
 
     <!-- Theme Toggle (Floating) -->
-    <div class="theme-toggle" id="themeToggle" title="Тема" role="button" tabindex="0" aria-label="Переключить тему"
-        onkeypress="if(event.key==='Enter') this.click();">
+    <div class="theme-toggle" id="themeToggle" title="Тақырып" role="button" tabindex="0"
+        aria-label="Тақырыпты ауыстыру" onkeypress="if(event.key==='Enter') this.click();">
         <span class="theme-icon material-symbols-rounded" aria-hidden="true">light_mode</span>
     </div>
 
@@ -389,8 +389,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="accessTitle" data-i18n="accessTitle">Қолжетімділік параметрлері</h3>
-                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)"
-                    aria-label="Закрыть">
+                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)" aria-label="Жабу">
                     <span class="material-symbols-rounded">close</span>
                 </button>
             </div>
@@ -400,8 +399,8 @@
                     <div class="select-wrapper">
                         <select id="contrastSelect" class="form-select"
                             onchange="window.accessibilityService.setContrast(this.value)">
-                            <option value="normal" data-i18n="contrastNormal">Обычная</option>
-                            <option value="high" data-i18n="contrastHigh">Высокая</option>
+                            <option value="normal" data-i18n="contrastNormal">Қалыпты</option>
+                            <option value="high" data-i18n="contrastHigh">Жоғары</option>
                         </select>
                     </div>
                 </div>
@@ -410,10 +409,10 @@
                     <div class="select-wrapper">
                         <select id="textSizeSelect" class="form-select"
                             onchange="window.accessibilityService.setTextSize(this.value)">
-                            <option value="small" data-i18n="textSizeSmall">Мелкий</option>
-                            <option value="normal" data-i18n="textSizeNormal">Обычный</option>
-                            <option value="large" data-i18n="textSizeLarge">Крупный</option>
-                            <option value="extra-large" data-i18n="textSizeExtraLarge">Очень крупный</option>
+                            <option value="small" data-i18n="textSizeSmall">Кішкентай</option>
+                            <option value="normal" data-i18n="textSizeNormal">Қалыпты</option>
+                            <option value="large" data-i18n="textSizeLarge">Үлкен</option>
+                            <option value="extra-large" data-i18n="textSizeExtraLarge">Өте үлкен</option>
                         </select>
                     </div>
                 </div>

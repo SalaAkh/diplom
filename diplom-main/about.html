@@ -56,13 +56,13 @@
 
 
     <!-- Skip Link -->
-    <a href="#main-content" class="skip-link visually-hidden-focusable">Перейти к основному содержанию</a>
+    <a href="#main-content" class="skip-link visually-hidden-focusable">Негізгі мазмұнға өту</a>
 
     <!-- Cosmic Navigation -->
-    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Главная навигация">
+    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Басты навигация">
         <!-- Desktop Collapse Button -->
-        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Свернуть навигацию"
-            title="Развернуть панель">
+        <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Навигацияны жию"
+            title="Панельді жайю">
             <span class="material-symbols-rounded">chevron_left</span>
         </button>
 
@@ -86,7 +86,7 @@
 
             <a href="about.html" class="nav-item active" role="menuitem">
                 <div class="nav-icon" aria-hidden="true"><span class="material-symbols-rounded">info</span></div>
-                <span class="nav-text" data-i18n="navAbout">О системе</span>
+                <span class="nav-text" data-i18n="navAbout">Жүйе туралы</span>
 
             </a>
         </div>
@@ -97,21 +97,21 @@
             <div class="container">
                 <div class="header-content">
                     <div class="header-main">
-                        <h1 class="logo" id="appName">Система самопознания</h1>
-                        <p class="tagline" id="tagline">Анализ личностных предпочтений и направлений развития</p>
+                        <h1 class="logo" id="appName">Өзін-өзі тану жүйесі</h1>
+                        <p class="tagline" id="tagline">Жеке қалауларды және даму бағыттарын талдау</p>
                     </div>
                     <div class="header-controls">
-                        <div class="language-selector" id="languageSelector" aria-label="Выбор языка"></div>
+                        <div class="language-selector" id="languageSelector" aria-label="Тіл таңдау"></div>
 
                         <!-- Accessibility Button -->
                         <button class="btn-icon header-btn accessibility-trigger" id="accessBtn"
-                            aria-label="Настройки доступности" title="Доступность"
+                            aria-label="Қолжетімділік параметрлері" title="Қолжетімділік"
                             onclick="window.accessibilityService.toggleModal(true)">
                             <span class="material-symbols-rounded">accessibility_new</span>
                         </button>
 
                         <!-- Navigation Toggle (Now in controls) -->
-                        <button class="nav-toggle" id="navToggle" aria-label="Открыть меню навигации">
+                        <button class="nav-toggle" id="navToggle" aria-label="Навигация мәзірін ашу">
                             <div class="nav-toggle-icon">
                                 <span></span>
                                 <span></span>
@@ -123,13 +123,13 @@
             </div>
         </header>
 
-        <main class="app-main" id="main-content" role="main" aria-label="О проекте" aria-labelledby="page-title">
+        <main class="app-main" id="main-content" role="main" aria-label="Жоба туралы" aria-labelledby="page-title">
             <div class="container">
                 <div class="about-content">
                     <!-- Page Header -->
                     <div class="page-header">
-                        <a href="index.html" class="btn-back" aria-label="Назад на главную">
-                            <span data-i18n="back">Назад</span>
+                        <a href="index.html" class="btn-back" aria-label="Басты бетке қайту">
+                            <span data-i18n="back">Артқа</span>
                         </a>
                         <h1 id="page-title" class="page-title" data-i18n="aboutTitle">О системе</h1>
                         <div style="width: 100px;"></div>
@@ -204,8 +204,8 @@
                     </div>
 
                     <!-- Features Grid -->
-                    <h2 class="text-2xl font-bold mb-6 gradient-text" data-i18n="featuresTitle">Что вас ждет</h2>
-                    <div class="feature-grid mb-8" role="list" aria-label="Возможности системы">
+                    <h2 class="text-2xl font-bold mb-6 gradient-text" data-i18n="featuresTitle">Сізді не күтеді</h2>
+                    <div class="feature-grid mb-8" role="list" aria-label="Жүйе мүмкіндіктері">
                         <div class="feature-card" role="listitem">
                             <span class="feature-icon material-symbols-rounded" aria-hidden="true">theater_comedy</span>
                             <h3 data-i18n="featInteractive">Интерактивные сценарии</h3>
@@ -231,7 +231,7 @@
                             <h2 class="card-title gradient-text" data-i18n="dimensionsTitle">Измерения анализа</h2>
                         </div>
                         <div class="card-body">
-                            <div class="dimension-grid" role="list" aria-label="Измерения анализа">
+                            <div class="dimension-grid" role="list" aria-label="Талдау өлшемдері">
                                 <div class="dimension-card" role="listitem">
                                     <div class="dim-icon" aria-hidden="true"><span
                                             class="material-symbols-rounded">rocket_launch</span>
@@ -333,16 +333,17 @@
         <footer class="app-footer" role="contentinfo">
             <div class="container">
                 <p>
-                    <span data-i18n="project">Дипломный проект</span> &copy; 2026
+                    <span data-i18n="project">Дипломдық жоба</span> &copy; 2026
                 </p>
-                <p class="footer-note" data-i18n="dataProcessed">Все данные обрабатываются локально в вашем браузере</p>
+                <p class="footer-note" data-i18n="dataProcessed">Барлық деректер сіздің браузеріңізде жергілікті
+                    өңделеді</p>
             </div>
         </footer>
     </div>
 
     <!-- Theme Toggle (Floating) -->
-    <div class="theme-toggle" id="themeToggle" title="Тема" role="button" tabindex="0" aria-label="Переключить тему"
-        onkeypress="if(event.key==='Enter') this.click();">
+    <div class="theme-toggle" id="themeToggle" title="Тақырып" role="button" tabindex="0"
+        aria-label="Тақырыпты ауыстыру" onkeypress="if(event.key==='Enter') this.click();">
         <span class="theme-icon material-symbols-rounded" aria-hidden="true">light_mode</span>
     </div>
 
@@ -353,8 +354,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="accessTitle" data-i18n="accessTitle">Қолжетімділік параметрлері</h3>
-                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)"
-                    aria-label="Закрыть">
+                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)" aria-label="Жабу">
                     <span class="material-symbols-rounded">close</span>
                 </button>
             </div>
@@ -364,20 +364,20 @@
                     <div class="select-wrapper">
                         <select id="contrastSelect" class="form-select"
                             onchange="window.accessibilityService.setContrast(this.value)">
-                            <option value="normal" data-i18n="contrastNormal">Обычная</option>
-                            <option value="high" data-i18n="contrastHigh">Высокая</option>
+                            <option value="normal" data-i18n="contrastNormal">Қалыпты</option>
+                            <option value="high" data-i18n="contrastHigh">Жоғары</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="textSizeSelect" data-i18n="textSizeLabel">Размер текста</label>
+                    <label for="textSizeSelect" data-i18n="textSizeLabel">Мәтін өлшемі</label>
                     <div class="select-wrapper">
                         <select id="textSizeSelect" class="form-select"
                             onchange="window.accessibilityService.setTextSize(this.value)">
-                            <option value="small" data-i18n="textSizeSmall">Мелкий</option>
-                            <option value="normal" data-i18n="textSizeNormal">Обычный</option>
-                            <option value="large" data-i18n="textSizeLarge">Крупный</option>
-                            <option value="extra-large" data-i18n="textSizeExtraLarge">Очень крупный</option>
+                            <option value="small" data-i18n="textSizeSmall">Кішкентай</option>
+                            <option value="normal" data-i18n="textSizeNormal">Қалыпты</option>
+                            <option value="large" data-i18n="textSizeLarge">Үлкен</option>
+                            <option value="extra-large" data-i18n="textSizeExtraLarge">Өте үлкен</option>
                         </select>
                     </div>
                 </div>
