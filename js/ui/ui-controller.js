@@ -1638,18 +1638,18 @@ class UIController {
 
                 // === Unified helper: render one history item ===
                 const renderItem = (id, title, dateStr, subtitle, extraInfo) => `
-                    <div class="history-item" data-test-id="${id}">
-                        <input type="checkbox" class="test-checkbox" data-test-id="${id}" style="width: 18px; height: 18px; cursor: pointer; margin-right: 12px;">
-                        <div class="history-info">
-                            <div class="flex items-center gap-2">
-                                <h3 class="font-bold text-lg m-0">${title}</h3>
-                                <button class="btn btn-ghost btn-sm p-1 test-rename-btn" data-test-id="${id}" title="${t('rename') || 'Rename'}">✏️</button>
-                                <button class="btn btn-ghost btn-sm p-1 text-red-500 test-delete-btn" data-test-id="${id}" title="${t('deleteTest') || 'Delete'}">🗑️</button>
-                            </div>
+                    <div class="history-item" data-test-id="${id}" style="display:flex; align-items:center; gap:12px; flex-wrap:nowrap; padding: 10px 12px 10px 20px;">
+                        <input type="checkbox" class="test-checkbox" data-test-id="${id}" style="width:18px; height:18px; cursor:pointer; flex-shrink:0;">
+                        <div class="history-info" style="flex:1; min-width:0;">
+                            <h3 class="font-bold text-lg m-0" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${title}</h3>
                             <span class="text-sm text-secondary">${dateStr}${subtitle ? ' • <span class="text-primary">' + subtitle + '</span>' : ''}</span>
                             ${extraInfo ? `<span class="text-xs" style="opacity:0.5;">${extraInfo}</span>` : ''}
                         </div>
-                        <button class="btn btn-secondary btn-sm test-view-btn" data-test-id="${id}">${t('viewResults')}</button>
+                        <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                            <button class="btn btn-ghost btn-sm test-rename-btn" data-test-id="${id}" title="${t('rename') || 'Rename'}" style="border:1px solid rgba(255,255,255,0.2); border-radius:8px; padding:4px 8px;">✏️</button>
+                            <button class="btn btn-ghost btn-sm text-red-500 test-delete-btn" data-test-id="${id}" title="${t('deleteTest') || 'Delete'}" style="border:1px solid rgba(255,80,80,0.3); border-radius:8px; padding:4px 8px;">🗑️</button>
+                            <button class="btn btn-secondary btn-sm test-view-btn" data-test-id="${id}">${t('viewResults')}</button>
+                        </div>
                     </div>`;
 
                 // Cognitive test item
