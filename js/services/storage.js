@@ -243,6 +243,21 @@ class StorageManager {
     }
 
     /**
+     * Remove Cognitive Test Results
+     * @returns {boolean}
+     */
+    removeCognitiveResults() {
+        if (!this.isStorageAvailable) return false;
+        try {
+            localStorage.removeItem('cognitiveTestResults');
+            return true;
+        } catch (error) {
+            console.error('Error removing cognitive results:', error);
+            return false;
+        }
+    }
+
+    /**
      * Сохранение прогресса прохождения теста
      * @param {Array|Object} choices - Массив выборов или объект с данными прогресса
      * @param {string} testMode - Режим теста ('basic' или 'advanced')

@@ -1594,7 +1594,7 @@ class UIController {
                                         ${evolutionReport.recommendations ? evolutionReport.recommendations.slice(0, 2).map(rec => `
                                             <div class="insight-card ${rec.type === 'leverage' ? 'positive' : 'attention'}" style="background: rgba(var(--primary-rgb), 0.05); padding: 1.25rem; border-radius: 12px; border-left: 4px solid ${rec.type === 'leverage' ? '#10b981' : '#f59e0b'};">
                                                 <h4 style="margin: 0 0 0.75rem 0; color: ${rec.type === 'leverage' ? '#10b981' : '#f59e0b'};">
-                                                    ${rec.type === 'leverage' ? '🚀 Так держать!' : '⚠️ Обратите внимание'}
+                                                    ${rec.type === 'leverage' ? '🚀 ' + (t('keepItUp') || 'Keep it up!') : '⚠️ ' + (t('payAttention') || 'Pay attention')}
                                                 </h4>
                                                 <p style="margin: 0; font-size: 0.95rem; opacity: 0.9; line-height: 1.5; text-align: justify;">${rec.text}</p>
                                             </div>
@@ -1636,65 +1636,40 @@ class UIController {
 
                 let itemsHTML = '';
 
-                // Render Cognitive Test Item
+                // === Unified helper: render one history item ===
+                const renderItem = (id, title, dateStr, subtitle, extraInfo) => `
+                    <div class="history-item" data-test-id="${id}">
+                        <input type="checkbox" class="test-checkbox" data-test-id="${id}" style="width: 18px; height: 18px; cursor: pointer; margin-right: 12px;">
+                        <div class="history-info">
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-bold text-lg m-0">${title}</h3>
+                                <button class="btn btn-ghost btn-sm p-1 test-rename-btn" data-test-id="${id}" title="${t('rename') || 'Rename'}">✏️</button>
+                                <button class="btn btn-ghost btn-sm p-1 text-red-500 test-delete-btn" data-test-id="${id}" title="${t('deleteTest') || 'Delete'}">🗑️</button>
+                            </div>
+                            <span class="text-sm text-secondary">${dateStr}${subtitle ? ' • <span class="text-primary">' + subtitle + '</span>' : ''}</span>
+                            ${extraInfo ? `<span class="text-xs" style="opacity:0.5;">${extraInfo}</span>` : ''}
+                        </div>
+                        <button class="btn btn-secondary btn-sm test-view-btn" data-test-id="${id}">${t('viewResults')}</button>
+                    </div>`;
+
+                // Cognitive test item
                 if (hasCognitive) {
-                    // Check for Cognitive Test Results
-                    const cognitiveResults = this.app.storage.loadCognitiveResults();
-                    if (cognitiveResults) {
-                        const date = new Date(cognitiveResults.timestamp);
-                        const cogDate = date.toLocaleDateString() === 'Invalid Date' ? new Date().toLocaleDateString() : date.toLocaleDateString();
-                        const cogTitle = `${t('testNumber')} ${history.length + 1}`; // Numbering like other tests
-
-                        itemsHTML += `
-                                        <div class="history-item" data-test-type="cognitive">
-                                            <input type="checkbox" class="test-checkbox" data-test-type="cognitive" style="width: 18px; height: 18px; cursor: pointer; margin-right: 12px;">
-                                            <div class="history-info">
-                                                <div class="flex items-center gap-2">
-                                                    <h3 class="font-bold text-lg m-0">
-                                                        ${cogTitle}
-                                                    </h3>
-                                                    <button class="btn btn-ghost btn-sm p-1 test-rename-btn" data-test-type="cognitive" title="${t('rename') || 'Переименовать'}">
-                                                        ✏️
-                                                    </button>
-                                                    <button class="btn btn-ghost btn-sm p-1 text-red-500 test-delete-btn" data-test-type="cognitive" title="${t('deleteTest') || 'Удалить'}">
-                                                        🗑️
-                                                    </button>
-                                                </div>
-                                                <div class="text-sm text-secondary">
-                                                    ${cogDate} • <span class="text-primary">${(cognitiveResults.results && cognitiveResults.results.title) ? cognitiveResults.results.title : (cognitiveResults.dominant || t('cognitiveTest'))}</span>
-                                                </div>
-                                            </div>
-                                             <button class="btn btn-secondary btn-sm test-view-btn" data-test-type="cognitive">
-                                                ${t('viewResults')}
-                                             </button>
-                                        </div>
-                                    `;
+                    const cr = this.app.storage.loadCognitiveResults();
+                    if (cr) {
+                        const d = new Date(cr.timestamp);
+                        const dateStr = isNaN(d) ? new Date().toLocaleDateString() : d.toLocaleDateString();
+                        const title = cr.title || cr.dominant || `${t('testNumber')} ${history.length + 1}`;
+                        const subtitle = t('cognitiveTest');
+                        itemsHTML += renderItem('cognitive', title, dateStr, subtitle, null);
                     }
-                } // End if (hasCognitive)
+                }
 
-                // Render Regular History Items
-                itemsHTML += history.map((test, index) => `
-                                    <div class="history-item" data-test-index="${index}">
-                                        <input type="checkbox" class="test-checkbox" data-test-index="${index}" style="width: 18px; height: 18px; cursor: pointer; margin-right: 12px;">
-                                        <div class="history-info">
-                                            <div class="flex items-center gap-2">
-                                                <h3 class="font-bold text-lg m-0">
-                                                    ${test.title || `${t('testNumber')} ${history.length - index}`}
-                                                </h3>
-                                                <button class="btn btn-ghost btn-sm p-1 test-rename-btn" data-test-index="${index}" title="${t('rename') || 'Переименовать'}">
-                                                    ✏️
-                                                </button>
-                                                <button class="btn btn-ghost btn-sm p-1 text-red-500 test-delete-btn" data-test-index="${index}" title="${t('deleteTest') || 'Удалить'}">
-                                                    🗑️
-                                                </button>
-                                            </div>
-                                            <span class="text-sm text-secondary">${new Date(test.date).toLocaleDateString()}</span>
-                                        </div>
-                                         <button class="btn btn-secondary btn-sm test-view-btn" data-test-index="${index}">
-                                            ${t('viewResults')}
-                                         </button>
-                                    </div>
-                                `).join('');
+                // Regular test items
+                itemsHTML += history.map((test, index) => {
+                    const title = test.title || `${t('testNumber')} ${history.length - index}`;
+                    const dateStr = new Date(test.date).toLocaleDateString();
+                    return renderItem(test.id || String(index), title, dateStr, null, null);
+                }).join('');
 
                 return `
                                     <!-- Batch Delete Controls -->
@@ -1732,63 +1707,42 @@ class UIController {
         // Reuse container variable from line 1514
         if (container) {
             // Remove existing listeners to avoid duplicates
-            if (this.handleTestHistoryClick) {
-                container.removeEventListener('click', this.handleTestHistoryClick);
-            }
-            // Add new listener
+            // Unified click handler — all tests use data-test-id
             this.handleTestHistoryClick = (e) => {
                 const target = e.target.closest('button');
                 if (!target) return;
 
-                // Handle Cognitive Test clicks
-                if (target.dataset.testType === 'cognitive') {
-                    if (target.classList.contains('test-delete-btn')) {
-                        e.preventDefault();
-                        this.app.deleteCognitiveTest(target);
-                    } else if (target.classList.contains('test-view-btn')) {
-                        e.preventDefault();
-                        this.app.showCognitiveResults(this.app.storage.loadCognitiveResults());
-                    } else if (target.classList.contains('test-rename-btn')) {
-                        e.preventDefault();
-                        this.app.renameCognitiveTest(target);
-                    }
-                    return;
-                }
+                const id = target.dataset.testId;
+                if (!id) return;
+                e.preventDefault();
 
-                // Handle Regular Tests
-                const index = parseInt(target.dataset.testIndex);
-                if (isNaN(index)) return;
+                if (target.classList.contains('test-delete-btn')) {
+                    if (id === 'cognitive') this.app.deleteCognitiveTest(target);
+                    else this.app.deleteTest(id, target);
 
-                if (target.classList.contains('test-rename-btn')) {
-                    e.preventDefault();
-                    this.app.renameTest(index);
-                } else if (target.classList.contains('test-delete-btn')) {
-                    e.preventDefault();
-                    // Pass the button element for positioning the modal near it
-                    this.app.deleteTest(index, target);
+                } else if (target.classList.contains('test-rename-btn')) {
+                    if (id === 'cognitive') this.app.renameCognitiveTest(target);
+                    else this.app.renameTest(id);
+
                 } else if (target.classList.contains('test-view-btn')) {
-                    e.preventDefault();
-                    this.app.viewTestResults(index);
+                    if (id === 'cognitive') {
+                        this.app.showCognitiveResults(this.app.storage.loadCognitiveResults());
+                    } else {
+                        const idx = this.app.auth
+                            ? this.app.auth.getTestHistory().findIndex(t => t.id === id)
+                            : parseInt(id);
+                        if (idx !== -1 && !isNaN(idx)) this.app.viewTestResults(idx);
+                    }
                 }
             };
             container.addEventListener('click', this.handleTestHistoryClick);
 
-            // Batch delete functionality
-            const selectAllCheckbox = document.getElementById('selectAllTests');
-            const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
-
-            console.log('Batch delete init:', {
-                selectAllCheckbox: selectAllCheckbox ? 'found' : 'NOT FOUND',
-                deleteSelectedBtn: deleteSelectedBtn ? 'found' : 'NOT FOUND',
-                testCheckboxCount: document.querySelectorAll('.test-checkbox').length
-            });
-
-            // Handle individual test checkbox changes
+            // Checkbox — all use data-test-id
             const testCheckboxes = document.querySelectorAll('.test-checkbox');
             testCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', (e) => {
-                    const id = e.target.dataset.testType === 'cognitive' ? 'cognitive' : parseInt(e.target.dataset.testIndex);
-                    console.log('Checkbox changed:', id, 'checked:', e.target.checked);
+                    const id = e.target.dataset.testId;
+                    if (!id) return;
                     if (e.target.checked) {
                         this.selectedTests.add(id);
                     } else {
@@ -1798,6 +1752,10 @@ class UIController {
                 });
             });
 
+            // Batch delete controls
+            const selectAllCheckbox = document.getElementById('selectAllTests');
+            const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
+
             // Handle "Select All" checkbox
             if (selectAllCheckbox) {
                 selectAllCheckbox.addEventListener('change', (e) => {
@@ -1805,7 +1763,7 @@ class UIController {
                     console.log('Select All clicked:', checked, 'Total checkboxes:', testCheckboxes.length);
                     testCheckboxes.forEach(cb => {
                         cb.checked = checked;
-                        const id = cb.dataset.testType === 'cognitive' ? 'cognitive' : parseInt(cb.dataset.testIndex);
+                        const id = cb.dataset.testId;
                         if (checked) {
                             this.selectedTests.add(id);
                         } else {
@@ -1846,7 +1804,7 @@ class UIController {
 
             // Update history items visual state
             testCheckboxes.forEach(checkbox => {
-                const id = checkbox.dataset.testType === 'cognitive' ? 'cognitive' : parseInt(checkbox.dataset.testIndex);
+                const id = checkbox.dataset.testId;
                 const historyItem = checkbox.closest('.history-item');
                 if (historyItem) {
                     if (this.selectedTests.has(id)) {
@@ -1970,7 +1928,7 @@ class UIController {
 
             if (hasData || (isCore && datasets.length < 4)) {
                 datasets.push({
-                    label: t(`${dim} Name`) || dim,
+                    label: t(dim + 'Name') || dim,
                     data: data,
                     borderColor: colors[colorIndex % colors.length],
                     backgroundColor: colors[colorIndex % colors.length],
@@ -2103,7 +2061,7 @@ class UIController {
 
         modal = document.createElement('div');
         modal.id = id;
-        modal.className = `${overlayClass} modal - type - ${type} `;
+        modal.className = `${overlayClass} modal-type-${type} active`;
 
         const closeHandler = () => {
             modal.classList.remove('active');
@@ -2118,7 +2076,7 @@ class UIController {
 
         const buttonsHtml = actions.map((btn, index) => {
             const btnClass = btn.class || 'btn-secondary';
-            return `< button class="btn ${btnClass}" id = "${id}Btn${index}" > ${btn.text}</button > `;
+            return `<button class="btn ${btnClass}" id="${id}Btn${index}">${btn.text}</button>`;
         }).join('');
 
         // Calculate position if trigger element is provided
@@ -2172,7 +2130,7 @@ class UIController {
         }
 
         modal.innerHTML = `
-            < div class="modal-content glass" ${positionStyle}>
+            <div class="modal-content glass" ${positionStyle}>
                 <button class="modal-close material-symbols-rounded" aria-label="Close">close</button>
                 <div class="modal-header">
                     ${icon ? `<span class="material-symbols-rounded modal-type-icon">${icon}</span>` : ''}
@@ -2180,7 +2138,7 @@ class UIController {
                 </div>
                 <div class="modal-body">${content}</div>
                 ${actions.length > 0 ? `<div class="modal-actions">${buttonsHtml}</div>` : ''}
-            </div >
+            </div>
             `;
 
         document.body.appendChild(modal);
@@ -2192,7 +2150,7 @@ class UIController {
         modal.querySelector('.modal-close').onclick = closeHandler;
 
         actions.forEach((btn, index) => {
-            const el = document.getElementById(`${id}Btn${index} `);
+            const el = document.getElementById(`${id}Btn${index}`);
             if (el && btn.onClick) {
                 el.onclick = (e) => {
                     if (e) e.stopPropagation();
@@ -2212,7 +2170,7 @@ class UIController {
             id: 'alertModal',
             overlayClass: 'alert-overlay', // Protection from app.closeModal()
             title: title || t('attention') || 'Внимание',
-            content: `< p > ${message}</p > `,
+            content: `<p>${message}</p>`,
             icon: 'warning',
             type: 'warning',
             closeOnOutsideClick: false,
@@ -2233,7 +2191,7 @@ class UIController {
         const t = this.i18n.t.bind(this.i18n);
         this.showModal({
             title: t('confirmation') || 'Подтверждение',
-            content: `< p > ${message}</p > `,
+            content: `<p>${message}</p>`,
             triggerElement: triggerElement,
             actions: [
                 {
@@ -2262,20 +2220,23 @@ class UIController {
         const inputId = 'promptInput';
 
         let displayTitle = title;
-        if (!displayTitle) {
-            const translated = t('inputRequired');
-            // If translation returns key or is empty, use Russian fallback
-            if (!translated || translated === 'inputRequired') {
-                displayTitle = 'Ввод данных';
+
+        // Если заголовок - это ключ локализации (без пробелов), пробуем перевести
+        if (title && !title.includes(' ') && !title.includes('<')) {
+            const translated = t(title);
+            // Проверяем, вернулся ли ключ или перевод
+            if (!translated || translated === title) {
+                // Если перевод не найден (вернулся ключ), используем дефолт
+                displayTitle = t('inputRequired');
             } else {
                 displayTitle = translated;
             }
         }
 
         this.showModal({
-            title: `< span class="text-gradient" > ${displayTitle}</span > `,
+            title: `<span class="text-gradient">${displayTitle}</span>`,
             content: `
-            < div style = "padding: 0.5rem 0;" >
+                <div style="padding: 0.5rem 0;">
                     <p style="margin-bottom: 1rem; opacity: 0.9;">${message}</p>
                     <div class="input-wrapper" style="position: relative;">
                         <input type="text" id="${inputId}" class="form-control cosmic-input" 
@@ -2283,23 +2244,8 @@ class UIController {
                             style="width: 100%; padding: 0.8rem 1rem; border-radius: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-size: 1rem; outline: none; transition: all 0.3s ease;">
                         <div style="position: absolute; bottom: -2px; left: 0; width: 0%; height: 2px; background: var(--primary-color); transition: width 0.3s ease;" id="inputFocusLine"></div>
                     </div>
-                </div >
-            <script>
-                    setTimeout(() => {
-                        const input = document.getElementById('${inputId}');
-                const line = document.getElementById('inputFocusLine');
-                if (input) {
-                    input.focus();
-                input.select();
-                            input.addEventListener('focus', () => line.style.width = '100%');
-                            input.addEventListener('blur', () => line.style.width = '0%');
-                            input.addEventListener('keypress', (e) => {
-                                if (e.key === 'Enter') document.querySelector('#genericModal .btn-primary').click();
-                            });
-                        }
-                    }, 100);
-            </script>
-        `,
+                </div>
+            `,
             actions: [
                 { text: t('cancel') || 'Отмена', class: 'btn-ghost', onClick: () => { } },
                 {
@@ -2317,6 +2263,24 @@ class UIController {
                 }
             ]
         });
+
+        // Initialize input behavior manually since <script> tags in innerHTML are not executed
+        setTimeout(() => {
+            const input = document.getElementById(inputId);
+            const line = document.getElementById('inputFocusLine');
+            if (input) {
+                input.focus();
+                input.select();
+                input.addEventListener('focus', () => line && (line.style.width = '100%'));
+                input.addEventListener('blur', () => line && (line.style.width = '0%'));
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        const btn = document.querySelector('#genericModal .btn-primary');
+                        if (btn) btn.click();
+                    }
+                });
+            }
+        }, 100);
     }
 
     /**

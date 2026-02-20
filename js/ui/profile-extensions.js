@@ -585,7 +585,8 @@ class ProfileExtensions {
         const matchText = { kk: 'ұқсастық', ru: 'сходство', en: 'match' };
 
         if (celebrities.length === 0) {
-            container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; opacity: 0.7;">Нет знаменитостей в этой категории</p>`;
+            const noCelebsText = { kk: 'Бұл санатта атақты тұлғалар жоқ', ru: 'Нет знаменитостей в этой категории', en: 'No celebrities in this category' };
+            container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; opacity: 0.7;">${noCelebsText[lang]}</p>`;
             return;
         }
 
@@ -662,6 +663,12 @@ class ProfileExtensions {
         const lang = this.getLang();
         const celeb = comparison.celebrity;
 
+        const matchLabel = { kk: '% сәйкестік', ru: '% совпадение', en: '% match' };
+        const profileCompLabel = { kk: 'Профильдерді салыстыру', ru: 'Сравнение профилей', en: 'Profile Comparison' };
+        const youLabel = { kk: 'Сіз', ru: 'Вы', en: 'You' };
+        const commonStrengthsLabel = { kk: '✓ Жалпы күшті жақтары:', ru: '✓ Общие сильные стороны:', en: '✓ Common Strengths:' };
+        const closeLabel = { kk: 'Жабу', ru: 'Закрыть', en: 'Close' };
+
         const dimensionBars = comparison.dimensions.map(d => `
             <div style="margin-bottom: 12px;">
                 <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px;">
@@ -681,7 +688,7 @@ class ProfileExtensions {
 
         const strengthsHtml = comparison.strengths.length > 0
             ? `<div style="margin-top: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border-radius: 12px; border-left: 3px solid var(--success-color);">
-                <strong style="color: var(--success-color);">✓ Общие сильные стороны:</strong> ${comparison.strengths.join(', ')}
+                <strong style="color: var(--success-color);">${commonStrengthsLabel[lang]}</strong> ${comparison.strengths.join(', ')}
             </div>`
             : '';
 
@@ -714,13 +721,13 @@ class ProfileExtensions {
                         border-radius: 20px;
                         font-size: 0.9rem;
                         font-weight: 600;
-                    ">${comparison.overallMatch}% совпадение</div>
+                    ">${comparison.overallMatch}${matchLabel[lang]}</div>
                 </div>
             </div>
             <p style="opacity: 0.9; line-height: 1.6; margin-bottom: 1.5rem;">${celeb.bio}</p>
-            <h4 style="margin-bottom: 1rem;">Сравнение профилей</h4>
+            <h4 style="margin-bottom: 1rem;">${profileCompLabel[lang]}</h4>
             <div style="margin-bottom: 8px; display: flex; gap: 1rem; font-size: 0.8rem; opacity: 0.7;">
-                <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 12px; height: 12px; background: var(--primary-color); border-radius: 2px;"></span> Вы</span>
+                <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 12px; height: 12px; background: var(--primary-color); border-radius: 2px;"></span> ${youLabel[lang]}</span>
                 <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 12px; height: 12px; background: var(--secondary-color); border-radius: 2px;"></span> ${celeb.name}</span>
             </div>
             ${dimensionBars}
@@ -730,7 +737,7 @@ class ProfileExtensions {
         window.app.ui.showModal({
             title: celeb.name,
             content: content,
-            actions: [{ text: 'Закрыть', class: 'btn-primary', closeAfter: true, onClick: () => { } }]
+            actions: [{ text: closeLabel[lang], class: 'btn-primary', closeAfter: true, onClick: () => { } }]
         });
     }
 

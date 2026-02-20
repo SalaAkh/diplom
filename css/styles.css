@@ -377,6 +377,31 @@ body:not(.dark-theme) .btn-secondary {
     }
 }
 
+/* Ghost Button (Transparent) */
+.btn-ghost {
+    background: transparent;
+    color: var(--text-color);
+    border: 1px solid transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+.btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-color);
+    transform: translateY(-2px);
+}
+
+body:not(.dark-theme) .btn-ghost {
+    color: var(--text-color);
+}
+
+body:not(.dark-theme) .btn-ghost:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
 /* Scenario Screen */
 .scenario-screen {
     max-width: 100%;
@@ -3332,6 +3357,7 @@ select:focus-visible {
     display: flex;
     gap: 10px;
 }
+
 /* ============================================
    Download Buttons Styling
    ============================================ */
@@ -3350,7 +3376,7 @@ select:focus-visible {
     cursor: pointer;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .btn-download-action:hover {
@@ -3415,9 +3441,9 @@ select:focus-visible {
 }
 
 .archetype-card {
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.1), 
-        rgba(99, 102, 241, 0.15));
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.1),
+            rgba(99, 102, 241, 0.15));
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--archetype-color, #6366f1);
@@ -3429,7 +3455,7 @@ select:focus-visible {
     position: relative;
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
-                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
     transition: all 0.3s ease;
 }
 
@@ -3539,24 +3565,24 @@ select:focus-visible {
         padding: 1.5rem;
         gap: 1rem;
     }
-    
+
     .archetype-icon-wrapper {
         width: 60px;
         height: 60px;
     }
-    
+
     .archetype-icon {
         font-size: 30px;
     }
-    
+
     .archetype-name {
         font-size: 1.5rem;
     }
-    
+
     .archetype-description {
         font-size: 1rem;
     }
-    
+
     .archetype-celebrities {
         justify-content: center;
         flex-wrap: wrap;
@@ -3565,9 +3591,8 @@ select:focus-visible {
 
 /* Light theme adjustments */
 body:not(.dark-theme) .archetype-card {
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.9), 
-        rgba(255, 255, 255, 0.7));
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.9),
+            rgba(255, 255, 255, 0.7));
     border-color: var(--archetype-color, #6366f1);
 }
-

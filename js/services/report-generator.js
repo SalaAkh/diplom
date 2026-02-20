@@ -34,7 +34,13 @@ class ReportGenerator {
         // Получаем основной контент
         const content = view.getHTML();
         const date = new Date().toLocaleDateString();
-        const appName = "Система самопознания"; // Или получить через i18n
+        const appName = this.app.i18n.t('appName');
+
+        let usernameDisplay = '';
+        const user = this.app.auth.getCurrentUser();
+        if (user) {
+            usernameDisplay = `<p>${this.app.i18n.t('loggedInAs')} <strong>${user.username}</strong></p>`;
+        }
 
         // Формируем полный HTML документ
         return `<!DOCTYPE html>
@@ -42,7 +48,7 @@ class ReportGenerator {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${appName} - Результаты ${date}</title>
+    <title>${appName} - ${this.app.i18n.t('resultsTitle')} ${date}</title>
     
     <!-- Стили -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -248,13 +254,14 @@ class ReportGenerator {
     <div class="export-container">
         <header class="export-header">
             <span class="export-logo">Neural Constellation</span>
-            <p>Отчет о результатах тестирования / ${date}</p>
+            <p>${this.app.i18n.t('resultsTitle')} / ${date}</p>
+            ${usernameDisplay}
         </header>
 
         ${content}
 
         <footer style="text-align: center; margin-top: 50px; color: #888; font-size: 0.9rem;">
-            <p>Результаты сгенерированы автоматически системой самопознания.</p>
+            <p>${this.app.i18n.t('reportGeneratedBy')}</p>
             <p>&copy; 2026 Neural Constellation</p>
         </footer>
     </div>

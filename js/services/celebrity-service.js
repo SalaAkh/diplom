@@ -18,10 +18,10 @@ class CelebrityService {
      * @returns {string} Код языка
      */
     getLang() {
-        if (window.localizationService?.getCurrentLanguage) {
-            return window.localizationService.getCurrentLanguage();
+        if (window.i18n?.currentLanguage) {
+            return window.i18n.currentLanguage;
         }
-        return localStorage.getItem('language') || 'ru';
+        return localStorage.getItem('preferredLanguage') || 'ru';
     }
 
     /**

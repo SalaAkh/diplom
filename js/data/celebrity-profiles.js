@@ -24,7 +24,7 @@ const CELEBRITY_PROFILES = {
             id: 'elon_musk',
             name: { ru: 'Илон Маск', kk: 'Илон Маск', en: 'Elon Musk' },
             category: 'business',
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Elon_Musk_Royal_Society_%28crop2%29.jpg/220px-Elon_Musk_Royal_Society_%28crop2%29.jpg',
+            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Elon_Musk_Royal_Society_%28crop1%29.jpg/220px-Elon_Musk_Royal_Society_%28crop1%29.jpg',
             scores: {
                 rationality: 0.85,
                 strategic: 0.95,
@@ -170,7 +170,6 @@ const CELEBRITY_PROFILES = {
             id: 'marie_curie',
             name: { ru: 'Мария Кюри', kk: 'Мария Кюри', en: 'Marie Curie' },
             category: 'science',
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Marie_Curie_c1920.jpg/220px-Marie_Curie_c1920.jpg',
             scores: {
                 rationality: 0.95,
                 strategic: 0.70,
@@ -268,7 +267,6 @@ const CELEBRITY_PROFILES = {
             id: 'meryl_streep',
             name: { ru: 'Мэрил Стрип', kk: 'Мэрил Стрип', en: 'Meryl Streep' },
             category: 'actors',
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Meryl_Streep_December_2018.jpg/220px-Meryl_Streep_December_2018.jpg',
             scores: {
                 rationality: 0.70,
                 strategic: 0.65,
@@ -292,7 +290,7 @@ const CELEBRITY_PROFILES = {
             id: 'keanu_reeves',
             name: { ru: 'Киану Ривз', kk: 'Киану Ривз', en: 'Keanu Reeves' },
             category: 'actors',
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Keanu_Reeves_2014_%28cropped%29.jpg/220px-Keanu_Reeves_2014_%28cropped%29.jpg',
+            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Reeves_San_Diego_Comic_Con_2013_3.jpg/220px-Reeves_San_Diego_Comic_Con_2013_3.jpg',
             scores: {
                 rationality: 0.50,
                 strategic: 0.40,
@@ -316,7 +314,7 @@ const CELEBRITY_PROFILES = {
             id: 'morgan_freeman',
             name: { ru: 'Морган Фриман', kk: 'Морган Фриман', en: 'Morgan Freeman' },
             category: 'actors',
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Morgan_Freeman_Deauville_2018.jpg/220px-Morgan_Freeman_Deauville_2018.jpg',
+            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Morgan_Freeman_at_The_Pentagon_on_2_August_2023_-_230802-D-PM193-3363_%28cropped%29.jpg/220px-Morgan_Freeman_at_The_Pentagon_on_2_August_2023_-_230802-D-PM193-3363_%28cropped%29.jpg',
             scores: {
                 rationality: 0.75,
                 strategic: 0.60,
@@ -366,7 +364,6 @@ const CELEBRITY_PROFILES = {
             id: 'serena_williams',
             name: { ru: 'Серена Уильямс', kk: 'Серена Уильямс', en: 'Serena Williams' },
             category: 'athletes',
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Serena_Williams_2013.jpg/220px-Serena_Williams_2013.jpg',
             scores: {
                 rationality: 0.65,
                 strategic: 0.80,
@@ -390,7 +387,7 @@ const CELEBRITY_PROFILES = {
             id: 'lionel_messi',
             name: { ru: 'Лионель Месси', kk: 'Лионель Месси', en: 'Lionel Messi' },
             category: 'athletes',
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Lionel_Messi_20180626.jpg/220px-Lionel_Messi_20180626.jpg',
+            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg/220px-Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg',
             scores: {
                 rationality: 0.60,
                 strategic: 0.75,
@@ -414,7 +411,7 @@ const CELEBRITY_PROFILES = {
             id: 'usain_bolt',
             name: { ru: 'Усэйн Болт', kk: 'Усэйн Болт', en: 'Usain Bolt' },
             category: 'athletes',
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Usain_Bolt_Rio_2016.jpg/220px-Usain_Bolt_Rio_2016.jpg',
+            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Usain_Bolt_portrait.jpg/220px-Usain_Bolt_portrait.jpg',
             scores: {
                 rationality: 0.55,
                 strategic: 0.60,
@@ -464,7 +461,6 @@ const CELEBRITY_PROFILES = {
             id: 'beyonce',
             name: { ru: 'Бейонсе', kk: 'Бейонсе', en: 'Beyoncé' },
             category: 'musicians',
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Beyonc%C3%A9_at_The_Lion_King_European_Premiere_2019.png/220px-Beyonc%C3%A9_at_The_Lion_King_European_Premiere_2019.png',
             scores: {
                 rationality: 0.70,
                 strategic: 0.85,
@@ -562,7 +558,6 @@ const CELEBRITY_PROFILES = {
             id: 'oprah_winfrey',
             name: { ru: 'Опра Уинфри', kk: 'Опра Уинфри', en: 'Oprah Winfrey' },
             category: 'leaders',
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Oprah_in_2014.jpg/220px-Oprah_in_2014.jpg',
             scores: {
                 rationality: 0.70,
                 strategic: 0.80,

@@ -306,52 +306,54 @@ class AuthManager {
 
     /**
      * Обновление названия теста
-     * @param {number} index - Индекс теста в истории
+     * @param {string} testId - ID теста
      * @param {string} title - Новое название
      */
-    updateTestTitle(index, title) {
+    updateTestTitle(testId, title) {
         const user = this.getCurrentUser();
-        if (!user || !user.testHistory || !user.testHistory[index]) return false;
+        if (!user || !user.testHistory) return false;
 
-        user.testHistory[index].title = title;
-        this.updateUser(user);
-        return true;
+        const test = user.testHistory.find(t => t.id === testId);
+        if (test) {
+            test.title = title;
+            this.updateUser(user);
+            return true;
+        }
+        return false;
     }
+
     /**
      * Удаление теста из истории
-     * @param {number} index - Индекс теста в истории
+     * @param {string} testId - ID теста
      */
-    deleteTest(index) {
+    deleteTest(testId) {
         const user = this.getCurrentUser();
-        if (!user || !user.testHistory || !user.testHistory[index]) return false;
+        if (!user || !user.testHistory) return false;
 
-        user.testHistory.splice(index, 1);
-        this.updateUser(user);
-        return true;
+        const initialLength = user.testHistory.length;
+        user.testHistory = user.testHistory.filter(t => t.id !== testId);
+
+        if (user.testHistory.length !== initialLength) {
+            this.updateUser(user);
+            return true;
+        }
+        return false;
     }
 
     /**
      * Удаление нескольких тестов из истории
-     * @param {Array<number>} indices - Массив индексов тестов
+     * @param {Array<string>} testIds - Массив ID тестов
      */
-    deleteMultipleTests(indices) {
+    deleteMultipleTests(testIds) {
         const user = this.getCurrentUser();
-        if (!user || !user.testHistory || !Array.isArray(indices) || indices.length === 0) {
+        if (!user || !user.testHistory || !Array.isArray(testIds) || testIds.length === 0) {
             return false;
         }
 
-        // Сортируем индексы в обратном порядке для корректного удаления
-        const sortedIndices = [...indices].sort((a, b) => b - a);
+        const initialLength = user.testHistory.length;
+        user.testHistory = user.testHistory.filter(t => !testIds.includes(t.id));
 
-        let deletedCount = 0;
-        sortedIndices.forEach(index => {
-            if (user.testHistory[index]) {
-                user.testHistory.splice(index, 1);
-                deletedCount++;
-            }
-        });
-
-        if (deletedCount > 0) {
+        if (user.testHistory.length !== initialLength) {
             this.updateUser(user);
             return true;
         }

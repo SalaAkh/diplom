@@ -1388,22 +1388,6 @@ class PersonalityTestApp {
         }
     }
 
-    /**
-     * Delete Cognitive Test
-     */
-    deleteCognitiveTest(targetElement = null) {
-        // Simple confirm for now, or use custom modal if available
-        if (!confirm(this.i18n.t('confirmDelete') || 'Вы уверены, что хотите удалить этот тест?')) return;
-
-        localStorage.removeItem('cognitiveTestResults');
-
-        if (this.toast) {
-            this.toast.show(this.i18n.t('testDeleted') || 'Тест удален', 'success');
-        }
-
-        // Refresh profile
-        this.showProfile();
-    }
 
     /**
      * Rename Cognitive Test
@@ -1413,56 +1397,20 @@ class PersonalityTestApp {
         const currentResults = this.storage.loadCognitiveResults();
         if (!currentResults) return;
 
-        const currentTitle = currentResults.results.title || (currentResults.dominant || this.i18n.t('cognitiveTest'));
-        const newTitle = prompt(this.i18n.t('enterNewName') || 'Введите новое название', currentTitle);
+        const currentTitle = currentResults.title || currentResults.dominant || this.i18n.t('cognitiveTest');
+        const t = this.i18n.t.bind(this.i18n);
+
+        const newTitle = prompt(t('enterTestName') || 'Введите название теста:', currentTitle);
 
         if (newTitle && newTitle.trim() !== '') {
             if (this.storage.updateCognitiveTestTitle(newTitle.trim())) {
-                if (this.toast) {
-                    this.toast.show(this.i18n.t('testRenamed') || 'Тест переименован', 'success');
-                }
+                if (this.toast) this.toast.show(t('testRenamed') || 'Тест переименован', 'success');
                 this.showProfile();
             }
         }
     }
 
-    /**
-     * Delete Selected Tests
-     * @param {Array} ids - Array of test indices or 'cognitive'
-     * @param {HTMLElement} targetElement - Button element for positioning
-     */
-    deleteSelectedTests(ids, targetElement = null) {
-        if (!ids || ids.length === 0) return;
 
-        if (!confirm(this.i18n.t('confirmDeleteSelected') || `Вы уверены, что хотите удалить выбранные тесты (${ids.length})?`)) return;
-
-        let cognitiveDeleted = false;
-        const numericIndices = [];
-
-        ids.forEach(id => {
-            if (id === 'cognitive') {
-                localStorage.removeItem('cognitiveTestResults');
-                cognitiveDeleted = true;
-            } else {
-                const index = parseInt(id);
-                if (!isNaN(index)) {
-                    numericIndices.push(index);
-                }
-            }
-        });
-
-        let historyDeleted = false;
-        if (numericIndices.length > 0 && this.auth) {
-            historyDeleted = this.auth.deleteMultipleTests(numericIndices);
-        }
-
-        if (cognitiveDeleted || historyDeleted) {
-            if (this.toast) {
-                this.toast.show(this.i18n.t('testsDeleted') || 'Тесты удалены', 'success');
-            }
-            this.showProfile();
-        }
-    }
 
     /**
      * Отображение социального сравнения
@@ -1615,24 +1563,25 @@ class PersonalityTestApp {
     /**
      * Переименование теста
      */
-    renameTest(index) {
+    /**
+     * Переименование теста
+     */
+    renameTest(testId) {
         const history = this.auth.getTestHistory();
-        if (!history[index]) return;
+        const test = history.find(t => t.id === testId);
+        if (!test) return;
 
-        const currentTitle = history[index].title || `Test #${history.length - index}`;
+        const currentTitle = test.title || `Test`;
         const t = this.i18n.t.bind(this.i18n);
 
-        this.ui.showPrompt(
-            t('enterTestName') || 'Введите название теста:',
-            currentTitle,
-            (newTitle) => {
-                if (newTitle && newTitle.trim() !== '') {
-                    if (this.auth.updateTestTitle(index, newTitle.trim())) {
-                        this.showProfile(); // Обновляем UI
-                    }
-                }
+        const newTitle = prompt(t('enterTestName') || 'Введите название теста:', currentTitle);
+
+        if (newTitle && newTitle.trim() !== '') {
+            if (this.auth.updateTestTitle(testId, newTitle.trim())) {
+                if (this.toast) this.toast.show(t('testRenamed') || 'Тест переименован', 'success');
+                this.showProfile();
             }
-        );
+        }
     }
 
     /**
@@ -1916,52 +1865,54 @@ class PersonalityTestApp {
         `;
     }
 
-    deleteTest(index, triggerElement = null) {
-        const t = this.i18n.t.bind(this.i18n);
-        this.ui.showConfirm(
-            t('confirmDelete') || 'Вы уверены, что хотите удалить этот тест?',
-            () => {
-                if (this.auth.deleteTest(index)) {
-                    this.showProfile(); // Обновляем UI
-                }
-            },
-            null,
-            triggerElement
-        );
+    /**
+     * Delete Test by ID
+     */
+    deleteTest(testId, targetElement = null) {
+        if (!confirm(this.i18n.t('confirmDelete') || 'Вы уверены, что хотите удалить этот тест?')) return;
+
+        if (testId === 'cognitive') {
+            this.storage.removeCognitiveResults();
+            if (this.toast) this.toast.show(this.i18n.t('testDeleted') || 'Тест удален', 'success');
+            this.showProfile();
+        } else if (this.auth.deleteTest(testId)) {
+            if (this.toast) this.toast.show(this.i18n.t('testDeleted') || 'Тест удален', 'success');
+            this.showProfile();
+        }
     }
 
     /**
-     * Удаление выбранных тестов
-     * @param {Array<number>} indices - Массив индексов тестов для удаления
-     * @param {HTMLElement} triggerElement - Элемент, вызвавший действие
+     * Delete Selected Tests
+     * @param {Array} ids - Array of test IDs or 'cognitive'
+     * @param {HTMLElement} targetElement - Button element for positioning
      */
-    deleteSelectedTests(indices, triggerElement = null) {
-        const t = this.i18n.t.bind(this.i18n);
-        const count = indices.length;
+    deleteSelectedTests(ids, targetElement = null) {
+        if (!ids || ids.length === 0) return;
 
-        if (count === 0) return;
+        if (!confirm(this.i18n.t('confirmDeleteSelected') || `Вы уверены, что хотите удалить выбранные тесты (${ids.length})?`)) return;
 
-        const message = count === 1
-            ? (t('confirmDelete') || 'Вы уверены, что хотите удалить этот тест?')
-            : (t('confirmDeleteMultiple')?.replace('{count}', count) || `Вы уверены, что хотите удалить ${count} тестов?`);
+        let deleted = false;
 
-        this.ui.showConfirm(
-            message,
-            () => {
-                if (this.auth.deleteMultipleTests(indices)) {
-                    this.showProfile(); // Обновляем UI
-                    this.ui.showAlert(
-                        t('success') || 'Успешно',
-                        t('testsDeleted')?.replace('{count}', count) || `Удалено тестов: ${count}`
-                    );
-                }
-            },
-            null,
-            triggerElement
-        );
+        // Separate cognitive from regular tests
+        const regularIds = ids.filter(id => id !== 'cognitive');
+        const hasCognitive = ids.includes('cognitive');
+
+        if (hasCognitive) {
+            this.storage.removeCognitiveResults();
+            deleted = true;
+        }
+
+        if (regularIds.length > 0 && this.auth.deleteMultipleTests(regularIds)) {
+            deleted = true;
+        }
+
+        if (deleted) {
+            if (this.toast) this.toast.show(this.i18n.t('testsDeleted') || 'Тесты удалены', 'success');
+            this.showProfile();
+        }
     }
 
-    // ... (rest of deleteTest implementation)
+
 
     /**
      * Выход из аккаунта
