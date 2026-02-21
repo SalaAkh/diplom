@@ -253,7 +253,7 @@ class ReportGenerator {
 <body>
     <div class="export-container">
         <header class="export-header">
-            <span class="export-logo">Neural Constellation</span>
+            <span class="export-logo">${appName}</span>
             <p>${this.app.i18n.t('resultsTitle')} / ${date}</p>
             ${usernameDisplay}
         </header>
@@ -262,7 +262,7 @@ class ReportGenerator {
 
         <footer style="text-align: center; margin-top: 50px; color: #888; font-size: 0.9rem;">
             <p>${this.app.i18n.t('reportGeneratedBy')}</p>
-            <p>&copy; 2026 Neural Constellation</p>
+            <p>&copy; 2026 ${appName}</p>
         </footer>
     </div>
 </body>

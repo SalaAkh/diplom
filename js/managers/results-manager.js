@@ -310,7 +310,7 @@ class ResultsManager {
         <div class="footer">
             <p>${t('reportGeneratedBy')}</p>
             <p>Ахмедьянов Саламат КПО 9/22-2 &nbsp;&bull;&nbsp; ${lang === 'kk' ? 'Дипломдық жоба' : lang === 'en' ? 'Diploma Project' : 'Дипломный проект'}</p>
-            <p class="brand">© 2026 Neural Constellation</p>
+            <p class="brand">© 2026 ${t('appName')}</p>
         </div>
     </div>
 </body>

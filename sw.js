@@ -6,8 +6,8 @@
  * Мерзімі (Date): 2026
  */
 
-const CACHE_NAME = 'self-knowledge-v1.1';
-const RUNTIME_CACHE = 'runtime-cache-v1.1';
+const CACHE_NAME = 'self-knowledge-v1.2';
+const RUNTIME_CACHE = 'runtime-cache-v1.2';
 
 // Файлы для кэширования при установке
 const STATIC_CACHE_URLS = [
@@ -15,39 +15,106 @@ const STATIC_CACHE_URLS = [
   './index.html',
   './about.html',
   './profile.html',
+  './manifest.json',
+
+  // CSS
   './css/design-tokens.css',
   './css/typography.css',
   './css/navigation.css',
   './css/layout.css',
   './css/styles.css',
   './css/pages.css',
-
   './css/themes.css',
-  './js/services/storage.js',
-  './js/services/localization.js',
-  './js/services/auth.js',
+  './css/accessibility.css',
+  './css/google-auth.css',
+  './css/landing.css',
+  './css/modal.css',
+  './css/transitions.css',
+
+  // i18n
+  './i18n/en.json',
+  './i18n/ru.json',
+  './i18n/kk.json',
+
+  // JS — Core
+  './js/app.js',
+  './js/config/config.js',
+  './js/core/AppState.js',
+  './js/core/EventBus.js',
+
+  // JS — Data
   './js/data/scenarios-data.js',
   './js/data/advanced-scenarios-data.js',
+  './js/data/dynamic-scenarios.js',
+  './js/data/advanced-test-organizer.js',
+  './js/data/celebrity-profiles.js',
+  './js/data/cognitive-test-data.js',
+
+  // JS — Analysis
   './js/analysis/analysis.js',
   './js/analysis/advanced-analysis.js',
-  './js/data/dynamic-scenarios.js',
-  './js/vis/visualization.js',
-
+  './js/analysis/comparative-analysis.js',
+  './js/analysis/evolution-tracker.js',
   './js/analysis/ai-analysis.js',
   './js/analysis/ai-coach.js',
   './js/analysis/ml-engine.js',
   './js/analysis/quality-control.js',
-  './js/services/feedback-system.js',
-  './js/services/social-features.js',
   './js/analysis/advanced-analytics.js',
   './js/analysis/scenario-calibration.js',
   './js/analysis/statistical-validation.js',
   './js/analysis/test-reliability.js',
   './js/analysis/quality-dashboard.js',
-  './js/app.js',
+
+  // JS — Services
+  './js/services/storage.js',
+  './js/services/localization.js',
+  './js/services/localization-patch.js',
+  './js/services/auth.js',
+  './js/services/accessibility-service.js',
+  './js/services/audio-feedback.js',
+  './js/services/celebrity-service.js',
+  './js/services/data-loader.js',
+  './js/services/error-handler.js',
+  './js/services/feedback.js',
+  './js/services/feedback-system.js',
+  './js/services/keyboard-navigation.js',
+  './js/services/logger.js',
+  './js/services/report-generator.js',
+  './js/services/resource-loader.js',
+  './js/services/social-features.js',
+  './js/services/voice-control.js',
+
+  // JS — Managers
+  './js/managers/results-manager.js',
+  './js/managers/test-manager.js',
+
+  // JS — UI
+  './js/ui/ui-controller.js',
+  './js/ui/navigation-controller.js',
+  './js/ui/profile-extensions.js',
+  './js/ui/toast-manager.js',
+  './js/ui/views/BaseView.js',
+  './js/ui/views/IntroView.js',
+  './js/ui/views/ResultsView.js',
+  './js/ui/views/ScenarioView.js',
+  './js/ui/views/TestSelectionView.js',
+
+  // JS — Vis
+  './js/vis/visualization.js',
+  './js/vis/particles-background.js',
+
+  // Data
   './data/scenarios.json',
   './data/advanced-scenarios.json',
+
+  // Icons
+  './icons/icon-72x72.png',
+  './icons/icon-96x96.png',
+  './icons/icon-128x128.png',
+  './icons/icon-144x144.png',
+  './icons/icon-152x152.png',
   './icons/icon-192x192.png',
+  './icons/icon-384x384.png',
   './icons/icon-512x512.png'
 ];
 
