@@ -42,16 +42,28 @@ class TestManager {
      * Load scenarios data ( Basic or Advanced)
      */
     async loadData() {
-        // Load scenarios from app
-        if (this.app.scenarios && this.app.scenarios.length > 0) {
-            this.scenarios = this.app.scenarios;
-        } else {
-            console.error('No scenarios loaded in app');
-            this.scenarios = [];
-        }
+        if (this.scenarios && this.scenarios.length > 0) return;
 
-        // Return promise for consistency if we add async loading later
-        return Promise.resolve();
+        try {
+            if (typeof window === 'undefined' || typeof window.SCENARIOS_DATA === 'undefined') {
+                console.log('scenarios-data.js динамикалық түрде жүктелуде (Dynamically loading scenarios-data.js)');
+                await import('../data/scenarios-data.js');
+            }
+            if (window.SCENARIOS_DATA && window.SCENARIOS_DATA.scenarios) {
+                this.scenarios = window.SCENARIOS_DATA.scenarios;
+                this.app.scenarios = this.scenarios;
+            } else {
+                throw new Error('SCENARIOS_DATA is missing after import');
+            }
+        } catch (error) {
+            console.error('Failed to load scenarios-data.js dynamically:', error);
+            // Fallback to app.scenarios if available
+            if (this.app.scenarios && this.app.scenarios.length > 0) {
+                this.scenarios = this.app.scenarios;
+            } else {
+                this.scenarios = [];
+            }
+        }
     }
 
     /**
@@ -61,23 +73,23 @@ class TestManager {
         try {
             let data = null;
 
-            // Try built-in data first
-            if (typeof ADVANCED_SCENARIOS_DATA !== 'undefined' && ADVANCED_SCENARIOS_DATA && ADVANCED_SCENARIOS_DATA.questions) {
-                console.log('Кірістірілген ADVANCED_SCENARIOS_DATA қолданылуда (Using built-in ADVANCED_SCENARIOS_DATA)');
-                data = ADVANCED_SCENARIOS_DATA;
-            } else if (typeof window !== 'undefined' && window.ADVANCED_SCENARIOS_DATA && window.ADVANCED_SCENARIOS_DATA.questions) {
+            if (typeof window !== 'undefined' && window.ADVANCED_SCENARIOS_DATA && window.ADVANCED_SCENARIOS_DATA.questions) {
                 console.log('window.ADVANCED_SCENARIOS_DATA қолданылуда (Using window.ADVANCED_SCENARIOS_DATA)');
                 data = window.ADVANCED_SCENARIOS_DATA;
             } else {
-                // Try fetch
-                console.log('advanced-scenarios.json алынуда... (Fetching advanced-scenarios.json...)');
+                console.log('advanced-scenarios-data.js динамикалық түрде жүктелуде (Dynamically loading advanced-scenarios-data.js)');
                 try {
+                    await import('../data/advanced-scenarios-data.js');
+                    if (window.ADVANCED_SCENARIOS_DATA) {
+                        data = window.ADVANCED_SCENARIOS_DATA;
+                    } else {
+                        throw new Error('ADVANCED_SCENARIOS_DATA not found after import');
+                    }
+                } catch (importError) {
+                    console.error('Dynamic import failed, falling back to fetch:', importError);
                     const response = await fetch('data/advanced-scenarios.json');
                     if (!response.ok) throw new Error(`HTTP ${response.status}`);
                     data = await response.json();
-                } catch (fetchError) {
-                    console.error('Fetch failed:', fetchError);
-                    throw new Error('Advanced test data not found.');
                 }
             }
 
@@ -94,15 +106,14 @@ class TestManager {
     /**
      * Start Basic Test
      */
-    startBasicTest() {
+    async startBasicTest() {
         this.testMode = 'basic';
         this.currentScenarioIndex = 0;
         this.currentQuestionIndex = 0;
         this.completedScenarios = [];
 
-        // Load scenarios first
-        // Load scenarios first
-        this.loadData();
+        // Load scenarios dynamically first
+        await this.loadData();
 
         // Ensure we use the Basic Analyzer
         this.app.analyzer = new PersonalityAnalyzer({
@@ -153,16 +164,22 @@ class TestManager {
     /**
      * Start Cognitive Test
      */
-    startCognitiveTest() {
+    async startCognitiveTest() {
         this.testMode = 'cognitive';
         this.currentQuestionIndex = 0;
         this.cognitiveAnswers = [];
 
-        if (!window.COGNITIVE_QUESTIONS) {
-            console.error('Cognitive questions not loaded');
-            alert('Test data not loaded');
-            return;
+        if (typeof window === 'undefined' || !window.COGNITIVE_QUESTIONS) {
+            console.log('cognitive-test-data.js динамикалық түрде жүктелуде (Dynamically loading cognitive-test-data.js)');
+            try {
+                await import('../data/cognitive-test-data.js');
+            } catch (error) {
+                console.error('Failed to load cognitive test data:', error);
+                alert('Test data not loaded');
+                return;
+            }
         }
+
 
         // Try to restore progress
         const savedProgress = this.storage.loadProgress();

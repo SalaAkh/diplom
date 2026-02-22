@@ -196,184 +196,16 @@
                     <!-- Қосымша мазмұны динамикалық түрде енгізіледі -->
                 </div>
 
-                <!-- Шаблон лендинга (для редактирования текста в HTML) -->
-                <template id="landing-template">
-                    <div class="landing-page">
-                        <!-- Hero Section -->
-                        <section class="hero-section" aria-labelledby="hero-title">
-                            <div class="hero-content">
-                                <h1 id="hero-title" class="hero-title fade-in" data-i18n="landingHeroTitle">Познай свою
-                                    истинную природу
-                                </h1>
-                                <p class="hero-subtitle fade-in delay-1" data-i18n="landingHeroSubtitle">
-                                    Интеллектуальная система анализа личности, основанная на когнитивной психологии и
-                                    сценариях выбора.
-                                    Определите свои сильные стороны и векторы развития.
-                                </p>
-                                <div class="hero-cta fade-in delay-2" id="landing-actions">
-                                    <!-- Кнопки будут вставлены JS -->
-                                </div>
-                            </div>
-                            <div class="hero-visual fade-in delay-3" aria-hidden="true">
-                                <!-- Декоративные иконки -->
-                                <span class="material-symbols-rounded floating-icon">psychology</span>
-                                <span class="material-symbols-rounded floating-icon delay-1">fingerprint</span>
-                                <span class="material-symbols-rounded floating-icon delay-2">auto_graph</span>
-                            </div>
-                        </section>
-
-                        <!-- Features Section -->
-                        <section class="features-section" aria-labelledby="features-title">
-                            <h2 id="features-title" class="section-title" data-i18n="landingFeaturesTitle">Технологии
-                                самопознания</h2>
-                            <div class="features-grid">
-                                <div class="feature-card">
-                                    <span class="feature-icon" aria-hidden="true">🎭</span>
-                                    <h3 data-i18n="featInteractive">Интерактивные сценарии</h3>
-                                    <p data-i18n="featInteractiveDesc">12 глубоких интерактивных сценариев с множеством
-                                        путей развития</p>
-                                </div>
-                                <div class="feature-card">
-                                    <span class="feature-icon" aria-hidden="true">🧠</span>
-                                    <h3 data-i18n="featPattern">Анализ паттернов</h3>
-                                    <p data-i18n="featPatternDesc">Комплексный анализ когнитивных паттернов и стилей
-                                        принятия решений</p>
-                                </div>
-                            </div>
-                        </section>
-
-                        <!-- NEW: Mission Section -->
-                        <section class="mission-section">
-                            <div class="mission-content">
-                                <span class="section-badge" data-i18n="missionTitle">Миссия проекта</span>
-                                <p class="mission-text" data-i18n="missionText">В эпоху информационного шума легко
-                                    потерять связь с собой. Наша цель — дать каждому инструмент для осознанного
-                                    самопознания. Это не просто тест, это цифровое зеркало, которое отражает ваши
-                                    истинные ценности, скрытые мотивы и потенциальные таланты, помогая принимать верные
-                                    жизненные решения.</p>
-                            </div>
-                        </section>
-
-                        <!-- NEW: Methodology Section -->
-                        <section class="methodology-section">
-                            <div class="methodology-wrapper">
-                                <div class="methodology-text">
-                                    <h2 class="section-title" data-i18n="methodologyTitle">Наука внутри</h2>
-                                    <h3 class="methodology-subtitle" data-i18n="methodologySubtitle">Больше, чем просто
-                                        вопросы</h3>
-                                    <p data-i18n="methodologyText" style="margin-bottom: 2rem;">В отличие от
-                                        классических тестов, где легко 'подгадать' правильный ответ, наша система
-                                        работает иначе:</p>
-
-                                    <div class="science-grid">
-                                        <div class="science-item">
-                                            <h4 data-i18n="sciencePsychTitle">Когнитивная психология</h4>
-                                            <p data-i18n="sciencePsychText">Анализ принятия решений в условиях
-                                                неопределенности выявляет истинные, а не декларируемые ценности.</p>
-                                        </div>
-                                        <div class="science-item">
-                                            <h4 data-i18n="scienceGameTitle">Теория игр</h4>
-                                            <p data-i18n="scienceGameText">Сценарные дилеммы ставят вас перед сложным
-                                                выбором, исключая социально ожидаемые ответы.</p>
-                                        </div>
-                                        <div class="science-item">
-                                            <h4 data-i18n="scienceDataTitle">Анализ данных</h4>
-                                            <p data-i18n="scienceDataText">Математическая модель строит профиль по 6
-                                                независимым осям, создавая уникальный 'отпечаток' личности.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="methodology-visual">
-                                    <div class="holo-circle"></div>
-                                    <div class="holo-circle delayed"></div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <!-- NEW: Value/Benefits Section -->
-                        <section class="value-section">
-                            <h2 class="section-title" data-i18n="valueTitle">Зачем это вам?</h2>
-                            <div class="value-grid">
-                                <div class="value-card">
-                                    <div class="value-icon">🚀</div>
-                                    <h3 data-i18n="valueCareerTitle">Карьерный навигатор</h3>
-                                    <p data-i18n="valueCareerText">Поймите, где ваши природные таланты раскроются
-                                        максимально: в управлении, творчестве, аналитике или предпринимательстве.</p>
-                                </div>
-                                <div class="value-card">
-                                    <div class="value-icon">💡</div>
-                                    <h3 data-i18n="valueRelTitle">Понимание себя</h3>
-                                    <p data-i18n="valueRelText">Узнайте свои истинные драйверы: почему вы действуете
-                                        именно так? Что вас мотивирует, а что забирает энергию?</p>
-                                </div>
-                                <div class="value-card">
-                                    <div class="value-icon">📈</div>
-                                    <h3 data-i18n="valueGrowthTitle">Точки роста</h3>
-                                    <p data-i18n="valueGrowthText">Получите персональную карту развития с конкретными
-                                        рекомендациями по soft skills, которые усилят вашу личность.</p>
-                                </div>
-                            </div>
-                        </section>
-
-
-                    </div>
-
-                    <!-- How It Works Section -->
-                    <section class="how-it-works-section" aria-labelledby="how-it-works-title">
-                        <h2 id="how-it-works-title" class="section-title" data-i18n="howItWorksTitle">Как это
-                            работает</h2>
-                        <div class="steps-container">
-                            <div class="step">
-                                <div class="step-number" aria-hidden="true">1</div>
-                                <h3 data-i18n="step1Title">Проходите тест</h3>
-                                <p data-i18n="step1Desc">Ответьте на 12 сценарных вопросов, выбирая близкие вам
-                                    варианты действий.</p>
-                            </div>
-                            <div class="step-arrow" aria-hidden="true">→</div>
-                            <div class="step">
-                                <div class="step-number" aria-hidden="true">2</div>
-                                <h3 data-i18n="step2Title">Алгоритм считает</h3>
-                                <p data-i18n="step2Desc">Система анализирует ваши ответы по 6 ключевым измерениям
-                                    личности.</p>
-                            </div>
-                            <div class="step-arrow" aria-hidden="true">→</div>
-                            <div class="step">
-                                <div class="step-number" aria-hidden="true">3</div>
-                                <h3 data-i18n="step3Title">Получаете профиль</h3>
-                                <p data-i18n="step3Desc">Детальный отчет и рекомендации по развитию
-                                    доступны мгновенно.</p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- CTA Section (Final Push) -->
-                    <section class="cta-section" aria-label="Призыв к действию">
-                        <div class="cta-content">
-                            <h2 data-i18n="ctaTitle">Откройте свой внутренний мир</h2>
-                            <p data-i18n="ctaText">Пройдите тест за 5-7 минут и получите детальный анализ вашей
-                                личности с персональными
-                                рекомендациями.</p>
-                            <!-- Динамические кнопки (Continue/Start) -->
-                            <div id="cta-actions">
-                                <button class="btn btn-primary btn-xl pulse-animation"
-                                    onclick="app.showTestTypeSelection()">
-                                    <span class="material-symbols-rounded" aria-hidden="true">play_arrow</span>
-                                    <span data-i18n="startTest">Начать тестирование</span>
-                                </button>
-                            </div>
-                        </div>
-                    </section>
+                <!-- Шаблон лендинга перенесен в js/ui/ui-controller.js для оптимизации (DOM Virtualization) -->
             </div>
-            </template>
-    </div>
-    </main>
+        </main>
 
-    <footer class="app-footer" role="contentinfo">
-        <div class="container">
-            <p id="footerText">Дипломдық жоба &copy; 2026</p>
-            <p class="footer-note" id="footerNote">Барлық деректер сіздің браузеріңізде жергілікті өңделеді</p>
-        </div>
-    </footer>
+        <footer class="app-footer" role="contentinfo">
+            <div class="container">
+                <p id="footerText">Дипломдық жоба &copy; 2026</p>
+                <p class="footer-note" id="footerNote">Барлық деректер сіздің браузеріңізде жергілікті өңделеді</p>
+            </div>
+        </footer>
     </div>
 
     <!-- Theme Toggle (Floating) -->
@@ -467,9 +299,6 @@
     <script src="js/services/accessibility-service.js" defer></script>
     <script src="js/services/voice-control.js" defer></script>
 
-    <script src="js/data/scenarios-data.js" defer></script>
-    <script src="js/data/advanced-scenarios-data.js" defer></script>
-    <script src="js/data/cognitive-test-data.js" defer></script>
     <script src="js/analysis/analysis.js" defer></script>
     <script src="js/analysis/advanced-analysis.js" defer></script>
     <script src="js/data/dynamic-scenarios.js" defer></script>

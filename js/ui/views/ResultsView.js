@@ -343,6 +343,16 @@ class ResultsView extends BaseView {
             this.onHome();
         }
     }
+
+    /**
+     * Очистка ресурсов при Уничтожении View
+     */
+    destroy() {
+        this.results = null;
+        this.onRetake = null;
+        this.onHome = null;
+        super.destroy();
+    }
 }
 
 // Экспорт

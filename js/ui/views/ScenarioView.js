@@ -205,16 +205,24 @@ class ScenarioView extends BaseView {
         }
     }
 
-    /**
-     * Показать анимацию перехода
-     */
     showTransition() {
         if (this.container) {
             this.container.classList.add('transitioning');
             setTimeout(() => {
-                this.container.classList.remove('transitioning');
+                if (this.container) this.container.classList.remove('transitioning');
             }, 300);
         }
+    }
+
+    /**
+     * Очистка ресурсов при Уничтожении View
+     */
+    destroy() {
+        // Clear references
+        this.scenario = null;
+        this.onAnswer = null;
+        this.onBack = null;
+        super.destroy();
     }
 }
 

@@ -360,6 +360,14 @@ class IntroView extends BaseView {
             this.handleStartTest();
         }
     }
+
+    /**
+     * Очистка ресурсов при Уничтожении View
+     */
+    destroy() {
+        this.savedProgress = null;
+        super.destroy();
+    }
 }
 
 // Экспорт

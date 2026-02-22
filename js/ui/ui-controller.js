@@ -6,6 +6,26 @@ class UIController {
     constructor(app) {
         this.app = app;
         this.selectedTests = new Set(); // Track selected tests for batch delete
+        this.currentView = null; // Track dynamic view instances to prevent memory leaks
+    }
+
+    /**
+     * Clears the active view by calling its destroy method if it exists
+     */
+    clearView() {
+        if (this.currentView && typeof this.currentView.destroy === 'function') {
+            this.currentView.destroy();
+        }
+        this.currentView = null;
+    }
+
+    /**
+     * Sets a new active view and destroys the previous one
+     * @param {Object} viewInstance 
+     */
+    setView(viewInstance) {
+        this.clearView();
+        this.currentView = viewInstance;
     }
 
     /**
@@ -66,6 +86,7 @@ class UIController {
      * Show Basic Scenario
      */
     showScenario(scenario, progress) {
+        this.clearView(); // Ensure previous views are destroyed
         const container = document.getElementById('app');
         if (!container) return;
 
@@ -888,8 +909,141 @@ class UIController {
 
     // ================= START INTRO UI =================
 
+    getLandingTemplateHTML() {
+        return `
+            <div class="landing-page">
+                <section class="hero-section" aria-labelledby="hero-title">
+                    <div class="hero-content">
+                        <h1 id="hero-title" class="hero-title fade-in" data-i18n="landingHeroTitle">Познай свою истинную природу</h1>
+                        <p class="hero-subtitle fade-in delay-1" data-i18n="landingHeroSubtitle">
+                            Интеллектуальная система анализа личности, основанная на когнитивной психологии и сценариях выбора.
+                            Определите свои сильные стороны и векторы развития.
+                        </p>
+                        <div class="hero-cta fade-in delay-2" id="landing-actions">
+                            <!-- Кнопки будут вставлены JS -->
+                        </div>
+                    </div>
+                    <div class="hero-visual fade-in delay-3" aria-hidden="true">
+                        <span class="material-symbols-rounded floating-icon">psychology</span>
+                        <span class="material-symbols-rounded floating-icon delay-1">fingerprint</span>
+                        <span class="material-symbols-rounded floating-icon delay-2">auto_graph</span>
+                    </div>
+                </section>
+
+                <section class="features-section" aria-labelledby="features-title">
+                    <h2 id="features-title" class="section-title" data-i18n="landingFeaturesTitle">Технологии самопознания</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <span class="feature-icon" aria-hidden="true">🎭</span>
+                            <h3 data-i18n="featInteractive">Интерактивные сценарии</h3>
+                            <p data-i18n="featInteractiveDesc">12 глубоких интерактивных сценариев с множеством путей развития</p>
+                        </div>
+                        <div class="feature-card">
+                            <span class="feature-icon" aria-hidden="true">🧠</span>
+                            <h3 data-i18n="featPattern">Анализ паттернов</h3>
+                            <p data-i18n="featPatternDesc">Комплексный анализ когнитивных паттернов и стилей принятия решений</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mission-section">
+                    <div class="mission-content">
+                        <span class="section-badge" data-i18n="missionTitle">Миссия проекта</span>
+                        <p class="mission-text" data-i18n="missionText">В эпоху информационного шума легко потерять связь с собой. Наша цель — дать каждому инструмент для осознанного самопознания. Это не просто тест, это цифровое зеркало, которое отражает ваши истинные ценности, скрытые мотивы и потенциальные таланты, помогая принимать верные жизненные решения.</p>
+                    </div>
+                </section>
+
+                <section class="methodology-section">
+                    <div class="methodology-wrapper">
+                        <div class="methodology-text">
+                            <h2 class="section-title" data-i18n="methodologyTitle">Наука внутри</h2>
+                            <h3 class="methodology-subtitle" data-i18n="methodologySubtitle">Больше, чем просто вопросы</h3>
+                            <p data-i18n="methodologyText" style="margin-bottom: 2rem;">В отличие от классических тестов, где легко 'подгадать' правильный ответ, наша система работает иначе:</p>
+                            <div class="science-grid">
+                                <div class="science-item">
+                                    <h4 data-i18n="sciencePsychTitle">Когнитивная психология</h4>
+                                    <p data-i18n="sciencePsychText">Анализ принятия решений в условиях неопределенности выявляет истинные, а не декларируемые ценности.</p>
+                                </div>
+                                <div class="science-item">
+                                    <h4 data-i18n="scienceGameTitle">Теория игр</h4>
+                                    <p data-i18n="scienceGameText">Сценарные дилеммы ставят вас перед сложным выбором, исключая социально ожидаемые ответы.</p>
+                                </div>
+                                <div class="science-item">
+                                    <h4 data-i18n="scienceDataTitle">Анализ данных</h4>
+                                    <p data-i18n="scienceDataText">Математическая модель строит профиль по 6 независимым осям, создавая уникальный 'отпечаток' личности.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="methodology-visual">
+                            <div class="holo-circle"></div>
+                            <div class="holo-circle delayed"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="value-section">
+                    <h2 class="section-title" data-i18n="valueTitle">Зачем это вам?</h2>
+                    <div class="value-grid">
+                        <div class="value-card">
+                            <div class="value-icon">🚀</div>
+                            <h3 data-i18n="valueCareerTitle">Карьерный навигатор</h3>
+                            <p data-i18n="valueCareerText">Поймите, где ваши природные таланты раскроются максимально: в управлении, творчестве, аналитике или предпринимательстве.</p>
+                        </div>
+                        <div class="value-card">
+                            <div class="value-icon">💡</div>
+                            <h3 data-i18n="valueRelTitle">Понимание себя</h3>
+                            <p data-i18n="valueRelText">Узнайте свои истинные драйверы: почему вы действуете именно так? Что вас мотивирует, а что забирает энергию?</p>
+                        </div>
+                        <div class="value-card">
+                            <div class="value-icon">📈</div>
+                            <h3 data-i18n="valueGrowthTitle">Точки роста</h3>
+                            <p data-i18n="valueGrowthText">Получите персональную карту развития с конкретными рекомендациями по soft skills, которые усилят вашу личность.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="how-it-works-section" aria-labelledby="how-it-works-title">
+                    <h2 id="how-it-works-title" class="section-title" data-i18n="howItWorksTitle">Как это работает</h2>
+                    <div class="steps-container">
+                        <div class="step">
+                            <div class="step-number" aria-hidden="true">1</div>
+                            <h3 data-i18n="step1Title">Проходите тест</h3>
+                            <p data-i18n="step1Desc">Ответьте на 12 сценарных вопросов, выбирая близкие вам варианты действий.</p>
+                        </div>
+                        <div class="step-arrow" aria-hidden="true">→</div>
+                        <div class="step">
+                            <div class="step-number" aria-hidden="true">2</div>
+                            <h3 data-i18n="step2Title">Алгоритм считает</h3>
+                            <p data-i18n="step2Desc">Система анализирует ваши ответы по 6 ключевым измерениям личности.</p>
+                        </div>
+                        <div class="step-arrow" aria-hidden="true">→</div>
+                        <div class="step">
+                            <div class="step-number" aria-hidden="true">3</div>
+                            <h3 data-i18n="step3Title">Получаете профиль</h3>
+                            <p data-i18n="step3Desc">Детальный отчет и рекомендации по развитию доступны мгновенно.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="cta-section" aria-label="Призыв к действию">
+                    <div class="cta-content">
+                        <h2 data-i18n="ctaTitle">Откройте свой внутренний мир</h2>
+                        <p data-i18n="ctaText">Пройдите тест за 5-7 минут и получите детальный анализ вашей личности с персональными рекомендациями.</p>
+                        <div id="cta-actions">
+                            <button class="btn btn-primary btn-xl pulse-animation" onclick="app.showTestTypeSelection()">
+                                <span class="material-symbols-rounded" aria-hidden="true">play_arrow</span>
+                                <span data-i18n="startTest">Начать тестирование</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        `;
+    }
+
     showIntro() {
         this.app.state = 'intro';
+        this.clearView(); // Ensure previous views are destroyed
         const container = document.getElementById('app');
         if (!container) return;
 
@@ -912,115 +1066,109 @@ class UIController {
             console.error('Прогресті тексеру қатесі (Error checking progress)', e);
         }
 
-        // Попытка использовать шаблон из HTML (если он есть)
-        const template = document.getElementById('landing-template');
+        // Используем встроенный шаблон (DOM Virtualization)
+        container.innerHTML = this.getLandingTemplateHTML();
 
-        if (template) {
-            // Клонируем контент шаблона
-            const clone = template.content.cloneNode(true);
-            container.innerHTML = '';
-            container.appendChild(clone);
+        // Обновляем тексты в соответствии с текущим языком
+        this.updateStaticContent();
 
-            // Обновляем тексты в соответствии с текущим языком
-            this.updateStaticContent();
+        // === 1. Обновляем Hero Section в зависимости от статуса ===
+        const heroContent = container.querySelector('.hero-content');
+        if (heroContent) {
+            // Добавляем бейдж статуса перед заголовком
+            const badge = document.createElement('div');
 
-            // === 1. Обновляем Hero Section в зависимости от статуса ===
-            const heroContent = container.querySelector('.hero-content');
-            if (heroContent) {
-                // Добавляем бейдж статуса перед заголовком
-                const badge = document.createElement('div');
-
-                if (user) {
-                    // Пользователь вошел
-                    badge.className = 'auth-status-badge logged-in';
-                    badge.innerHTML = `
+            if (user) {
+                // Пользователь вошел
+                badge.className = 'auth-status-badge logged-in';
+                badge.innerHTML = `
                         <span class="material-symbols-rounded">check_circle</span>
                         ${t('loggedIn') || 'Вы вошли в систему'}
                     `;
 
-                    // Обновляем заголовок
-                    const heroTitle = heroContent.querySelector('.hero-title');
-                    if (heroTitle) {
-                        const escapedUsername = this.escapeHTML(user.username);
-                        heroTitle.innerHTML = `${t('welcomeBack') || 'С возвращением'}, <br><span class="highlight">${escapedUsername}</span>!`;
-                    }
-                } else {
-                    // Гость
-                    badge.className = 'auth-status-badge guest';
-                    badge.innerHTML = `
+                // Обновляем заголовок
+                const heroTitle = heroContent.querySelector('.hero-title');
+                if (heroTitle) {
+                    const escapedUsername = this.escapeHTML(user.username);
+                    heroTitle.innerHTML = `${t('welcomeBack') || 'С возвращением'}, <br><span class="highlight">${escapedUsername}</span>!`;
+                }
+            } else {
+                // Гость
+                badge.className = 'auth-status-badge guest';
+                badge.innerHTML = `
                         <span class="material-symbols-rounded">account_circle</span>
                         ${t('guestMode') || 'Гостевой режим'}
                     `;
-                }
-
-                // Вставляем бейдж первым элементом
-                heroContent.insertBefore(badge, heroContent.firstChild);
             }
 
-            // === 2. Обновляем кнопки действий ===
-            const actionsContainer = container.querySelector('#landing-actions');
+            // Вставляем бейдж первым элементом
+            heroContent.insertBefore(badge, heroContent.firstChild);
+        }
 
-            if (actionsContainer) {
-                let buttonsHtml = '';
+        // === 2. Обновляем кнопки действий ===
+        const actionsContainer = container.querySelector('#landing-actions');
 
-                if (user) {
-                    // Для авторизованного пользователя
-                    if (hasProgress) {
-                        buttonsHtml += `
+        if (actionsContainer) {
+            let buttonsHtml = '';
+
+            if (user) {
+                // Для авторизованного пользователя
+                if (hasProgress) {
+                    buttonsHtml += `
                             <button class="btn btn-primary btn-lg pulse-animation" onclick="app.continueTest()">
                                 <span class="material-symbols-rounded">play_arrow</span>
                                 ${t('continueTest') || 'Продолжить тест'}
                             </button>
                         `;
-                    } else {
-                        buttonsHtml += `
+                } else {
+                    buttonsHtml += `
                             <button class="btn btn-primary btn-lg pulse-animation" onclick="app.showTestTypeSelection()">
                                 <span class="material-symbols-rounded">play_arrow</span>
                                 ${t('startTest') || 'Начать тест'}
                             </button>
                         `;
-                    }
-                    // Доп. кнопка профиля
-                    buttonsHtml += `
+                }
+                // Доп. кнопка профиля
+                buttonsHtml += `
                         <a href="profile.html" class="btn btn-secondary btn-lg">
                             <span class="material-symbols-rounded">person</span>
                             ${t('myProfile') || 'Мой профиль'}
                         </a>
                     `;
-                } else {
-                    // Для гостя
-                    if (hasProgress) {
-                        buttonsHtml += `
+            } else {
+                // Для гостя
+                if (hasProgress) {
+                    buttonsHtml += `
                             <button class="btn btn-primary btn-lg pulse-animation" onclick="app.continueTest()">
                                 <span class="material-symbols-rounded">play_arrow</span>
                                 ${t('continueTest') || 'Продолжить'}
                             </button>
                         `;
-                    } else {
-                        buttonsHtml += `
+                } else {
+                    buttonsHtml += `
                             <button class="btn btn-primary btn-lg pulse-animation" onclick="app.showTestTypeSelection()">
                                 <span class="material-symbols-rounded">science</span>
                                 ${t('startTest') || 'Начать тест'}
                             </button>
                         `;
-                    }
+                }
 
-                    // Кнопки входа/регистрации
-                    buttonsHtml += `
+                // Кнопки входа/регистрации
+                buttonsHtml += `
                         <button class="btn btn-secondary btn-lg" onclick="app.showAuth()">
                             <span class="material-symbols-rounded">login</span>
                             ${t('login') || 'Войти'}
                         </button>
                     `;
-                }
+            }
 
-                actionsContainer.innerHTML = buttonsHtml;
+            actionsContainer.innerHTML = buttonsHtml;
 
-                // Также обновляем нижний CTA блок
-                const ctaActionsContainer = container.querySelector('#cta-actions');
-                if (ctaActionsContainer) {
-                    if (hasProgress) {
-                        ctaActionsContainer.innerHTML = `
+            // Также обновляем нижний CTA блок
+            const ctaActionsContainer = container.querySelector('#cta-actions');
+            if (ctaActionsContainer) {
+                if (hasProgress) {
+                    ctaActionsContainer.innerHTML = `
                             <div class="cta-actions-group">
                                 <button class="btn btn-primary btn-xl pulse-animation" onclick="app.continueTest()">
                                     <span class="material-symbols-rounded">play_arrow</span>
@@ -1032,28 +1180,15 @@ class UIController {
                                 </button>
                             </div>
                          `;
-                    } else {
-                        ctaActionsContainer.innerHTML = `
+                } else {
+                    ctaActionsContainer.innerHTML = `
                             <button class="btn btn-primary btn-xl pulse-animation" onclick="app.showTestTypeSelection()">
                                 <span class="material-symbols-rounded">play_arrow</span>
                                 ${t('startTest') || 'Начать тестирование'}
                             </button>
                          `;
-                    }
                 }
             }
-        } else {
-            // Фолбек на хардкод (упрощенная версия)
-            container.innerHTML = `
-                <div class="intro-screen">
-                    <h1 class="fade-in split-text">${t('appName')}</h1>
-                    <div class="actions fade-in delay-2">
-                         <button class="btn btn-primary btn-lg" onclick="app.showTestTypeSelection()">
-                            ${t('startTest')}
-                        </button>
-                    </div>
-                </div>
-            `;
         }
 
         // Плавное появление
@@ -2289,28 +2424,35 @@ class UIController {
         }, 100);
     }
 
-    /**
-     * Show Test Type Selection Screen
-     */
     showTestTypeSelection() {
+        this.clearView(); // Ensure previous views are destroyed
         const container = document.getElementById('app');
         if (!container) return;
 
         container.style.opacity = '0';
 
-        if (typeof TestSelectionView !== 'undefined') {
-            const view = new TestSelectionView({
-                onSelectBasic: () => this.app.startBasicTest(),
-                onSelectAdvanced: () => this.app.startAdvancedTest(),
-                onSelectCognitive: () => this.app.startCognitiveTest(),
+        if (typeof TestSelectionView !== 'undefined' || typeof window.TestSelectionView !== 'undefined') {
+            const ViewClass = window.TestSelectionView || TestSelectionView;
+            const view = new ViewClass({
+                app: this.app,
+                container: container,
+                i18n: this.i18n,
+                onSelectBasic: () => this.app.startTest ? this.app.startTest('basic') : this.app.startBasicTest(),
+                onSelectAdvanced: () => this.app.startTest ? this.app.startTest('advanced') : this.app.startAdvancedTest(),
+                onSelectCognitive: () => this.app.startTest ? this.app.startTest('cognitive') : this.app.startCognitiveTest(),
                 onBack: () => this.app.showIntro()
             });
 
-            container.innerHTML = view.getHTML();
+            this.setView(view);
 
-            // Trigger afterRender to bind events
-            if (typeof view.afterRender === 'function') {
-                view.afterRender();
+            if (typeof view.render === 'function') {
+                view.renderContainer = container; // set explicitly if needed
+                view.render();
+            } else {
+                container.innerHTML = view.getHTML();
+                if (typeof view.afterRender === 'function') {
+                    view.afterRender();
+                }
             }
 
             setTimeout(() => {

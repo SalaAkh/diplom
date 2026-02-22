@@ -303,7 +303,7 @@ class TestSelectionView extends BaseView {
                     </li>
                     <li>
                         <span class="material-symbols-rounded">auto_awesome</span>
-                        ${this.t('cognitiveFeature2')}
+                        ${this.t('cognitiveFeature3')}
                     </li>
                 </ul>
                 
@@ -466,14 +466,22 @@ class TestSelectionView extends BaseView {
         }
     }
 
-    /**
-     * Обработчик возврата
-     */
     handleBack() {
         this.emit(EventBus.Events.SCREEN_CHANGED, { screen: 'intro' });
         if (typeof this.onBack === 'function') {
             this.onBack();
         }
+    }
+
+    /**
+     * Очистка ресурсов при Уничтожении View
+     */
+    destroy() {
+        this.onSelectBasic = null;
+        this.onSelectAdvanced = null;
+        this.onSelectCognitive = null;
+        this.onBack = null;
+        super.destroy();
     }
 }
 
