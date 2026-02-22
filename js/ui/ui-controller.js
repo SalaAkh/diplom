@@ -1639,7 +1639,10 @@ class UIController {
                 // === Unified helper: render one history item ===
                 const renderItem = (id, title, dateStr, subtitle, extraInfo) => `
                     <div class="history-item" data-test-id="${id}" style="display:flex; align-items:center; gap:12px; flex-wrap:nowrap; padding: 10px 12px 10px 20px;">
-                        <input type="checkbox" class="test-checkbox" data-test-id="${id}" style="width:18px; height:18px; cursor:pointer; flex-shrink:0;">
+                    <div class="test-checkbox-wrapper">
+                        <input type="checkbox" class="test-checkbox" data-test-id="${id}">
+                        <span class="test-checkbox-custom"></span>
+                    </div>
                         <div class="history-info" style="flex:1; min-width:0;">
                             <h3 class="font-bold text-lg m-0" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${title}</h3>
                             <span class="text-sm text-secondary">${dateStr}${subtitle ? ' • <span class="text-primary">' + subtitle + '</span>' : ''}</span>
@@ -1675,7 +1678,10 @@ class UIController {
                                     <!-- Batch Delete Controls -->
                                     <div class="test-history-controls" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 1rem;">
                                         <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                            <input type="checkbox" id="selectAllTests" class="test-checkbox-all" style="width: 18px; height: 18px; cursor: pointer;">
+                                        <div class="test-checkbox-wrapper">
+                                            <input type="checkbox" id="selectAllTests" class="test-checkbox-all">
+                                            <span class="test-checkbox-custom"></span>
+                                        </div>
                                             <span>${t('selectAll') || 'Выбрать все'}</span>
                                         </label>
                                         <button class="btn btn-danger btn-sm" id="deleteSelectedBtn" style="display: none;">
