@@ -514,10 +514,8 @@ body:not(.dark-theme) .step-arrow {
 
 /* CTA Section */
 .cta-section {
-    background: var(--gradient-primary);
     color: white;
     text-align: center;
-    border-radius: 24px;
     margin: 3rem 2rem;
     padding: 4rem 2rem;
 }
@@ -780,6 +778,12 @@ body:not(.dark-theme) .step-arrow {
     border-radius: 40px;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
     position: relative;
+}
+
+body:not(.dark-theme) .cta-content {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
 .cta-content h2 {

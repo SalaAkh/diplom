@@ -127,7 +127,7 @@ class ProfileExtensions {
                 <div class="card-body">
                     <div class="comparative-controls" style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
                         <label for="roleSelect" style="font-weight: 500;">${selectLabels[lang]}</label>
-                        <select id="roleSelect" class="form-select cosmic-select" style="max-width: 250px; padding: 0.5rem 1rem; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: inherit;" onchange="window.profileExtensions.updateComparison(this.value)">
+                        <select id="roleSelect" class="form-select cosmic-select" style="max-width: 250px; padding: 0.5rem 1rem; border-radius: 8px; background: var(--input-bg, rgba(255,255,255,0.1)); border: 1px solid var(--border-color, rgba(255,255,255,0.2)); color: var(--text-color, inherit);" onchange="window.profileExtensions.updateComparison(this.value)">
                             ${rolesOptions}
                         </select>
                         <div id="matchBadge" style="margin-left: auto; padding: 0.5rem 1rem; border-radius: 20px; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; font-weight: 600;">
