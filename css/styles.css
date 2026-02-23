@@ -3318,7 +3318,7 @@ select:focus-visible {
     border-color: rgba(0, 198, 251, 0.3);
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 198, 251, 0.1);
-    color: #fff;
+    color: var(--primary-color);
 }
 
 /* Results Header Styling */

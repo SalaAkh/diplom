@@ -140,6 +140,13 @@ class ResultsVisualizer {
                 return 50 + (score / 2);
             });
 
+            // Определяем текущую тему для адаптации цветов графика
+            const isDarkTheme = document.body.classList.contains('dark-theme');
+            const gridColor = isDarkTheme ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+            const labelColor = isDarkTheme ? '#e1e8ed' : '#2c3e50';
+            const tooltipBg = isDarkTheme ? 'rgba(20, 20, 35, 0.9)' : 'rgba(255, 255, 255, 0.9)';
+            const tooltipText = isDarkTheme ? '#ffffff' : '#2c3e50';
+
             // Уничтожение предыдущего графика, если существует
             if (this.charts.radar) {
                 this.charts.radar.destroy();
@@ -182,12 +189,12 @@ class ResultsVisualizer {
                                 backdropColor: 'transparent'
                             },
                             grid: {
-                                color: 'rgba(255, 255, 255, 0.1)',
+                                color: gridColor,
                                 circular: true, // Круглая сетка выглядит лучше
                                 lineWidth: 1
                             },
                             angleLines: {
-                                color: 'rgba(255, 255, 255, 0.1)',
+                                color: gridColor,
                                 lineWidth: 1
                             },
                             pointLabels: {
@@ -196,7 +203,7 @@ class ResultsVisualizer {
                                     family: "'Space Grotesk', sans-serif",
                                     weight: '600'
                                 },
-                                color: '#e1e8ed', // Star Silver
+                                color: labelColor,
                                 padding: 20
                             }
                         }
@@ -206,8 +213,10 @@ class ResultsVisualizer {
                             display: false // Скрываем легенду, так как у нас один датасет и заголовок выше
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(20, 20, 35, 0.9)',
+                            backgroundColor: tooltipBg,
                             padding: 15,
+                            titleColor: tooltipText,
+                            bodyColor: tooltipText,
                             titleFont: {
                                 size: 14,
                                 family: "'Space Grotesk', sans-serif",

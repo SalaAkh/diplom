@@ -150,3 +150,17 @@
 .modal-actions .btn {
     min-width: 120px;
 }
+
+/* Light Theme Overrides */
+body:not(.dark-theme) .modal-content.glass {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+body:not(.dark-theme) .modal-title {
+    color: var(--text-color);
+}
+
+body:not(.dark-theme) .modal-body {
+    color: var(--text-secondary);
+}
