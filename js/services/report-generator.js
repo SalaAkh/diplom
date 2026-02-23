@@ -32,7 +32,24 @@ class ReportGenerator {
         });
 
         // Получаем основной контент
-        const content = view.getHTML();
+        let content = view.getHTML();
+
+        // Попытка получить уже отрендеренный график из текущего DOM (live app)
+        const liveCanvas = document.querySelector('#radarChartContainer canvas');
+        if (liveCanvas) {
+            try {
+                const imgData = liveCanvas.toDataURL('image/png');
+                content = content.replace(
+                    /<div[^>]*id="radarChartContainer"[^>]*>[\s\S]*?<\/div>/i,
+                    `<div class="chart-container" id="radarChartContainer" style="text-align: center; padding: 20px 0; background: linear-gradient(135deg, #10111e 0%, #050510 100%); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 20px 0;">
+                        <img src="${imgData}" alt="Visual Profile" style="max-width: 100%; width: 450px; height: auto; display: inline-block;">
+                     </div>`
+                );
+            } catch (e) {
+                console.warn('Canvas export to image failed:', e);
+            }
+        }
+
         const date = new Date().toLocaleDateString();
         const appName = this.app.i18n.t('appName');
 
@@ -56,18 +73,23 @@ class ReportGenerator {
     
     <style>
         :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #50e3c2;
-            --background-color: #f5f7fa;
-            --surface-color: #ffffff;
-            --text-primary: #2c3e50;
-            --text-secondary: #7f8c8d;
-            --border-radius: 12px;
+            --primary-color: #00c6fb;
+            --secondary-color: #005bea;
+            --accent-color: #b122e5;
+            --background-color: #050510;
+            --surface-color: rgba(20, 20, 35, 0.7);
+            --surface-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --border-radius: 16px;
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--background-color);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 198, 251, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(177, 34, 229, 0.1) 0%, transparent 50%);
             color: var(--text-primary);
             line-height: 1.6;
             margin: 0;
@@ -78,25 +100,43 @@ class ReportGenerator {
             max-width: 900px;
             margin: 0 auto;
             background: var(--surface-color);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 50px;
+            border-radius: 24px;
+            border: 1px solid var(--surface-border);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.05);
         }
 
         .export-header {
             text-align: center;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            border-bottom: 1px solid var(--surface-border);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .export-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
         }
 
         .export-logo {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            display: block;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            display: inline-block;
+            letter-spacing: 1px;
         }
 
         /* Адаптация стилей ResultsView для печати/экспорта */
@@ -111,132 +151,215 @@ class ReportGenerator {
 
         .section-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            border-left: 4px solid var(--primary-color);
-            padding-left: 15px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-title::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 24px;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
         }
 
         /* Архетип */
         .archetype-card {
-            background: linear-gradient(135deg, #f6f8fb 0%, #eef2f7 100%);
-            border-radius: 20px;
-            padding: 30px;
+            background: rgba(10, 10, 20, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
             text-align: center;
-            border: 1px solid rgba(0,0,0,0.05);
-            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 40px;
+            box-shadow: inset 0 0 80px rgba(0, 198, 251, 0.05);
         }
 
         .archetype-icon {
-            font-size: 64px;
-            color: var(--primary-color);
-            margin-bottom: 15px;
+            font-size: 72px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(0, 198, 251, 0.3));
         }
 
         .archetype-name {
-            font-size: 2.5rem;
-            margin: 10px 0;
-            background: linear-gradient(90deg, #4a90e2, #50e3c2);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            margin: 15px 0;
+            background: linear-gradient(90deg, #fff, #a0a0b0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+        
+        .archetype-description {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 80%;
+            margin: 0 auto;
         }
 
         /* Шкалы */
         .scores-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 24px;
         }
 
         .score-card {
-            background: #fff;
-            border: 1px solid #eee;
-            padding: 15px;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--surface-border);
+            padding: 20px;
+            border-radius: 16px;
+            transition: transform 0.3s ease;
         }
 
         .score-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+        }
+        
+        .score-header .material-symbols-rounded {
+            color: var(--primary-color);
         }
 
         .score-bar {
-            height: 8px;
-            background: #eee;
-            border-radius: 4px;
+            height: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
             overflow: hidden;
             position: relative;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .score-fill {
             height: 100%;
-            background: var(--primary-color);
-            border-radius: 4px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            border-radius: 5px;
+            position: relative;
         }
         
-        .score-fill.high { background: #4caf50; }
-        .score-fill.medium-high { background: #8bc34a; }
-        .score-fill.medium-low { background: #ffc107; }
-        .score-fill.low { background: #ff9800; }
+        .score-fill::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            border-radius: 5px;
+        }
+        
+        .score-fill.high { background: linear-gradient(90deg, #00b09b, #96c93d); }
+        .score-fill.medium-high { background: linear-gradient(90deg, #4facfe, #00f2fe); }
+        .score-fill.medium-low { background: linear-gradient(90deg, #f6d365, #fda085); }
+        .score-fill.low { background: linear-gradient(90deg, #ff0844, #ffb199); }
 
         .score-labels {
             display: flex;
             justify-content: space-between;
-            font-size: 0.8rem;
-            margin-top: 5px;
+            font-size: 0.85rem;
+            margin-top: 8px;
             color: var(--text-secondary);
+        }
+        
+        .score-value {
+            color: #fff;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
         }
 
         /* Направления */
         .directions-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            gap: 24px;
         }
 
         .direction-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 3px solid var(--secondary-color);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--surface-border);
+            border-top: 2px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .direction-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 30px;
+            background: linear-gradient(180deg, rgba(0, 198, 251, 0.1), transparent);
+            pointer-events: none;
         }
 
         .direction-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .direction-name {
             margin: 0;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #fff;
+        }
+        
+        .direction-match {
+            background: rgba(0, 198, 251, 0.2);
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .direction-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
         }
 
         /* Рекомендации */
         .recommendations-list {
             list-style: none;
             padding: 0;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .recommendation-item {
             display: flex;
-            gap: 15px;
-            padding: 15px;
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 10px;
-            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--surface-border);
+            border-radius: 16px;
+            align-items: flex-start;
         }
 
         .recommendation-item .material-symbols-rounded {
-            color: var(--secondary-color);
+            color: var(--primary-color);
+            background: rgba(0, 198, 251, 0.1);
+            padding: 8px;
+            border-radius: 50%;
+            font-size: 20px;
+        }
+        
+        .recommendation-item span:last-child {
+            color: #e0e0e0;
+            padding-top: 4px;
         }
 
         /* Скрыть кнопки действий в отчете */

@@ -881,13 +881,25 @@ class PersonalityTestApp {
 
     /**
      * Начало тестирования
+     * @param {string} mode - Тип теста: 'basic', 'advanced', или 'cognitive'
      */
-    startTest() {
-        this.state = 'testing';
-        if (this.testMode === 'advanced') {
-            this.showQuestion();
-        } else {
-            this.showScenario();
+    startTest(mode) {
+        if (!this.testManager) {
+            console.error('TestManager not initialized');
+            return;
+        }
+
+        switch (mode) {
+            case 'advanced':
+                this.testManager.startAdvancedTest();
+                break;
+            case 'cognitive':
+                this.testManager.startCognitiveTest();
+                break;
+            case 'basic':
+            default:
+                this.testManager.startBasicTest();
+                break;
         }
     }
 
@@ -1324,21 +1336,28 @@ class PersonalityTestApp {
         const t = this.i18n.t.bind(this.i18n);
         const modal = document.createElement('div');
         modal.className = 'modal-overlay';
+        modal.id = 'editProfileModal';
         modal.innerHTML = `
-            <div class="modal-content">
-                <h3>${t('editProfile', {})}</h3>
-                <form class="profile-edit-form" onsubmit="app.saveProfile(event)">
-                    <div class="form-group">
-                        <label>${t('username')}</label>
-                        <input type="text" name="username" value="${user.username}" required>
+            <div class="modal-content glass" style="max-width: 450px; padding: 2rem;">
+                <button class="modal-close material-symbols-rounded" aria-label="Close" onclick="app.closeModal(this)">close</button>
+                <div class="modal-header" style="margin-bottom: 1.5rem; padding-bottom: 0; border: none;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span class="material-symbols-rounded" style="color: var(--primary-color); font-size: 2rem;">manage_accounts</span>
+                        <h2 class="modal-title gradient-text" style="font-size: 1.5rem; margin: 0;">${t('editProfile', {})}</h2>
                     </div>
-                    <div class="form-group">
-                        <label>${t('email')}</label>
-                        <input type="email" name="email" value="${user.email || ''}">
+                </div>
+                <form class="profile-edit-form" onsubmit="app.saveProfile(event)" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                    <div class="form-group" style="margin: 0;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.9rem; font-weight: 500;">${t('username')}</label>
+                        <input type="text" name="username" class="form-control cosmic-input" value="${user.username}" required style="width: 100%; border-radius: 12px; padding: 0.8rem 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease;">
                     </div>
-                    <div class="form-actions">
+                    <div class="form-group" style="margin: 0;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.9rem; font-weight: 500;">${t('email')}</label>
+                        <input type="email" name="email" class="form-control cosmic-input" value="${user.email || ''}" style="width: 100%; border-radius: 12px; padding: 0.8rem 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease;">
+                    </div>
+                    <div class="modal-actions" style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button type="button" class="btn btn-ghost" onclick="app.closeModal(this)">${t('cancel', {})}</button>
                         <button type="submit" class="btn btn-primary">${t('save', {})}</button>
-                        <button type="button" class="btn btn-secondary" onclick="app.closeModal()">${t('cancel', {})}</button>
                     </div>
                 </form>
             </div>
