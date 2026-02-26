@@ -56,7 +56,9 @@
 </head>
 
 <body class="dark-theme">
-    <div id="background-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+    <div id="background-canvas"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; transform: scale(1.3); transform-origin: center center;">
+    </div>
 
     <!-- Cosmic Loading Screen -->
     <div class="loading-wrapper" id="mainLoading">
@@ -223,6 +225,7 @@
     <!-- Configuration removed -->
     <script src="js/services/storage.js" defer></script>
     <script src="js/services/localization.js" defer></script>
+    <script src="js/services/localization-patch.js" defer></script>
     <script src="js/services/auth.js" defer></script>
     <script src="js/analysis/analysis.js" defer></script>
     <script src="js/analysis/advanced-analysis.js" defer></script>

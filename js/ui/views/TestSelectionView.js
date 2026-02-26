@@ -59,6 +59,10 @@ class TestSelectionView extends BaseView {
                     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
                     position: relative;
                     overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                    box-sizing: border-box;
                 }
                 .test-option-card::before {
                     content: '';
@@ -143,6 +147,9 @@ class TestSelectionView extends BaseView {
                     list-style: none;
                     padding: 0;
                     margin: 0 0 1.5rem 0;
+                    flex-grow: 1;
+                    display: flex;
+                    flex-direction: column;
                 }
                 .option-features li {
                     display: flex;
@@ -157,10 +164,12 @@ class TestSelectionView extends BaseView {
                 }
                 .option-btn {
                     width: 100%;
-                    padding: 1rem;
-                    font-size: 1.1rem;
+                    padding: 1rem 1.5rem;
+                    min-height: 58px;
+                    font-size: 1rem;
                     font-weight: 600;
-                    border-radius: 12px;
+                    letter-spacing: 0.02em;
+                    border-radius: 14px;
                     border: none;
                     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
                     color: white;
@@ -169,11 +178,33 @@ class TestSelectionView extends BaseView {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    gap: 0.5rem;
+                    gap: 0.6rem;
+                    margin-top: auto;
+                    box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.3);
+                    white-space: nowrap;
+                }
+                .option-btn .material-symbols-rounded {
+                    font-size: 1.3rem;
+                    flex-shrink: 0;
                 }
                 .option-btn:hover {
-                    transform: scale(1.02);
-                    box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.4);
+                    transform: scale(1.02) translateY(-2px);
+                    box-shadow: 0 8px 25px rgba(var(--primary-rgb), 0.4);
+                }
+                .test-option-card#cognitiveTestCard .option-btn {
+                    background: linear-gradient(135deg, #9333ea, #c026d3);
+                    box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
+                }
+                .test-option-card#cognitiveTestCard:hover .option-btn {
+                    box-shadow: 0 8px 25px rgba(147, 51, 234, 0.5);
+                }
+                .test-option-card.featured .option-btn {
+                    background: linear-gradient(135deg, #ffd700, #ff8c00);
+                    color: #000;
+                    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+                }
+                .test-option-card.featured:hover .option-btn {
+                    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
                 }
                 .badge-featured {
                     position: absolute;
@@ -191,6 +222,35 @@ class TestSelectionView extends BaseView {
                 }
                 .selection-footer {
                     text-align: center;
+                    margin-top: 1rem;
+                }
+                .selection-footer .btn-text {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    padding: 0.85rem 2rem;
+                    min-height: 50px;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    letter-spacing: 0.02em;
+                    color: var(--text-color, #e2e8f0);
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.12);
+                    border-radius: 14px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    backdrop-filter: blur(8px);
+                    -webkit-backdrop-filter: blur(8px);
+                }
+                .selection-footer .btn-text:hover {
+                    background: rgba(255, 255, 255, 0.1);
+                    border-color: rgba(255, 255, 255, 0.25);
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+                }
+                .selection-footer .btn-text .material-symbols-rounded {
+                    font-size: 1.3rem;
+                    flex-shrink: 0;
                 }
             </style>
             <div class="test-selection-container">

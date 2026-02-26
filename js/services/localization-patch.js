@@ -36,7 +36,9 @@
             audioFeedbackLabel: "Звуковое сопровождение",
             audioFeedbackDesc: "Звуковое подтверждение действий и озвучивание важных изменений состояния.",
             readingLabel: "Озвучивание результатов",
-            readingDesc: "Синтез речи для автоматического прочтения ваших результатов и рекомендаций."
+            readingDesc: "Синтез речи для автоматического прочтения ваших результатов и рекомендаций.",
+            audioSystemLabel: "Аудиосистема",
+            audioSystemDesc: "Звуковое подтверждение действий, озвучивание важных изменений состояния, а также синтез речи для автоматического прочтения результатов и рекомендаций."
         },
         en: {
             keepItUp: "Keep it up!",
@@ -70,7 +72,9 @@
             audioFeedbackLabel: "Audio Feedback",
             audioFeedbackDesc: "Audio confirmation of actions and voicing of important state changes.",
             readingLabel: "Read Results Aloud",
-            readingDesc: "Speech synthesis for automatic reading of your results and recommendations."
+            readingDesc: "Speech synthesis for automatic reading of your results and recommendations.",
+            audioSystemLabel: "Audio System",
+            audioSystemDesc: "Audio confirmation of actions, voicing of important state changes, as well as speech synthesis for automatic reading of your results and recommendations."
         },
         kk: {
             keepItUp: "Жарайсыз!",
@@ -104,7 +108,9 @@
             audioFeedbackLabel: "Дыбыстық сүйемелдеу",
             audioFeedbackDesc: "Әрекеттерді дыбыстық растау және маңызды күй өзгерістерін дыбыстау.",
             readingLabel: "Нәтижелерді дауыстап оқу",
-            readingDesc: "Нәтижелер мен ұсыныстарды автоматты түрде оқу үшін сөйлеу синтезі."
+            readingDesc: "Нәтижелер мен ұсыныстарды автоматты түрде оқу үшін сөйлеу синтезі.",
+            audioSystemLabel: "Аудиожүйе",
+            audioSystemDesc: "Әрекеттерді дыбыстық растау, маңызды күй өзгерістерін дыбыстау, сондай-ақ нәтижелер мен ұсыныстарды автоматты түрде оқу үшін сөйлеу синтезі."
         }
     };
 
