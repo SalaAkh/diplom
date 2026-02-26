@@ -1075,34 +1075,27 @@ class UIController {
         // === 1. Обновляем Hero Section в зависимости от статуса ===
         const heroContent = container.querySelector('.hero-content');
         if (heroContent) {
-            // Добавляем бейдж статуса перед заголовком
-            const badge = document.createElement('div');
-
             if (user) {
-                // Пользователь вошел
-                badge.className = 'auth-status-badge logged-in';
-                badge.innerHTML = `
-                        <span class="material-symbols-rounded">check_circle</span>
-                        ${t('loggedIn') || 'Вы вошли в систему'}
-                    `;
-
-                // Обновляем заголовок
+                // Пользователь вошел — единый приветственный чип
                 const heroTitle = heroContent.querySelector('.hero-title');
                 if (heroTitle) {
                     const escapedUsername = this.escapeHTML(user.username);
-                    heroTitle.innerHTML = `${t('welcomeBack') || 'С возвращением'}, <br><span class="highlight">${escapedUsername}</span>!`;
+                    const welcomeEl = document.createElement('div');
+                    welcomeEl.className = 'hero-welcome fade-in';
+                    welcomeEl.style.cssText = 'display: inline-flex; align-items: center; gap: 0.5rem; font-size: 1.15rem; font-weight: 500; opacity: 0.8; margin-bottom: 0.75rem; padding: 0.4rem 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 50px; color: #10b981;';
+                    welcomeEl.innerHTML = `<span class="material-symbols-rounded" style="font-size: 1.2rem;">waving_hand</span> ${t('welcomeBack') || 'С возвращением'}, <strong>${escapedUsername}</strong>!`;
+                    heroTitle.parentNode.insertBefore(welcomeEl, heroTitle);
                 }
             } else {
-                // Гость
+                // Гость — бейдж статуса
+                const badge = document.createElement('div');
                 badge.className = 'auth-status-badge guest';
                 badge.innerHTML = `
                         <span class="material-symbols-rounded">account_circle</span>
                         ${t('guestMode') || 'Гостевой режим'}
                     `;
+                heroContent.insertBefore(badge, heroContent.firstChild);
             }
-
-            // Вставляем бейдж первым элементом
-            heroContent.insertBefore(badge, heroContent.firstChild);
         }
 
         // === 2. Обновляем кнопки действий ===

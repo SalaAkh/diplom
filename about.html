@@ -307,9 +307,8 @@
                                         <span class="material-symbols-rounded">volume_up</span>
                                     </div>
                                     <h4 data-i18n="audioSystemLabel">Аудиожүйе</h4>
-                                    <p data-i18n="audioSystemDesc">Әрекеттерді дыбыстық растау, маңызды күй өзгерістерін
-                                        дыбыстау,
-                                        сондай-ақ нәтижелер мен ұсыныстарды автоматты түрде оқу үшін сөйлеу синтезі.</p>
+                                    <p data-i18n="audioSystemDesc">Әрекеттерді дыбыстық растау және нәтижелерді дауыстап
+                                        оқу үшін сөйлеу синтезі.</p>
                                 </div>
                             </div>
                         </div>
@@ -412,17 +411,11 @@
 
 
     <script>
-        // Initialize theme and background
+        // Apply saved theme
         window.addEventListener('DOMContentLoaded', () => {
-            // Apply saved theme
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'light') {
                 document.body.classList.remove('dark-theme');
-            }
-
-            // Initialize Particles
-            if (typeof ParticleBackground !== 'undefined') {
-                new ParticleBackground('background-canvas');
             }
         });
     </script>

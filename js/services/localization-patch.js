@@ -38,7 +38,7 @@
             readingLabel: "Озвучивание результатов",
             readingDesc: "Синтез речи для автоматического прочтения ваших результатов и рекомендаций.",
             audioSystemLabel: "Аудиосистема",
-            audioSystemDesc: "Звуковое подтверждение действий, озвучивание важных изменений состояния, а также синтез речи для автоматического прочтения результатов и рекомендаций."
+            audioSystemDesc: "Звуковое подтверждение действий и синтез речи для озвучивания результатов."
         },
         en: {
             keepItUp: "Keep it up!",
@@ -74,7 +74,7 @@
             readingLabel: "Read Results Aloud",
             readingDesc: "Speech synthesis for automatic reading of your results and recommendations.",
             audioSystemLabel: "Audio System",
-            audioSystemDesc: "Audio confirmation of actions, voicing of important state changes, as well as speech synthesis for automatic reading of your results and recommendations."
+            audioSystemDesc: "Audio confirmation of actions and speech synthesis for reading results aloud."
         },
         kk: {
             keepItUp: "Жарайсыз!",
@@ -110,7 +110,7 @@
             readingLabel: "Нәтижелерді дауыстап оқу",
             readingDesc: "Нәтижелер мен ұсыныстарды автоматты түрде оқу үшін сөйлеу синтезі.",
             audioSystemLabel: "Аудиожүйе",
-            audioSystemDesc: "Әрекеттерді дыбыстық растау, маңызды күй өзгерістерін дыбыстау, сондай-ақ нәтижелер мен ұсыныстарды автоматты түрде оқу үшін сөйлеу синтезі."
+            audioSystemDesc: "Әрекеттерді дыбыстық растау және нәтижелерді дауыстап оқу үшін сөйлеу синтезі."
         }
     };
 
