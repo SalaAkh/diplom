@@ -49,119 +49,165 @@
         const style = document.createElement('style');
         style.id = 'donation-prompt-styles';
         style.textContent = `
+            @keyframes pulse-glow {
+                0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+                70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+            }
             .global-donation-prompt {
                 position: fixed;
                 bottom: -150px;
-                right: 20px;
-                width: 340px;
-                background: linear-gradient(135deg, rgba(20, 24, 44, 0.95), rgba(42, 35, 66, 0.95));
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                border: 1px solid rgba(245, 158, 11, 0.2);
-                border-radius: 20px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(245, 158, 11, 0.1);
-                padding: 1.25rem;
+                right: 24px;
+                width: 360px;
+                background: linear-gradient(145deg, rgba(16, 20, 38, 0.85), rgba(30, 25, 50, 0.7));
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-top-color: rgba(245, 158, 11, 0.3);
+                border-radius: 24px;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+                padding: 1.5rem;
                 z-index: 99999;
-                transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s;
+                transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease;
                 opacity: 0;
             }
+            .global-donation-prompt::before {
+                content: '';
+                position: absolute;
+                top: -30px;
+                left: -30px;
+                width: 100px;
+                height: 100px;
+                background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: -1;
+            }
             .global-donation-prompt.show {
-                transform: translateY(-170px);
+                transform: translateY(-174px);
                 opacity: 1;
             }
             @media(max-width: 600px) {
                 .global-donation-prompt {
                     right: 50%;
                     transform: translateX(50%) translateY(0);
-                    width: calc(100% - 40px);
+                    width: calc(100% - 32px);
+                    max-width: 400px;
                 }
                 .global-donation-prompt.show {
-                    transform: translateX(50%) translateY(-170px);
+                    transform: translateX(50%) translateY(-100px);
                 }
             }
             .donation-prompt-close {
                 position: absolute;
-                top: 10px;
-                right: 10px;
-                background: none;
-                border: none;
-                color: rgba(255,255,255,0.5);
+                top: 14px;
+                right: 14px;
+                background: rgba(255,255,255,0.05);
+                border: 1px solid rgba(255,255,255,0.1);
+                color: rgba(255,255,255,0.6);
                 cursor: pointer;
                 border-radius: 50%;
-                width: 24px;
-                height: 24px;
+                width: 28px;
+                height: 28px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: all 0.2s;
+                transition: all 0.3s ease;
             }
             .donation-prompt-close:hover {
-                background: rgba(255,255,255,0.1);
+                background: rgba(255,255,255,0.15);
                 color: #fff;
+                transform: rotate(90deg);
             }
             .donation-prompt-title {
                 display: flex;
                 align-items: center;
-                gap: 8px;
-                color: #fbbf24;
+                gap: 10px;
+                font-family: 'Space Grotesk', sans-serif;
+                background: linear-gradient(135deg, #f59e0b, #fbbf24);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
                 font-weight: 700;
-                font-size: 1.1rem;
+                font-size: 1.15rem;
                 margin-top: 0;
-                margin-bottom: 8px;
+                margin-bottom: 10px;
+            }
+            .donation-prompt-heart {
+                color: #f59e0b;
+                animation: pulse-glow 2s infinite;
+                border-radius: 50%;
+                background: rgba(245, 158, 11, 0.1);
             }
             .donation-prompt-text {
-                color: rgba(255,255,255,0.8);
-                font-size: 0.9rem;
-                line-height: 1.4;
-                margin-bottom: 15px;
+                color: var(--text-secondary, rgba(255,255,255,0.7));
+                font-size: 0.95rem;
+                line-height: 1.5;
+                margin-bottom: 1.25rem;
             }
             .donation-prompt-actions {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                gap: 8px;
+                gap: 12px;
             }
             .donation-btn {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: 6px;
-                padding: 8px;
-                border-radius: 10px;
+                gap: 8px;
+                padding: 10px 12px;
+                border-radius: 12px;
                 font-weight: 600;
                 font-size: 0.85rem;
                 cursor: pointer;
-                transition: all 0.2s;
+                transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 text-decoration: none;
                 border: none;
+                position: relative;
+                overflow: hidden;
+            }
+            .donation-btn::after {
+                content: '';
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: linear-gradient(rgba(255,255,255,0.2), transparent);
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+            .donation-btn:hover::after {
+                opacity: 1;
             }
             .donation-btn-bmc {
-                background: #FFDD00;
+                background: linear-gradient(135deg, #FFDD00, #F5B50A);
                 color: #000;
+                box-shadow: 0 4px 15px rgba(255, 221, 0, 0.2);
             }
             .donation-btn-bmc:hover {
-                background: #ffea5c;
-                transform: translateY(-2px);
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(255, 221, 0, 0.35);
             }
             .donation-btn-kaspi {
-                background: rgba(241, 70, 53, 0.15);
+                background: rgba(255, 255, 255, 0.03);
                 color: #fff;
-                border: 1px solid rgba(241, 70, 53, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             }
             .donation-btn-kaspi:hover {
-                background: rgba(241, 70, 53, 0.3);
-                border-color: rgba(241, 70, 53, 0.6);
+                transform: translateY(-3px);
+                background: rgba(241, 70, 53, 0.08);
+                border-color: rgba(241, 70, 53, 0.3);
+                box-shadow: 0 8px 20px rgba(241, 70, 53, 0.15);
             }
             .kaspi-icon {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                width: 18px;
-                height: 18px;
-                background: #F14635;
+                width: 20px;
+                height: 20px;
+                background: linear-gradient(135deg, #F14635, #C62828);
                 color: white;
                 border-radius: 50%;
-                font-size: 10px;
-                font-weight: bold;
+                font-size: 11px;
+                font-weight: 800;
             }
         `;
         document.head.appendChild(style);
@@ -183,7 +229,7 @@
                 <span class="material-symbols-rounded" style="font-size: 16px;">close</span>
             </button>
             <h4 class="donation-prompt-title">
-                <span class="material-symbols-rounded" style="font-size: 1.2rem;">volunteer_activism</span>
+                <span class="material-symbols-rounded donation-prompt-heart" style="font-size: 1.2rem;">volunteer_activism</span>
                 ${t.title}
             </h4>
             <div class="donation-prompt-text">
@@ -191,7 +237,7 @@
             </div>
             <div class="donation-prompt-actions">
                 <a href="https://buymeacoffee.com/sala_ah" target="_blank" class="donation-btn donation-btn-bmc">
-                    <img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="BMC" style="height: 14px;">
+                    <span class="material-symbols-rounded" style="font-size: 16px;">local_cafe</span>
                     ${t.btnBMC}
                 </a>
                 <button class="donation-btn donation-btn-kaspi" onclick="
@@ -231,15 +277,14 @@
     // Initialize
     createPromptStyles();
 
-    // Start 5-minute interval timer
+    // Start 3-minute interval timer (180,000 ms)
     setInterval(() => {
         createDonationPromptElement();
-    }, PROMPT_INTERVAL);
+    }, 180000);
 
-    // Initial delay for demo (wait 2 minutes on first load before aggressive prompts)
+    // Initial delay: Show immediately upon first entry (wait 1.5s for page to settle)
     setTimeout(() => {
-        // Optional: uncomment below to show exactly on first run after 2 mins
-        // createDonationPromptElement();
-    }, 120000);
+        createDonationPromptElement();
+    }, 1500);
 
 })();
