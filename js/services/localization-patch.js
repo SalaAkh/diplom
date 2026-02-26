@@ -38,7 +38,9 @@
             readingLabel: "Озвучивание результатов",
             readingDesc: "Синтез речи для автоматического прочтения ваших результатов и рекомендаций.",
             audioSystemLabel: "Аудиосистема",
-            audioSystemDesc: "Звуковое подтверждение действий и синтез речи для озвучивания результатов."
+            audioSystemDesc: "Звуковое подтверждение действий и синтез речи для озвучивания результатов.",
+            supportTitle: "Поддержка проекта",
+            supportDesc: "Этот проект работает полностью бесплатно и без рекламы. Если он вам оказался полезен, вы можете поддержать автора."
         },
         en: {
             keepItUp: "Keep it up!",
@@ -74,7 +76,9 @@
             readingLabel: "Read Results Aloud",
             readingDesc: "Speech synthesis for automatic reading of your results and recommendations.",
             audioSystemLabel: "Audio System",
-            audioSystemDesc: "Audio confirmation of actions and speech synthesis for reading results aloud."
+            audioSystemDesc: "Audio confirmation of actions and speech synthesis for reading results aloud.",
+            supportTitle: "Support the Project",
+            supportDesc: "This project runs completely free and ad-free. If you found it useful, you can support the author."
         },
         kk: {
             keepItUp: "Жарайсыз!",
@@ -110,7 +114,9 @@
             readingLabel: "Нәтижелерді дауыстап оқу",
             readingDesc: "Нәтижелер мен ұсыныстарды автоматты түрде оқу үшін сөйлеу синтезі.",
             audioSystemLabel: "Аудиожүйе",
-            audioSystemDesc: "Әрекеттерді дыбыстық растау және нәтижелерді дауыстап оқу үшін сөйлеу синтезі."
+            audioSystemDesc: "Әрекеттерді дыбыстық растау және нәтижелерді дауыстап оқу үшін сөйлеу синтезі.",
+            supportTitle: "Жобаға қолдау көрсету",
+            supportDesc: "Бұл жоба толығымен тегін және жарнамасыз жұмыс істейді. Егер сізге пайдалы болса, авторға қолдау көрсете аласыз."
         }
     };
 
