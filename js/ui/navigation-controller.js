@@ -144,11 +144,18 @@ class NavigationController {
         elements.forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (key) {
-                el.textContent = window.i18n.t(key);
+                el.innerHTML = window.i18n.t(key);
             }
         });
 
-        // Update footer date if needed
+        const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
+        placeholders.forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (key) {
+                el.setAttribute('placeholder', window.i18n.t(key));
+            }
+        });
+
         // Update footer date if needed
         const footerText = document.getElementById('footerText');
 

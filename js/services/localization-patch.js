@@ -40,7 +40,19 @@
             audioSystemLabel: "Аудиосистема",
             audioSystemDesc: "Звуковое подтверждение действий и синтез речи для озвучивания результатов.",
             supportTitle: "Поддержка проекта",
-            supportDesc: "Этот проект работает полностью бесплатно и без рекламы. Если он вам оказался полезен, вы можете поддержать автора."
+            supportDesc: "Этот проект работает полностью бесплатно и без рекламы. Если он вам оказался полезен, вы можете поддержать автора.",
+            // Contacts (about page)
+            section_contacts: "Контакты",
+            contacts_desc: "Давайте превратим вашу идею в стабильный бизнес. Пишите!",
+            contacts_city: "Караганда, Казахстан",
+            location: "Локация / Location",
+            label_name: "Ваше имя",
+            label_contact: "Email",
+            label_message: "Сообщение",
+            placeholder_name: "Ваше имя",
+            placeholder_contact: "Email",
+            placeholder_message: "Расскажите о вашем проекте",
+            btn_send: "Отправить"
         },
         en: {
             keepItUp: "Keep it up!",
@@ -78,7 +90,19 @@
             audioSystemLabel: "Audio System",
             audioSystemDesc: "Audio confirmation of actions and speech synthesis for reading results aloud.",
             supportTitle: "Support the Project",
-            supportDesc: "This project runs completely free and ad-free. If you found it useful, you can support the author."
+            supportDesc: "This project runs completely free and ad-free. If you found it useful, you can support the author.",
+            // Contacts (about page)
+            section_contacts: "Contacts",
+            contacts_desc: "Let's turn your idea into a stable business. Contact me!",
+            contacts_city: "Karaganda, Kazakhstan",
+            location: "Location",
+            label_name: "Your Name",
+            label_contact: "Email",
+            label_message: "Message",
+            placeholder_name: "Your Name",
+            placeholder_contact: "Email",
+            placeholder_message: "Tell me about your project",
+            btn_send: "Send"
         },
         kk: {
             keepItUp: "Жарайсыз!",
@@ -116,7 +140,19 @@
             audioSystemLabel: "Аудиожүйе",
             audioSystemDesc: "Әрекеттерді дыбыстық растау және нәтижелерді дауыстап оқу үшін сөйлеу синтезі.",
             supportTitle: "Жобаға қолдау көрсету",
-            supportDesc: "Бұл жоба толығымен тегін және жарнамасыз жұмыс істейді. Егер сізге пайдалы болса, авторға қолдау көрсете аласыз."
+            supportDesc: "Бұл жоба толығымен тегін және жарнамасыз жұмыс істейді. Егер сізге пайдалы болса, авторға қолдау көрсете аласыз.",
+            // Contacts (about page)
+            section_contacts: "Байланыс",
+            contacts_desc: "Идеяңызды тұрақты бизнеске айналдырайық. Хабарласыңыз!",
+            contacts_city: "Қарағанды, Қазақстан",
+            location: "Локация / Location",
+            label_name: "Сіздің атыңыз",
+            label_contact: "Email",
+            label_message: "Хабарлама",
+            placeholder_name: "Сіздің атыңыз",
+            placeholder_contact: "Email",
+            placeholder_message: "Жобаңыз туралы айтып беріңізші",
+            btn_send: "Жіберу"
         }
     };
 
@@ -136,7 +172,16 @@
                 const key = el.getAttribute('data-i18n');
                 const translated = window.i18n.t(key);
                 if (translated && translated !== key) {
-                    el.textContent = translated;
+                    el.innerHTML = translated;
+                }
+            });
+
+            // Apply translations to placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                const translated = window.i18n.t(key);
+                if (translated && translated !== key) {
+                    el.setAttribute('placeholder', translated);
                 }
             });
         } else {
@@ -144,6 +189,9 @@
             setTimeout(applyPatch, 100);
         }
     }
+
+    // Export for external triggers (like language change EventListeners)
+    window.applyLocalizationPatch = applyPatch;
 
     // Try to apply immediately or wait
     if (document.readyState === 'complete') {
