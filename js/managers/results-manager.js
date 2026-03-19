@@ -238,9 +238,15 @@ class ResultsManager {
             const t = this.i18n.t.bind(this.i18n);
             const lang = this.i18n.getLanguage();
             const details = results.details || {};
-            const title = details.title && details.title[lang] ? details.title[lang] : results.dominant;
+            const title = details.title && details.title[lang] ? details.title[lang] : (results.dominant || t('cognitiveTest'));
             const desc = details.description && details.description[lang] ? details.description[lang] : '';
             const tips = details.tips && details.tips[lang] ? details.tips[lang] : '';
+
+            // --- Defensive: handle missing breakdown ---
+            const breakdown = results.breakdown || {};
+            const visual = typeof breakdown.visual === 'number' ? breakdown.visual : 0;
+            const auditory = typeof breakdown.auditory === 'number' ? breakdown.auditory : 0;
+            const kinesthetic = typeof breakdown.kinesthetic === 'number' ? breakdown.kinesthetic : 0;
 
             const htmlContent = `
 <!DOCTYPE html>
@@ -287,18 +293,18 @@ class ResultsManager {
                 <div class="breakdown">
                     <div class="breakdown-item">
                         <div class="breakdown-label">${t('cognitiveVisual')}</div>
-                        <div class="breakdown-value">${results.breakdown.visual}%</div>
-                        <div class="bar-container"><div class="bar-fill" style="width: ${results.breakdown.visual}%"></div></div>
+                        <div class="breakdown-value">${visual}%</div>
+                        <div class="bar-container"><div class="bar-fill" style="width: ${visual}%"></div></div>
                     </div>
                     <div class="breakdown-item">
                         <div class="breakdown-label">${t('cognitiveAuditory')}</div>
-                        <div class="breakdown-value">${results.breakdown.auditory}%</div>
-                        <div class="bar-container"><div class="bar-fill" style="width: ${results.breakdown.auditory}%"></div></div>
+                        <div class="breakdown-value">${auditory}%</div>
+                        <div class="bar-container"><div class="bar-fill" style="width: ${auditory}%"></div></div>
                     </div>
                     <div class="breakdown-item">
                         <div class="breakdown-label">${t('cognitiveKinesthetic')}</div>
-                        <div class="breakdown-value">${results.breakdown.kinesthetic}%</div>
-                        <div class="bar-container"><div class="bar-fill" style="width: ${results.breakdown.kinesthetic}%"></div></div>
+                        <div class="breakdown-value">${kinesthetic}%</div>
+                        <div class="bar-container"><div class="bar-fill" style="width: ${kinesthetic}%"></div></div>
                     </div>
                 </div>
             </div>
