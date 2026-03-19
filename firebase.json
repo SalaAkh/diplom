@@ -10,6 +10,21 @@
       "*.md",
       "docs/**",
       "docx_output.txt"
+    ],
+    "headers": [
+      {
+        "source": "/data/**",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache" },
+          { "key": "Access-Control-Allow-Origin", "value": "*" }
+        ]
+      },
+      {
+        "source": "/favicon.ico",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=86400" }
+        ]
+      }
     ]
   }
 }
