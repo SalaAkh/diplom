@@ -99,19 +99,21 @@
     </div>
 
     <!-- Skip Link -->
-    <a href="#main-content" class="skip-link visually-hidden-focusable">Негізгі мазмұнға өту</a>
+    <a href="#main-content" class="skip-link visually-hidden-focusable" data-i18n="skipToContent">Негізгі мазмұнға өту</a>
 
     <!-- Cosmic Navigation -->
-    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Басты навигация">
+    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Басты навигация"
+        data-i18n-aria-label="navMainAria">
         <!-- Desktop Collapse Button -->
         <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Навигацияны жию"
-            title="Панельді жию">
+            title="Панельді жию" data-i18n-aria-label="collapseNavigation" data-i18n-title="collapseNavigation">
             <span class="material-symbols-rounded">chevron_left</span>
         </button>
 
         <!-- Mobile Nav Header (Settings + Close) -->
         <div class="nav-mobile-header show-mobile">
-            <button class="nav-close-btn" id="navCloseBtn" aria-label="Мәзірді жабу">
+            <button class="nav-close-btn" id="navCloseBtn" aria-label="Мәзірді жабу"
+                data-i18n-aria-label="closeMenu">
                 <span class="material-symbols-rounded">close</span>
             </button>
             <div class="nav-mobile-controls">
@@ -155,7 +157,8 @@
                     <div class="nav-username" id="navUsername">Guest</div>
                     <div class="nav-user-role" data-i18n="navGuest">Explorer</div>
                 </div>
-                <button class="nav-logout-btn" onclick="app.logout()" title="Шығу" aria-label="Аккаунттан шығу">
+                <button class="nav-logout-btn" onclick="app.logout()" title="Шығу" aria-label="Аккаунттан шығу"
+                    data-i18n-title="logout" data-i18n-aria-label="logoutAria">
                     <span class="material-symbols-rounded">logout</span>
                 </button>
             </div>
@@ -171,17 +174,20 @@
                         <p class="tagline" id="tagline"></p>
                     </div>
                     <div class="header-controls">
-                        <div class="language-selector" id="languageSelector" aria-label="Тіл таңдау"></div>
+                        <div class="language-selector" id="languageSelector" aria-label="Тіл таңдау"
+                            data-i18n-aria-label="languageSelect"></div>
 
                         <!-- Accessibility Button -->
                         <button class="btn-icon header-btn accessibility-trigger" id="accessBtn"
                             aria-label="Қолжетімділік параметрлері" title="Қолжетімділік"
+                            data-i18n-aria-label="accessTitle" data-i18n-title="accessibilityShort"
                             onclick="window.accessibilityService.toggleModal(true)">
                             <span class="material-symbols-rounded">accessibility_new</span>
                         </button>
 
                         <!-- Navigation Toggle (Now in controls) -->
-                        <button class="nav-toggle" id="navToggle" aria-label="Навигация мәзірін ашу">
+                        <button class="nav-toggle" id="navToggle" aria-label="Навигация мәзірін ашу"
+                            data-i18n-aria-label="openNavigationMenu">
                             <div class="nav-toggle-icon">
                                 <span></span>
                                 <span></span>
@@ -193,7 +199,8 @@
             </div>
         </header>
 
-        <main class="app-main" id="main-content" role="main" aria-label="Негізгі мазмұн">
+        <main class="app-main" id="main-content" role="main" aria-label="Негізгі мазмұн"
+            data-i18n-aria-label="mainContentAria">
             <div class="container">
                 <div id="app" aria-live="polite" aria-atomic="true">
                     <!-- Қосымша мазмұны динамикалық түрде енгізіледі -->
@@ -213,6 +220,7 @@
 
     <!-- Theme Toggle (Floating) -->
     <div class="theme-toggle" id="themeToggle" title="Тақырып" role="button" tabindex="0"
+        data-i18n-title="theme" data-i18n-aria-label="toggleTheme"
         aria-label="Тақырыпты ауыстыру" onkeypress="if(event.key==='Enter') this.click();">
         <span class="theme-icon material-symbols-rounded" aria-hidden="true">light_mode</span>
     </div>
@@ -224,7 +232,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="accessTitle" data-i18n="accessTitle">Қолжетімділік параметрлері</h3>
-                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)" aria-label="Жабу">
+                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)" aria-label="Жабу"
+                    data-i18n-aria-label="close">
                     <span class="material-symbols-rounded">close</span>
                 </button>
             </div>

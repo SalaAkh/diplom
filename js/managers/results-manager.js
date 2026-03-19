@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Results Manager
  * Handles calculation of test results, AI analysis coordination, and profile data management.
  */
@@ -96,7 +96,7 @@ class ResultsManager {
             return results;
 
         } catch (error) {
-            console.error('Нәтижелерді есептеу қатесі (Error calculating results):', error);
+            console.error('ÐÓ™Ñ‚Ð¸Ð¶ÐµÐ»ÐµÑ€Ð´Ñ– ÐµÑÐµÐ¿Ñ‚ÐµÑƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error calculating results):', error);
             throw error;
         }
     }
@@ -145,7 +145,7 @@ class ResultsManager {
                 }
 
             } catch (error) {
-                console.error('Асинхронды нәтижелерді өңдеу сәтсіз аяқталды (Async results processing failed):', error);
+                console.error('ÐÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð´Ñ‹ Ð½Ó™Ñ‚Ð¸Ð¶ÐµÐ»ÐµÑ€Ð´Ñ– Ó©Ò£Ð´ÐµÑƒ ÑÓ™Ñ‚ÑÑ–Ð· Ð°ÑÒ›Ñ‚Ð°Ð»Ð´Ñ‹ (Async results processing failed):', error);
             }
         }, 100);
     }
@@ -172,6 +172,8 @@ class ResultsManager {
      * @param {string} format 'html', 'text'
      */
     downloadResults(format = 'html') {
+        const t = this.i18n?.t ? this.i18n.t.bind(this.i18n) : null;
+
         // 1. Determine Data Source
         // Use activeResults if available (viewing history or current test)
         // Otherwise fallback to live analyzer data
@@ -214,16 +216,17 @@ class ResultsManager {
 
                 // Toast notification
                 if (this.app.toast) {
-                    this.app.toast.show(window.t ? window.t('resultsDownloaded') || 'Результаты скачаны' : 'Result downloaded', 'success');
+                    this.app.toast.show(window.t ? window.t('resultsDownloaded') || 'Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ñ‹ ÑÐºÐ°Ñ‡Ð°Ð½Ñ‹' : 'Result downloaded', 'success');
                 }
             } else {
                 console.error('ReportGenerator not available');
-                alert('Export service not available');
+                alert((t && t('exportServiceUnavailable')) || 'Export service is unavailable.');
             }
 
         } catch (error) {
             console.error('Export failed:', error);
-            alert('Export failed: ' + error.message);
+            const message = error?.message || (t ? t('unknownError') : 'Unknown error');
+            alert((t && t('exportFailed', { message })) || `Export failed: ${message}`);
         }
     }
 
@@ -234,8 +237,9 @@ class ResultsManager {
     downloadCognitiveResults(results) {
         if (!results) return;
 
+        const t = this.i18n.t.bind(this.i18n);
+
         try {
-            const t = this.i18n.t.bind(this.i18n);
             const lang = this.i18n.getLanguage();
             const details = results.details || {};
             const title = details.title && details.title[lang] ? details.title[lang] : (results.dominant || t('cognitiveTest'));
@@ -315,8 +319,8 @@ class ResultsManager {
         </div>
         <div class="footer">
             <p>${t('reportGeneratedBy')}</p>
-            <p>Ахмедьянов Саламат КПО 9/22-2 &nbsp;&bull;&nbsp; ${lang === 'kk' ? 'Дипломдық жоба' : lang === 'en' ? 'Diploma Project' : 'Дипломный проект'}</p>
-            <p class="brand">© 2026 ${t('appName')}</p>
+            <p>ÐÑ…Ð¼ÐµÐ´ÑŒÑÐ½Ð¾Ð² Ð¡Ð°Ð»Ð°Ð¼Ð°Ñ‚ ÐšÐŸÐž 9/22-2 &nbsp;&bull;&nbsp; ${t('project')}</p>
+            <p class="brand">&copy; 2026 ${t('appName')}</p>
         </div>
     </div>
 </body>
@@ -334,12 +338,13 @@ class ResultsManager {
 
             // Toast notification
             if (this.app.toast) {
-                this.app.toast.show(t('resultsDownloaded') || 'Результаты скачаны', 'success');
+                this.app.toast.show(t('resultsDownloaded') || 'Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ñ‹ ÑÐºÐ°Ñ‡Ð°Ð½Ñ‹', 'success');
             }
 
         } catch (error) {
             console.error('Cognitive export failed:', error);
-            alert('Export failed: ' + error.message);
+            const message = error?.message || t('unknownError');
+            alert(t('exportFailed', { message }) || `Export failed: ${message}`);
         }
     }
 }
@@ -348,3 +353,5 @@ class ResultsManager {
 if (typeof window !== 'undefined') {
     window.ResultsManager = ResultsManager;
 }
+
+

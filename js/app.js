@@ -1,37 +1,37 @@
-/**
- * Қосымшаның негізгі модулі (Main application module)
- * Барлық компоненттердің күйі мен өзара әрекеттесуін басқарады (Manages state and interaction of all components)
+﻿/**
+ * ÒšÐ¾ÑÑ‹Ð¼ÑˆÐ°Ð½Ñ‹Ò£ Ð½ÐµÐ³Ñ–Ð·Ð³Ñ– Ð¼Ð¾Ð´ÑƒÐ»Ñ– (Main application module)
+ * Ð‘Ð°Ñ€Ð»Ñ‹Ò› ÐºÐ¾Ð¼Ð¿Ð¾Ð½ÐµÐ½Ñ‚Ñ‚ÐµÑ€Ð´Ñ–Ò£ ÐºÒ¯Ð¹Ñ– Ð¼ÐµÐ½ Ó©Ð·Ð°Ñ€Ð° Ó™Ñ€ÐµÐºÐµÑ‚Ñ‚ÐµÑÑƒÑ–Ð½ Ð±Ð°ÑÒ›Ð°Ñ€Ð°Ð´Ñ‹ (Manages state and interaction of all components)
  * 
- * Дипломдық жоба: HTML, CSS, JS бағдарламалау тілдерінде интерактивті таңдау сценарийлері негізінде 
- * пайдаланушының жеке басымдықтары мен даму бағыттарын талдау бағдарламалық жүйесін әзірлеу
+ * Ð”Ð¸Ð¿Ð»Ð¾Ð¼Ð´Ñ‹Ò› Ð¶Ð¾Ð±Ð°: HTML, CSS, JS Ð±Ð°Ò“Ð´Ð°Ñ€Ð»Ð°Ð¼Ð°Ð»Ð°Ñƒ Ñ‚Ñ–Ð»Ð´ÐµÑ€Ñ–Ð½Ð´Ðµ Ð¸Ð½Ñ‚ÐµÑ€Ð°ÐºÑ‚Ð¸Ð²Ñ‚Ñ– Ñ‚Ð°Ò£Ð´Ð°Ñƒ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸Ð¹Ð»ÐµÑ€Ñ– Ð½ÐµÐ³Ñ–Ð·Ñ–Ð½Ð´Ðµ 
+ * Ð¿Ð°Ð¹Ð´Ð°Ð»Ð°Ð½ÑƒÑˆÑ‹Ð½Ñ‹Ò£ Ð¶ÐµÐºÐµ Ð±Ð°ÑÑ‹Ð¼Ð´Ñ‹Ò›Ñ‚Ð°Ñ€Ñ‹ Ð¼ÐµÐ½ Ð´Ð°Ð¼Ñƒ Ð±Ð°Ò“Ñ‹Ñ‚Ñ‚Ð°Ñ€Ñ‹Ð½ Ñ‚Ð°Ð»Ð´Ð°Ñƒ Ð±Ð°Ò“Ð´Ð°Ñ€Ð»Ð°Ð¼Ð°Ð»Ñ‹Ò› Ð¶Ò¯Ð¹ÐµÑÑ–Ð½ Ó™Ð·Ñ–Ñ€Ð»ÐµÑƒ
  * (Diploma project: Development of a software system for analyzing personal preferences 
  * and user development directions based on interactive choice scenarios, in JS)
  * 
- * Авторы (Author): Ахмедьянов Саламат КПО 9/22-2
- * Мерзімі (Date): 2026
+ * ÐÐ²Ñ‚Ð¾Ñ€Ñ‹ (Author): ÐÑ…Ð¼ÐµÐ´ÑŒÑÐ½Ð¾Ð² Ð¡Ð°Ð»Ð°Ð¼Ð°Ñ‚ ÐšÐŸÐž 9/22-2
+ * ÐœÐµÑ€Ð·Ñ–Ð¼Ñ– (Date): 2026
  */
 
-// Түзету жалаушасы (Debug flag) (localStorage немесе URL параметрі арқылы орнатуға болады)
+// Ð¢Ò¯Ð·ÐµÑ‚Ñƒ Ð¶Ð°Ð»Ð°ÑƒÑˆÐ°ÑÑ‹ (Debug flag) (localStorage Ð½ÐµÐ¼ÐµÑÐµ URL Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ñ– Ð°Ñ€Ò›Ñ‹Ð»Ñ‹ Ð¾Ñ€Ð½Ð°Ñ‚ÑƒÒ“Ð° Ð±Ð¾Ð»Ð°Ð´Ñ‹)
 const DEBUG = localStorage.getItem('debug') === 'true' ||
     (typeof URLSearchParams !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === 'true');
 
-// Логтауға арналған көмекші функциялар (Helper functions for logging)
+// Ð›Ð¾Ð³Ñ‚Ð°ÑƒÒ“Ð° Ð°Ñ€Ð½Ð°Ð»Ò“Ð°Ð½ ÐºÓ©Ð¼ÐµÐºÑˆÑ– Ñ„ÑƒÐ½ÐºÑ†Ð¸ÑÐ»Ð°Ñ€ (Helper functions for logging)
 const debugLog = DEBUG ? console.log.bind(console) : () => { };
 const debugError = DEBUG ? console.error.bind(console) : () => { };
 const debugWarn = DEBUG ? console.warn.bind(console) : () => { };
 
-// Маңызды қателер әрқашан логталады (Critical errors are always logged)
+// ÐœÐ°Ò£Ñ‹Ð·Ð´Ñ‹ Ò›Ð°Ñ‚ÐµÐ»ÐµÑ€ Ó™Ñ€Ò›Ð°ÑˆÐ°Ð½ Ð»Ð¾Ð³Ñ‚Ð°Ð»Ð°Ð´Ñ‹ (Critical errors are always logged)
 const criticalError = console.error.bind(console);
 const criticalLog = console.log.bind(console);
 
 // Easter Egg Signature
-console.log('%c Әзірлеген Ахмедьянов Саламат КПО 9/22-2 (Developed by Akhmedyanov Salamat) ', 'background: #222; color: #bada55; font-size: 12px; padding: 4px; border-radius: 4px;');
+console.log('%c Ó˜Ð·Ñ–Ñ€Ð»ÐµÐ³ÐµÐ½ ÐÑ…Ð¼ÐµÐ´ÑŒÑÐ½Ð¾Ð² Ð¡Ð°Ð»Ð°Ð¼Ð°Ñ‚ ÐšÐŸÐž 9/22-2 (Developed by Akhmedyanov Salamat) ', 'background: #222; color: #bada55; font-size: 12px; padding: 4px; border-radius: 4px;');
 
 /**
- * Функция debounce для задержки выполнения
- * @param {Function} func - Функция для выполнения
- * @param {number} wait - Время задержки в мс
- * @returns {Function} Обернутая функция
+ * Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ debounce Ð´Ð»Ñ Ð·Ð°Ð´ÐµÑ€Ð¶ÐºÐ¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ
+ * @param {Function} func - Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð´Ð»Ñ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ
+ * @param {number} wait - Ð’Ñ€ÐµÐ¼Ñ Ð·Ð°Ð´ÐµÑ€Ð¶ÐºÐ¸ Ð² Ð¼Ñ
+ * @returns {Function} ÐžÐ±ÐµÑ€Ð½ÑƒÑ‚Ð°Ñ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ñ
  */
 function debounce(func, wait) {
     let timeout;
@@ -48,19 +48,19 @@ function debounce(func, wait) {
 class PersonalityTestApp {
     constructor() {
         this.scenarios = [];
-        this.completedScenarios = []; // Массив завершённых сценариев для динамической логики
+        this.completedScenarios = []; // ÐœÐ°ÑÑÐ¸Ð² Ð·Ð°Ð²ÐµÑ€ÑˆÑ‘Ð½Ð½Ñ‹Ñ… ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ² Ð´Ð»Ñ Ð´Ð¸Ð½Ð°Ð¼Ð¸Ñ‡ÐµÑÐºÐ¾Ð¹ Ð»Ð¾Ð³Ð¸ÐºÐ¸
         this.currentScenarioIndex = 0;
         this.analyzer = null;
         this.visualizer = null;
-        this.dynamicSelector = null; // Динамический селектор сценариев
+        this.dynamicSelector = null; // Ð”Ð¸Ð½Ð°Ð¼Ð¸Ñ‡ÐµÑÐºÐ¸Ð¹ ÑÐµÐ»ÐµÐºÑ‚Ð¾Ñ€ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ²
         this.storage = new StorageManager();
         this.auth = new AuthManager();
         this.ui = new UIController(this);
         this.testManager = new TestManager(this);
         this.resultsManager = new ResultsManager(this);
-        this.feedbackService = null; // Будет инициализирован в init()
+        this.feedbackService = null; // Ð‘ÑƒÐ´ÐµÑ‚ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð¸Ñ€Ð¾Ð²Ð°Ð½ Ð² init()
 
-        // AI Analysis с опциональной инициализацией
+        // AI Analysis Ñ Ð¾Ð¿Ñ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾Ð¹ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸ÐµÐ¹
         this.aiAnalyzer = this.initializeOptionalModule('AIAnalyzer', () => new AIAnalyzer());
 
         this.i18n = typeof i18n !== 'undefined' ? i18n : new LocalizationManager();
@@ -75,7 +75,7 @@ class PersonalityTestApp {
 
         this.advancedAnalytics = this.initializeOptionalModule('AdvancedAnalytics', () => new AdvancedAnalytics());
 
-        // Модули контроля качества
+        // ÐœÐ¾Ð´ÑƒÐ»Ð¸ ÐºÐ¾Ð½Ñ‚Ñ€Ð¾Ð»Ñ ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð°
         this.testReliability = this.initializeOptionalModule('TestReliability', () => new TestReliability());
         this.statisticalValidation = this.initializeOptionalModule('StatisticalValidation', () => new StatisticalValidation());
         this.qualityControl = this.initializeOptionalModule('QualityControl', () => new QualityControl());
@@ -83,38 +83,38 @@ class PersonalityTestApp {
         this.feedbackSystem = this.initializeOptionalModule('FeedbackSystem', () => new FeedbackSystem());
 
         this.state = 'intro'; // auth, intro, testSelection, testing, results
-        this.testMode = null; // 'basic' или 'advanced'
-        this.advancedQuestions = []; // Вопросы для углубленного теста
-        this.currentQuestionIndex = 0; // Индекс текущего вопроса (для углубленного теста)
-        this.currentSituationalStep = {}; // Отслеживание текущего шага для каждого ситуационного вопроса {questionId: stepIndex}
-        this.currentScenarioStartTime = null; // Время начала текущего вопроса
+        this.testMode = null; // 'basic' Ð¸Ð»Ð¸ 'advanced'
+        this.advancedQuestions = []; // Ð’Ð¾Ð¿Ñ€Ð¾ÑÑ‹ Ð´Ð»Ñ ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°
+        this.currentQuestionIndex = 0; // Ð˜Ð½Ð´ÐµÐºÑ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ³Ð¾ Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ° (Ð´Ð»Ñ ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°)
+        this.currentSituationalStep = {}; // ÐžÑ‚ÑÐ»ÐµÐ¶Ð¸Ð²Ð°Ð½Ð¸Ðµ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ³Ð¾ ÑˆÐ°Ð³Ð° Ð´Ð»Ñ ÐºÐ°Ð¶Ð´Ð¾Ð³Ð¾ ÑÐ¸Ñ‚ÑƒÐ°Ñ†Ð¸Ð¾Ð½Ð½Ð¾Ð³Ð¾ Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ° {questionId: stepIndex}
+        this.currentScenarioStartTime = null; // Ð’Ñ€ÐµÐ¼Ñ Ð½Ð°Ñ‡Ð°Ð»Ð° Ñ‚ÐµÐºÑƒÑ‰ÐµÐ³Ð¾ Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ°
 
-        // Инициализация происходит асинхронно после загрузки всех скриптов
-        // Не вызываем this.init() здесь, чтобы избежать проблем с порядком загрузки
+        // Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð¿Ñ€Ð¾Ð¸ÑÑ…Ð¾Ð´Ð¸Ñ‚ Ð°ÑÐ¸Ð½Ñ…Ñ€Ð¾Ð½Ð½Ð¾ Ð¿Ð¾ÑÐ»Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ Ð²ÑÐµÑ… ÑÐºÑ€Ð¸Ð¿Ñ‚Ð¾Ð²
+        // ÐÐµ Ð²Ñ‹Ð·Ñ‹Ð²Ð°ÐµÐ¼ this.init() Ð·Ð´ÐµÑÑŒ, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð¸Ð·Ð±ÐµÐ¶Ð°Ñ‚ÑŒ Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼ Ñ Ð¿Ð¾Ñ€ÑÐ´ÐºÐ¾Ð¼ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸
     }
 
     /**
-     * Инициализация опционального модуля с проверкой доступности
-     * @param {string} moduleName - Имя модуля для проверки
-     * @param {Function} initializer - Функция инициализации модуля
-     * @returns {Object|null} Инициализированный модуль или null
+     * Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð¾Ð¿Ñ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾Ð³Ð¾ Ð¼Ð¾Ð´ÑƒÐ»Ñ Ñ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¾Ð¹ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð¾ÑÑ‚Ð¸
+     * @param {string} moduleName - Ð˜Ð¼Ñ Ð¼Ð¾Ð´ÑƒÐ»Ñ Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸
+     * @param {Function} initializer - Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ð¸ Ð¼Ð¾Ð´ÑƒÐ»Ñ
+     * @returns {Object|null} Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ð¹ Ð¼Ð¾Ð´ÑƒÐ»ÑŒ Ð¸Ð»Ð¸ null
      */
     initializeOptionalModule(moduleName, initializer) {
         try {
             if (typeof window !== 'undefined' && window[moduleName]) {
                 return initializer();
             }
-            debugLog(`Модуль ${moduleName} недоступен, используется fallback`);
+            debugLog(`ÐœÐ¾Ð´ÑƒÐ»ÑŒ ${moduleName} Ð½ÐµÐ´Ð¾ÑÑ‚ÑƒÐ¿ÐµÐ½, Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑ‚ÑÑ fallback`);
             return null;
         } catch (error) {
-            debugWarn(`Ошибка инициализации модуля ${moduleName}:`, error);
+            debugWarn(`ÐžÑˆÐ¸Ð±ÐºÐ° Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ð¸ Ð¼Ð¾Ð´ÑƒÐ»Ñ ${moduleName}:`, error);
             return null;
         }
     }
 
     /**
-     * Проверка наличия критических зависимостей
-     * @returns {Object} Результат проверки зависимостей
+     * ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ñ ÐºÑ€Ð¸Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ñ… Ð·Ð°Ð²Ð¸ÑÐ¸Ð¼Ð¾ÑÑ‚ÐµÐ¹
+     * @returns {Object} Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸ Ð·Ð°Ð²Ð¸ÑÐ¸Ð¼Ð¾ÑÑ‚ÐµÐ¹
      */
     checkDependencies() {
         const dependencies = {
@@ -139,56 +139,56 @@ class PersonalityTestApp {
     }
 
     /**
-     * Валидация структуры данных сценариев
-     * @param {Object} data - Данные для валидации
-     * @returns {boolean} true если данные валидны
+     * Ð’Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸Ñ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ… ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ²
+     * @param {Object} data - Ð”Ð°Ð½Ð½Ñ‹Ðµ Ð´Ð»Ñ Ð²Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸Ð¸
+     * @returns {boolean} true ÐµÑÐ»Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð²Ð°Ð»Ð¸Ð´Ð½Ñ‹
      */
     validateScenariosData(data) {
         if (!data || typeof data !== 'object') {
             return false;
         }
 
-        // Проверяем наличие массива scenarios
+        // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ðµ Ð¼Ð°ÑÑÐ¸Ð²Ð° scenarios
         if (!data.scenarios || !Array.isArray(data.scenarios) || data.scenarios.length === 0) {
             return false;
         }
 
-        // Проверяем наличие dimensions
+        // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ðµ dimensions
         if (!data.dimensions || typeof data.dimensions !== 'object') {
             return false;
         }
 
-        // Валидируем каждый сценарий
+        // Ð’Ð°Ð»Ð¸Ð´Ð¸Ñ€ÑƒÐµÐ¼ ÐºÐ°Ð¶Ð´Ñ‹Ð¹ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸Ð¹
         for (const scenario of data.scenarios) {
             if (!scenario.id || typeof scenario.id !== 'number') {
                 return false;
             }
 
-            // Проверяем наличие title (может быть объектом с переводами или строкой)
+            // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ðµ title (Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð¾Ð±ÑŠÐµÐºÑ‚Ð¾Ð¼ Ñ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´Ð°Ð¼Ð¸ Ð¸Ð»Ð¸ ÑÑ‚Ñ€Ð¾ÐºÐ¾Ð¹)
             if (!scenario.title || (typeof scenario.title !== 'string' && typeof scenario.title !== 'object')) {
                 return false;
             }
 
-            // Проверяем наличие description
+            // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ðµ description
             if (!scenario.description || (typeof scenario.description !== 'string' && typeof scenario.description !== 'object')) {
                 return false;
             }
 
-            // Проверяем наличие хотя бы одного варианта (optionA, optionB, optionC или optionD)
+            // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ðµ Ñ…Ð¾Ñ‚Ñ Ð±Ñ‹ Ð¾Ð´Ð½Ð¾Ð³Ð¾ Ð²Ð°Ñ€Ð¸Ð°Ð½Ñ‚Ð° (optionA, optionB, optionC Ð¸Ð»Ð¸ optionD)
             const hasOption = scenario.optionA || scenario.optionB || scenario.optionC || scenario.optionD;
             if (!hasOption) {
                 return false;
             }
 
-            // Проверяем структуру вариантов
+            // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñƒ Ð²Ð°Ñ€Ð¸Ð°Ð½Ñ‚Ð¾Ð²
             ['optionA', 'optionB', 'optionC', 'optionD'].forEach(optKey => {
                 if (scenario[optKey]) {
                     const option = scenario[optKey];
-                    // Должен быть text (строка или объект с переводами)
+                    // Ð”Ð¾Ð»Ð¶ÐµÐ½ Ð±Ñ‹Ñ‚ÑŒ text (ÑÑ‚Ñ€Ð¾ÐºÐ° Ð¸Ð»Ð¸ Ð¾Ð±ÑŠÐµÐºÑ‚ Ñ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´Ð°Ð¼Ð¸)
                     if (!option.text || (typeof option.text !== 'string' && typeof option.text !== 'object')) {
                         return false;
                     }
-                    // Должны быть weights (объект)
+                    // Ð”Ð¾Ð»Ð¶Ð½Ñ‹ Ð±Ñ‹Ñ‚ÑŒ weights (Ð¾Ð±ÑŠÐµÐºÑ‚)
                     if (!option.weights || typeof option.weights !== 'object') {
                         return false;
                     }
@@ -200,13 +200,13 @@ class PersonalityTestApp {
     }
 
     /**
-     * Ожидание загрузки SCENARIOS_DATA через Promise
-     * @param {number} timeout - Максимальное время ожидания в мс
-     * @returns {Promise<Object>} Данные сценариев
+     * ÐžÐ¶Ð¸Ð´Ð°Ð½Ð¸Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ SCENARIOS_DATA Ñ‡ÐµÑ€ÐµÐ· Promise
+     * @param {number} timeout - ÐœÐ°ÐºÑÐ¸Ð¼Ð°Ð»ÑŒÐ½Ð¾Ðµ Ð²Ñ€ÐµÐ¼Ñ Ð¾Ð¶Ð¸Ð´Ð°Ð½Ð¸Ñ Ð² Ð¼Ñ
+     * @returns {Promise<Object>} Ð”Ð°Ð½Ð½Ñ‹Ðµ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ²
      */
     waitForScenariosData(timeout = 2000) {
         return new Promise((resolve, reject) => {
-            // Функция для получения встроенных данных
+            // Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð´Ð»Ñ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ñ Ð²ÑÑ‚Ñ€Ð¾ÐµÐ½Ð½Ñ‹Ñ… Ð´Ð°Ð½Ð½Ñ‹Ñ…
             const getBuiltInData = () => {
                 if (typeof SCENARIOS_DATA !== 'undefined' && SCENARIOS_DATA && SCENARIOS_DATA.scenarios) {
                     return SCENARIOS_DATA;
@@ -220,35 +220,35 @@ class PersonalityTestApp {
                 return null;
             };
 
-            // Проверяем сразу
+            // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ ÑÑ€Ð°Ð·Ñƒ
             const immediateData = getBuiltInData();
             if (immediateData && immediateData.scenarios && immediateData.scenarios.length > 0) {
-                debugLog('SCENARIOS_DATA бірден қолжетімді (SCENARIOS_DATA available immediately)');
+                debugLog('SCENARIOS_DATA Ð±Ñ–Ñ€Ð´ÐµÐ½ Ò›Ð¾Ð»Ð¶ÐµÑ‚Ñ–Ð¼Ð´Ñ– (SCENARIOS_DATA available immediately)');
                 return resolve(immediateData);
             }
 
-            // Если данные не загружены, ждём события загрузки или проверяем через интервалы
+            // Ð•ÑÐ»Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð½Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½Ñ‹, Ð¶Ð´Ñ‘Ð¼ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ Ð¸Ð»Ð¸ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ‡ÐµÑ€ÐµÐ· Ð¸Ð½Ñ‚ÐµÑ€Ð²Ð°Ð»Ñ‹
             const startTime = Date.now();
-            const checkInterval = 50; // Проверяем каждые 50ms
+            const checkInterval = 50; // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ ÐºÐ°Ð¶Ð´Ñ‹Ðµ 50ms
             const maxAttempts = Math.ceil(timeout / checkInterval);
             let attempts = 0;
 
-            // Обработчик события загрузки (если есть)
+            // ÐžÐ±Ñ€Ð°Ð±Ð¾Ñ‚Ñ‡Ð¸Ðº ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ (ÐµÑÐ»Ð¸ ÐµÑÑ‚ÑŒ)
             const onDataLoaded = () => {
                 const data = getBuiltInData();
                 if (data && data.scenarios && data.scenarios.length > 0) {
-                    debugLog('SCENARIOS_DATA оқиға арқылы жүктелді (SCENARIOS_DATA loaded via event)');
+                    debugLog('SCENARIOS_DATA Ð¾Ò›Ð¸Ò“Ð° Ð°Ñ€Ò›Ñ‹Ð»Ñ‹ Ð¶Ò¯ÐºÑ‚ÐµÐ»Ð´Ñ– (SCENARIOS_DATA loaded via event)');
                     cleanup();
                     resolve(data);
                 }
             };
 
-            // Подписываемся на событие, если оно есть
+            // ÐŸÐ¾Ð´Ð¿Ð¸ÑÑ‹Ð²Ð°ÐµÐ¼ÑÑ Ð½Ð° ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ðµ, ÐµÑÐ»Ð¸ Ð¾Ð½Ð¾ ÐµÑÑ‚ÑŒ
             if (typeof window !== 'undefined') {
                 window.addEventListener('scenarios-data-loaded', onDataLoaded);
             }
 
-            // Функция очистки
+            // Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð¾Ñ‡Ð¸ÑÑ‚ÐºÐ¸
             const cleanup = () => {
                 if (typeof window !== 'undefined') {
                     window.removeEventListener('scenarios-data-loaded', onDataLoaded);
@@ -258,23 +258,23 @@ class PersonalityTestApp {
                 }
             };
 
-            // Проверяем через интервалы
+            // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ‡ÐµÑ€ÐµÐ· Ð¸Ð½Ñ‚ÐµÑ€Ð²Ð°Ð»Ñ‹
             const intervalId = setInterval(() => {
                 attempts++;
                 const data = getBuiltInData();
 
                 if (data && data.scenarios && data.scenarios.length > 0) {
-                    debugLog(`SCENARIOS_DATA загружен через проверку (попытка ${attempts})`);
+                    debugLog(`SCENARIOS_DATA Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½ Ñ‡ÐµÑ€ÐµÐ· Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÑƒ (Ð¿Ð¾Ð¿Ñ‹Ñ‚ÐºÐ° ${attempts})`);
                     cleanup();
                     resolve(data);
                     return;
                 }
 
-                // Проверяем timeout
+                // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ timeout
                 if (Date.now() - startTime >= timeout || attempts >= maxAttempts) {
                     cleanup();
-                    const error = new Error('Встроенные данные сценариев недоступны. Убедитесь, что scenarios-data.js загружен правильно.');
-                    criticalError('МАҢЫЗДЫ ҚАТЕ: Кірістірілген деректер қолжетімсіз (CRITICAL ERROR: Embedded data unavailable)');
+                    const error = new Error('Ð’ÑÑ‚Ñ€Ð¾ÐµÐ½Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ² Ð½ÐµÐ´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹. Ð£Ð±ÐµÐ´Ð¸Ñ‚ÐµÑÑŒ, Ñ‡Ñ‚Ð¾ scenarios-data.js Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½ Ð¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ð¾.');
+                    criticalError('ÐœÐÒ¢Ð«Ð—Ð”Ð« ÒšÐÐ¢Ð•: ÐšÑ–Ñ€Ñ–ÑÑ‚Ñ–Ñ€Ñ–Ð»Ð³ÐµÐ½ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€ Ò›Ð¾Ð»Ð¶ÐµÑ‚Ñ–Ð¼ÑÑ–Ð· (CRITICAL ERROR: Embedded data unavailable)');
                     criticalError('SCENARIOS_DATA:', typeof SCENARIOS_DATA);
                     criticalError('window.SCENARIOS_DATA:', typeof window !== 'undefined' ? typeof window.SCENARIOS_DATA : 'N/A');
                     reject(error);
@@ -284,12 +284,12 @@ class PersonalityTestApp {
     }
 
     /**
-     * Показ ошибки отсутствия зависимостей
-     * @param {Array} missing - Массив отсутствующих зависимостей
+     * ÐŸÐ¾ÐºÐ°Ð· Ð¾ÑˆÐ¸Ð±ÐºÐ¸ Ð¾Ñ‚ÑÑƒÑ‚ÑÑ‚Ð²Ð¸Ñ Ð·Ð°Ð²Ð¸ÑÐ¸Ð¼Ð¾ÑÑ‚ÐµÐ¹
+     * @param {Array} missing - ÐœÐ°ÑÑÐ¸Ð² Ð¾Ñ‚ÑÑƒÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ñ… Ð·Ð°Ð²Ð¸ÑÐ¸Ð¼Ð¾ÑÑ‚ÐµÐ¹
      */
     /**
-     * Показ ошибки отсутствия зависимостей
-     * @param {Array} missing - Массив отсутствующих зависимостей
+     * ÐŸÐ¾ÐºÐ°Ð· Ð¾ÑˆÐ¸Ð±ÐºÐ¸ Ð¾Ñ‚ÑÑƒÑ‚ÑÑ‚Ð²Ð¸Ñ Ð·Ð°Ð²Ð¸ÑÐ¸Ð¼Ð¾ÑÑ‚ÐµÐ¹
+     * @param {Array} missing - ÐœÐ°ÑÑÐ¸Ð² Ð¾Ñ‚ÑÑƒÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ñ… Ð·Ð°Ð²Ð¸ÑÐ¸Ð¼Ð¾ÑÑ‚ÐµÐ¹
      */
     showDependencyError(missing) {
         if (this.ui) {
@@ -298,22 +298,22 @@ class PersonalityTestApp {
     }
 
     /**
-     * Выход из системы
+     * Ð’Ñ‹Ñ…Ð¾Ð´ Ð¸Ð· ÑÐ¸ÑÑ‚ÐµÐ¼Ñ‹
      */
     logout() {
         if (this.auth) {
             this.auth.logout();
-            // Сбрасываем состояние
+            // Ð¡Ð±Ñ€Ð°ÑÑ‹Ð²Ð°ÐµÐ¼ ÑÐ¾ÑÑ‚Ð¾ÑÐ½Ð¸Ðµ
             this.state = 'intro';
             this.currentUser = null;
 
-            // Очищаем UI если нужно или перезагружаем
+            // ÐžÑ‡Ð¸Ñ‰Ð°ÐµÐ¼ UI ÐµÑÐ»Ð¸ Ð½ÑƒÐ¶Ð½Ð¾ Ð¸Ð»Ð¸ Ð¿ÐµÑ€ÐµÐ·Ð°Ð³Ñ€ÑƒÐ¶Ð°ÐµÐ¼
             window.location.reload();
         }
     }
 
     /**
-     * Инициализация приложения
+     * Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ
      */
     async init() {
         try {
@@ -357,7 +357,7 @@ class PersonalityTestApp {
                 // If specific critical deps are missing
                 const critical = depsCheck.missing.filter(d => d !== 'visualizer' && d !== 'threejs'); // visualizer depends on threejs
                 if (critical.length > 0) {
-                    criticalError('МАҢЫЗДЫ ТӘУЕЛДІЛІКТЕР ЖОҚ (CRITICAL DEPENDENCIES MISSING):', critical);
+                    criticalError('ÐœÐÒ¢Ð«Ð—Ð”Ð« Ð¢Ó˜Ð£Ð•Ð›Ð”Ð†Ð›Ð†ÐšÐ¢Ð•Ð  Ð–ÐžÒš (CRITICAL DEPENDENCIES MISSING):', critical);
                     this.showDependencyError(critical);
                     return;
                     debugWarn('Three.js check skipped.');
@@ -367,12 +367,12 @@ class PersonalityTestApp {
 
             let data = null;
 
-            // Используем Promise-based подход для загрузки данных
+            // Ð˜ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÐ¼ Promise-based Ð¿Ð¾Ð´Ñ…Ð¾Ð´ Ð´Ð»Ñ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ Ð´Ð°Ð½Ð½Ñ‹Ñ…
             try {
                 data = await this.waitForScenariosData(2000);
-                debugLog('Сценарийлердің кірістірілген деректері сәтті жүктелді (Embedded scenario data loaded successfully)');
+                debugLog('Ð¡Ñ†ÐµÐ½Ð°Ñ€Ð¸Ð¹Ð»ÐµÑ€Ð´Ñ–Ò£ ÐºÑ–Ñ€Ñ–ÑÑ‚Ñ–Ñ€Ñ–Ð»Ð³ÐµÐ½ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€Ñ– ÑÓ™Ñ‚Ñ‚Ñ– Ð¶Ò¯ÐºÑ‚ÐµÐ»Ð´Ñ– (Embedded scenario data loaded successfully)');
             } catch (error) {
-                // Если Promise-based подход не сработал, пробуем последнюю попытку
+                // Ð•ÑÐ»Ð¸ Promise-based Ð¿Ð¾Ð´Ñ…Ð¾Ð´ Ð½Ðµ ÑÑ€Ð°Ð±Ð¾Ñ‚Ð°Ð», Ð¿Ñ€Ð¾Ð±ÑƒÐµÐ¼ Ð¿Ð¾ÑÐ»ÐµÐ´Ð½ÑŽÑŽ Ð¿Ð¾Ð¿Ñ‹Ñ‚ÐºÑƒ
                 const getBuiltInData = () => {
                     if (typeof SCENARIOS_DATA !== 'undefined' && SCENARIOS_DATA && SCENARIOS_DATA.scenarios) {
                         return SCENARIOS_DATA;
@@ -389,74 +389,74 @@ class PersonalityTestApp {
                 const lastAttempt = getBuiltInData();
                 if (lastAttempt && lastAttempt.scenarios && lastAttempt.scenarios.length > 0) {
                     data = lastAttempt;
-                    debugLog('Соңғы әрекетте кірістірілген деректер табылды (Embedded data found on last attempt)');
+                    debugLog('Ð¡Ð¾Ò£Ò“Ñ‹ Ó™Ñ€ÐµÐºÐµÑ‚Ñ‚Ðµ ÐºÑ–Ñ€Ñ–ÑÑ‚Ñ–Ñ€Ñ–Ð»Ð³ÐµÐ½ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€ Ñ‚Ð°Ð±Ñ‹Ð»Ð´Ñ‹ (Embedded data found on last attempt)');
                 } else {
-                    throw error; // Пробрасываем ошибку дальше
+                    throw error; // ÐŸÑ€Ð¾Ð±Ñ€Ð°ÑÑ‹Ð²Ð°ÐµÐ¼ Ð¾ÑˆÐ¸Ð±ÐºÑƒ Ð´Ð°Ð»ÑŒÑˆÐµ
                 }
             }
 
-            // Если встроенные данные не найдены, это критическая ошибка
+            // Ð•ÑÐ»Ð¸ Ð²ÑÑ‚Ñ€Ð¾ÐµÐ½Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ñ‹, ÑÑ‚Ð¾ ÐºÑ€Ð¸Ñ‚Ð¸Ñ‡ÐµÑÐºÐ°Ñ Ð¾ÑˆÐ¸Ð±ÐºÐ°
             if (!data || !data.scenarios || !Array.isArray(data.scenarios) || data.scenarios.length === 0) {
-                criticalError('МАҢЫЗДЫ ҚАТЕ: Кірістірілген деректер қолжетімсіз (CRITICAL ERROR: Embedded data unavailable)');
+                criticalError('ÐœÐÒ¢Ð«Ð—Ð”Ð« ÒšÐÐ¢Ð•: ÐšÑ–Ñ€Ñ–ÑÑ‚Ñ–Ñ€Ñ–Ð»Ð³ÐµÐ½ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€ Ò›Ð¾Ð»Ð¶ÐµÑ‚Ñ–Ð¼ÑÑ–Ð· (CRITICAL ERROR: Embedded data unavailable)');
                 criticalError('SCENARIOS_DATA:', typeof SCENARIOS_DATA);
                 criticalError('window.SCENARIOS_DATA:', typeof window !== 'undefined' ? typeof window.SCENARIOS_DATA : 'N/A');
-                throw new Error('Встроенные данные сценариев недоступны. Убедитесь, что scenarios-data.js загружен правильно.');
+                throw new Error('Ð’ÑÑ‚Ñ€Ð¾ÐµÐ½Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ² Ð½ÐµÐ´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹. Ð£Ð±ÐµÐ´Ð¸Ñ‚ÐµÑÑŒ, Ñ‡Ñ‚Ð¾ scenarios-data.js Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½ Ð¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ð¾.');
             }
 
-            // Валидация структуры данных
+            // Ð’Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸Ñ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ…
             if (!this.validateScenariosData(data)) {
-                criticalError('МАҢЫЗДЫ ҚАТЕ: Сценарий деректерінің құрылымы жарамсыз (CRITICAL ERROR: Invalid scenario data structure)');
-                throw new Error('Структура данных сценариев невалидна. Проверьте формат данных в scenarios-data.js или scenarios.json.');
+                criticalError('ÐœÐÒ¢Ð«Ð—Ð”Ð« ÒšÐÐ¢Ð•: Ð¡Ñ†ÐµÐ½Ð°Ñ€Ð¸Ð¹ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€Ñ–Ð½Ñ–Ò£ Ò›Ò±Ñ€Ñ‹Ð»Ñ‹Ð¼Ñ‹ Ð¶Ð°Ñ€Ð°Ð¼ÑÑ‹Ð· (CRITICAL ERROR: Invalid scenario data structure)');
+                throw new Error('Ð¡Ñ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ð° Ð´Ð°Ð½Ð½Ñ‹Ñ… ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ² Ð½ÐµÐ²Ð°Ð»Ð¸Ð´Ð½Ð°. ÐŸÑ€Ð¾Ð²ÐµÑ€ÑŒÑ‚Ðµ Ñ„Ð¾Ñ€Ð¼Ð°Ñ‚ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð² scenarios-data.js Ð¸Ð»Ð¸ scenarios.json.');
             }
 
-            // Опционально: пытаемся загрузить из файла для обновления (но не критично)
+            // ÐžÐ¿Ñ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾: Ð¿Ñ‹Ñ‚Ð°ÐµÐ¼ÑÑ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ Ð¸Ð· Ñ„Ð°Ð¹Ð»Ð° Ð´Ð»Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ (Ð½Ð¾ Ð½Ðµ ÐºÑ€Ð¸Ñ‚Ð¸Ñ‡Ð½Ð¾)
             const isFileProtocol = typeof window !== 'undefined' && window.location && window.location.protocol === 'file:';
             if (!isFileProtocol) {
                 try {
                     const response = await fetch('data/scenarios.json');
                     if (response.ok) {
                         const jsonData = await response.json();
-                        // Валидируем данные из файла перед использованием
+                        // Ð’Ð°Ð»Ð¸Ð´Ð¸Ñ€ÑƒÐµÐ¼ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¸Ð· Ñ„Ð°Ð¹Ð»Ð° Ð¿ÐµÑ€ÐµÐ´ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ð½Ð¸ÐµÐ¼
                         if (this.validateScenariosData(jsonData)) {
-                            // Используем данные из файла, если они валидны
+                            // Ð˜ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÐ¼ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¸Ð· Ñ„Ð°Ð¹Ð»Ð°, ÐµÑÐ»Ð¸ Ð¾Ð½Ð¸ Ð²Ð°Ð»Ð¸Ð´Ð½Ñ‹
                             data = jsonData;
-                            debugLog('Деректер scenarios.json файлынан жаңартылды (Data updated from scenarios.json)');
+                            debugLog('Ð”ÐµÑ€ÐµÐºÑ‚ÐµÑ€ scenarios.json Ñ„Ð°Ð¹Ð»Ñ‹Ð½Ð°Ð½ Ð¶Ð°Ò£Ð°Ñ€Ñ‚Ñ‹Ð»Ð´Ñ‹ (Data updated from scenarios.json)');
                         } else {
-                            debugWarn('scenarios.json деректері жарамсыз, кірістірілген деректер қолданылуда (Data from scenarios.json is invalid, using embedded data)');
+                            debugWarn('scenarios.json Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€Ñ– Ð¶Ð°Ñ€Ð°Ð¼ÑÑ‹Ð·, ÐºÑ–Ñ€Ñ–ÑÑ‚Ñ–Ñ€Ñ–Ð»Ð³ÐµÐ½ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€ Ò›Ð¾Ð»Ð´Ð°Ð½Ñ‹Ð»ÑƒÐ´Ð° (Data from scenarios.json is invalid, using embedded data)');
                         }
                     }
                 } catch (fetchError) {
-                    // Не критично - используем встроенные данные
-                    debugLog('scenarios.json жүктеу мүмкін болмады, кірістірілген деректер қолданылуда (Failed to load scenarios.json, using embedded data)');
+                    // ÐÐµ ÐºÑ€Ð¸Ñ‚Ð¸Ñ‡Ð½Ð¾ - Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÐ¼ Ð²ÑÑ‚Ñ€Ð¾ÐµÐ½Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ
+                    debugLog('scenarios.json Ð¶Ò¯ÐºÑ‚ÐµÑƒ Ð¼Ò¯Ð¼ÐºÑ–Ð½ Ð±Ð¾Ð»Ð¼Ð°Ð´Ñ‹, ÐºÑ–Ñ€Ñ–ÑÑ‚Ñ–Ñ€Ñ–Ð»Ð³ÐµÐ½ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€ Ò›Ð¾Ð»Ð´Ð°Ð½Ñ‹Ð»ÑƒÐ´Ð° (Failed to load scenarios.json, using embedded data)');
                 }
             }
 
             this.scenarios = data.scenarios;
             this.dimensions = data.dimensions;
 
-            // Инициализация анализатора
+            // Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð°Ð½Ð°Ð»Ð¸Ð·Ð°Ñ‚Ð¾Ñ€Ð°
             this.analyzer = new PersonalityAnalyzer(data);
 
-            // Инициализация динамического селектора сценариев
+            // Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð´Ð¸Ð½Ð°Ð¼Ð¸Ñ‡ÐµÑÐºÐ¾Ð³Ð¾ ÑÐµÐ»ÐµÐºÑ‚Ð¾Ñ€Ð° ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ²
             this.dynamicSelector = new DynamicScenarioSelector(data.scenarios);
 
-            // Инициализация визуализатора
+            // Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð²Ð¸Ð·ÑƒÐ°Ð»Ð¸Ð·Ð°Ñ‚Ð¾Ñ€Ð°
             this.visualizer = new ResultsVisualizer('radarChartContainer');
 
 
 
-            // Инициализация сервиса обратной связи
-            // Инициализация сервиса обратной связи
+            // Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ ÑÐµÑ€Ð²Ð¸ÑÐ° Ð¾Ð±Ñ€Ð°Ñ‚Ð½Ð¾Ð¹ ÑÐ²ÑÐ·Ð¸
+            // Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ ÑÐµÑ€Ð²Ð¸ÑÐ° Ð¾Ð±Ñ€Ð°Ñ‚Ð½Ð¾Ð¹ ÑÐ²ÑÐ·Ð¸
             if (typeof FeedbackService !== 'undefined') {
                 this.feedbackService = new FeedbackService(this.i18n, this.auth, this.analyzer, this.ui);
             } else {
-                console.warn('FeedbackService не найден. Функции обратной связи будут недоступны.');
+                console.warn('FeedbackService Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½. Ð¤ÑƒÐ½ÐºÑ†Ð¸Ð¸ Ð¾Ð±Ñ€Ð°Ñ‚Ð½Ð¾Ð¹ ÑÐ²ÑÐ·Ð¸ Ð±ÑƒÐ´ÑƒÑ‚ Ð½ÐµÐ´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹.');
             }
 
-            // Проверка сохранённого прогресса
+            // ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° ÑÐ¾Ñ…Ñ€Ð°Ð½Ñ‘Ð½Ð½Ð¾Ð³Ð¾ Ð¿Ñ€Ð¾Ð³Ñ€ÐµÑÑÐ°
             this.checkSavedProgress();
 
-            // Инициализация UI элементов (после загрузки DOM)
+            // Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ UI ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð² (Ð¿Ð¾ÑÐ»Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ DOM)
             // Optimized: Single rAF for faster initialization
             requestAnimationFrame(() => {
                 // Set language
@@ -490,17 +490,17 @@ class PersonalityTestApp {
             });
 
         } catch (error) {
-            criticalError('Инициализация қатесі (Initialization error):', error);
-            const errorMessage = error.message || 'Неизвестная ошибка';
-            criticalError('Қате мәліметтері (Error details):', errorMessage);
+            criticalError('Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ò›Ð°Ñ‚ÐµÑÑ– (Initialization error):', error);
+            const errorMessage = error.message || 'ÐÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½Ð°Ñ Ð¾ÑˆÐ¸Ð±ÐºÐ°';
+            criticalError('ÒšÐ°Ñ‚Ðµ Ð¼Ó™Ð»Ñ–Ð¼ÐµÑ‚Ñ‚ÐµÑ€Ñ– (Error details):', errorMessage);
 
-            // Дополнительная диагностика
-            debugLog('SCENARIOS_DATA қолжетімділігін тексеру (Checking SCENARIOS_DATA availability):', typeof SCENARIOS_DATA);
-            debugLog('window.SCENARIOS_DATA қолжетімділігін тексеру (Checking window.SCENARIOS_DATA availability):', typeof window !== 'undefined' ? typeof window.SCENARIOS_DATA : 'window unavailable');
+            // Ð”Ð¾Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð°Ñ Ð´Ð¸Ð°Ð³Ð½Ð¾ÑÑ‚Ð¸ÐºÐ°
+            debugLog('SCENARIOS_DATA Ò›Ð¾Ð»Ð¶ÐµÑ‚Ñ–Ð¼Ð´Ñ–Ð»Ñ–Ð³Ñ–Ð½ Ñ‚ÐµÐºÑÐµÑ€Ñƒ (Checking SCENARIOS_DATA availability):', typeof SCENARIOS_DATA);
+            debugLog('window.SCENARIOS_DATA Ò›Ð¾Ð»Ð¶ÐµÑ‚Ñ–Ð¼Ð´Ñ–Ð»Ñ–Ð³Ñ–Ð½ Ñ‚ÐµÐºÑÐµÑ€Ñƒ (Checking window.SCENARIOS_DATA availability):', typeof window !== 'undefined' ? typeof window.SCENARIOS_DATA : 'window unavailable');
 
-            // Последняя попытка использовать встроенные данные напрямую
+            // ÐŸÐ¾ÑÐ»ÐµÐ´Ð½ÑÑ Ð¿Ð¾Ð¿Ñ‹Ñ‚ÐºÐ° Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒ Ð²ÑÑ‚Ñ€Ð¾ÐµÐ½Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð½Ð°Ð¿Ñ€ÑÐ¼ÑƒÑŽ
             if (typeof SCENARIOS_DATA !== 'undefined' && SCENARIOS_DATA && SCENARIOS_DATA.scenarios) {
-                debugLog('SCENARIOS_DATA дерегін тікелей қолдану әрекеті (Trying to use SCENARIOS_DATA directly)...');
+                debugLog('SCENARIOS_DATA Ð´ÐµÑ€ÐµÐ³Ñ–Ð½ Ñ‚Ñ–ÐºÐµÐ»ÐµÐ¹ Ò›Ð¾Ð»Ð´Ð°Ð½Ñƒ Ó™Ñ€ÐµÐºÐµÑ‚Ñ– (Trying to use SCENARIOS_DATA directly)...');
                 try {
                     this.scenarios = SCENARIOS_DATA.scenarios;
                     this.analyzer = new PersonalityAnalyzer(SCENARIOS_DATA);
@@ -533,20 +533,20 @@ class PersonalityTestApp {
                     });
 
                 } catch (error) {
-                    criticalError('Инициализация қатесі (Initialization error):', error);
-                    const errorMessage = error.message || 'Неизвестная ошибка';
-                    criticalError('Қате мәліметтері (Error details):', errorMessage);
+                    criticalError('Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ò›Ð°Ñ‚ÐµÑÑ– (Initialization error):', error);
+                    const errorMessage = error.message || 'ÐÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½Ð°Ñ Ð¾ÑˆÐ¸Ð±ÐºÐ°';
+                    criticalError('ÒšÐ°Ñ‚Ðµ Ð¼Ó™Ð»Ñ–Ð¼ÐµÑ‚Ñ‚ÐµÑ€Ñ– (Error details):', errorMessage);
                     this.showError(errorMessage);
                 }
             }
 
             // Restore general error handling if recovery failed
-            this.showError('Не удалось загрузить данные сценариев. Пожалуйста, перезагрузите страницу.');
+            this.showError('ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ². ÐŸÐ¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð¿ÐµÑ€ÐµÐ·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚Ðµ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ.');
         }
     }
 
     /**
-     * Плавное скрытие загрузочного экрана
+     * ÐŸÐ»Ð°Ð²Ð½Ð¾Ðµ ÑÐºÑ€Ñ‹Ñ‚Ð¸Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¾Ñ‡Ð½Ð¾Ð³Ð¾ ÑÐºÑ€Ð°Ð½Ð°
      */
     hideMainLoading() {
         const loader = document.getElementById('mainLoading');
@@ -561,22 +561,22 @@ class PersonalityTestApp {
     }
 
     /**
-     * Проверка сохранённого прогресса
+     * ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° ÑÐ¾Ñ…Ñ€Ð°Ð½Ñ‘Ð½Ð½Ð¾Ð³Ð¾ Ð¿Ñ€Ð¾Ð³Ñ€ÐµÑÑÐ°
      */
     checkSavedProgress() {
         const savedProgress = this.storage.loadProgress();
         if (savedProgress && savedProgress.choices) {
             const choices = Array.isArray(savedProgress.choices) ? savedProgress.choices : [];
 
-            // Если тест уже завершен (количество ответов >= количеству сценариев),
-            // то не восстанавливаем его как активный, чтобы избежать дублирования в истории
+            // Ð•ÑÐ»Ð¸ Ñ‚ÐµÑÑ‚ ÑƒÐ¶Ðµ Ð·Ð°Ð²ÐµÑ€ÑˆÐµÐ½ (ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¾Ñ‚Ð²ÐµÑ‚Ð¾Ð² >= ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ñƒ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ²),
+            // Ñ‚Ð¾ Ð½Ðµ Ð²Ð¾ÑÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÐ¼ ÐµÐ³Ð¾ ÐºÐ°Ðº Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ð¹, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð¸Ð·Ð±ÐµÐ¶Ð°Ñ‚ÑŒ Ð´ÑƒÐ±Ð»Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ Ð² Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ð¸
             if (this.scenarios && choices.length >= this.scenarios.length) {
-                this.storage.clearAll(); // Или только удалить прогресс: localStorage.removeItem('testProgress');
+                this.storage.clearAll(); // Ð˜Ð»Ð¸ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ Ð¿Ñ€Ð¾Ð³Ñ€ÐµÑÑ: localStorage.removeItem('testProgress');
                 this.currentScenarioIndex = 0;
                 return;
             }
 
-            // Восстановление прогресса для базового теста
+            // Ð’Ð¾ÑÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¾Ð³Ñ€ÐµÑÑÐ° Ð´Ð»Ñ Ð±Ð°Ð·Ð¾Ð²Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°
             // Check if testMode is explicitly 'basic' OR it's missing and the data looks basic (array of choices)
             // AND it doesn't look like advanced (no scales/situational keys)
             const isAdvancedData = !Array.isArray(choices) && (choices.scales || choices.situational || choices.open);
@@ -588,7 +588,7 @@ class PersonalityTestApp {
                 choices.forEach(choice => {
                     this.analyzer.recordChoice(choice.scenarioId, choice.choice);
 
-                    // Восстанавливаем завершённые сценарии
+                    // Ð’Ð¾ÑÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÐ¼ Ð·Ð°Ð²ÐµÑ€ÑˆÑ‘Ð½Ð½Ñ‹Ðµ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸Ð¸
                     const scenario = this.scenarios.find(s => s.id === choice.scenarioId);
                     if (scenario && !this.completedScenarios.find(s => s.id === choice.scenarioId)) {
                         this.completedScenarios.push(scenario);
@@ -596,7 +596,7 @@ class PersonalityTestApp {
                 });
                 this.currentScenarioIndex = savedProgress.currentQuestionIndex || choices.length;
             }
-            // Восстановление прогресса для расширенного теста
+            // Ð’Ð¾ÑÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¾Ð³Ñ€ÐµÑÑÐ° Ð´Ð»Ñ Ñ€Ð°ÑÑˆÐ¸Ñ€ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°
             else if (savedProgress.testMode === 'advanced' || isAdvancedData) {
                 this.testMode = 'advanced';
                 if (this.testManager) this.testManager.testMode = 'advanced';
@@ -615,11 +615,11 @@ class PersonalityTestApp {
                     if (typeof AdvancedPersonalityAnalyzer !== 'undefined') {
                         // We need data to init analyzer, will be done in continueTest usually, 
                         // but here we just mark the mode
-                        console.log('checkSavedProgress ішінде кеңейтілген режим анықталды (Detected advanced mode in checkSavedProgress)');
+                        console.log('checkSavedProgress Ñ–ÑˆÑ–Ð½Ð´Ðµ ÐºÐµÒ£ÐµÐ¹Ñ‚Ñ–Ð»Ð³ÐµÐ½ Ñ€ÐµÐ¶Ð¸Ð¼ Ð°Ð½Ñ‹Ò›Ñ‚Ð°Ð»Ð´Ñ‹ (Detected advanced mode in checkSavedProgress)');
                     }
                 }
 
-                // Восстанавливаем другие типы ответов расширенного теста
+                // Ð’Ð¾ÑÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÐ¼ Ð´Ñ€ÑƒÐ³Ð¸Ðµ Ñ‚Ð¸Ð¿Ñ‹ Ð¾Ñ‚Ð²ÐµÑ‚Ð¾Ð² Ñ€Ð°ÑÑˆÐ¸Ñ€ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°
                 if (typeof choicesData === 'object' && !Array.isArray(choicesData)) {
                     if (choicesData.scales) this.analyzer.scaleAnswers = choicesData.scales;
                     if (choicesData.open) this.analyzer.openAnswers = choicesData.open;
@@ -632,13 +632,13 @@ class PersonalityTestApp {
             else if (savedProgress.testMode === 'cognitive' || savedProgress.mode === 'cognitive') {
                 this.testMode = 'cognitive';
                 if (this.testManager) this.testManager.testMode = 'cognitive';
-                console.log('✅ Cognitive test progress detected');
+                console.log('âœ… Cognitive test progress detected');
             }
         }
     }
 
     /**
-     * Инициализация UI элементов (язык, тема)
+     * Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ UI ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð² (ÑÐ·Ñ‹Ðº, Ñ‚ÐµÐ¼Ð°)
      */
     initUI() {
         if (this.ui) {
@@ -647,7 +647,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Обновление заголовка (с debounce для предотвращения частых обновлений)
+     * ÐžÐ±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ Ð·Ð°Ð³Ð¾Ð»Ð¾Ð²ÐºÐ° (Ñ debounce Ð´Ð»Ñ Ð¿Ñ€ÐµÐ´Ð¾Ñ‚Ð²Ñ€Ð°Ñ‰ÐµÐ½Ð¸Ñ Ñ‡Ð°ÑÑ‚Ñ‹Ñ… Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ð¹)
      */
     updateHeader() {
         if (this.ui) {
@@ -656,7 +656,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Инициализация переключателя языка
+     * Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð¿ÐµÑ€ÐµÐºÐ»ÑŽÑ‡Ð°Ñ‚ÐµÐ»Ñ ÑÐ·Ñ‹ÐºÐ°
      */
     initLanguageSelector() {
         if (this.ui) {
@@ -665,7 +665,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Переключение меню языка
+     * ÐŸÐµÑ€ÐµÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ Ð¼ÐµÐ½ÑŽ ÑÐ·Ñ‹ÐºÐ°
      */
     toggleLanguageMenu(event) {
         if (this.ui) {
@@ -674,8 +674,8 @@ class PersonalityTestApp {
     }
 
     /**
-     * Смена языка
-     * @param {string} langCode - Код языка
+     * Ð¡Ð¼ÐµÐ½Ð° ÑÐ·Ñ‹ÐºÐ°
+     * @param {string} langCode - ÐšÐ¾Ð´ ÑÐ·Ñ‹ÐºÐ°
      */
     changeLanguage(langCode) {
         if (this.ui) {
@@ -684,7 +684,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Инициализация переключателя темы
+     * Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð¿ÐµÑ€ÐµÐºÐ»ÑŽÑ‡Ð°Ñ‚ÐµÐ»Ñ Ñ‚ÐµÐ¼Ñ‹
      */
     initThemeToggle() {
         if (this.ui) {
@@ -693,8 +693,8 @@ class PersonalityTestApp {
     }
 
     /**
-     * Установка темы
-     * @param {string} theme - 'light' или 'dark'
+     * Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ñ‚ÐµÐ¼Ñ‹
+     * @param {string} theme - 'light' Ð¸Ð»Ð¸ 'dark'
      */
     setTheme(theme) {
         if (this.ui) {
@@ -703,7 +703,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Применение сохранённой темы
+     * ÐŸÑ€Ð¸Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ ÑÐ¾Ñ…Ñ€Ð°Ð½Ñ‘Ð½Ð½Ð¾Ð¹ Ñ‚ÐµÐ¼Ñ‹
      */
     applyTheme() {
         if (this.ui) {
@@ -712,7 +712,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Отображение экрана аутентификации
+     * ÐžÑ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ ÑÐºÑ€Ð°Ð½Ð° Ð°ÑƒÑ‚ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ†Ð¸Ð¸
      */
     showAuth() {
         if (this.ui) {
@@ -723,13 +723,13 @@ class PersonalityTestApp {
 
 
     /**
-     * Форма входа
+     * Ð¤Ð¾Ñ€Ð¼Ð° Ð²Ñ…Ð¾Ð´Ð°
      */
 
 
     /**
-     * Показать форму входа
-     * @param {Event} e - Событие клика (опционально)
+     * ÐŸÐ¾ÐºÐ°Ð·Ð°Ñ‚ÑŒ Ñ„Ð¾Ñ€Ð¼Ñƒ Ð²Ñ…Ð¾Ð´Ð°
+     * @param {Event} e - Ð¡Ð¾Ð±Ñ‹Ñ‚Ð¸Ðµ ÐºÐ»Ð¸ÐºÐ° (Ð¾Ð¿Ñ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾)
      */
     showLoginForm(e) {
         if (this.ui) {
@@ -738,8 +738,8 @@ class PersonalityTestApp {
     }
 
     /**
-     * Показать форму регистрации
-     * @param {Event} e - Событие клика (опционально)
+     * ÐŸÐ¾ÐºÐ°Ð·Ð°Ñ‚ÑŒ Ñ„Ð¾Ñ€Ð¼Ñƒ Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ð¸
+     * @param {Event} e - Ð¡Ð¾Ð±Ñ‹Ñ‚Ð¸Ðµ ÐºÐ»Ð¸ÐºÐ° (Ð¾Ð¿Ñ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾)
      */
     showRegisterForm(e) {
         if (this.ui) {
@@ -748,7 +748,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Обработка входа
+     * ÐžÐ±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° Ð²Ñ…Ð¾Ð´Ð°
      */
     handleLogin(event) {
         if (this.ui) {
@@ -757,7 +757,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Обработка регистрации
+     * ÐžÐ±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ð¸
      */
     handleRegister(event) {
         if (this.ui) {
@@ -766,7 +766,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Продолжить как гость
+     * ÐŸÑ€Ð¾Ð´Ð¾Ð»Ð¶Ð¸Ñ‚ÑŒ ÐºÐ°Ðº Ð³Ð¾ÑÑ‚ÑŒ
      */
     continueAsGuest() {
         if (this.ui) {
@@ -775,7 +775,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Показать ошибку аутентификации
+     * ÐŸÐ¾ÐºÐ°Ð·Ð°Ñ‚ÑŒ Ð¾ÑˆÐ¸Ð±ÐºÑƒ Ð°ÑƒÑ‚ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ†Ð¸Ð¸
      */
     showAuthError(message) {
         if (this.ui) {
@@ -784,7 +784,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Отображение вводного экрана
+     * ÐžÑ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ Ð²Ð²Ð¾Ð´Ð½Ð¾Ð³Ð¾ ÑÐºÑ€Ð°Ð½Ð°
      */
     showIntro() {
         this.state = 'intro';
@@ -795,7 +795,7 @@ class PersonalityTestApp {
 
 
     /**
-     * Показ экрана выбора типа теста
+     * ÐŸÐ¾ÐºÐ°Ð· ÑÐºÑ€Ð°Ð½Ð° Ð²Ñ‹Ð±Ð¾Ñ€Ð° Ñ‚Ð¸Ð¿Ð° Ñ‚ÐµÑÑ‚Ð°
      */
     showTestTypeSelection() {
         if (this.ui) {
@@ -805,57 +805,57 @@ class PersonalityTestApp {
 
 
     /**
-     * Загрузка данных углубленного теста
+     * Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° Ð´Ð°Ð½Ð½Ñ‹Ñ… ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°
      */
     async loadAdvancedScenarios() {
         try {
             let data = null;
 
-            // Сначала пробуем использовать встроенные данные (для file:// протокола)
+            // Ð¡Ð½Ð°Ñ‡Ð°Ð»Ð° Ð¿Ñ€Ð¾Ð±ÑƒÐµÐ¼ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒ Ð²ÑÑ‚Ñ€Ð¾ÐµÐ½Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ (Ð´Ð»Ñ file:// Ð¿Ñ€Ð¾Ñ‚Ð¾ÐºÐ¾Ð»Ð°)
             if (typeof ADVANCED_SCENARIOS_DATA !== 'undefined' && ADVANCED_SCENARIOS_DATA && ADVANCED_SCENARIOS_DATA.questions) {
-                debugLog('Кеңейтілген тесттің кірістірілген деректерін қолдану (Using embedded advanced test data): ADVANCED_SCENARIOS_DATA');
+                debugLog('ÐšÐµÒ£ÐµÐ¹Ñ‚Ñ–Ð»Ð³ÐµÐ½ Ñ‚ÐµÑÑ‚Ñ‚Ñ–Ò£ ÐºÑ–Ñ€Ñ–ÑÑ‚Ñ–Ñ€Ñ–Ð»Ð³ÐµÐ½ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€Ñ–Ð½ Ò›Ð¾Ð»Ð´Ð°Ð½Ñƒ (Using embedded advanced test data): ADVANCED_SCENARIOS_DATA');
                 data = ADVANCED_SCENARIOS_DATA;
             } else if (typeof window !== 'undefined' && window.ADVANCED_SCENARIOS_DATA && window.ADVANCED_SCENARIOS_DATA.questions) {
-                debugLog('Кеңейтілген тесттің кірістірілген деректерін қолдану (Using embedded advanced test data): window.ADVANCED_SCENARIOS_DATA');
+                debugLog('ÐšÐµÒ£ÐµÐ¹Ñ‚Ñ–Ð»Ð³ÐµÐ½ Ñ‚ÐµÑÑ‚Ñ‚Ñ–Ò£ ÐºÑ–Ñ€Ñ–ÑÑ‚Ñ–Ñ€Ñ–Ð»Ð³ÐµÐ½ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€Ñ–Ð½ Ò›Ð¾Ð»Ð´Ð°Ð½Ñƒ (Using embedded advanced test data): window.ADVANCED_SCENARIOS_DATA');
                 data = window.ADVANCED_SCENARIOS_DATA;
             } else {
-                // Пробуем загрузить через fetch (для HTTP/HTTPS)
-                debugLog('Кеңейтілген тест деректерін fetch арқылы жүктеуге тырысуда (Trying to load advanced test data via fetch)...');
+                // ÐŸÑ€Ð¾Ð±ÑƒÐµÐ¼ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ Ñ‡ÐµÑ€ÐµÐ· fetch (Ð´Ð»Ñ HTTP/HTTPS)
+                debugLog('ÐšÐµÒ£ÐµÐ¹Ñ‚Ñ–Ð»Ð³ÐµÐ½ Ñ‚ÐµÑÑ‚ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€Ñ–Ð½ fetch Ð°Ñ€Ò›Ñ‹Ð»Ñ‹ Ð¶Ò¯ÐºÑ‚ÐµÑƒÐ³Ðµ Ñ‚Ñ‹Ñ€Ñ‹ÑÑƒÐ´Ð° (Trying to load advanced test data via fetch)...');
                 try {
                     const response = await fetch('data/advanced-scenarios.json');
                     if (!response.ok) {
-                        throw new Error(`Не удалось загрузить данные углубленного теста: ${response.status} ${response.statusText}`);
+                        throw new Error(`ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°: ${response.status} ${response.statusText}`);
                     }
                     data = await response.json();
                 } catch (fetchError) {
-                    criticalError('Fetch сәтсіз аяқталды (мүмкін file:// хаттамасы) (Fetch failed, possibly file:// protocol):', fetchError.message);
-                    throw new Error('Данные углубленного теста не найдены. Убедитесь, что файл advanced-scenarios-data.js загружен.');
+                    criticalError('Fetch ÑÓ™Ñ‚ÑÑ–Ð· Ð°ÑÒ›Ñ‚Ð°Ð»Ð´Ñ‹ (Ð¼Ò¯Ð¼ÐºÑ–Ð½ file:// Ñ…Ð°Ñ‚Ñ‚Ð°Ð¼Ð°ÑÑ‹) (Fetch failed, possibly file:// protocol):', fetchError.message);
+                    throw new Error('Ð”Ð°Ð½Ð½Ñ‹Ðµ ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð° Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ñ‹. Ð£Ð±ÐµÐ´Ð¸Ñ‚ÐµÑÑŒ, Ñ‡Ñ‚Ð¾ Ñ„Ð°Ð¹Ð» advanced-scenarios-data.js Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½.');
                 }
             }
 
-            // Валидация данных
+            // Ð’Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸Ñ Ð´Ð°Ð½Ð½Ñ‹Ñ…
             if (!data.questions || !Array.isArray(data.questions) || data.questions.length === 0) {
-                throw new Error('Невалидная структура данных углубленного теста: отсутствует массив questions');
+                throw new Error('ÐÐµÐ²Ð°Ð»Ð¸Ð´Ð½Ð°Ñ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ð° Ð´Ð°Ð½Ð½Ñ‹Ñ… ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°: Ð¾Ñ‚ÑÑƒÑ‚ÑÑ‚Ð²ÑƒÐµÑ‚ Ð¼Ð°ÑÑÐ¸Ð² questions');
             }
 
             if (!data.dimensions || typeof data.dimensions !== 'object') {
-                throw new Error('Отсутствуют измерения в данных углубленного теста');
+                throw new Error('ÐžÑ‚ÑÑƒÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‚ Ð¸Ð·Ð¼ÐµÑ€ÐµÐ½Ð¸Ñ Ð² Ð´Ð°Ð½Ð½Ñ‹Ñ… ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°');
             }
 
             this.advancedQuestions = data.questions;
             return data;
         } catch (error) {
-            criticalError('Кеңейтілген тест деректерін жүктеу қатесі (Error loading advanced test data):', error);
-            // Пробрасываем ошибку дальше для обработки в вызывающем коде
+            criticalError('ÐšÐµÒ£ÐµÐ¹Ñ‚Ñ–Ð»Ð³ÐµÐ½ Ñ‚ÐµÑÑ‚ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€Ñ–Ð½ Ð¶Ò¯ÐºÑ‚ÐµÑƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error loading advanced test data):', error);
+            // ÐŸÑ€Ð¾Ð±Ñ€Ð°ÑÑ‹Ð²Ð°ÐµÐ¼ Ð¾ÑˆÐ¸Ð±ÐºÑƒ Ð´Ð°Ð»ÑŒÑˆÐµ Ð´Ð»Ñ Ð¾Ð±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ¸ Ð² Ð²Ñ‹Ð·Ñ‹Ð²Ð°ÑŽÑ‰ÐµÐ¼ ÐºÐ¾Ð´Ðµ
             throw error;
         }
     }
 
     /**
-     * Начало базового теста
+     * ÐÐ°Ñ‡Ð°Ð»Ð¾ Ð±Ð°Ð·Ð¾Ð²Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°
      */
     /**
-     * Начало базового теста
+     * ÐÐ°Ñ‡Ð°Ð»Ð¾ Ð±Ð°Ð·Ð¾Ð²Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°
      */
     startBasicTest() {
         if (this.testManager) {
@@ -864,10 +864,10 @@ class PersonalityTestApp {
     }
 
     /**
-     * Начало углубленного теста
+     * ÐÐ°Ñ‡Ð°Ð»Ð¾ ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°
      */
     /**
-     * Начало углубленного теста
+     * ÐÐ°Ñ‡Ð°Ð»Ð¾ ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°
      */
     async startAdvancedTest() {
         if (this.testManager) {
@@ -880,8 +880,8 @@ class PersonalityTestApp {
 
 
     /**
-     * Начало тестирования
-     * @param {string} mode - Тип теста: 'basic', 'advanced', или 'cognitive'
+     * ÐÐ°Ñ‡Ð°Ð»Ð¾ Ñ‚ÐµÑÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ
+     * @param {string} mode - Ð¢Ð¸Ð¿ Ñ‚ÐµÑÑ‚Ð°: 'basic', 'advanced', Ð¸Ð»Ð¸ 'cognitive'
      */
     startTest(mode) {
         if (!this.testManager) {
@@ -904,16 +904,16 @@ class PersonalityTestApp {
     }
 
     /**
-     * Отображение текущего вопроса (для углубленного теста)
+     * ÐžÑ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ³Ð¾ Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ° (Ð´Ð»Ñ ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°)
      */
     showQuestion() {
         if (!this.advancedQuestions || this.advancedQuestions.length === 0) {
-            criticalError('Кеңейтілген тест сұрақтары жүктелген жоқ (Advanced test questions not loaded)');
+            criticalError('ÐšÐµÒ£ÐµÐ¹Ñ‚Ñ–Ð»Ð³ÐµÐ½ Ñ‚ÐµÑÑ‚ ÑÒ±Ñ€Ð°Ò›Ñ‚Ð°Ñ€Ñ‹ Ð¶Ò¯ÐºÑ‚ÐµÐ»Ð³ÐµÐ½ Ð¶Ð¾Ò› (Advanced test questions not loaded)');
             this.showTestTypeSelection();
             return;
         }
 
-        // Проверяем, все ли вопросы пройдены
+        // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼, Ð²ÑÐµ Ð»Ð¸ Ð²Ð¾Ð¿Ñ€Ð¾ÑÑ‹ Ð¿Ñ€Ð¾Ð¹Ð´ÐµÐ½Ñ‹
         if (this.currentQuestionIndex >= this.advancedQuestions.length) {
             this.showResults();
             return;
@@ -934,7 +934,7 @@ class PersonalityTestApp {
         const t = this.i18n.t.bind(this.i18n);
         const currentLang = this.i18n.getLanguage();
 
-        // Определяем тип вопроса и показываем соответствующий интерфейс
+        // ÐžÐ¿Ñ€ÐµÐ´ÐµÐ»ÑÐµÐ¼ Ñ‚Ð¸Ð¿ Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ° Ð¸ Ð¿Ð¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ ÑÐ¾Ð¾Ñ‚Ð²ÐµÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¹ Ð¸Ð½Ñ‚ÐµÑ€Ñ„ÐµÐ¹Ñ
         let questionHTML = '';
 
         if (question.type === 'scenario') {
@@ -946,7 +946,7 @@ class PersonalityTestApp {
         } else if (question.type === 'situational') {
             questionHTML = this.ui.renderSituationalQuestion(question, currentLang, t);
         } else {
-            criticalError('Сұрақтың белгісіз түрі (Unknown question type):', question.type);
+            criticalError('Ð¡Ò±Ñ€Ð°Ò›Ñ‚Ñ‹Ò£ Ð±ÐµÐ»Ð³Ñ–ÑÑ–Ð· Ñ‚Ò¯Ñ€Ñ– (Unknown question type):', question.type);
             this.currentQuestionIndex++;
             this.showQuestion();
             return;
@@ -973,7 +973,7 @@ class PersonalityTestApp {
 
 
     /**
-     * Продолжение теста
+     * ÐŸÑ€Ð¾Ð´Ð¾Ð»Ð¶ÐµÐ½Ð¸Ðµ Ñ‚ÐµÑÑ‚Ð°
      */
     continueTest() {
         if (this.testManager) {
@@ -982,7 +982,7 @@ class PersonalityTestApp {
             if (savedProgress && savedProgress.choices) {
                 // Check if this is cognitive test
                 if (savedProgress.testMode === 'cognitive' || (savedProgress.mode === 'cognitive')) {
-                    console.log('🧠 Cognitive test progress found, restoring via TestManager...');
+                    console.log('ðŸ§  Cognitive test progress found, restoring via TestManager...');
                     if (this.testManager && typeof this.testManager.startCognitiveTest === 'function') {
                         this.testManager.startCognitiveTest();
                         return;
@@ -997,7 +997,7 @@ class PersonalityTestApp {
                     // Check signature of advanced test data
                     if (!Array.isArray(savedProgress.choices) && (savedProgress.choices.scales || savedProgress.choices.situational || savedProgress.choices.open)) {
                         testMode = 'advanced';
-                        console.log('🔄 Extracted test mode: advanced (inferred)');
+                        console.log('ðŸ”„ Extracted test mode: advanced (inferred)');
                     } else if (savedProgress.choices && savedProgress.choices.length > 0 && (savedProgress.choices[0].weights || savedProgress.choices[0].scenarioId)) {
                         // Basic test usually has simple choices array
                         testMode = 'basic';
@@ -1017,16 +1017,16 @@ class PersonalityTestApp {
                             // Validate and Init Advanced Analyzer
                             if (data && typeof AdvancedPersonalityAnalyzer !== 'undefined') {
                                 this.analyzer = new AdvancedPersonalityAnalyzer(data);
-                                console.log('✅ Жалғастыру үшін кеңейтілген анализатор инициализацияланды (✅ Advanced Analyzer initialized for continuation)');
+                                console.log('âœ… Ð–Ð°Ð»Ò“Ð°ÑÑ‚Ñ‹Ñ€Ñƒ Ò¯ÑˆÑ–Ð½ ÐºÐµÒ£ÐµÐ¹Ñ‚Ñ–Ð»Ð³ÐµÐ½ Ð°Ð½Ð°Ð»Ð¸Ð·Ð°Ñ‚Ð¾Ñ€ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸ÑÐ»Ð°Ð½Ð´Ñ‹ (âœ… Advanced Analyzer initialized for continuation)');
                             }
 
                             // Restore question index
                             const restoredIndex = savedProgress.currentQuestionIndex || 0;
                             this.testManager.currentQuestionIndex = restoredIndex;
-                            console.log('📍 №', restoredIndex + 1, 'сұрақтан жалғастырамыз (📍 Continuing from question No.)');
+                            console.log('ðŸ“ â„–', restoredIndex + 1, 'ÑÒ±Ñ€Ð°Ò›Ñ‚Ð°Ð½ Ð¶Ð°Ð»Ò“Ð°ÑÑ‚Ñ‹Ñ€Ð°Ð¼Ñ‹Ð· (ðŸ“ Continuing from question No.)');
 
                             // Debug Info
-                            // alert(`DEBUG: Тест ${testMode}, Восстановлен индекс: ${restoredIndex}, Ответы: ${JSON.stringify(savedProgress.choices ? Object.keys(savedProgress.choices) : 'нет')}`);
+                            // alert(`DEBUG: Ð¢ÐµÑÑ‚ ${testMode}, Ð’Ð¾ÑÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½ Ð¸Ð½Ð´ÐµÐºÑ: ${restoredIndex}, ÐžÑ‚Ð²ÐµÑ‚Ñ‹: ${JSON.stringify(savedProgress.choices ? Object.keys(savedProgress.choices) : 'Ð½ÐµÑ‚')}`);
 
                             // Restore answers to analyzer
                             if (savedProgress.choices) {
@@ -1095,7 +1095,7 @@ class PersonalityTestApp {
                             scenarios: this.scenarios,
                             dimensions: this.dimensions
                         });
-                        console.log('✅ Basic Analyzer initialized for continuation');
+                        console.log('âœ… Basic Analyzer initialized for continuation');
                     }
 
                     // Restore choices to analyzer
@@ -1128,7 +1128,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Начать новый тест (очистить прогресс)
+     * ÐÐ°Ñ‡Ð°Ñ‚ÑŒ Ð½Ð¾Ð²Ñ‹Ð¹ Ñ‚ÐµÑÑ‚ (Ð¾Ñ‡Ð¸ÑÑ‚Ð¸Ñ‚ÑŒ Ð¿Ñ€Ð¾Ð³Ñ€ÐµÑÑ)
      */
     startNewTest() {
         const t = this.i18n ? this.i18n.t.bind(this.i18n) : ((key) => key);
@@ -1157,7 +1157,7 @@ class PersonalityTestApp {
 
 
     /**
-     * Обработка выбора в сценарии (для Basic)
+     * ÐžÐ±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° Ð²Ñ‹Ð±Ð¾Ñ€Ð° Ð² ÑÑ†ÐµÐ½Ð°Ñ€Ð¸Ð¸ (Ð´Ð»Ñ Basic)
      */
     handleScenarioOption(choice, scenarioId) {
         if (this.testManager) {
@@ -1166,7 +1166,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Обработка ответа на сценарий (для Advanced)
+     * ÐžÐ±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° Ð¾Ñ‚Ð²ÐµÑ‚Ð° Ð½Ð° ÑÑ†ÐµÐ½Ð°Ñ€Ð¸Ð¹ (Ð´Ð»Ñ Advanced)
      */
     handleAdvancedAnswer(choice, questionId) {
         if (this.testManager) {
@@ -1176,26 +1176,26 @@ class PersonalityTestApp {
 
 
     /**
-     * Отображение результатов
+     * ÐžÑ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¾Ð²
      */
     /**
-     * Отображение результатов
+     * ÐžÑ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¾Ð²
      */
     /**
-     * Отображение результатов
-     * @param {Object} [existingResults] - Существующие результаты (для просмотра истории)
+     * ÐžÑ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¾Ð²
+     * @param {Object} [existingResults] - Ð¡ÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ðµ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ñ‹ (Ð´Ð»Ñ Ð¿Ñ€Ð¾ÑÐ¼Ð¾Ñ‚Ñ€Ð° Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ð¸)
      */
     showResults(results = null) {
         this.state = 'results';
         if (this.resultsManager && this.ui) {
-            // Если переданы результаты, используем их, иначе генерируем новые
+            // Ð•ÑÐ»Ð¸ Ð¿ÐµÑ€ÐµÐ´Ð°Ð½Ñ‹ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ñ‹, Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÐ¼ Ð¸Ñ…, Ð¸Ð½Ð°Ñ‡Ðµ Ð³ÐµÐ½ÐµÑ€Ð¸Ñ€ÑƒÐµÐ¼ Ð½Ð¾Ð²Ñ‹Ðµ
             this.activeResults = results || this.resultsManager.generateResults();
             this.ui.showResults(this.activeResults);
         }
     }
 
     /**
-     * Скачивание результатов
+     * Ð¡ÐºÐ°Ñ‡Ð¸Ð²Ð°Ð½Ð¸Ðµ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¾Ð²
      */
     downloadResults(format = 'html') {
         if (this.testMode === 'cognitive' && this.resultsManager) {
@@ -1208,7 +1208,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Показать профиль пользователя
+     * ÐŸÐ¾ÐºÐ°Ð·Ð°Ñ‚ÑŒ Ð¿Ñ€Ð¾Ñ„Ð¸Ð»ÑŒ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
      */
     showProfile() {
         this.state = 'profile';
@@ -1226,9 +1226,9 @@ class PersonalityTestApp {
 
 
     /**
-     * Получение аватара пользователя
-     * @param {Object} user - Пользователь
-     * @returns {string} HTML аватара
+     * ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð°Ð²Ð°Ñ‚Ð°Ñ€Ð° Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
+     * @param {Object} user - ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ
+     * @returns {string} HTML Ð°Ð²Ð°Ñ‚Ð°Ñ€Ð°
      */
     getUserAvatar(user) {
         if (!user) return '?';
@@ -1239,20 +1239,20 @@ class PersonalityTestApp {
             return '';
         }
 
-        // По умолчанию - первая буква имени
+        // ÐŸÐ¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ - Ð¿ÐµÑ€Ð²Ð°Ñ Ð±ÑƒÐºÐ²Ð° Ð¸Ð¼ÐµÐ½Ð¸
         const letter = user.username.charAt(0).toUpperCase();
         return `<span style="font-size: 2rem; color: white;">${letter}</span>`;
     }
 
     /**
-     * Редактирование аватара
+     * Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð°Ð²Ð°Ñ‚Ð°Ñ€Ð°
      */
     editAvatar() {
         const user = this.auth.getCurrentUser();
         if (!user) return;
 
         const t = this.i18n.t.bind(this.i18n);
-        const emojis = ['😊', '🎯', '🚀', '💡', '🌟', '⚡', '🎨', '🔬', '📊', '💼', '🎓', '🏆'];
+        const emojis = ['ðŸ˜Š', 'ðŸŽ¯', 'ðŸš€', 'ðŸ’¡', 'ðŸŒŸ', 'âš¡', 'ðŸŽ¨', 'ðŸ”¬', 'ðŸ“Š', 'ðŸ’¼', 'ðŸŽ“', 'ðŸ†'];
         const colors = ['#4a90e2', '#7b68ee', '#50c878', '#f39c12', '#e74c3c', '#9b59b6', '#1abc9c', '#e67e22'];
 
         const modal = document.createElement('div');
@@ -1288,7 +1288,7 @@ class PersonalityTestApp {
         `;
         document.body.appendChild(modal);
 
-        // Закрытие при клике вне модального окна
+        // Ð—Ð°ÐºÑ€Ñ‹Ñ‚Ð¸Ðµ Ð¿Ñ€Ð¸ ÐºÐ»Ð¸ÐºÐµ Ð²Ð½Ðµ Ð¼Ð¾Ð´Ð°Ð»ÑŒÐ½Ð¾Ð³Ð¾ Ð¾ÐºÐ½Ð°
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 this.closeModal();
@@ -1297,7 +1297,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Установка аватара
+     * Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ð°Ð²Ð°Ñ‚Ð°Ñ€Ð°
      */
     setAvatar(type, value) {
         const user = this.auth.getCurrentUser();
@@ -1306,17 +1306,17 @@ class PersonalityTestApp {
         user.avatar = { type, value };
         this.auth.updateUser(user);
 
-        // Закрываем модальное окно
+        // Ð—Ð°ÐºÑ€Ñ‹Ð²Ð°ÐµÐ¼ Ð¼Ð¾Ð´Ð°Ð»ÑŒÐ½Ð¾Ðµ Ð¾ÐºÐ½Ð¾
         this.closeModal();
 
-        // Показываем профиль с обновлённым аватаром
+        // ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ Ð¿Ñ€Ð¾Ñ„Ð¸Ð»ÑŒ Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»Ñ‘Ð½Ð½Ñ‹Ð¼ Ð°Ð²Ð°Ñ‚Ð°Ñ€Ð¾Ð¼
         setTimeout(() => {
             this.showProfile();
         }, 100);
     }
 
     /**
-     * Закрытие модального окна
+     * Ð—Ð°ÐºÑ€Ñ‹Ñ‚Ð¸Ðµ Ð¼Ð¾Ð´Ð°Ð»ÑŒÐ½Ð¾Ð³Ð¾ Ð¾ÐºÐ½Ð°
      */
     closeModal() {
         const modal = document.querySelector('.modal-overlay');
@@ -1327,7 +1327,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Редактирование профиля
+     * Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð¿Ñ€Ð¾Ñ„Ð¸Ð»Ñ
      */
     editProfile() {
         const user = this.auth.getCurrentUser();
@@ -1364,7 +1364,7 @@ class PersonalityTestApp {
         `;
         document.body.appendChild(modal);
 
-        // Закрытие при клике вне модального окна
+        // Ð—Ð°ÐºÑ€Ñ‹Ñ‚Ð¸Ðµ Ð¿Ñ€Ð¸ ÐºÐ»Ð¸ÐºÐµ Ð²Ð½Ðµ Ð¼Ð¾Ð´Ð°Ð»ÑŒÐ½Ð¾Ð³Ð¾ Ð¾ÐºÐ½Ð°
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 this.closeModal();
@@ -1373,7 +1373,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Сохранение профиля
+     * Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¾Ñ„Ð¸Ð»Ñ
      */
     saveProfile(event) {
         event.preventDefault();
@@ -1386,23 +1386,23 @@ class PersonalityTestApp {
 
         this.auth.updateUser(user);
 
-        // Закрываем модальное окно
+        // Ð—Ð°ÐºÑ€Ñ‹Ð²Ð°ÐµÐ¼ Ð¼Ð¾Ð´Ð°Ð»ÑŒÐ½Ð¾Ðµ Ð¾ÐºÐ½Ð¾
         this.closeModal();
 
-        // Показываем профиль с обновлёнными данными
+        // ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ Ð¿Ñ€Ð¾Ñ„Ð¸Ð»ÑŒ Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»Ñ‘Ð½Ð½Ñ‹Ð¼Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ð¼Ð¸
         setTimeout(() => {
             this.showProfile();
         }, 100);
     }
 
     /**
-     * Просмотр результатов конкретного теста
+     * ÐŸÑ€Ð¾ÑÐ¼Ð¾Ñ‚Ñ€ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¾Ð² ÐºÐ¾Ð½ÐºÑ€ÐµÑ‚Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°
      */
     viewTestResults(index) {
         const history = this.auth.getTestHistory();
         if (index >= 0 && index < history.length) {
             const test = history[index];
-            // Показываем результаты без повторного сохранения
+            // ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ñ‹ Ð±ÐµÐ· Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€Ð½Ð¾Ð³Ð¾ ÑÐ¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ñ
             this.showResults(test.results);
         }
     }
@@ -1419,11 +1419,11 @@ class PersonalityTestApp {
         const currentTitle = currentResults.title || currentResults.dominant || this.i18n.t('cognitiveTest');
         const t = this.i18n.t.bind(this.i18n);
 
-        const newTitle = prompt(t('enterTestName') || 'Введите название теста:', currentTitle);
+        const newTitle = prompt(t('enterTestName') || 'Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ Ñ‚ÐµÑÑ‚Ð°:', currentTitle);
 
         if (newTitle && newTitle.trim() !== '') {
             if (this.storage.updateCognitiveTestTitle(newTitle.trim())) {
-                if (this.toast) this.toast.show(t('testRenamed') || 'Тест переименован', 'success');
+                if (this.toast) this.toast.show(t('testRenamed') || 'Ð¢ÐµÑÑ‚ Ð¿ÐµÑ€ÐµÐ¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ð½', 'success');
                 this.showProfile();
             }
         }
@@ -1432,11 +1432,11 @@ class PersonalityTestApp {
 
 
     /**
-     * Отображение социального сравнения
-     * @param {string} containerId - ID контейнера
-     * @param {Object} scores - Оценки пользователя
-     * @param {Object} profile - Профиль
-     * @param {Object} aiAnalysis - AI-анализ
+     * ÐžÑ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ ÑÐ¾Ñ†Ð¸Ð°Ð»ÑŒÐ½Ð¾Ð³Ð¾ ÑÑ€Ð°Ð²Ð½ÐµÐ½Ð¸Ñ
+     * @param {string} containerId - ID ÐºÐ¾Ð½Ñ‚ÐµÐ¹Ð½ÐµÑ€Ð°
+     * @param {Object} scores - ÐžÑ†ÐµÐ½ÐºÐ¸ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
+     * @param {Object} profile - ÐŸÑ€Ð¾Ñ„Ð¸Ð»ÑŒ
+     * @param {Object} aiAnalysis - AI-Ð°Ð½Ð°Ð»Ð¸Ð·
      */
     displaySocialComparison(containerId, scores, profile, aiAnalysis) {
         const container = document.getElementById(containerId);
@@ -1450,7 +1450,7 @@ class PersonalityTestApp {
                 <div class="social-unavailable">
                     <p>${comparison.message}</p>
                     <p style="font-size: 0.9em; color: #666; margin-top: 0.5rem;">
-                        Пройдите тест еще раз, чтобы увидеть сравнение с другими пользователями
+                        ÐŸÑ€Ð¾Ð¹Ð´Ð¸Ñ‚Ðµ Ñ‚ÐµÑÑ‚ ÐµÑ‰Ðµ Ñ€Ð°Ð·, Ñ‡Ñ‚Ð¾Ð±Ñ‹ ÑƒÐ²Ð¸Ð´ÐµÑ‚ÑŒ ÑÑ€Ð°Ð²Ð½ÐµÐ½Ð¸Ðµ Ñ Ð´Ñ€ÑƒÐ³Ð¸Ð¼Ð¸ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑÐ¼Ð¸
                     </p>
                 </div>
             `;
@@ -1463,7 +1463,7 @@ class PersonalityTestApp {
                     <h3>${this.i18n.t('yourGroup')} ${userGroup.name}</h3>
                     <p>${userGroup.description}</p>
                     <div class="match-score">
-                        ${this.i18n.t('match') || 'Соответствие'}: ${Math.round(userGroup.matchScore * 100)}%
+                        ${this.i18n.t('match') || 'Ð¡Ð¾Ð¾Ñ‚Ð²ÐµÑ‚ÑÑ‚Ð²Ð¸Ðµ'}: ${Math.round(userGroup.matchScore * 100)}%
                     </div>
                 </div>
                 
@@ -1518,9 +1518,9 @@ class PersonalityTestApp {
 
 
     /**
-     * Обработка выбора опции в сценарии (Базовый тест)
-     * @param {string} choice - Выбранная опция (A, B, C, D)
-     * @param {number} scenarioId - ID сценария
+     * ÐžÐ±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° Ð²Ñ‹Ð±Ð¾Ñ€Ð° Ð¾Ð¿Ñ†Ð¸Ð¸ Ð² ÑÑ†ÐµÐ½Ð°Ñ€Ð¸Ð¸ (Ð‘Ð°Ð·Ð¾Ð²Ñ‹Ð¹ Ñ‚ÐµÑÑ‚)
+     * @param {string} choice - Ð’Ñ‹Ð±Ñ€Ð°Ð½Ð½Ð°Ñ Ð¾Ð¿Ñ†Ð¸Ñ (A, B, C, D)
+     * @param {number} scenarioId - ID ÑÑ†ÐµÐ½Ð°Ñ€Ð¸Ñ
      */
     handleScenarioOption(choice, scenarioId) {
         if (this.testManager) {
@@ -1529,9 +1529,9 @@ class PersonalityTestApp {
     }
 
     /**
-     * Обработка ответа на углубленный вопрос (Тип: Сценарий)
-     * @param {string} choice - Выбранная опция
-     * @param {number} questionId - ID вопроса
+     * ÐžÐ±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° Ð¾Ñ‚Ð²ÐµÑ‚Ð° Ð½Ð° ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ñ‹Ð¹ Ð²Ð¾Ð¿Ñ€Ð¾Ñ (Ð¢Ð¸Ð¿: Ð¡Ñ†ÐµÐ½Ð°Ñ€Ð¸Ð¹)
+     * @param {string} choice - Ð’Ñ‹Ð±Ñ€Ð°Ð½Ð½Ð°Ñ Ð¾Ð¿Ñ†Ð¸Ñ
+     * @param {number} questionId - ID Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ°
      */
     handleAdvancedAnswer(choice, questionId) {
         if (this.testManager) {
@@ -1540,8 +1540,8 @@ class PersonalityTestApp {
     }
 
     /**
-     * Обработка ответа на шкалируемый вопрос
-     * @param {number} questionId - ID вопроса
+     * ÐžÐ±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° Ð¾Ñ‚Ð²ÐµÑ‚Ð° Ð½Ð° ÑˆÐºÐ°Ð»Ð¸Ñ€ÑƒÐµÐ¼Ñ‹Ð¹ Ð²Ð¾Ð¿Ñ€Ð¾Ñ
+     * @param {number} questionId - ID Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ°
      */
     handleScaleAnswer(questionId) {
         const input = document.getElementById(`scale-input-${questionId}`);
@@ -1552,8 +1552,8 @@ class PersonalityTestApp {
     }
 
     /**
-     * Обработка открытого ответа
-     * @param {number} questionId - ID вопроса
+     * ÐžÐ±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° Ð¾Ñ‚ÐºÑ€Ñ‹Ñ‚Ð¾Ð³Ð¾ Ð¾Ñ‚Ð²ÐµÑ‚Ð°
+     * @param {number} questionId - ID Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ°
      */
     handleOpenAnswer(questionId) {
         const textarea = document.getElementById(`open-answer-${questionId}`);
@@ -1561,7 +1561,7 @@ class PersonalityTestApp {
             const text = textarea.value.trim();
             // Basic validation
             if (!text) {
-                this.ui.showAlert(this.i18n.t('pleaseEnterAnswer') || 'Пожалуйста, введите ответ');
+                this.ui.showAlert(this.i18n.t('pleaseEnterAnswer') || 'ÐŸÐ¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð²Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¾Ñ‚Ð²ÐµÑ‚');
                 return;
             }
             this.testManager.recordOpenAnswer(questionId, text);
@@ -1569,7 +1569,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Обработка ответа на ситуационный вопрос
+     * ÐžÐ±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° Ð¾Ñ‚Ð²ÐµÑ‚Ð° Ð½Ð° ÑÐ¸Ñ‚ÑƒÐ°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ð¹ Ð²Ð¾Ð¿Ñ€Ð¾Ñ
      */
     handleSituationalAnswer(questionId, stepId, choice) {
         if (this.testManager) {
@@ -1580,10 +1580,10 @@ class PersonalityTestApp {
     // ... (skipping unchanged code)
 
     /**
-     * Переименование теста
+     * ÐŸÐµÑ€ÐµÐ¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ð½Ð¸Ðµ Ñ‚ÐµÑÑ‚Ð°
      */
     /**
-     * Переименование теста
+     * ÐŸÐµÑ€ÐµÐ¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ð½Ð¸Ðµ Ñ‚ÐµÑÑ‚Ð°
      */
     renameTest(testId) {
         const history = this.auth.getTestHistory();
@@ -1593,18 +1593,18 @@ class PersonalityTestApp {
         const currentTitle = test.title || `Test`;
         const t = this.i18n.t.bind(this.i18n);
 
-        const newTitle = prompt(t('enterTestName') || 'Введите название теста:', currentTitle);
+        const newTitle = prompt(t('enterTestName') || 'Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ Ñ‚ÐµÑÑ‚Ð°:', currentTitle);
 
         if (newTitle && newTitle.trim() !== '') {
             if (this.auth.updateTestTitle(testId, newTitle.trim())) {
-                if (this.toast) this.toast.show(t('testRenamed') || 'Тест переименован', 'success');
+                if (this.toast) this.toast.show(t('testRenamed') || 'Ð¢ÐµÑÑ‚ Ð¿ÐµÑ€ÐµÐ¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ð½', 'success');
                 this.showProfile();
             }
         }
     }
 
     /**
-     * Удаление теста
+     * Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ñ‚ÐµÑÑ‚Ð°
      */
     /**
      * Start Cognitive Test
@@ -1836,21 +1836,21 @@ class PersonalityTestApp {
 
                 <div class="breakdown-grid">
                     <div class="breakdown-item ${results.dominant === 'visual' ? 'dominant' : ''}">
-                        <div class="breakdown-label">👁️ Visual</div>
+                        <div class="breakdown-label">ðŸ‘ï¸ Visual</div>
                         <div class="breakdown-value">${results.breakdown.visual}%</div>
                         <div class="breakdown-bar">
                             <div class="breakdown-bar-fill" style="width: ${results.breakdown.visual}%"></div>
                         </div>
                     </div>
                     <div class="breakdown-item ${results.dominant === 'auditory' ? 'dominant' : ''}">
-                        <div class="breakdown-label">🎧 Auditory</div>
+                        <div class="breakdown-label">ðŸŽ§ Auditory</div>
                         <div class="breakdown-value">${results.breakdown.auditory}%</div>
                         <div class="breakdown-bar">
                             <div class="breakdown-bar-fill" style="width: ${results.breakdown.auditory}%"></div>
                         </div>
                     </div>
                     <div class="breakdown-item ${results.dominant === 'kinesthetic' ? 'dominant' : ''}">
-                        <div class="breakdown-label">🤸 Kinesthetic</div>
+                        <div class="breakdown-label">ðŸ¤¸ Kinesthetic</div>
                         <div class="breakdown-value">${results.breakdown.kinesthetic}%</div>
                         <div class="breakdown-bar">
                             <div class="breakdown-bar-fill" style="width: ${results.breakdown.kinesthetic}%"></div>
@@ -1869,15 +1869,15 @@ class PersonalityTestApp {
                 <div class="action-buttons">
                     <button class="btn-primary-gradient" onclick="app.downloadResults('html')">
                         <span class="material-symbols-rounded">download</span>
-                        ${t('downloadResults') || 'Нәтижелерді жүктеу (HTML)'}
+                        ${t('downloadResults') || 'ÐÓ™Ñ‚Ð¸Ð¶ÐµÐ»ÐµÑ€Ð´Ñ– Ð¶Ò¯ÐºÑ‚ÐµÑƒ (HTML)'}
                     </button>
                     <button class="btn-secondary-outline" onclick="app.showProfile()">
                         <span class="material-symbols-rounded">person</span>
-                        ${t('goToProfile') || 'Профильге өту'}
+                        ${t('goToProfile') || 'ÐŸÑ€Ð¾Ñ„Ð¸Ð»ÑŒÐ³Ðµ Ó©Ñ‚Ñƒ'}
                     </button>
                     <button class="btn-secondary-outline" onclick="app.showTestTypeSelection()">
                         <span class="material-symbols-rounded">refresh</span>
-                        ${t('takeAnotherTest') || 'Басқа тест тапсыру'}
+                        ${t('takeAnotherTest') || 'Ð‘Ð°ÑÒ›Ð° Ñ‚ÐµÑÑ‚ Ñ‚Ð°Ð¿ÑÑ‹Ñ€Ñƒ'}
                     </button>
                 </div>
             </div>
@@ -1888,14 +1888,14 @@ class PersonalityTestApp {
      * Delete Test by ID
      */
     deleteTest(testId, targetElement = null) {
-        if (!confirm(this.i18n.t('confirmDelete') || 'Вы уверены, что хотите удалить этот тест?')) return;
+        if (!confirm(this.i18n.t('confirmDelete') || 'Ð’Ñ‹ ÑƒÐ²ÐµÑ€ÐµÐ½Ñ‹, Ñ‡Ñ‚Ð¾ Ñ…Ð¾Ñ‚Ð¸Ñ‚Ðµ ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ ÑÑ‚Ð¾Ñ‚ Ñ‚ÐµÑÑ‚?')) return;
 
         if (testId === 'cognitive') {
             this.storage.removeCognitiveResults();
-            if (this.toast) this.toast.show(this.i18n.t('testDeleted') || 'Тест удален', 'success');
+            if (this.toast) this.toast.show(this.i18n.t('testDeleted') || 'Ð¢ÐµÑÑ‚ ÑƒÐ´Ð°Ð»ÐµÐ½', 'success');
             this.showProfile();
         } else if (this.auth.deleteTest(testId)) {
-            if (this.toast) this.toast.show(this.i18n.t('testDeleted') || 'Тест удален', 'success');
+            if (this.toast) this.toast.show(this.i18n.t('testDeleted') || 'Ð¢ÐµÑÑ‚ ÑƒÐ´Ð°Ð»ÐµÐ½', 'success');
             this.showProfile();
         }
     }
@@ -1908,7 +1908,7 @@ class PersonalityTestApp {
     deleteSelectedTests(ids, targetElement = null) {
         if (!ids || ids.length === 0) return;
 
-        if (!confirm(this.i18n.t('confirmDeleteSelected') || `Вы уверены, что хотите удалить выбранные тесты (${ids.length})?`)) return;
+        if (!confirm(this.i18n.t('confirmDeleteSelected', { count: ids.length }) || `Ð’Ñ‹ ÑƒÐ²ÐµÑ€ÐµÐ½Ñ‹, Ñ‡Ñ‚Ð¾ Ñ…Ð¾Ñ‚Ð¸Ñ‚Ðµ ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð½Ñ‹Ðµ Ñ‚ÐµÑÑ‚Ñ‹ (${ids.length})?`)) return;
 
         let deleted = false;
 
@@ -1926,7 +1926,7 @@ class PersonalityTestApp {
         }
 
         if (deleted) {
-            if (this.toast) this.toast.show(this.i18n.t('testsDeleted') || 'Тесты удалены', 'success');
+            if (this.toast) this.toast.show(this.i18n.t('testsDeleted') || 'Ð¢ÐµÑÑ‚Ñ‹ ÑƒÐ´Ð°Ð»ÐµÐ½Ñ‹', 'success');
             this.showProfile();
         }
     }
@@ -1934,7 +1934,7 @@ class PersonalityTestApp {
 
 
     /**
-     * Выход из аккаунта
+     * Ð’Ñ‹Ñ…Ð¾Ð´ Ð¸Ð· Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°
      */
     logout() {
         this.auth.logout();
@@ -1942,11 +1942,11 @@ class PersonalityTestApp {
     }
 
     /**
-     * Регистрация Service Worker для PWA
+     * Ð ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Service Worker Ð´Ð»Ñ PWA
      */
     registerServiceWorker() {
         if (!('serviceWorker' in navigator)) {
-            debugLog('Бұл браузерде Service Worker қолдау көрсетілмейді (Service Worker not supported in this browser)');
+            debugLog('Ð‘Ò±Ð» Ð±Ñ€Ð°ÑƒÐ·ÐµÑ€Ð´Ðµ Service Worker Ò›Ð¾Ð»Ð´Ð°Ñƒ ÐºÓ©Ñ€ÑÐµÑ‚Ñ–Ð»Ð¼ÐµÐ¹Ð´Ñ– (Service Worker not supported in this browser)');
             return;
         }
 
@@ -1955,38 +1955,38 @@ class PersonalityTestApp {
                 const swPath = window.location.pathname.includes('/diplom/') ? './sw.js' : '/sw.js';
                 navigator.serviceWorker.register('./sw.js')
                     .then((registration) => {
-                        debugLog('Service Worker тіркелді (Service Worker registered):', registration.scope);
+                        debugLog('Service Worker Ñ‚Ñ–Ñ€ÐºÐµÐ»Ð´Ñ– (Service Worker registered):', registration.scope);
 
-                        // Проверка обновлений
+                        // ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ð¹
                         registration.addEventListener('updatefound', () => {
                             try {
                                 const newWorker = registration.installing;
                                 if (newWorker) {
                                     newWorker.addEventListener('statechange', () => {
                                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                            debugLog('Қолданбаның жаңа нұсқасы қолжетімді (New application version available)');
+                                            debugLog('ÒšÐ¾Ð»Ð´Ð°Ð½Ð±Ð°Ð½Ñ‹Ò£ Ð¶Ð°Ò£Ð° Ð½Ò±ÑÒ›Ð°ÑÑ‹ Ò›Ð¾Ð»Ð¶ÐµÑ‚Ñ–Ð¼Ð´Ñ– (New application version available)');
                                         }
                                     });
                                 }
                             } catch (updateError) {
-                                debugWarn('Service Worker жаңартуларын тексеру қатесі (Error checking Service Worker updates):', updateError);
+                                debugWarn('Service Worker Ð¶Ð°Ò£Ð°Ñ€Ñ‚ÑƒÐ»Ð°Ñ€Ñ‹Ð½ Ñ‚ÐµÐºÑÐµÑ€Ñƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error checking Service Worker updates):', updateError);
                             }
                         });
                     })
                     .catch((error) => {
-                        debugWarn('Service Worker тіркеу қатесі (Service Worker registration error):', error);
-                        // Не критично, приложение может работать без Service Worker
+                        debugWarn('Service Worker Ñ‚Ñ–Ñ€ÐºÐµÑƒ Ò›Ð°Ñ‚ÐµÑÑ– (Service Worker registration error):', error);
+                        // ÐÐµ ÐºÑ€Ð¸Ñ‚Ð¸Ñ‡Ð½Ð¾, Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ Ð¼Ð¾Ð¶ÐµÑ‚ Ñ€Ð°Ð±Ð¾Ñ‚Ð°Ñ‚ÑŒ Ð±ÐµÐ· Service Worker
                     });
             });
         } catch (error) {
-            debugWarn('Service Worker теңшеу қатесі (Error setting up Service Worker):', error);
+            debugWarn('Service Worker Ñ‚ÐµÒ£ÑˆÐµÑƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error setting up Service Worker):', error);
         }
     }
 
     /**
-     * Отображение метрик качества теста
-     * @param {Object} qualityMetrics - Метрики качества
-     * @param {string} containerId - ID контейнера
+     * ÐžÑ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ Ð¼ÐµÑ‚Ñ€Ð¸Ðº ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð° Ñ‚ÐµÑÑ‚Ð°
+     * @param {Object} qualityMetrics - ÐœÐµÑ‚Ñ€Ð¸ÐºÐ¸ ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð°
+     * @param {string} containerId - ID ÐºÐ¾Ð½Ñ‚ÐµÐ¹Ð½ÐµÑ€Ð°
      */
     displayQualityMetrics(qualityMetrics, containerId) {
         const container = document.getElementById(containerId);
@@ -1994,7 +1994,7 @@ class PersonalityTestApp {
 
         let html = '<div class="quality-metrics">';
 
-        // Надежность
+        // ÐÐ°Ð´ÐµÐ¶Ð½Ð¾ÑÑ‚ÑŒ
         if (qualityMetrics.reliability) {
             const reliability = qualityMetrics.reliability;
             html += `
@@ -2024,7 +2024,7 @@ class PersonalityTestApp {
             `;
         }
 
-        // Статистическая валидация
+        // Ð¡Ñ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸Ñ‡ÐµÑÐºÐ°Ñ Ð²Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸Ñ
         if (qualityMetrics.statistical) {
             const statistical = qualityMetrics.statistical;
             html += `
@@ -2053,40 +2053,40 @@ class PersonalityTestApp {
     }
 
     /**
-     * Получение текстовой метки качества
-     * @param {string} quality - Качество
-     * @returns {string} Метка
+     * ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ð¾Ð¹ Ð¼ÐµÑ‚ÐºÐ¸ ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð°
+     * @param {string} quality - ÐšÐ°Ñ‡ÐµÑÑ‚Ð²Ð¾
+     * @returns {string} ÐœÐµÑ‚ÐºÐ°
      */
     getQualityLabel(quality) {
         const labels = {
-            'excellent': 'Отличное',
-            'good': 'Хорошее',
-            'acceptable': 'Приемлемое',
-            'questionable': 'Сомнительное',
-            'poor': 'Плохое'
+            'excellent': 'ÐžÑ‚Ð»Ð¸Ñ‡Ð½Ð¾Ðµ',
+            'good': 'Ð¥Ð¾Ñ€Ð¾ÑˆÐµÐµ',
+            'acceptable': 'ÐŸÑ€Ð¸ÐµÐ¼Ð»ÐµÐ¼Ð¾Ðµ',
+            'questionable': 'Ð¡Ð¾Ð¼Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾Ðµ',
+            'poor': 'ÐŸÐ»Ð¾Ñ…Ð¾Ðµ'
         };
         return labels[quality] || quality;
     }
 
     /**
-     * Получение текстовой метки валидности
-     * @param {string} validity - Валидность
-     * @returns {string} Метка
+     * ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ð¾Ð¹ Ð¼ÐµÑ‚ÐºÐ¸ Ð²Ð°Ð»Ð¸Ð´Ð½Ð¾ÑÑ‚Ð¸
+     * @param {string} validity - Ð’Ð°Ð»Ð¸Ð´Ð½Ð¾ÑÑ‚ÑŒ
+     * @returns {string} ÐœÐµÑ‚ÐºÐ°
      */
     getValidityLabel(validity) {
         const labels = {
-            'good': 'Хорошая',
-            'questionable': 'Сомнительная',
-            'poor': 'Плохая'
+            'good': 'Ð¥Ð¾Ñ€Ð¾ÑˆÐ°Ñ',
+            'questionable': 'Ð¡Ð¾Ð¼Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð°Ñ',
+            'poor': 'ÐŸÐ»Ð¾Ñ…Ð°Ñ'
         };
         return labels[validity] || validity;
     }
 
     /**
-     * Показ формы обратной связи
+     * ÐŸÐ¾ÐºÐ°Ð· Ñ„Ð¾Ñ€Ð¼Ñ‹ Ð¾Ð±Ñ€Ð°Ñ‚Ð½Ð¾Ð¹ ÑÐ²ÑÐ·Ð¸
      */
     /**
-     * Показ формы обратной связи
+     * ÐŸÐ¾ÐºÐ°Ð· Ñ„Ð¾Ñ€Ð¼Ñ‹ Ð¾Ð±Ñ€Ð°Ñ‚Ð½Ð¾Ð¹ ÑÐ²ÑÐ·Ð¸
      */
     showFeedbackForm() {
         if (!this.feedbackService) return;
@@ -2099,7 +2099,7 @@ class PersonalityTestApp {
     }
 
     /**
-     * Пропуск обратной связи
+     * ÐŸÑ€Ð¾Ð¿ÑƒÑÐº Ð¾Ð±Ñ€Ð°Ñ‚Ð½Ð¾Ð¹ ÑÐ²ÑÐ·Ð¸
      */
     skipFeedback() {
         if (!this.feedbackService) return;
@@ -2107,15 +2107,15 @@ class PersonalityTestApp {
     }
 
     /**
-     * Отображение ошибки
-     * @param {string} message - Сообщение об ошибке
+     * ÐžÑ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ Ð¾ÑˆÐ¸Ð±ÐºÐ¸
+     * @param {string} message - Ð¡Ð¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ
      */
     showError(message) {
         const container = document.getElementById('app');
         if (!container) return;
 
-        const errorTitle = this.i18n ? this.i18n.t('error') : 'Ошибка';
-        const reloadText = this.i18n ? this.i18n.t('reloadPage') || 'Перезагрузить страницу' : 'Перезагрузить страницу';
+        const errorTitle = this.i18n ? this.i18n.t('error') : 'ÐžÑˆÐ¸Ð±ÐºÐ°';
+        const reloadText = this.i18n ? this.i18n.t('reloadPage') || 'ÐŸÐµÑ€ÐµÐ·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ' : 'ÐŸÐµÑ€ÐµÐ·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ';
 
         container.innerHTML = `
             <div class="error-message">
@@ -2127,38 +2127,38 @@ class PersonalityTestApp {
     }
 }
 
-// Инициализация приложения при загрузке страницы
+// Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ Ð¿Ñ€Ð¸ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐµ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñ‹
 let app;
 
-// Инициализация приложения после загрузки DOM и всех критических скриптов
+// Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ Ð¿Ð¾ÑÐ»Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ DOM Ð¸ Ð²ÑÐµÑ… ÐºÑ€Ð¸Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ñ… ÑÐºÑ€Ð¸Ð¿Ñ‚Ð¾Ð²
 let initAttempts = 0;
-const MAX_INIT_ATTEMPTS = 50; // Максимум 10 секунд (50 * 200ms)
+const MAX_INIT_ATTEMPTS = 50; // ÐœÐ°ÐºÑÐ¸Ð¼ÑƒÐ¼ 10 ÑÐµÐºÑƒÐ½Ð´ (50 * 200ms)
 
 function initializeApp() {
     initAttempts++;
 
-    // Проверяем, что все необходимые классы и данные загружены
+    // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼, Ñ‡Ñ‚Ð¾ Ð²ÑÐµ Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ñ‹Ðµ ÐºÐ»Ð°ÑÑÑ‹ Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½Ñ‹
     if (typeof PersonalityTestApp === 'undefined') {
         if (initAttempts < MAX_INIT_ATTEMPTS) {
-            debugWarn(`Попытка ${initAttempts}: PersonalityTestApp не определён, ждём...`);
+            debugWarn(`ÐŸÐ¾Ð¿Ñ‹Ñ‚ÐºÐ° ${initAttempts}: PersonalityTestApp Ð½Ðµ Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»Ñ‘Ð½, Ð¶Ð´Ñ‘Ð¼...`);
             setTimeout(initializeApp, 200);
         } else {
-            criticalError('PersonalityTestApp анықталмады (PersonalityTestApp not defined after)', MAX_INIT_ATTEMPTS, 'attempts');
+            criticalError('PersonalityTestApp Ð°Ð½Ñ‹Ò›Ñ‚Ð°Ð»Ð¼Ð°Ð´Ñ‹ (PersonalityTestApp not defined after)', MAX_INIT_ATTEMPTS, 'attempts');
         }
         return;
     }
 
-    // Проверяем наличие критических зависимостей перед инициализацией
+    // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ðµ ÐºÑ€Ð¸Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ñ… Ð·Ð°Ð²Ð¸ÑÐ¸Ð¼Ð¾ÑÑ‚ÐµÐ¹ Ð¿ÐµÑ€ÐµÐ´ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸ÐµÐ¹
     const requiredModules = ['StorageManager', 'LocalizationManager', 'AuthManager', 'PersonalityAnalyzer', 'ResultsVisualizer'];
 
-    // Функция безопасной проверки доступности модуля
+    // Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð±ÐµÐ·Ð¾Ð¿Ð°ÑÐ½Ð¾Ð¹ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð¾ÑÑ‚Ð¸ Ð¼Ð¾Ð´ÑƒÐ»Ñ
     const isModuleAvailable = (moduleName) => {
-        // 1. Проверяем через window (основной способ для браузера)
+        // 1. ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ‡ÐµÑ€ÐµÐ· window (Ð¾ÑÐ½Ð¾Ð²Ð½Ð¾Ð¹ ÑÐ¿Ð¾ÑÐ¾Ð± Ð´Ð»Ñ Ð±Ñ€Ð°ÑƒÐ·ÐµÑ€Ð°)
         if (typeof window !== 'undefined' && typeof window[moduleName] !== 'undefined') {
             return true;
         }
 
-        // 2. Проверяем через globalThis (современный стандарт)
+        // 2. ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ñ‡ÐµÑ€ÐµÐ· globalThis (ÑÐ¾Ð²Ñ€ÐµÐ¼ÐµÐ½Ð½Ñ‹Ð¹ ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚)
         if (typeof globalThis !== 'undefined' && typeof globalThis[moduleName] !== 'undefined') {
             return true;
         }
@@ -2166,15 +2166,15 @@ function initializeApp() {
         return false;
     };
 
-    // Проверяем доступность каждого модуля с отладочной информацией
+    // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð¾ÑÑ‚ÑŒ ÐºÐ°Ð¶Ð´Ð¾Ð³Ð¾ Ð¼Ð¾Ð´ÑƒÐ»Ñ Ñ Ð¾Ñ‚Ð»Ð°Ð´Ð¾Ñ‡Ð½Ð¾Ð¹ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸ÐµÐ¹
     const moduleStatus = {};
     requiredModules.forEach(module => {
         moduleStatus[module] = isModuleAvailable(module);
     });
 
-    // Логируем статус модулей для диагностики (только при первой попытке или при ошибках)
+    // Ð›Ð¾Ð³Ð¸Ñ€ÑƒÐµÐ¼ ÑÑ‚Ð°Ñ‚ÑƒÑ Ð¼Ð¾Ð´ÑƒÐ»ÐµÐ¹ Ð´Ð»Ñ Ð´Ð¸Ð°Ð³Ð½Ð¾ÑÑ‚Ð¸ÐºÐ¸ (Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð¿Ñ€Ð¸ Ð¿ÐµÑ€Ð²Ð¾Ð¹ Ð¿Ð¾Ð¿Ñ‹Ñ‚ÐºÐµ Ð¸Ð»Ð¸ Ð¿Ñ€Ð¸ Ð¾ÑˆÐ¸Ð±ÐºÐ°Ñ…)
     if (initAttempts === 1 || initAttempts % 10 === 0) {
-        debugLog('Модульдердің жүктелу күйі (Module loading status):', moduleStatus);
+        debugLog('ÐœÐ¾Ð´ÑƒÐ»ÑŒÐ´ÐµÑ€Ð´Ñ–Ò£ Ð¶Ò¯ÐºÑ‚ÐµÐ»Ñƒ ÐºÒ¯Ð¹Ñ– (Module loading status):', moduleStatus);
         const availableModules = Object.entries(moduleStatus)
             .filter(([_, available]) => available)
             .map(([name]) => name);
@@ -2183,10 +2183,10 @@ function initializeApp() {
             .map(([name]) => name);
 
         if (availableModules.length > 0) {
-            debugLog('Жүктелген модульдер (Modules loaded):', availableModules);
+            debugLog('Ð–Ò¯ÐºÑ‚ÐµÐ»Ð³ÐµÐ½ Ð¼Ð¾Ð´ÑƒÐ»ÑŒÐ´ÐµÑ€ (Modules loaded):', availableModules);
         }
         if (missingModules.length > 0) {
-            debugWarn('Модульдер жетіспейді (Missing modules):', missingModules);
+            debugWarn('ÐœÐ¾Ð´ÑƒÐ»ÑŒÐ´ÐµÑ€ Ð¶ÐµÑ‚Ñ–ÑÐ¿ÐµÐ¹Ð´Ñ– (Missing modules):', missingModules);
         }
     }
 
@@ -2194,32 +2194,32 @@ function initializeApp() {
 
     if (missingModules.length > 0) {
         if (initAttempts < MAX_INIT_ATTEMPTS) {
-            console.warn(`${initAttempts}-әрекет (Attempt): Маңызды модульдер жүктелмеген (Critical modules not loaded):`, missingModules);
-            // Ждем еще немного и пробуем снова
+            console.warn(`${initAttempts}-Ó™Ñ€ÐµÐºÐµÑ‚ (Attempt): ÐœÐ°Ò£Ñ‹Ð·Ð´Ñ‹ Ð¼Ð¾Ð´ÑƒÐ»ÑŒÐ´ÐµÑ€ Ð¶Ò¯ÐºÑ‚ÐµÐ»Ð¼ÐµÐ³ÐµÐ½ (Critical modules not loaded):`, missingModules);
+            // Ð–Ð´ÐµÐ¼ ÐµÑ‰Ðµ Ð½ÐµÐ¼Ð½Ð¾Ð³Ð¾ Ð¸ Ð¿Ñ€Ð¾Ð±ÑƒÐµÐ¼ ÑÐ½Ð¾Ð²Ð°
             setTimeout(() => {
-                initializeApp(); // Рекурсивно пытаемся снова
+                initializeApp(); // Ð ÐµÐºÑƒÑ€ÑÐ¸Ð²Ð½Ð¾ Ð¿Ñ‹Ñ‚Ð°ÐµÐ¼ÑÑ ÑÐ½Ð¾Ð²Ð°
             }, 200);
             return;
         } else {
-            // Превышен лимит попыток - выводим критическую ошибку
-            console.error('Маңызды модульдер ' + MAX_INIT_ATTEMPTS + ' әрекеттен кейін де жүктелмеді (Critical modules not loaded after attempts):', missingModules);
-            // Показываем ошибку пользователю, но не прерываем выполнение полностью
+            // ÐŸÑ€ÐµÐ²Ñ‹ÑˆÐµÐ½ Ð»Ð¸Ð¼Ð¸Ñ‚ Ð¿Ð¾Ð¿Ñ‹Ñ‚Ð¾Ðº - Ð²Ñ‹Ð²Ð¾Ð´Ð¸Ð¼ ÐºÑ€Ð¸Ñ‚Ð¸Ñ‡ÐµÑÐºÑƒÑŽ Ð¾ÑˆÐ¸Ð±ÐºÑƒ
+            console.error('ÐœÐ°Ò£Ñ‹Ð·Ð´Ñ‹ Ð¼Ð¾Ð´ÑƒÐ»ÑŒÐ´ÐµÑ€ ' + MAX_INIT_ATTEMPTS + ' Ó™Ñ€ÐµÐºÐµÑ‚Ñ‚ÐµÐ½ ÐºÐµÐ¹Ñ–Ð½ Ð´Ðµ Ð¶Ò¯ÐºÑ‚ÐµÐ»Ð¼ÐµÐ´Ñ– (Critical modules not loaded after attempts):', missingModules);
+            // ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ Ð¾ÑˆÐ¸Ð±ÐºÑƒ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŽ, Ð½Ð¾ Ð½Ðµ Ð¿Ñ€ÐµÑ€Ñ‹Ð²Ð°ÐµÐ¼ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð»Ð½Ð¾ÑÑ‚ÑŒÑŽ
             const container = document.getElementById('app');
             if (container) {
                 container.innerHTML = `
                     <div class="error-message">
-                        <h2>Модульдерді жүктеу қатесі (Error loading modules)</h2>
-                        <p>Маңызды модульдерді жүктеу мүмкін болмады (Failed to load critical modules): ${missingModules.join(', ')}</p>
-                        <p style="font-size: 0.9em; color: #666;">Мәліметтерді браузер консолінен (F12) тексеріңіз (Check browser console for details).</p>
-                        <button class="btn btn-primary" onclick="location.reload()">Бетті қайта жүктеу (Reload page)</button>
+                        <h2>ÐœÐ¾Ð´ÑƒÐ»ÑŒÐ´ÐµÑ€Ð´Ñ– Ð¶Ò¯ÐºÑ‚ÐµÑƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error loading modules)</h2>
+                        <p>ÐœÐ°Ò£Ñ‹Ð·Ð´Ñ‹ Ð¼Ð¾Ð´ÑƒÐ»ÑŒÐ´ÐµÑ€Ð´Ñ– Ð¶Ò¯ÐºÑ‚ÐµÑƒ Ð¼Ò¯Ð¼ÐºÑ–Ð½ Ð±Ð¾Ð»Ð¼Ð°Ð´Ñ‹ (Failed to load critical modules): ${missingModules.join(', ')}</p>
+                        <p style="font-size: 0.9em; color: #666;">ÐœÓ™Ð»Ñ–Ð¼ÐµÑ‚Ñ‚ÐµÑ€Ð´Ñ– Ð±Ñ€Ð°ÑƒÐ·ÐµÑ€ ÐºÐ¾Ð½ÑÐ¾Ð»Ñ–Ð½ÐµÐ½ (F12) Ñ‚ÐµÐºÑÐµÑ€Ñ–Ò£Ñ–Ð· (Check browser console for details).</p>
+                        <button class="btn btn-primary" onclick="location.reload()">Ð‘ÐµÑ‚Ñ‚Ñ– Ò›Ð°Ð¹Ñ‚Ð° Ð¶Ò¯ÐºÑ‚ÐµÑƒ (Reload page)</button>
                     </div>
                 `;
             }
-            return; // Не продолжаем инициализацию без критических модулей
+            return; // ÐÐµ Ð¿Ñ€Ð¾Ð´Ð¾Ð»Ð¶Ð°ÐµÐ¼ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸ÑŽ Ð±ÐµÐ· ÐºÑ€Ð¸Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ñ… Ð¼Ð¾Ð´ÑƒÐ»ÐµÐ¹
         }
     }
 
-    // Проверяем доступность встроенных данных (пробуем несколько вариантов)
+    // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð¾ÑÑ‚ÑŒ Ð²ÑÑ‚Ñ€Ð¾ÐµÐ½Ð½Ñ‹Ñ… Ð´Ð°Ð½Ð½Ñ‹Ñ… (Ð¿Ñ€Ð¾Ð±ÑƒÐµÐ¼ Ð½ÐµÑÐºÐ¾Ð»ÑŒÐºÐ¾ Ð²Ð°Ñ€Ð¸Ð°Ð½Ñ‚Ð¾Ð²)
     let hasData = false;
     let dataSource = '';
 
@@ -2235,22 +2235,22 @@ function initializeApp() {
     }
 
     if (!hasData) {
-        debugWarn(`${initAttempts}-әрекет (Attempt): SCENARIOS_DATA әлі жүктелмеген, күтеміз... (SCENARIOS_DATA not loaded yet, waiting...)`);
-        debugLog('SCENARIOS_DATA тексеру (Checking SCENARIOS_DATA):', typeof SCENARIOS_DATA);
-        debugLog('window.SCENARIOS_DATA тексеру (Checking window.SCENARIOS_DATA):', typeof window !== 'undefined' ? typeof window.SCENARIOS_DATA : 'window unavailable');
+        debugWarn(`${initAttempts}-Ó™Ñ€ÐµÐºÐµÑ‚ (Attempt): SCENARIOS_DATA Ó™Ð»Ñ– Ð¶Ò¯ÐºÑ‚ÐµÐ»Ð¼ÐµÐ³ÐµÐ½, ÐºÒ¯Ñ‚ÐµÐ¼Ñ–Ð·... (SCENARIOS_DATA not loaded yet, waiting...)`);
+        debugLog('SCENARIOS_DATA Ñ‚ÐµÐºÑÐµÑ€Ñƒ (Checking SCENARIOS_DATA):', typeof SCENARIOS_DATA);
+        debugLog('window.SCENARIOS_DATA Ñ‚ÐµÐºÑÐµÑ€Ñƒ (Checking window.SCENARIOS_DATA):', typeof window !== 'undefined' ? typeof window.SCENARIOS_DATA : 'window unavailable');
 
         if (initAttempts < MAX_INIT_ATTEMPTS) {
             setTimeout(initializeApp, 200);
         } else {
-            criticalError('SCENARIOS_DATA жүктеу әрекеттерінің шекті санынан асты (Max attempts to load SCENARIOS_DATA exceeded)');
+            criticalError('SCENARIOS_DATA Ð¶Ò¯ÐºÑ‚ÐµÑƒ Ó™Ñ€ÐµÐºÐµÑ‚Ñ‚ÐµÑ€Ñ–Ð½Ñ–Ò£ ÑˆÐµÐºÑ‚Ñ– ÑÐ°Ð½Ñ‹Ð½Ð°Ð½ Ð°ÑÑ‚Ñ‹ (Max attempts to load SCENARIOS_DATA exceeded)');
             const container = document.getElementById('app');
             if (container) {
                 container.innerHTML = `
                     <div class="error-message">
-                        <h2>Деректерді жүктеу қатесі (Error loading data)</h2>
-                        <p>Сценарий деректерін жүктеу мүмкін болмады (Failed to load scenario data). Убедитесь, что файл scenarios-data.js загружен.</p>
-                        <p style="font-size: 0.9em; color: #666;">Мәліметтерді браузер консолінен (F12) тексеріңіз (Check browser console for details).</p>
-                        <button class="btn btn-primary" onclick="location.reload()">Бетті қайта жүктеу (Reload page)</button>
+                        <h2>Ð”ÐµÑ€ÐµÐºÑ‚ÐµÑ€Ð´Ñ– Ð¶Ò¯ÐºÑ‚ÐµÑƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error loading data)</h2>
+                        <p>Ð¡Ñ†ÐµÐ½Ð°Ñ€Ð¸Ð¹ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€Ñ–Ð½ Ð¶Ò¯ÐºÑ‚ÐµÑƒ Ð¼Ò¯Ð¼ÐºÑ–Ð½ Ð±Ð¾Ð»Ð¼Ð°Ð´Ñ‹ (Failed to load scenario data). Ð£Ð±ÐµÐ´Ð¸Ñ‚ÐµÑÑŒ, Ñ‡Ñ‚Ð¾ Ñ„Ð°Ð¹Ð» scenarios-data.js Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½.</p>
+                        <p style="font-size: 0.9em; color: #666;">ÐœÓ™Ð»Ñ–Ð¼ÐµÑ‚Ñ‚ÐµÑ€Ð´Ñ– Ð±Ñ€Ð°ÑƒÐ·ÐµÑ€ ÐºÐ¾Ð½ÑÐ¾Ð»Ñ–Ð½ÐµÐ½ (F12) Ñ‚ÐµÐºÑÐµÑ€Ñ–Ò£Ñ–Ð· (Check browser console for details).</p>
+                        <button class="btn btn-primary" onclick="location.reload()">Ð‘ÐµÑ‚Ñ‚Ñ– Ò›Ð°Ð¹Ñ‚Ð° Ð¶Ò¯ÐºÑ‚ÐµÑƒ (Reload page)</button>
                     </div>
                 `;
             }
@@ -2258,7 +2258,7 @@ function initializeApp() {
         return;
     }
 
-    debugLog('Кірістірілген деректер табылды (Embedded data found via):', dataSource);
+    debugLog('ÐšÑ–Ñ€Ñ–ÑÑ‚Ñ–Ñ€Ñ–Ð»Ð³ÐµÐ½ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€ Ñ‚Ð°Ð±Ñ‹Ð»Ð´Ñ‹ (Embedded data found via):', dataSource);
 
     // Check if all required classes are loaded
     const requiredClasses = ['UIController', 'TestManager', 'ResultsManager', 'StorageManager', 'AuthManager'];
@@ -2274,39 +2274,40 @@ function initializeApp() {
         return;
     }
 
-    // Все готово, инициализируем
+    // Ð’ÑÐµ Ð³Ð¾Ñ‚Ð¾Ð²Ð¾, Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð¸Ñ€ÑƒÐµÐ¼
     try {
         app = new PersonalityTestApp();
         window.app = app; // Expose to global scope for onclick handlers
-        console.log('✅ window.app initialized:', window.app);
-        console.log('✅ app.renameTest exists:', typeof app.renameTest);
-        console.log('✅ app.deleteTest exists:', typeof app.deleteTest);
-        // Вызываем init() после создания экземпляра
+        console.log('âœ… window.app initialized:', window.app);
+        console.log('âœ… app.renameTest exists:', typeof app.renameTest);
+        console.log('âœ… app.deleteTest exists:', typeof app.deleteTest);
+        // Ð’Ñ‹Ð·Ñ‹Ð²Ð°ÐµÐ¼ init() Ð¿Ð¾ÑÐ»Ðµ ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ñ ÑÐºÐ·ÐµÐ¼Ð¿Ð»ÑÑ€Ð°
         if (app && typeof app.init === 'function') {
             app.init().catch(error => {
-                criticalError('Қолданбаны инициализациялау қатесі (Error initializing application):', error);
+                criticalError('ÒšÐ¾Ð»Ð´Ð°Ð½Ð±Ð°Ð½Ñ‹ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸ÑÐ»Ð°Ñƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error initializing application):', error);
             });
         }
     } catch (error) {
-        criticalError('Қолданбаны жасау қатесі (Error creating application):', error);
+        criticalError('ÒšÐ¾Ð»Ð´Ð°Ð½Ð±Ð°Ð½Ñ‹ Ð¶Ð°ÑÐ°Ñƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error creating application):', error);
         const container = document.getElementById('app');
         if (container) {
             container.innerHTML = `
                 <div class="error-message">
-                    <h2>Инициализация қатесі (Initialization error)</h2>
-                    <p>${error.message || 'Неизвестная ошибка'}</p>
-                    <button class="btn btn-primary" onclick="location.reload()">Бетті қайта жүктеу (Reload page)</button>
+                    <h2>Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ò›Ð°Ñ‚ÐµÑÑ– (Initialization error)</h2>
+                    <p>${error.message || 'ÐÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½Ð°Ñ Ð¾ÑˆÐ¸Ð±ÐºÐ°'}</p>
+                    <button class="btn btn-primary" onclick="location.reload()">Ð‘ÐµÑ‚Ñ‚Ñ– Ò›Ð°Ð¹Ñ‚Ð° Ð¶Ò¯ÐºÑ‚ÐµÑƒ (Reload page)</button>
                 </div>
             `;
         }
     }
 }
 
-// Инициализация после загрузки DOM и всех скриптов
+// Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð¿Ð¾ÑÐ»Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ DOM Ð¸ Ð²ÑÐµÑ… ÑÐºÑ€Ð¸Ð¿Ñ‚Ð¾Ð²
 if (document.readyState === 'loading') {
     // DOMContentLoaded fires before scripts, use window load instead
     window.addEventListener('load', initializeApp);
 } else {
-    // DOM уже загружен, но ждем загрузки всех скриптов
+    // DOM ÑƒÐ¶Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½, Ð½Ð¾ Ð¶Ð´ÐµÐ¼ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ Ð²ÑÐµÑ… ÑÐºÑ€Ð¸Ð¿Ñ‚Ð¾Ð²
     window.addEventListener('load', initializeApp);
 }
+

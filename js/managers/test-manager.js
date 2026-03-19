@@ -156,7 +156,8 @@ class TestManager {
 
         } catch (error) {
             console.error('Failed to start advanced test:', error);
-            alert('Failed to load advanced test data.');
+            const t = this.app?.i18n?.t.bind(this.app.i18n);
+            alert((t && t('failedToLoadAdvancedTestData')) || 'Failed to load advanced test data.');
             this.app.showTestTypeSelection();
         }
     }
@@ -175,7 +176,8 @@ class TestManager {
                 await import('../data/cognitive-test-data.js');
             } catch (error) {
                 console.error('Failed to load cognitive test data:', error);
-                alert('Test data not loaded');
+                const t = this.app?.i18n?.t.bind(this.app.i18n);
+                alert((t && t('testDataNotLoaded')) || 'Test data is not loaded.');
                 return;
             }
         }

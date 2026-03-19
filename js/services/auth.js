@@ -1,9 +1,9 @@
-/**
- * Аутентификация және аккаунттарды басқару модулі (Authentication and account management module)
- * Серверсіз жергілікті жүйе (Local system without server)
+﻿/**
+ * ÐÑƒÑ‚ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ†Ð¸Ñ Ð¶Ó™Ð½Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‚Ð°Ñ€Ð´Ñ‹ Ð±Ð°ÑÒ›Ð°Ñ€Ñƒ Ð¼Ð¾Ð´ÑƒÐ»Ñ– (Authentication and account management module)
+ * Ð¡ÐµÑ€Ð²ÐµÑ€ÑÑ–Ð· Ð¶ÐµÑ€Ð³Ñ–Ð»Ñ–ÐºÑ‚Ñ– Ð¶Ò¯Ð¹Ðµ (Local system without server)
  * 
- * Авторы (Author): Ахмедьянов Саламат КПО 9/22-2
- * Мерзімі (Date): 2026
+ * ÐÐ²Ñ‚Ð¾Ñ€Ñ‹ (Author): ÐÑ…Ð¼ÐµÐ´ÑŒÑÐ½Ð¾Ð² Ð¡Ð°Ð»Ð°Ð¼Ð°Ñ‚ ÐšÐŸÐž 9/22-2
+ * ÐœÐµÑ€Ð·Ñ–Ð¼Ñ– (Date): 2026
  */
 
 class AuthManager {
@@ -11,29 +11,30 @@ class AuthManager {
         this.currentUser = null;
         this.usersKey = 'personalityTestUsers';
         this.sessionKey = 'currentSession';
-        // Инициализируем трекер эволюции
+        // Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð¸Ñ€ÑƒÐµÐ¼ Ñ‚Ñ€ÐµÐºÐµÑ€ ÑÐ²Ð¾Ð»ÑŽÑ†Ð¸Ð¸
         this.evolutionTracker = typeof EvolutionTracker !== 'undefined' ? new EvolutionTracker() : null;
     }
 
     /**
-     * Регистрация нового пользователя
-     * @param {string} username - Имя пользователя
-     * @param {string} email - Email (опционально)
-     * @returns {Object} Результат регистрации
+     * Ð ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð½Ð¾Ð²Ð¾Ð³Ð¾ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
+     * @param {string} username - Ð˜Ð¼Ñ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
+     * @param {string} email - Email (Ð¾Ð¿Ñ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾)
+     * @returns {Object} Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ð¸
      */
     register(username, email = '') {
+        const t = (typeof window !== 'undefined' && window.t) ? window.t : ((key) => key);
         try {
             const users = this.getAllUsers();
 
-            // Проверка на существующего пользователя
+            // ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð½Ð° ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰ÐµÐ³Ð¾ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
             if (users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
                 return {
                     success: false,
-                    error: 'Мұндай атымен пайдаланушы бұрыннан бар (User with this name already exists)'
+                    error: t('userExists') || 'User with this name already exists'
                 };
             }
 
-            // Создание нового пользователя
+            // Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¸Ðµ Ð½Ð¾Ð²Ð¾Ð³Ð¾ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
             const newUser = {
                 id: this.generateId(),
                 username: username.trim(),
@@ -47,7 +48,7 @@ class AuthManager {
             users.push(newUser);
             this.saveUsers(users);
 
-            // Автоматический вход
+            // ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ð¹ Ð²Ñ…Ð¾Ð´
             this.login(username);
 
             return {
@@ -55,20 +56,21 @@ class AuthManager {
                 user: newUser
             };
         } catch (error) {
-            console.error('Тіркеу қатесі (Registration error):', error);
+            console.error('Ð¢Ñ–Ñ€ÐºÐµÑƒ Ò›Ð°Ñ‚ÐµÑÑ– (Registration error):', error);
             return {
                 success: false,
-                error: 'Тіркелу қатесі (Error during registration)'
+                error: t('errorDefault') || 'Error during registration'
             };
         }
     }
 
     /**
-     * Вход пользователя
-     * @param {string} username - Имя пользователя
-     * @returns {Object} Результат входа
+     * Ð’Ñ…Ð¾Ð´ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
+     * @param {string} username - Ð˜Ð¼Ñ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
+     * @returns {Object} Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð²Ñ…Ð¾Ð´Ð°
      */
     login(username) {
+        const t = (typeof window !== 'undefined' && window.t) ? window.t : ((key) => key);
         try {
             const users = this.getAllUsers();
             const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
@@ -76,15 +78,15 @@ class AuthManager {
             if (!user) {
                 return {
                     success: false,
-                    error: 'Пайдаланушы табылмады (User not found)'
+                    error: t('userNotFound') || 'User not found'
                 };
             }
 
-            // Обновление времени последнего входа
+            // ÐžÐ±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Ð¿Ð¾ÑÐ»ÐµÐ´Ð½ÐµÐ³Ð¾ Ð²Ñ…Ð¾Ð´Ð°
             user.lastLogin = new Date().toISOString();
             this.updateUser(user);
 
-            // Сохранение сессии
+            // Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ðµ ÑÐµÑÑÐ¸Ð¸
             this.currentUser = user;
             localStorage.setItem(this.sessionKey, JSON.stringify({
                 userId: user.id,
@@ -97,16 +99,16 @@ class AuthManager {
                 user: user
             };
         } catch (error) {
-            console.error('Кіру қатесі (Login error):', error);
+            console.error('ÐšÑ–Ñ€Ñƒ Ò›Ð°Ñ‚ÐµÑÑ– (Login error):', error);
             return {
                 success: false,
-                error: 'Кіру қатесі (Error during login)'
+                error: t('errorDefault') || 'Error during login'
             };
         }
     }
 
     /**
-     * Выход пользователя
+     * Ð’Ñ‹Ñ…Ð¾Ð´ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
      */
     logout() {
         this.currentUser = null;
@@ -114,8 +116,8 @@ class AuthManager {
     }
 
     /**
-     * Проверка текущей сессии
-     * @returns {Object|null} Текущий пользователь или null
+     * ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ñ‚ÐµÐºÑƒÑ‰ÐµÐ¹ ÑÐµÑÑÐ¸Ð¸
+     * @returns {Object|null} Ð¢ÐµÐºÑƒÑ‰Ð¸Ð¹ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ Ð¸Ð»Ð¸ null
      */
     getCurrentUser() {
         if (this.currentUser) {
@@ -135,15 +137,15 @@ class AuthManager {
                 }
             }
         } catch (error) {
-            console.error('Сессияны тексеру қатесі (Error checking session):', error);
+            console.error('Ð¡ÐµÑÑÐ¸ÑÐ½Ñ‹ Ñ‚ÐµÐºÑÐµÑ€Ñƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error checking session):', error);
         }
 
         return null;
     }
 
     /**
-     * Сохранение результатов теста для текущего пользователя
-     * @param {Object} results - Результаты теста
+     * Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ðµ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¾Ð² Ñ‚ÐµÑÑ‚Ð° Ð´Ð»Ñ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ³Ð¾ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
+     * @param {Object} results - Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ñ‹ Ñ‚ÐµÑÑ‚Ð°
      */
     saveTestResults(results) {
         const user = this.getCurrentUser();
@@ -163,10 +165,10 @@ class AuthManager {
             };
 
             user.testHistory.push(testResult);
-            user.profile = results.profile; // Обновляем текущий профиль
+            user.profile = results.profile; // ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ñ‚ÐµÐºÑƒÑ‰Ð¸Ð¹ Ð¿Ñ€Ð¾Ñ„Ð¸Ð»ÑŒ
             this.updateUser(user);
 
-            // Сохраняем в трекер эволюции
+            // Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÑÐµÐ¼ Ð² Ñ‚Ñ€ÐµÐºÐµÑ€ ÑÐ²Ð¾Ð»ÑŽÑ†Ð¸Ð¸
             if (this.evolutionTracker) {
                 this.evolutionTracker.saveSessionResults(user.id, {
                     scores: results.scores,
@@ -180,14 +182,14 @@ class AuthManager {
 
             return true;
         } catch (error) {
-            console.error('Нәтижелерді сақтау қатесі (Error saving results):', error);
+            console.error('ÐÓ™Ñ‚Ð¸Ð¶ÐµÐ»ÐµÑ€Ð´Ñ– ÑÐ°Ò›Ñ‚Ð°Ñƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error saving results):', error);
             return false;
         }
     }
 
     /**
-     * Получение истории тестов пользователя
-     * @returns {Array} История тестов
+     * ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ð¸ Ñ‚ÐµÑÑ‚Ð¾Ð² Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
+     * @returns {Array} Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ Ñ‚ÐµÑÑ‚Ð¾Ð²
      */
     getTestHistory() {
         const user = this.getCurrentUser();
@@ -199,8 +201,8 @@ class AuthManager {
     }
 
     /**
-     * Получение истории эволюции пользователя
-     * @returns {Object|null} История эволюции
+     * ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ð¸ ÑÐ²Ð¾Ð»ÑŽÑ†Ð¸Ð¸ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
+     * @returns {Object|null} Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ ÑÐ²Ð¾Ð»ÑŽÑ†Ð¸Ð¸
      */
     getEvolutionHistory() {
         const user = this.getCurrentUser();
@@ -210,8 +212,8 @@ class AuthManager {
     }
 
     /**
-     * Получение отчёта об эволюции
-     * @returns {Object|null} Отчёт об эволюции
+     * ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð¾Ñ‚Ñ‡Ñ‘Ñ‚Ð° Ð¾Ð± ÑÐ²Ð¾Ð»ÑŽÑ†Ð¸Ð¸
+     * @returns {Object|null} ÐžÑ‚Ñ‡Ñ‘Ñ‚ Ð¾Ð± ÑÐ²Ð¾Ð»ÑŽÑ†Ð¸Ð¸
      */
     getEvolutionReport() {
         const user = this.getCurrentUser();
@@ -221,34 +223,34 @@ class AuthManager {
     }
 
     /**
-     * Получение всех пользователей
-     * @returns {Array} Массив пользователей
+     * ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ð²ÑÐµÑ… Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÐµÐ¹
+     * @returns {Array} ÐœÐ°ÑÑÐ¸Ð² Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÐµÐ¹
      */
     getAllUsers() {
         try {
             const usersData = localStorage.getItem(this.usersKey);
             return usersData ? JSON.parse(usersData) : [];
         } catch (error) {
-            console.error('Пайдаланушыларды жүктеу қатесі (Error loading users):', error);
+            console.error('ÐŸÐ°Ð¹Ð´Ð°Ð»Ð°Ð½ÑƒÑˆÑ‹Ð»Ð°Ñ€Ð´Ñ‹ Ð¶Ò¯ÐºÑ‚ÐµÑƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error loading users):', error);
             return [];
         }
     }
 
     /**
-     * Сохранение всех пользователей
-     * @param {Array} users - Массив пользователей
+     * Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ðµ Ð²ÑÐµÑ… Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÐµÐ¹
+     * @param {Array} users - ÐœÐ°ÑÑÐ¸Ð² Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÐµÐ¹
      */
     saveUsers(users) {
         try {
             localStorage.setItem(this.usersKey, JSON.stringify(users));
         } catch (error) {
-            console.error('Пайдаланушыларды сақтау қатесі (Error saving users):', error);
+            console.error('ÐŸÐ°Ð¹Ð´Ð°Ð»Ð°Ð½ÑƒÑˆÑ‹Ð»Ð°Ñ€Ð´Ñ‹ ÑÐ°Ò›Ñ‚Ð°Ñƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error saving users):', error);
         }
     }
 
     /**
-     * Обновление пользователя
-     * @param {Object} user - Обновлённый пользователь
+     * ÐžÐ±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
+     * @param {Object} user - ÐžÐ±Ð½Ð¾Ð²Ð»Ñ‘Ð½Ð½Ñ‹Ð¹ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ
      */
     updateUser(user) {
         const users = this.getAllUsers();
@@ -265,9 +267,9 @@ class AuthManager {
     }
 
     /**
-     * Удаление аккаунта
-     * @param {string} userId - ID пользователя
-     * @returns {boolean} Успех операции
+     * Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°
+     * @param {string} userId - ID Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
+     * @returns {boolean} Ð£ÑÐ¿ÐµÑ… Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¸
      */
     deleteAccount(userId) {
         try {
@@ -281,22 +283,22 @@ class AuthManager {
 
             return true;
         } catch (error) {
-            console.error('Аккаунтты өшіру қатесі (Error deleting account):', error);
+            console.error('ÐÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‚Ñ‹ Ó©ÑˆÑ–Ñ€Ñƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error deleting account):', error);
             return false;
         }
     }
 
     /**
-     * Генерация уникального ID
-     * @returns {string} Уникальный ID
+     * Ð“ÐµÐ½ÐµÑ€Ð°Ñ†Ð¸Ñ ÑƒÐ½Ð¸ÐºÐ°Ð»ÑŒÐ½Ð¾Ð³Ð¾ ID
+     * @returns {string} Ð£Ð½Ð¸ÐºÐ°Ð»ÑŒÐ½Ñ‹Ð¹ ID
      */
     generateId() {
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
     }
 
     /**
-     * Проверка, зарегистрирован ли пользователь
-     * @param {string} username - Имя пользователя
+     * ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ°, Ð·Ð°Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð¸Ñ€Ð¾Ð²Ð°Ð½ Ð»Ð¸ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ
+     * @param {string} username - Ð˜Ð¼Ñ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
      * @returns {boolean}
      */
     userExists(username) {
@@ -305,9 +307,9 @@ class AuthManager {
     }
 
     /**
-     * Обновление названия теста
-     * @param {string} testId - ID теста
-     * @param {string} title - Новое название
+     * ÐžÐ±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ñ Ñ‚ÐµÑÑ‚Ð°
+     * @param {string} testId - ID Ñ‚ÐµÑÑ‚Ð°
+     * @param {string} title - ÐÐ¾Ð²Ð¾Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ
      */
     updateTestTitle(testId, title) {
         const user = this.getCurrentUser();
@@ -323,8 +325,8 @@ class AuthManager {
     }
 
     /**
-     * Удаление теста из истории
-     * @param {string} testId - ID теста
+     * Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ñ‚ÐµÑÑ‚Ð° Ð¸Ð· Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ð¸
+     * @param {string} testId - ID Ñ‚ÐµÑÑ‚Ð°
      */
     deleteTest(testId) {
         const user = this.getCurrentUser();
@@ -341,8 +343,8 @@ class AuthManager {
     }
 
     /**
-     * Удаление нескольких тестов из истории
-     * @param {Array<string>} testIds - Массив ID тестов
+     * Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ð½ÐµÑÐºÐ¾Ð»ÑŒÐºÐ¸Ñ… Ñ‚ÐµÑÑ‚Ð¾Ð² Ð¸Ð· Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ð¸
+     * @param {Array<string>} testIds - ÐœÐ°ÑÑÐ¸Ð² ID Ñ‚ÐµÑÑ‚Ð¾Ð²
      */
     deleteMultipleTests(testIds) {
         const user = this.getCurrentUser();
@@ -362,12 +364,14 @@ class AuthManager {
     }
 }
 
-// Экспорт для использования в других модулях
+// Ð­ÐºÑÐ¿Ð¾Ñ€Ñ‚ Ð´Ð»Ñ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ð½Ð¸Ñ Ð² Ð´Ñ€ÑƒÐ³Ð¸Ñ… Ð¼Ð¾Ð´ÑƒÐ»ÑÑ…
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = AuthManager;
 }
 
-// Явное присвоение к window для браузера
+// Ð¯Ð²Ð½Ð¾Ðµ Ð¿Ñ€Ð¸ÑÐ²Ð¾ÐµÐ½Ð¸Ðµ Ðº window Ð´Ð»Ñ Ð±Ñ€Ð°ÑƒÐ·ÐµÑ€Ð°
 if (typeof window !== 'undefined') {
     window.AuthManager = AuthManager;
 }
+
+

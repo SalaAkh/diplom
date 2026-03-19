@@ -1,4 +1,4 @@
-/**
+﻿/**
  * UI Controller
  * Manages all UI interactions, rendering, and event handling
  */
@@ -500,14 +500,17 @@ class UIController {
      * Update all static content with data-i18n attributes
      */
     updateStaticContent() {
-        // Update generic data-i18n elements
-        const elements = document.querySelectorAll('[data-i18n]');
-        elements.forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (key) {
-                el.textContent = this.i18n.t(key);
-            }
-        });
+        if (typeof window.applyLocalizedAttributes === 'function') {
+            window.applyLocalizedAttributes(document);
+        } else {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (key) {
+                    el.textContent = this.i18n.t(key);
+                }
+            });
+        }
 
         // Update specific IDs if needed (legacy support)
         const appName = document.getElementById('appName');
@@ -517,7 +520,7 @@ class UIController {
 
         if (appName) appName.textContent = this.i18n.t('appName');
         if (tagline) tagline.textContent = this.i18n.t('tagline');
-        if (footerText) footerText.textContent = `${this.i18n.t('project')} © 2026`;
+        if (footerText) footerText.innerHTML = `${this.i18n.t('project')} &copy; 2026`;
         if (footerNote) footerNote.textContent = this.i18n.t('dataProcessed');
 
         document.documentElement.lang = this.i18n.getLanguage();
@@ -548,7 +551,7 @@ class UIController {
                 <button class="language-btn" onclick="app.toggleLanguageMenu(event)">
                     <span class="language-flag">${currentLangData.flag}</span>
                     <span class="language-name">${currentLangData.name}</span>
-                    <span class="language-arrow">▼</span>
+                    <span class="language-arrow">&#9662;</span>
                 </button>
                 <div class="language-menu" id="languageMenu">
                     ${languages.map(lang => `
@@ -556,7 +559,7 @@ class UIController {
                                 onclick="app.changeLanguage('${lang.code}')">
                             <span class="language-flag">${lang.flag}</span>
                             <span class="language-name">${lang.name}</span>
-                            ${lang.code === currentLang ? '<span class="language-check">✓</span>' : ''}
+                            ${lang.code === currentLang ? '<span class="language-check">&#10003;</span>' : ''}
                         </button>
                     `).join('')}
                 </div>
@@ -632,7 +635,7 @@ class UIController {
                 const currentTime = new Date().getTime();
                 if (currentTime - lastClickTime < 500) {
                     // Double click detected
-                    this.showAuthSuccess('Developed by Ахмедьянов Саламат КПО 9/22-2 🚀');
+                    this.showAuthSuccess('Developed by ÐÑ…Ð¼ÐµÐ´ÑŒÑÐ½Ð¾Ð² Ð¡Ð°Ð»Ð°Ð¼Ð°Ñ‚ ÐšÐŸÐž 9/22-2 ðŸš€');
                     clickCount = 0;
                 } else {
                     clickCount = 1;
@@ -803,20 +806,20 @@ class UIController {
 
         const usernameInput = document.getElementById('loginUsername');
         if (!usernameInput) {
-            this.showAuthError('Форма входа не найдена');
+            this.showAuthError(this.i18n.t('loginFormNotFound') || 'Login form not found.');
             return;
         }
 
         const username = usernameInput.value.trim();
 
         if (!username) {
-            this.showAuthError(this.i18n.t('usernameRequired') || 'Введите имя пользователя');
+            this.showAuthError(this.i18n.t('usernameRequired') || 'Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¸Ð¼Ñ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ');
             return;
         }
 
         // Use AuthManager to login
         if (!this.app.auth) {
-            this.showAuthError('Система аутентификации недоступна');
+            this.showAuthError(this.i18n.t('authSystemUnavailable') || 'Authentication system is unavailable.');
             return;
         }
 
@@ -824,11 +827,7 @@ class UIController {
 
         if (result.success) {
             const capitalizedName = username.charAt(0).toUpperCase() + username.slice(1);
-            const welcomeMsg = this.i18n.getLanguage() === 'ru'
-                ? `С возвращением,\n${capitalizedName}!`
-                : (this.i18n.getLanguage() === 'kk'
-                    ? `Қош келдіңіз,\n${capitalizedName}!`
-                    : `Welcome back,\n${capitalizedName}!`);
+            const welcomeMsg = `${this.i18n.t('welcomeBack') || 'Welcome back'},\n${capitalizedName}!`;
 
             this.showAuthSuccess(welcomeMsg);
 
@@ -837,7 +836,7 @@ class UIController {
                 this.showIntro();
             }, 1500);
         } else {
-            this.showAuthError(result.error || 'Ошибка входа');
+            this.showAuthError(result.error || this.i18n.t('unknownError') || 'Unknown error');
         }
     }
 
@@ -848,7 +847,7 @@ class UIController {
         const emailInput = document.getElementById('registerEmail');
 
         if (!usernameInput) {
-            this.showAuthError('Форма регистрации не найдена');
+            this.showAuthError(this.i18n.t('registerFormNotFound') || 'Registration form not found.');
             return;
         }
 
@@ -856,18 +855,18 @@ class UIController {
         const email = emailInput ? emailInput.value.trim() : '';
 
         if (!username) {
-            this.showAuthError(this.i18n.t('usernameRequired') || 'Введите имя пользователя');
+            this.showAuthError(this.i18n.t('usernameRequired') || 'Enter a username');
             return;
         }
 
         if (username.length < 3) {
-            this.showAuthError(this.i18n.t('usernameTooShort') || 'Имя пользователя должно содержать минимум 3 символа');
+            this.showAuthError(this.i18n.t('usernameTooShort') || 'Username must be at least 3 characters long');
             return;
         }
 
         // Use AuthManager to register
         if (!this.app.auth) {
-            this.showAuthError('Система аутентификации недоступна');
+            this.showAuthError(this.i18n.t('authSystemUnavailable') || 'Authentication system is unavailable.');
             return;
         }
 
@@ -875,11 +874,7 @@ class UIController {
 
         if (result.success) {
             const capitalizedName = username.charAt(0).toUpperCase() + username.slice(1);
-            const welcomeMsg = this.i18n.getLanguage() === 'ru'
-                ? `Аккаунт создан!\nС возвращением, ${capitalizedName}!`
-                : (this.i18n.getLanguage() === 'kk'
-                    ? `Аккаунт жасалды!\nҚош келдіңіз, ${capitalizedName}!`
-                    : `Account created!\nWelcome, ${capitalizedName}!`);
+            const welcomeMsg = `${this.i18n.t('accountCreated') || 'Account created'}!\n${this.i18n.t('welcomeBack') || 'Welcome back'}, ${capitalizedName}!`;
 
             this.showAuthSuccess(welcomeMsg);
 
@@ -888,7 +883,7 @@ class UIController {
                 this.showIntro();
             }, 1500);
         } else {
-            this.showAuthError(result.error || 'Ошибка регистрации');
+            this.showAuthError(result.error || this.i18n.t('unknownError') || 'Unknown error');
         }
     }
 
@@ -914,13 +909,13 @@ class UIController {
             <div class="landing-page">
                 <section class="hero-section" aria-labelledby="hero-title">
                     <div class="hero-content">
-                        <h1 id="hero-title" class="hero-title fade-in" data-i18n="landingHeroTitle">Познай свою истинную природу</h1>
+                        <h1 id="hero-title" class="hero-title fade-in" data-i18n="landingHeroTitle">ÐŸÐ¾Ð·Ð½Ð°Ð¹ ÑÐ²Ð¾ÑŽ Ð¸ÑÑ‚Ð¸Ð½Ð½ÑƒÑŽ Ð¿Ñ€Ð¸Ñ€Ð¾Ð´Ñƒ</h1>
                         <p class="hero-subtitle fade-in delay-1" data-i18n="landingHeroSubtitle">
-                            Интеллектуальная система анализа личности, основанная на когнитивной психологии и сценариях выбора.
-                            Определите свои сильные стороны и векторы развития.
+                            Ð˜Ð½Ñ‚ÐµÐ»Ð»ÐµÐºÑ‚ÑƒÐ°Ð»ÑŒÐ½Ð°Ñ ÑÐ¸ÑÑ‚ÐµÐ¼Ð° Ð°Ð½Ð°Ð»Ð¸Ð·Ð° Ð»Ð¸Ñ‡Ð½Ð¾ÑÑ‚Ð¸, Ð¾ÑÐ½Ð¾Ð²Ð°Ð½Ð½Ð°Ñ Ð½Ð° ÐºÐ¾Ð³Ð½Ð¸Ñ‚Ð¸Ð²Ð½Ð¾Ð¹ Ð¿ÑÐ¸Ñ…Ð¾Ð»Ð¾Ð³Ð¸Ð¸ Ð¸ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÑÑ… Ð²Ñ‹Ð±Ð¾Ñ€Ð°.
+                            ÐžÐ¿Ñ€ÐµÐ´ÐµÐ»Ð¸Ñ‚Ðµ ÑÐ²Ð¾Ð¸ ÑÐ¸Ð»ÑŒÐ½Ñ‹Ðµ ÑÑ‚Ð¾Ñ€Ð¾Ð½Ñ‹ Ð¸ Ð²ÐµÐºÑ‚Ð¾Ñ€Ñ‹ Ñ€Ð°Ð·Ð²Ð¸Ñ‚Ð¸Ñ.
                         </p>
                         <div class="hero-cta fade-in delay-2" id="landing-actions">
-                            <!-- Кнопки будут вставлены JS -->
+                            <!-- ÐšÐ½Ð¾Ð¿ÐºÐ¸ Ð±ÑƒÐ´ÑƒÑ‚ Ð²ÑÑ‚Ð°Ð²Ð»ÐµÐ½Ñ‹ JS -->
                         </div>
                     </div>
                     <div class="hero-visual fade-in delay-3" aria-hidden="true">
@@ -931,46 +926,46 @@ class UIController {
                 </section>
 
                 <section class="features-section" aria-labelledby="features-title">
-                    <h2 id="features-title" class="section-title" data-i18n="landingFeaturesTitle">Технологии самопознания</h2>
+                    <h2 id="features-title" class="section-title" data-i18n="landingFeaturesTitle">Ð¢ÐµÑ…Ð½Ð¾Ð»Ð¾Ð³Ð¸Ð¸ ÑÐ°Ð¼Ð¾Ð¿Ð¾Ð·Ð½Ð°Ð½Ð¸Ñ</h2>
                     <div class="features-grid">
                         <div class="feature-card">
-                            <span class="feature-icon" aria-hidden="true">🎭</span>
-                            <h3 data-i18n="featInteractive">Интерактивные сценарии</h3>
-                            <p data-i18n="featInteractiveDesc">12 глубоких интерактивных сценариев с множеством путей развития</p>
+                            <span class="feature-icon" aria-hidden="true">ðŸŽ­</span>
+                            <h3 data-i18n="featInteractive">Ð˜Ð½Ñ‚ÐµÑ€Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ðµ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸Ð¸</h3>
+                            <p data-i18n="featInteractiveDesc">12 Ð³Ð»ÑƒÐ±Ð¾ÐºÐ¸Ñ… Ð¸Ð½Ñ‚ÐµÑ€Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ñ… ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ² Ñ Ð¼Ð½Ð¾Ð¶ÐµÑÑ‚Ð²Ð¾Ð¼ Ð¿ÑƒÑ‚ÐµÐ¹ Ñ€Ð°Ð·Ð²Ð¸Ñ‚Ð¸Ñ</p>
                         </div>
                         <div class="feature-card">
-                            <span class="feature-icon" aria-hidden="true">🧠</span>
-                            <h3 data-i18n="featPattern">Анализ паттернов</h3>
-                            <p data-i18n="featPatternDesc">Комплексный анализ когнитивных паттернов и стилей принятия решений</p>
+                            <span class="feature-icon" aria-hidden="true">ðŸ§ </span>
+                            <h3 data-i18n="featPattern">ÐÐ½Ð°Ð»Ð¸Ð· Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½Ð¾Ð²</h3>
+                            <p data-i18n="featPatternDesc">ÐšÐ¾Ð¼Ð¿Ð»ÐµÐºÑÐ½Ñ‹Ð¹ Ð°Ð½Ð°Ð»Ð¸Ð· ÐºÐ¾Ð³Ð½Ð¸Ñ‚Ð¸Ð²Ð½Ñ‹Ñ… Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½Ð¾Ð² Ð¸ ÑÑ‚Ð¸Ð»ÐµÐ¹ Ð¿Ñ€Ð¸Ð½ÑÑ‚Ð¸Ñ Ñ€ÐµÑˆÐµÐ½Ð¸Ð¹</p>
                         </div>
                     </div>
                 </section>
 
                 <section class="mission-section">
                     <div class="mission-content">
-                        <span class="section-badge" data-i18n="missionTitle">Миссия проекта</span>
-                        <p class="mission-text" data-i18n="missionText">В эпоху информационного шума легко потерять связь с собой. Наша цель — дать каждому инструмент для осознанного самопознания. Это не просто тест, это цифровое зеркало, которое отражает ваши истинные ценности, скрытые мотивы и потенциальные таланты, помогая принимать верные жизненные решения.</p>
+                        <span class="section-badge" data-i18n="missionTitle">ÐœÐ¸ÑÑÐ¸Ñ Ð¿Ñ€Ð¾ÐµÐºÑ‚Ð°</span>
+                        <p class="mission-text" data-i18n="missionText">Ð’ ÑÐ¿Ð¾Ñ…Ñƒ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð¾Ð³Ð¾ ÑˆÑƒÐ¼Ð° Ð»ÐµÐ³ÐºÐ¾ Ð¿Ð¾Ñ‚ÐµÑ€ÑÑ‚ÑŒ ÑÐ²ÑÐ·ÑŒ Ñ ÑÐ¾Ð±Ð¾Ð¹. ÐÐ°ÑˆÐ° Ñ†ÐµÐ»ÑŒ â€” Ð´Ð°Ñ‚ÑŒ ÐºÐ°Ð¶Ð´Ð¾Ð¼Ñƒ Ð¸Ð½ÑÑ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚ Ð´Ð»Ñ Ð¾ÑÐ¾Ð·Ð½Ð°Ð½Ð½Ð¾Ð³Ð¾ ÑÐ°Ð¼Ð¾Ð¿Ð¾Ð·Ð½Ð°Ð½Ð¸Ñ. Ð­Ñ‚Ð¾ Ð½Ðµ Ð¿Ñ€Ð¾ÑÑ‚Ð¾ Ñ‚ÐµÑÑ‚, ÑÑ‚Ð¾ Ñ†Ð¸Ñ„Ñ€Ð¾Ð²Ð¾Ðµ Ð·ÐµÑ€ÐºÐ°Ð»Ð¾, ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ðµ Ð¾Ñ‚Ñ€Ð°Ð¶Ð°ÐµÑ‚ Ð²Ð°ÑˆÐ¸ Ð¸ÑÑ‚Ð¸Ð½Ð½Ñ‹Ðµ Ñ†ÐµÐ½Ð½Ð¾ÑÑ‚Ð¸, ÑÐºÑ€Ñ‹Ñ‚Ñ‹Ðµ Ð¼Ð¾Ñ‚Ð¸Ð²Ñ‹ Ð¸ Ð¿Ð¾Ñ‚ÐµÐ½Ñ†Ð¸Ð°Ð»ÑŒÐ½Ñ‹Ðµ Ñ‚Ð°Ð»Ð°Ð½Ñ‚Ñ‹, Ð¿Ð¾Ð¼Ð¾Ð³Ð°Ñ Ð¿Ñ€Ð¸Ð½Ð¸Ð¼Ð°Ñ‚ÑŒ Ð²ÐµÑ€Ð½Ñ‹Ðµ Ð¶Ð¸Ð·Ð½ÐµÐ½Ð½Ñ‹Ðµ Ñ€ÐµÑˆÐµÐ½Ð¸Ñ.</p>
                     </div>
                 </section>
 
                 <section class="methodology-section">
                     <div class="methodology-wrapper">
                         <div class="methodology-text">
-                            <h2 class="section-title" data-i18n="methodologyTitle">Наука внутри</h2>
-                            <h3 class="methodology-subtitle" data-i18n="methodologySubtitle">Больше, чем просто вопросы</h3>
-                            <p data-i18n="methodologyText" style="margin-bottom: 2rem;">В отличие от классических тестов, где легко 'подгадать' правильный ответ, наша система работает иначе:</p>
+                            <h2 class="section-title" data-i18n="methodologyTitle">ÐÐ°ÑƒÐºÐ° Ð²Ð½ÑƒÑ‚Ñ€Ð¸</h2>
+                            <h3 class="methodology-subtitle" data-i18n="methodologySubtitle">Ð‘Ð¾Ð»ÑŒÑˆÐµ, Ñ‡ÐµÐ¼ Ð¿Ñ€Ð¾ÑÑ‚Ð¾ Ð²Ð¾Ð¿Ñ€Ð¾ÑÑ‹</h3>
+                            <p data-i18n="methodologyText" style="margin-bottom: 2rem;">Ð’ Ð¾Ñ‚Ð»Ð¸Ñ‡Ð¸Ðµ Ð¾Ñ‚ ÐºÐ»Ð°ÑÑÐ¸Ñ‡ÐµÑÐºÐ¸Ñ… Ñ‚ÐµÑÑ‚Ð¾Ð², Ð³Ð´Ðµ Ð»ÐµÐ³ÐºÐ¾ 'Ð¿Ð¾Ð´Ð³Ð°Ð´Ð°Ñ‚ÑŒ' Ð¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ñ‹Ð¹ Ð¾Ñ‚Ð²ÐµÑ‚, Ð½Ð°ÑˆÐ° ÑÐ¸ÑÑ‚ÐµÐ¼Ð° Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÐµÑ‚ Ð¸Ð½Ð°Ñ‡Ðµ:</p>
                             <div class="science-grid">
                                 <div class="science-item">
-                                    <h4 data-i18n="sciencePsychTitle">Когнитивная психология</h4>
-                                    <p data-i18n="sciencePsychText">Анализ принятия решений в условиях неопределенности выявляет истинные, а не декларируемые ценности.</p>
+                                    <h4 data-i18n="sciencePsychTitle">ÐšÐ¾Ð³Ð½Ð¸Ñ‚Ð¸Ð²Ð½Ð°Ñ Ð¿ÑÐ¸Ñ…Ð¾Ð»Ð¾Ð³Ð¸Ñ</h4>
+                                    <p data-i18n="sciencePsychText">ÐÐ½Ð°Ð»Ð¸Ð· Ð¿Ñ€Ð¸Ð½ÑÑ‚Ð¸Ñ Ñ€ÐµÑˆÐµÐ½Ð¸Ð¹ Ð² ÑƒÑÐ»Ð¾Ð²Ð¸ÑÑ… Ð½ÐµÐ¾Ð¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð½Ð¾ÑÑ‚Ð¸ Ð²Ñ‹ÑÐ²Ð»ÑÐµÑ‚ Ð¸ÑÑ‚Ð¸Ð½Ð½Ñ‹Ðµ, Ð° Ð½Ðµ Ð´ÐµÐºÐ»Ð°Ñ€Ð¸Ñ€ÑƒÐµÐ¼Ñ‹Ðµ Ñ†ÐµÐ½Ð½Ð¾ÑÑ‚Ð¸.</p>
                                 </div>
                                 <div class="science-item">
-                                    <h4 data-i18n="scienceGameTitle">Теория игр</h4>
-                                    <p data-i18n="scienceGameText">Сценарные дилеммы ставят вас перед сложным выбором, исключая социально ожидаемые ответы.</p>
+                                    <h4 data-i18n="scienceGameTitle">Ð¢ÐµÐ¾Ñ€Ð¸Ñ Ð¸Ð³Ñ€</h4>
+                                    <p data-i18n="scienceGameText">Ð¡Ñ†ÐµÐ½Ð°Ñ€Ð½Ñ‹Ðµ Ð´Ð¸Ð»ÐµÐ¼Ð¼Ñ‹ ÑÑ‚Ð°Ð²ÑÑ‚ Ð²Ð°Ñ Ð¿ÐµÑ€ÐµÐ´ ÑÐ»Ð¾Ð¶Ð½Ñ‹Ð¼ Ð²Ñ‹Ð±Ð¾Ñ€Ð¾Ð¼, Ð¸ÑÐºÐ»ÑŽÑ‡Ð°Ñ ÑÐ¾Ñ†Ð¸Ð°Ð»ÑŒÐ½Ð¾ Ð¾Ð¶Ð¸Ð´Ð°ÐµÐ¼Ñ‹Ðµ Ð¾Ñ‚Ð²ÐµÑ‚Ñ‹.</p>
                                 </div>
                                 <div class="science-item">
-                                    <h4 data-i18n="scienceDataTitle">Анализ данных</h4>
-                                    <p data-i18n="scienceDataText">Математическая модель строит профиль по 6 независимым осям, создавая уникальный 'отпечаток' личности.</p>
+                                    <h4 data-i18n="scienceDataTitle">ÐÐ½Ð°Ð»Ð¸Ð· Ð´Ð°Ð½Ð½Ñ‹Ñ…</h4>
+                                    <p data-i18n="scienceDataText">ÐœÐ°Ñ‚ÐµÐ¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ°Ñ Ð¼Ð¾Ð´ÐµÐ»ÑŒ ÑÑ‚Ñ€Ð¾Ð¸Ñ‚ Ð¿Ñ€Ð¾Ñ„Ð¸Ð»ÑŒ Ð¿Ð¾ 6 Ð½ÐµÐ·Ð°Ð²Ð¸ÑÐ¸Ð¼Ñ‹Ð¼ Ð¾ÑÑÐ¼, ÑÐ¾Ð·Ð´Ð°Ð²Ð°Ñ ÑƒÐ½Ð¸ÐºÐ°Ð»ÑŒÐ½Ñ‹Ð¹ 'Ð¾Ñ‚Ð¿ÐµÑ‡Ð°Ñ‚Ð¾Ðº' Ð»Ð¸Ñ‡Ð½Ð¾ÑÑ‚Ð¸.</p>
                                 </div>
                             </div>
                         </div>
@@ -982,57 +977,57 @@ class UIController {
                 </section>
 
                 <section class="value-section">
-                    <h2 class="section-title" data-i18n="valueTitle">Зачем это вам?</h2>
+                    <h2 class="section-title" data-i18n="valueTitle">Ð—Ð°Ñ‡ÐµÐ¼ ÑÑ‚Ð¾ Ð²Ð°Ð¼?</h2>
                     <div class="value-grid">
                         <div class="value-card">
-                            <div class="value-icon">🚀</div>
-                            <h3 data-i18n="valueCareerTitle">Карьерный навигатор</h3>
-                            <p data-i18n="valueCareerText">Поймите, где ваши природные таланты раскроются максимально: в управлении, творчестве, аналитике или предпринимательстве.</p>
+                            <div class="value-icon">ðŸš€</div>
+                            <h3 data-i18n="valueCareerTitle">ÐšÐ°Ñ€ÑŒÐµÑ€Ð½Ñ‹Ð¹ Ð½Ð°Ð²Ð¸Ð³Ð°Ñ‚Ð¾Ñ€</h3>
+                            <p data-i18n="valueCareerText">ÐŸÐ¾Ð¹Ð¼Ð¸Ñ‚Ðµ, Ð³Ð´Ðµ Ð²Ð°ÑˆÐ¸ Ð¿Ñ€Ð¸Ñ€Ð¾Ð´Ð½Ñ‹Ðµ Ñ‚Ð°Ð»Ð°Ð½Ñ‚Ñ‹ Ñ€Ð°ÑÐºÑ€Ð¾ÑŽÑ‚ÑÑ Ð¼Ð°ÐºÑÐ¸Ð¼Ð°Ð»ÑŒÐ½Ð¾: Ð² ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ð¸, Ñ‚Ð²Ð¾Ñ€Ñ‡ÐµÑÑ‚Ð²Ðµ, Ð°Ð½Ð°Ð»Ð¸Ñ‚Ð¸ÐºÐµ Ð¸Ð»Ð¸ Ð¿Ñ€ÐµÐ´Ð¿Ñ€Ð¸Ð½Ð¸Ð¼Ð°Ñ‚ÐµÐ»ÑŒÑÑ‚Ð²Ðµ.</p>
                         </div>
                         <div class="value-card">
-                            <div class="value-icon">💡</div>
-                            <h3 data-i18n="valueRelTitle">Понимание себя</h3>
-                            <p data-i18n="valueRelText">Узнайте свои истинные драйверы: почему вы действуете именно так? Что вас мотивирует, а что забирает энергию?</p>
+                            <div class="value-icon">ðŸ’¡</div>
+                            <h3 data-i18n="valueRelTitle">ÐŸÐ¾Ð½Ð¸Ð¼Ð°Ð½Ð¸Ðµ ÑÐµÐ±Ñ</h3>
+                            <p data-i18n="valueRelText">Ð£Ð·Ð½Ð°Ð¹Ñ‚Ðµ ÑÐ²Ð¾Ð¸ Ð¸ÑÑ‚Ð¸Ð½Ð½Ñ‹Ðµ Ð´Ñ€Ð°Ð¹Ð²ÐµÑ€Ñ‹: Ð¿Ð¾Ñ‡ÐµÐ¼Ñƒ Ð²Ñ‹ Ð´ÐµÐ¹ÑÑ‚Ð²ÑƒÐµÑ‚Ðµ Ð¸Ð¼ÐµÐ½Ð½Ð¾ Ñ‚Ð°Ðº? Ð§Ñ‚Ð¾ Ð²Ð°Ñ Ð¼Ð¾Ñ‚Ð¸Ð²Ð¸Ñ€ÑƒÐµÑ‚, Ð° Ñ‡Ñ‚Ð¾ Ð·Ð°Ð±Ð¸Ñ€Ð°ÐµÑ‚ ÑÐ½ÐµÑ€Ð³Ð¸ÑŽ?</p>
                         </div>
                         <div class="value-card">
-                            <div class="value-icon">📈</div>
-                            <h3 data-i18n="valueGrowthTitle">Точки роста</h3>
-                            <p data-i18n="valueGrowthText">Получите персональную карту развития с конкретными рекомендациями по soft skills, которые усилят вашу личность.</p>
+                            <div class="value-icon">ðŸ“ˆ</div>
+                            <h3 data-i18n="valueGrowthTitle">Ð¢Ð¾Ñ‡ÐºÐ¸ Ñ€Ð¾ÑÑ‚Ð°</h3>
+                            <p data-i18n="valueGrowthText">ÐŸÐ¾Ð»ÑƒÑ‡Ð¸Ñ‚Ðµ Ð¿ÐµÑ€ÑÐ¾Ð½Ð°Ð»ÑŒÐ½ÑƒÑŽ ÐºÐ°Ñ€Ñ‚Ñƒ Ñ€Ð°Ð·Ð²Ð¸Ñ‚Ð¸Ñ Ñ ÐºÐ¾Ð½ÐºÑ€ÐµÑ‚Ð½Ñ‹Ð¼Ð¸ Ñ€ÐµÐºÐ¾Ð¼ÐµÐ½Ð´Ð°Ñ†Ð¸ÑÐ¼Ð¸ Ð¿Ð¾ soft skills, ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ ÑƒÑÐ¸Ð»ÑÑ‚ Ð²Ð°ÑˆÑƒ Ð»Ð¸Ñ‡Ð½Ð¾ÑÑ‚ÑŒ.</p>
                         </div>
                     </div>
                 </section>
 
                 <section class="how-it-works-section" aria-labelledby="how-it-works-title">
-                    <h2 id="how-it-works-title" class="section-title" data-i18n="howItWorksTitle">Как это работает</h2>
+                    <h2 id="how-it-works-title" class="section-title" data-i18n="howItWorksTitle">ÐšÐ°Ðº ÑÑ‚Ð¾ Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÐµÑ‚</h2>
                     <div class="steps-container">
                         <div class="step">
                             <div class="step-number" aria-hidden="true">1</div>
-                            <h3 data-i18n="step1Title">Проходите тест</h3>
-                            <p data-i18n="step1Desc">Ответьте на 12 сценарных вопросов, выбирая близкие вам варианты действий.</p>
+                            <h3 data-i18n="step1Title">ÐŸÑ€Ð¾Ñ…Ð¾Ð´Ð¸Ñ‚Ðµ Ñ‚ÐµÑÑ‚</h3>
+                            <p data-i18n="step1Desc">ÐžÑ‚Ð²ÐµÑ‚ÑŒÑ‚Ðµ Ð½Ð° 12 ÑÑ†ÐµÐ½Ð°Ñ€Ð½Ñ‹Ñ… Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ¾Ð², Ð²Ñ‹Ð±Ð¸Ñ€Ð°Ñ Ð±Ð»Ð¸Ð·ÐºÐ¸Ðµ Ð²Ð°Ð¼ Ð²Ð°Ñ€Ð¸Ð°Ð½Ñ‚Ñ‹ Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ð¹.</p>
                         </div>
-                        <div class="step-arrow" aria-hidden="true">→</div>
+                        <div class="step-arrow" aria-hidden="true">â†’</div>
                         <div class="step">
                             <div class="step-number" aria-hidden="true">2</div>
-                            <h3 data-i18n="step2Title">Алгоритм считает</h3>
-                            <p data-i18n="step2Desc">Система анализирует ваши ответы по 6 ключевым измерениям личности.</p>
+                            <h3 data-i18n="step2Title">ÐÐ»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼ ÑÑ‡Ð¸Ñ‚Ð°ÐµÑ‚</h3>
+                            <p data-i18n="step2Desc">Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð° Ð°Ð½Ð°Ð»Ð¸Ð·Ð¸Ñ€ÑƒÐµÑ‚ Ð²Ð°ÑˆÐ¸ Ð¾Ñ‚Ð²ÐµÑ‚Ñ‹ Ð¿Ð¾ 6 ÐºÐ»ÑŽÑ‡ÐµÐ²Ñ‹Ð¼ Ð¸Ð·Ð¼ÐµÑ€ÐµÐ½Ð¸ÑÐ¼ Ð»Ð¸Ñ‡Ð½Ð¾ÑÑ‚Ð¸.</p>
                         </div>
-                        <div class="step-arrow" aria-hidden="true">→</div>
+                        <div class="step-arrow" aria-hidden="true">â†’</div>
                         <div class="step">
                             <div class="step-number" aria-hidden="true">3</div>
-                            <h3 data-i18n="step3Title">Получаете профиль</h3>
-                            <p data-i18n="step3Desc">Детальный отчет и рекомендации по развитию доступны мгновенно.</p>
+                            <h3 data-i18n="step3Title">ÐŸÐ¾Ð»ÑƒÑ‡Ð°ÐµÑ‚Ðµ Ð¿Ñ€Ð¾Ñ„Ð¸Ð»ÑŒ</h3>
+                            <p data-i18n="step3Desc">Ð”ÐµÑ‚Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð¾Ñ‚Ñ‡ÐµÑ‚ Ð¸ Ñ€ÐµÐºÐ¾Ð¼ÐµÐ½Ð´Ð°Ñ†Ð¸Ð¸ Ð¿Ð¾ Ñ€Ð°Ð·Ð²Ð¸Ñ‚Ð¸ÑŽ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹ Ð¼Ð³Ð½Ð¾Ð²ÐµÐ½Ð½Ð¾.</p>
                         </div>
                     </div>
                 </section>
 
-                <section class="cta-section" aria-label="Призыв к действию">
+                <section class="cta-section" aria-label="ÐŸÑ€Ð¸Ð·Ñ‹Ð² Ðº Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸ÑŽ">
                     <div class="cta-content">
-                        <h2 data-i18n="ctaTitle">Откройте свой внутренний мир</h2>
-                        <p data-i18n="ctaText">Пройдите тест за 5-7 минут и получите детальный анализ вашей личности с персональными рекомендациями.</p>
+                        <h2 data-i18n="ctaTitle">ÐžÑ‚ÐºÑ€Ð¾Ð¹Ñ‚Ðµ ÑÐ²Ð¾Ð¹ Ð²Ð½ÑƒÑ‚Ñ€ÐµÐ½Ð½Ð¸Ð¹ Ð¼Ð¸Ñ€</h2>
+                        <p data-i18n="ctaText">ÐŸÑ€Ð¾Ð¹Ð´Ð¸Ñ‚Ðµ Ñ‚ÐµÑÑ‚ Ð·Ð° 5-7 Ð¼Ð¸Ð½ÑƒÑ‚ Ð¸ Ð¿Ð¾Ð»ÑƒÑ‡Ð¸Ñ‚Ðµ Ð´ÐµÑ‚Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð°Ð½Ð°Ð»Ð¸Ð· Ð²Ð°ÑˆÐµÐ¹ Ð»Ð¸Ñ‡Ð½Ð¾ÑÑ‚Ð¸ Ñ Ð¿ÐµÑ€ÑÐ¾Ð½Ð°Ð»ÑŒÐ½Ñ‹Ð¼Ð¸ Ñ€ÐµÐºÐ¾Ð¼ÐµÐ½Ð´Ð°Ñ†Ð¸ÑÐ¼Ð¸.</p>
                         <div id="cta-actions">
                             <button class="btn btn-primary btn-xl pulse-animation" onclick="app.showTestTypeSelection()">
                                 <span class="material-symbols-rounded" aria-hidden="true">play_arrow</span>
-                                <span data-i18n="startTest">Начать тестирование</span>
+                                <span data-i18n="startTest">ÐÐ°Ñ‡Ð°Ñ‚ÑŒ Ñ‚ÐµÑÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ</span>
                             </button>
                         </div>
                     </div>
@@ -1063,101 +1058,101 @@ class UIController {
                 }
             }
         } catch (e) {
-            console.error('Прогресті тексеру қатесі (Error checking progress)', e);
+            console.error('ÐŸÑ€Ð¾Ð³Ñ€ÐµÑÑ‚Ñ– Ñ‚ÐµÐºÑÐµÑ€Ñƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error checking progress)', e);
         }
 
-        // Используем встроенный шаблон (DOM Virtualization)
+        // Ð˜ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÐ¼ Ð²ÑÑ‚Ñ€Ð¾ÐµÐ½Ð½Ñ‹Ð¹ ÑˆÐ°Ð±Ð»Ð¾Ð½ (DOM Virtualization)
         container.innerHTML = this.getLandingTemplateHTML();
 
-        // Обновляем тексты в соответствии с текущим языком
+        // ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ñ‚ÐµÐºÑÑ‚Ñ‹ Ð² ÑÐ¾Ð¾Ñ‚Ð²ÐµÑ‚ÑÑ‚Ð²Ð¸Ð¸ Ñ Ñ‚ÐµÐºÑƒÑ‰Ð¸Ð¼ ÑÐ·Ñ‹ÐºÐ¾Ð¼
         this.updateStaticContent();
 
-        // === 1. Обновляем Hero Section в зависимости от статуса ===
+        // === 1. ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Hero Section Ð² Ð·Ð°Ð²Ð¸ÑÐ¸Ð¼Ð¾ÑÑ‚Ð¸ Ð¾Ñ‚ ÑÑ‚Ð°Ñ‚ÑƒÑÐ° ===
         const heroContent = container.querySelector('.hero-content');
         if (heroContent) {
             if (user) {
-                // Пользователь вошел — единый приветственный чип
+                // ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ Ð²Ð¾ÑˆÐµÐ» â€” ÐµÐ´Ð¸Ð½Ñ‹Ð¹ Ð¿Ñ€Ð¸Ð²ÐµÑ‚ÑÑ‚Ð²ÐµÐ½Ð½Ñ‹Ð¹ Ñ‡Ð¸Ð¿
                 const heroTitle = heroContent.querySelector('.hero-title');
                 if (heroTitle) {
                     const escapedUsername = this.escapeHTML(user.username);
                     const welcomeEl = document.createElement('div');
                     welcomeEl.className = 'hero-welcome fade-in';
                     welcomeEl.style.cssText = 'display: inline-flex; align-items: center; gap: 0.5rem; font-size: 1.15rem; font-weight: 500; opacity: 0.8; margin-bottom: 0.75rem; padding: 0.4rem 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 50px; color: #10b981;';
-                    welcomeEl.innerHTML = `<span class="material-symbols-rounded" style="font-size: 1.2rem;">waving_hand</span> ${t('welcomeBack') || 'С возвращением'}, <strong>${escapedUsername}</strong>!`;
+                    welcomeEl.innerHTML = `<span class="material-symbols-rounded" style="font-size: 1.2rem;">waving_hand</span> ${t('welcomeBack') || 'Welcome back'}, <strong>${escapedUsername}</strong>!`;
                     heroTitle.parentNode.insertBefore(welcomeEl, heroTitle);
                 }
             } else {
-                // Гость — бейдж статуса
+                // Ð“Ð¾ÑÑ‚ÑŒ â€” Ð±ÐµÐ¹Ð´Ð¶ ÑÑ‚Ð°Ñ‚ÑƒÑÐ°
                 const badge = document.createElement('div');
                 badge.className = 'auth-status-badge guest';
                 badge.innerHTML = `
                         <span class="material-symbols-rounded">account_circle</span>
-                        ${t('guestMode') || 'Гостевой режим'}
+                        ${t('guestMode') || 'Guest mode'}
                     `;
                 heroContent.insertBefore(badge, heroContent.firstChild);
             }
         }
 
-        // === 2. Обновляем кнопки действий ===
+        // === 2. ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ ÐºÐ½Ð¾Ð¿ÐºÐ¸ Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ð¹ ===
         const actionsContainer = container.querySelector('#landing-actions');
 
         if (actionsContainer) {
             let buttonsHtml = '';
 
             if (user) {
-                // Для авторизованного пользователя
+                // Ð”Ð»Ñ Ð°Ð²Ñ‚Ð¾Ñ€Ð¸Ð·Ð¾Ð²Ð°Ð½Ð½Ð¾Ð³Ð¾ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ
                 if (hasProgress) {
                     buttonsHtml += `
                             <button class="btn btn-primary btn-lg pulse-animation" onclick="app.continueTest()">
                                 <span class="material-symbols-rounded">play_arrow</span>
-                                ${t('continueTest') || 'Продолжить тест'}
+                                ${t('continueTest') || 'Continue test'}
                             </button>
                         `;
                 } else {
                     buttonsHtml += `
                             <button class="btn btn-primary btn-lg pulse-animation" onclick="app.showTestTypeSelection()">
                                 <span class="material-symbols-rounded">play_arrow</span>
-                                ${t('startTest') || 'Начать тест'}
+                                ${t('startTest') || 'Start test'}
                             </button>
                         `;
                 }
-                // Доп. кнопка профиля
+                // Ð”Ð¾Ð¿. ÐºÐ½Ð¾Ð¿ÐºÐ° Ð¿Ñ€Ð¾Ñ„Ð¸Ð»Ñ
                 buttonsHtml += `
                         <a href="profile.html" class="btn btn-secondary btn-lg">
                             <span class="material-symbols-rounded">person</span>
-                            ${t('myProfile') || 'Мой профиль'}
+                            ${t('myProfile') || 'My profile'}
                         </a>
                     `;
             } else {
-                // Для гостя
+                // Ð”Ð»Ñ Ð³Ð¾ÑÑ‚Ñ
                 if (hasProgress) {
                     buttonsHtml += `
                             <button class="btn btn-primary btn-lg pulse-animation" onclick="app.continueTest()">
                                 <span class="material-symbols-rounded">play_arrow</span>
-                                ${t('continueTest') || 'Продолжить'}
+                                ${t('continueTest') || 'Continue'}
                             </button>
                         `;
                 } else {
                     buttonsHtml += `
                             <button class="btn btn-primary btn-lg pulse-animation" onclick="app.showTestTypeSelection()">
                                 <span class="material-symbols-rounded">science</span>
-                                ${t('startTest') || 'Начать тест'}
+                                ${t('startTest') || 'Start test'}
                             </button>
                         `;
                 }
 
-                // Кнопки входа/регистрации
+                // ÐšÐ½Ð¾Ð¿ÐºÐ¸ Ð²Ñ…Ð¾Ð´Ð°/Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ð¸
                 buttonsHtml += `
                         <button class="btn btn-secondary btn-lg" onclick="app.showAuth()">
                             <span class="material-symbols-rounded">login</span>
-                            ${t('login') || 'Войти'}
+                            ${t('login') || 'Sign in'}
                         </button>
                     `;
             }
 
             actionsContainer.innerHTML = buttonsHtml;
 
-            // Также обновляем нижний CTA блок
+            // Ð¢Ð°ÐºÐ¶Ðµ Ð¾Ð±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ð½Ð¸Ð¶Ð½Ð¸Ð¹ CTA Ð±Ð»Ð¾Ðº
             const ctaActionsContainer = container.querySelector('#cta-actions');
             if (ctaActionsContainer) {
                 if (hasProgress) {
@@ -1165,11 +1160,11 @@ class UIController {
                             <div class="cta-actions-group">
                                 <button class="btn btn-primary btn-xl pulse-animation" onclick="app.continueTest()">
                                     <span class="material-symbols-rounded">play_arrow</span>
-                                    ${t('continueTest') || 'Продолжить тест'}
+                                    ${t('continueTest') || 'Continue test'}
                                 </button>
                                 <button class="btn btn-secondary btn-xl" onclick="app.showTestTypeSelection()">
                                     <span class="material-symbols-rounded">refresh</span>
-                                    ${t('startNewTest') || 'Начать заново'}
+                                    ${t('startNewTest') || 'Start over'}
                                 </button>
                             </div>
                          `;
@@ -1177,14 +1172,14 @@ class UIController {
                     ctaActionsContainer.innerHTML = `
                             <button class="btn btn-primary btn-xl pulse-animation" onclick="app.showTestTypeSelection()">
                                 <span class="material-symbols-rounded">play_arrow</span>
-                                ${t('startTest') || 'Начать тестирование'}
+                                ${t('startTest') || 'Start testing'}
                             </button>
                          `;
                 }
             }
         }
 
-        // Плавное появление
+        // ÐŸÐ»Ð°Ð²Ð½Ð¾Ðµ Ð¿Ð¾ÑÐ²Ð»ÐµÐ½Ð¸Ðµ
         requestAnimationFrame(() => {
             container.style.transition = 'opacity 0.5s';
             container.style.opacity = '1';
@@ -1212,21 +1207,21 @@ class UIController {
         modal.innerHTML = `
             <div class="modal-content glass">
                 <span class="modal-close" onclick="document.getElementById('converterModal').remove()">&times;</span>
-                <h2>Конвертер отчетов</h2>
-                <p>Загрузите JSON файл с результатами теста для конвертации в другие форматы.</p>
+                <h2>${t('converterTitle') || 'Report Converter'}</h2>
+                <p>${t('converterDescription') || 'Upload a JSON file with test results to convert it into other formats.'}</p>
                 
                 <div class="converter-upload-area" id="dropZone">
                     <input type="file" id="jsonFileInput" accept=".json" style="display: none" onchange="app.ui.handleFileSelect(event)">
                     <button class="btn btn-secondary" onclick="document.getElementById('jsonFileInput').click()">
                         <span class="material-symbols-rounded">upload_file</span>
-                        Выберите файл
+                        ${t('chooseFile') || 'Choose file'}
                     </button>
-                    <p style="margin-top: 10px; font-size: 0.9em; color: var(--text-secondary);">или перетащите сюда</p>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: var(--text-secondary);">${t('orDragHere') || 'or drag it here'}</p>
                     <div id="fileNameDisplay" style="margin-top: 10px; font-weight: bold;"></div>
                 </div>
 
                 <div id="converterActions" style="display: none; margin-top: 20px;">
-                    <h3>Скачать как:</h3>
+                    <h3>${t('downloadAs') || 'Download as:'}</h3>
                     <div class="results-actions-top" style="justify-content: center; gap: 12px;">
                         <button class="btn-download-action btn-download-html" onclick="app.ui.convertAndDownload('html')">
                             <span class="material-symbols-rounded">html</span> HTML
@@ -1287,15 +1282,16 @@ class UIController {
         const display = document.getElementById('fileNameDisplay');
         const actions = document.getElementById('converterActions');
         const status = document.getElementById('conversionStatus');
+        const t = this.i18n.t.bind(this.i18n);
 
         if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
-            display.textContent = 'Қате: .json файлын таңдаңыз (Error: Select .json file)';
+            display.textContent = t('selectJsonFile') || 'Select a .json file';
             display.style.color = 'red';
             actions.style.display = 'none';
             return;
         }
 
-        display.textContent = `Выбран: ${file.name}`;
+        display.textContent = `${t('selectedFile') || 'Selected'}: ${file.name}`;
         display.style.color = 'var(--text-primary)';
 
         // Read file
@@ -1310,19 +1306,19 @@ class UIController {
                 }
 
                 if (!this.loadedReportData.profile && !this.loadedReportData.scores) {
-                    throw new Error('Некорректный формат файла отчета');
+                    throw new Error(t('invalidReportFormat') || 'Invalid report file format');
                 }
 
                 actions.style.display = 'block';
-                status.textContent = 'Файл сәтті оқылды. Конвертациялау форматын таңдаңыз (File read successfully. Select format for conversion).';
+                status.textContent = t('fileReadSuccess') || 'File loaded successfully. Choose a format for conversion.';
                 status.style.color = 'green';
 
                 // Store original filename for export naming
                 this.loadedFilenameBase = file.name.replace('.json', '');
 
             } catch (error) {
-                console.error('Файлды талдау қатесі (File parse error):', error);
-                status.textContent = 'Файлды оқу қатесі (Error reading file): ' + error.message;
+                console.error('File parse error:', error);
+                status.textContent = `${t('fileReadError') || 'Error reading file'}: ${error.message}`;
                 status.style.color = 'red';
                 actions.style.display = 'none';
             }
@@ -1361,91 +1357,91 @@ class UIController {
                 }
             }
         } catch (e) {
-            console.error('Прогресті тексеру қатесі (Error checking progress)', e);
+            console.error('ÐŸÑ€Ð¾Ð³Ñ€ÐµÑÑ‚Ñ– Ñ‚ÐµÐºÑÐµÑ€Ñƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error checking progress)', e);
         }
 
         // Fallbacks provided directly in template literal for better readability
         container.innerHTML = `
             <div class="test-selection-screen">
-                <h1>${t('selectTestType') || 'Выберите тип теста'}</h1>
-                <p class="subtitle">${t('testTypeDescription') || 'Выберите подходящий для вас вариант тестирования'}</p>
+                <h1>${t('selectTestType') || 'Choose a test type'}</h1>
+                <p class="subtitle">${t('testTypeDescription') || 'Choose the testing mode that fits you best'}</p>
                 
                 ${hasProgress ? `
                     <div class="continue-test-banner">
                         <div class="banner-content">
                             <span class="material-symbols-rounded">history</span>
                             <div class="banner-text">
-                                <h3>${t('unfinishedTest') || 'У вас есть незавершенный тест'}</h3>
-                                <p>${t('continueOrStartNew') || 'Вы можете продолжить с того места, где остановились, или начать новый тест'}</p>
+                                <h3>${t('unfinishedTest') || 'You have an unfinished test'}</h3>
+                                <p>${t('continueOrStartNew') || 'You can continue where you left off or start a new test'}</p>
                             </div>
                         </div>
                         <button class="btn btn-primary btn-lg pulse-animation" onclick="app.continueTest()">
                             <span class="material-symbols-rounded">play_arrow</span>
-                            ${t('continueTest') || 'Продолжить тест'}
+                            ${t('continueTest') || 'Continue test'}
                         </button>
                     </div>
                 ` : ''}
                 
                 <div class="test-type-cards">
                     <div class="test-type-card" onclick="app.startBasicTest()">
-                        <div class="test-type-icon">⚡</div>
-                        <h2>${t('basicTest') || 'Быстрый тест'}</h2>
+                        <div class="test-type-icon"><span class="material-symbols-rounded">bolt</span></div>
+                        <h2>${t('basicTest') || 'Quick test'}</h2>
                         <div class="test-type-info">
-                            <p class="test-count">${t('questionsCount') || 'Вопросов'}: <strong>12</strong></p>
-                            <p class="test-time">${t('estimatedTime') || 'Время'}: <strong>~15 ${t('minutes') || 'минут'}</strong></p>
+                            <p class="test-count">${t('questionsCount') || 'Questions'}: <strong>12</strong></p>
+                            <p class="test-time">${t('estimatedTime') || 'Time'}: <strong>~15 ${t('minutes') || 'minutes'}</strong></p>
                         </div>
                         <div class="test-type-description">
-                            <p>${t('basicTestDescription') || 'Быстрое тестирование с основными сценариями для получения базового профиля личности.'}</p>
+                            <p>${t('basicTestDescription') || 'A concise scenario-based test for a baseline personality profile.'}</p>
                             <ul>
-                                <li>${t('basicTestFeature1') || '12 сценариев с выбором'}</li>
-                                <li>${t('basicTestFeature2') || 'Базовый анализ профиля'}</li>
-                                <li>${t('basicTestFeature3') || 'Рекомендации по развитию'}</li>
+                                <li>${t('basicTestFeature1') || '12 choice scenarios'}</li>
+                                <li>${t('basicTestFeature2') || 'Baseline profile analysis'}</li>
+                                <li>${t('basicTestFeature3') || 'Growth recommendations'}</li>
                             </ul>
                         </div>
-                        <button class="btn btn-primary">${t('startBasicTest') || 'Начать быстрый тест'}</button>
+                        <button class="btn btn-primary">${t('startBasicTest') || 'Start quick test'}</button>
                     </div>
                     
                     <div class="test-type-card advanced" onclick="app.startAdvancedTest()">
-                        <div class="test-type-icon">🔬</div>
-                        <h2>${t('advancedTest') || 'Углубленный тест'}</h2>
-                        <div class="test-type-badge">${t('mostAccurate') || 'Максимально точный'}</div>
+                        <div class="test-type-icon"><span class="material-symbols-rounded">biotech</span></div>
+                        <h2>${t('advancedTest') || 'Advanced test'}</h2>
+                        <div class="test-type-badge">${t('mostAccurate') || 'Most accurate'}</div>
                         <div class="test-type-info">
-                            <p class="test-count">${t('questionsCount') || 'Вопросов'}: <strong>36</strong> <span style="font-size: 0.8em; opacity: 0.8;">(${t('exactQuantity') || 'точное количество'})</span></p>
-                            <p class="test-time">${t('estimatedTime') || 'Время'}: <strong>~45-60 ${t('minutes') || 'минут'}</strong></p>
+                            <p class="test-count">${t('questionsCount') || 'Questions'}: <strong>36</strong> <span style="font-size: 0.8em; opacity: 0.8;">(${t('exactQuantity') || 'exact count'})</span></p>
+                            <p class="test-time">${t('estimatedTime') || 'Time'}: <strong>~45-60 ${t('minutes') || 'minutes'}</strong></p>
                         </div>
                         <div class="test-type-description">
-                            <p>${t('advancedTestDescription') || 'Комплексное тестирование с углубленными вопросами для максимально точного анализа личности.'}</p>
+                            <p>${t('advancedTestDescription') || 'A deeper assessment with multiple question formats for maximum accuracy.'}</p>
                             <ul>
-                                <li>${t('advancedTestFeature1') || 'Сценарии, шкалы, открытые вопросы'}</li>
-                                <li>${t('advancedTestFeature2') || 'Ситуационные задачи'}</li>
-                                <li>${t('advancedTestFeature3') || 'Детализированный анализ'}</li>
-                                <li>${t('advancedTestFeature4') || 'Статистическая достоверность'}</li>
+                                <li>${t('advancedTestFeature1') || 'Scenarios, scales, and open-ended questions'}</li>
+                                <li>${t('advancedTestFeature2') || 'Situational tasks'}</li>
+                                <li>${t('advancedTestFeature3') || 'Detailed analysis'}</li>
+                                <li>${t('advancedTestFeature4') || 'Statistical reliability'}</li>
                             </ul>
                         </div>
-                        <button class="btn btn-primary">${t('startAdvancedTest') || 'Начать углубленный тест'}</button>
+                        <button class="btn btn-primary">${t('startAdvancedTest') || 'Start advanced test'}</button>
                     </div>
 
                     <div class="test-type-card cognitive" onclick="app.startCognitiveTest()">
-                        <div class="test-type-icon">🧠</div>
-                        <h2>${t('cognitiveTest') || 'Когнитивный стиль'}</h2>
+                        <div class="test-type-icon"><span class="material-symbols-rounded">neurology</span></div>
+                        <h2>${t('cognitiveTest') || 'Cognitive style'}</h2>
                         <div class="test-type-info">
-                            <p class="test-count">${t('questionsCount') || 'Вопросов'}: <strong>15</strong></p>
-                            <p class="test-time">${t('estimatedTime') || 'Время'}: <strong>~10 ${t('minutes') || 'минут'}</strong></p>
+                            <p class="test-count">${t('questionsCount') || 'Questions'}: <strong>15</strong></p>
+                            <p class="test-time">${t('estimatedTime') || 'Time'}: <strong>~10 ${t('minutes') || 'minutes'}</strong></p>
                         </div>
                         <div class="test-type-description">
-                            <p>${t('cognitiveTestDescription') || 'Определите свой стиль обучения и мышления'}</p>
+                            <p>${t('cognitiveTestDescription') || 'Identify your preferred learning and thinking style'}</p>
                             <ul>
-                                <li>${t('cognitiveFeature1') || 'Визуальный, аудиальный, кинестетический'}</li>
-                                <li>${t('cognitiveFeature2') || 'Советы по обучению'}</li>
-                                <li>${t('cognitiveFeature3') || 'Индивидуальный подход'}</li>
+                                <li>${t('cognitiveFeature1') || 'Visual, auditory, and kinesthetic patterns'}</li>
+                                <li>${t('cognitiveFeature2') || 'Learning tips'}</li>
+                                <li>${t('cognitiveFeature3') || 'Personalized approach'}</li>
                             </ul>
                         </div>
-                        <button class="btn btn-primary">${t('startCognitiveTest') || 'Начать тест'}</button>
+                        <button class="btn btn-primary">${t('startCognitiveTest') || 'Start test'}</button>
                     </div>
                 </div>
                 
                 <div class="test-selection-actions">
-                    <button class="btn btn-secondary" onclick="app.showIntro()">${t('back') || 'Назад'}</button>
+                    <button class="btn btn-secondary" onclick="app.showIntro()">${t('back') || 'Back'}</button>
                 </div>
             </div>
         `;
@@ -1475,14 +1471,14 @@ class UIController {
 
         container.innerHTML = `
             <div class="error-screen">
-                <h1>Ошибка загрузки приложения</h1>
+                <h1>ÐžÑˆÐ¸Ð±ÐºÐ° Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ</h1>
                 <p class="error-message">
-                    Не удалось загрузить необходимые компоненты: <strong>${missingList}</strong>
+                    ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ñ‹Ðµ ÐºÐ¾Ð¼Ð¿Ð¾Ð½ÐµÐ½Ñ‚Ñ‹: <strong>${missingList}</strong>
                 </p>
                 <p class="error-description">
-                    Пожалуйста, обновите страницу. Если проблема сохраняется, убедитесь, что все файлы загружены правильно.
+                    ÐŸÐ¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð¾Ð±Ð½Ð¾Ð²Ð¸Ñ‚Ðµ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ. Ð•ÑÐ»Ð¸ Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼Ð° ÑÐ¾Ñ…Ñ€Ð°Ð½ÑÐµÑ‚ÑÑ, ÑƒÐ±ÐµÐ´Ð¸Ñ‚ÐµÑÑŒ, Ñ‡Ñ‚Ð¾ Ð²ÑÐµ Ñ„Ð°Ð¹Ð»Ñ‹ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½Ñ‹ Ð¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ð¾.
                 </p>
-                <button class="btn btn-primary" onclick="location.reload()">Обновить страницу</button>
+                <button class="btn btn-primary" onclick="location.reload()">ÐžÐ±Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ</button>
             </div>
     `;
     }
@@ -1517,7 +1513,7 @@ class UIController {
             <div class="loading-wrapper" style="position: absolute; background: transparent;">
                 <div class="loading-content">
                     <div class="cosmic-spinner"></div>
-                    <p class="loading-text" style="font-size: 1.1rem; margin-top: 1.5rem;">${t('processingResults') || 'Нәтижелер өңделуде...'}</p>
+                    <p class="loading-text" style="font-size: 1.1rem; margin-top: 1.5rem;">${t('processingResults') || 'Processing results...'}</p>
                 </div>
             </div>
     `;
@@ -1536,7 +1532,7 @@ class UIController {
             let content = `
                 <div class="results-screen animate-in">
                     <div class="results-header">
-                        <button class="btn-home" onclick="app.showIntro()" title="${t('home')}">🏠</button>
+                        <button class="btn-home" onclick="app.showIntro()" title="${t('home')}"><span class="material-symbols-rounded">home</span></button>
                         <h1 id="resultsTitle">${t('resultsTitle') || 'Personality Profile Analysis'}</h1>
                         <div class="results-actions-top" style="gap: 12px;">
                              <button class="btn-download-action btn-download-html" onclick="app.downloadResults('html')">
@@ -1562,7 +1558,7 @@ class UIController {
                         
                         <!-- AI Analysis Container -->
                          <div id="aiAnalysisContainer" class="result-card ai-card" style="${aiAnalysis ? '' : 'display:none'}">
-                             <h2>🤖 ${t('aiAnalysisTitle') || 'AI Analysis'}</h2>
+                             <h2><span class="material-symbols-rounded">smart_toy</span> ${t('aiAnalysisTitle') || 'AI Analysis'}</h2>
                              <div id="aiAnalysisContent"></div>
                          </div>
                     </div>
@@ -1624,7 +1620,7 @@ class UIController {
             const confidence = Math.round(aiAnalysis.personalityType.confidence * 100);
             html += `
                 <div class="ai-section">
-                    <h3>🎯 ${t('personalityType')}</h3>
+                    <h3><span class="material-symbols-rounded">target</span> ${t('personalityType')}</h3>
                     <div class="personality-type-card">
                         <h4>${aiAnalysis.personalityType.name}</h4>
                         <p style="text-align: justify;">${aiAnalysis.personalityType.description}</p>
@@ -1636,7 +1632,7 @@ class UIController {
 
         // Insights
         if (aiAnalysis.insights && aiAnalysis.insights.length > 0) {
-            html += `<div class="ai-section"><h3>💡 ${t('insights')}</h3><div class="insights-list">`;
+            html += `<div class="ai-section"><h3><span class="material-symbols-rounded">lightbulb</span> ${t('insights')}</h3><div class="insights-list">`;
             aiAnalysis.insights.forEach(insight => {
                 html += `
                     <div class="insight-item insight-${insight.importance}">
@@ -1702,7 +1698,7 @@ class UIController {
                     ${showEvolution ? `
                     <div class="cosmic-card mb-6 fade-in delay-1">
                         <div class="card-header">
-                            <h2 class="card-title">📈 ${t('evolutionProgress') || 'Прогресс развития'}</h2>
+                            <h2 class="card-title"><span class="material-symbols-rounded">trending_up</span> ${t('evolutionProgress') || 'Development progress'}</h2>
                         </div>
                         <div class="card-body">
                             <div style="height: 300px; width: 100%; position: relative;">
@@ -1710,7 +1706,7 @@ class UIController {
                             </div>
                             ${evolutionReport && (evolutionReport.insights || evolutionReport.recommendations) ? `
                                 <div class="evolution-insights mt-8">
-                                    <h3 class="text-lg font-semibold mb-4">${t('keyInsights') || 'Ключевые инсайты'}</h3>
+                                    <h3 class="text-lg font-semibold mb-4">${t('keyInsights') || 'Key insights'}</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         ${evolutionReport.insights ? evolutionReport.insights.slice(0, 2).map(insight => `
                                             <div class="insight-card ${insight.type || 'neutral'}" style="background: rgba(var(--primary-rgb), 0.05); padding: 1.25rem; border-radius: 12px; border-left: 4px solid var(--primary-color);">
@@ -1722,7 +1718,9 @@ class UIController {
                                         ${evolutionReport.recommendations ? evolutionReport.recommendations.slice(0, 2).map(rec => `
                                             <div class="insight-card ${rec.type === 'leverage' ? 'positive' : 'attention'}" style="background: rgba(var(--primary-rgb), 0.05); padding: 1.25rem; border-radius: 12px; border-left: 4px solid ${rec.type === 'leverage' ? '#10b981' : '#f59e0b'};">
                                                 <h4 style="margin: 0 0 0.75rem 0; color: ${rec.type === 'leverage' ? '#10b981' : '#f59e0b'};">
-                                                    ${rec.type === 'leverage' ? '🚀 ' + (t('keepItUp') || 'Keep it up!') : '⚠️ ' + (t('payAttention') || 'Pay attention')}
+                                                    ${rec.type === 'leverage'
+                                                        ? '<span class="material-symbols-rounded" style="font-size: 1rem; vertical-align: text-bottom;">north_east</span> ' + (t('keepItUp') || 'Keep it up!')
+                                                        : '<span class="material-symbols-rounded" style="font-size: 1rem; vertical-align: text-bottom;">warning</span> ' + (t('payAttention') || 'Pay attention')}
                                                 </h4>
                                                 <p style="margin: 0; font-size: 0.95rem; opacity: 0.9; line-height: 1.5; text-align: justify;">${rec.text}</p>
                                             </div>
@@ -1768,17 +1766,17 @@ class UIController {
                 const renderItem = (id, title, dateStr, subtitle, extraInfo) => `
                     <div class="history-item" data-test-id="${id}" style="display:flex; align-items:center; gap:12px; flex-wrap:nowrap; padding: 10px 12px 10px 20px;">
                     <div class="test-checkbox-wrapper">
-                        <input type="checkbox" class="test-checkbox" data-test-id="${id}">
+                        <input type="checkbox" id="history-test-${id}" name="selectedTests" class="test-checkbox" data-test-id="${id}">
                         <span class="test-checkbox-custom"></span>
                     </div>
                         <div class="history-info" style="flex:1; min-width:0;">
                             <h3 class="font-bold text-lg m-0" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${title}</h3>
-                            <span class="text-sm text-secondary">${dateStr}${subtitle ? ' • <span class="text-primary">' + subtitle + '</span>' : ''}</span>
+                            <span class="text-sm text-secondary">${dateStr}${subtitle ? ' &bull; <span class="text-primary">' + subtitle + '</span>' : ''}</span>
                             ${extraInfo ? `<span class="text-xs" style="opacity:0.5;">${extraInfo}</span>` : ''}
                         </div>
                         <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
-                            <button class="btn btn-ghost btn-sm test-rename-btn" data-test-id="${id}" title="${t('rename') || 'Rename'}" style="border:1px solid rgba(255,255,255,0.2); border-radius:8px; padding:4px 8px;">✏️</button>
-                            <button class="btn btn-ghost btn-sm text-red-500 test-delete-btn" data-test-id="${id}" title="${t('deleteTest') || 'Delete'}" style="border:1px solid rgba(255,80,80,0.3); border-radius:8px; padding:4px 8px;">🗑️</button>
+                            <button class="btn btn-ghost btn-sm test-rename-btn" data-test-id="${id}" title="${t('rename') || 'Rename'}" style="border:1px solid rgba(255,255,255,0.2); border-radius:8px; padding:4px 8px;"><span class="material-symbols-rounded" style="font-size: 1rem;">edit</span></button>
+                            <button class="btn btn-ghost btn-sm text-red-500 test-delete-btn" data-test-id="${id}" title="${t('deleteTest') || 'Delete'}" style="border:1px solid rgba(255,80,80,0.3); border-radius:8px; padding:4px 8px;"><span class="material-symbols-rounded" style="font-size: 1rem;">delete</span></button>
                             <button class="btn btn-secondary btn-sm test-view-btn" data-test-id="${id}">${t('viewResults')}</button>
                         </div>
                     </div>`;
@@ -1810,10 +1808,10 @@ class UIController {
                                             <input type="checkbox" id="selectAllTests" class="test-checkbox-all">
                                             <span class="test-checkbox-custom"></span>
                                         </div>
-                                            <span>${t('selectAll') || 'Выбрать все'}</span>
+                                            <span>${t('selectAll') || 'Select all'}</span>
                                         </label>
                                         <button class="btn btn-danger btn-sm" id="deleteSelectedBtn" style="display: none;">
-                                            🗑️ ${t('deleteSelected') || 'Удалить выбранные'} (<span id="selectedCount">0</span>)
+                                            <span class="material-symbols-rounded" style="font-size: 1rem; vertical-align: text-bottom;">delete</span> ${t('deleteSelected') || 'Delete selected'} (<span id="selectedCount">0</span>)
                                         </button>
                                     </div>
                                     <div class="history-list">
@@ -1841,7 +1839,7 @@ class UIController {
         // Reuse container variable from line 1514
         if (container) {
             // Remove existing listeners to avoid duplicates
-            // Unified click handler — all tests use data-test-id
+            // Unified click handler â€” all tests use data-test-id
             this.handleTestHistoryClick = (e) => {
                 const target = e.target.closest('button');
                 if (!target) return;
@@ -1871,7 +1869,7 @@ class UIController {
             };
             container.addEventListener('click', this.handleTestHistoryClick);
 
-            // Checkbox — all use data-test-id
+            // Checkbox â€” all use data-test-id
             const testCheckboxes = document.querySelectorAll('.test-checkbox');
             testCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', (e) => {
@@ -2249,7 +2247,7 @@ class UIController {
                 top = window.scrollY + window.innerHeight - modalHeight - 10;
             }
 
-            console.log('🎯 Modal positioning:', {
+            console.log('ðŸŽ¯ Modal positioning:', {
                 buttonRect: { top: rect.top, left: rect.left, width: rect.width, height: rect.height },
                 calculatedTop: top,
                 calculatedLeft: left,
@@ -2303,7 +2301,7 @@ class UIController {
         this.showModal({
             id: 'alertModal',
             overlayClass: 'alert-overlay', // Protection from app.closeModal()
-            title: title || t('attention') || 'Внимание',
+            title: title || t('attention') || 'Attention',
             content: `<p>${message}</p>`,
             icon: 'warning',
             type: 'warning',
@@ -2324,17 +2322,17 @@ class UIController {
     showConfirm(message, onConfirm, onCancel = null, triggerElement = null) {
         const t = this.i18n.t.bind(this.i18n);
         this.showModal({
-            title: t('confirmation') || 'Подтверждение',
+            title: t('confirmation') || 'Confirmation',
             content: `<p>${message}</p>`,
             triggerElement: triggerElement,
             actions: [
                 {
-                    text: t('cancel') || 'Отмена',
+                    text: t('cancel') || 'Cancel',
                     class: 'btn-secondary',
                     onClick: () => { if (onCancel) onCancel(); }
                 },
                 {
-                    text: t('confirm') || 'Да',
+                    text: t('confirm') || 'Confirm',
                     class: 'btn-primary',
                     onClick: () => { if (onConfirm) onConfirm(); }
                 }
@@ -2355,12 +2353,12 @@ class UIController {
 
         let displayTitle = title;
 
-        // Если заголовок - это ключ локализации (без пробелов), пробуем перевести
+        // Ð•ÑÐ»Ð¸ Ð·Ð°Ð³Ð¾Ð»Ð¾Ð²Ð¾Ðº - ÑÑ‚Ð¾ ÐºÐ»ÑŽÑ‡ Ð»Ð¾ÐºÐ°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ð¸ (Ð±ÐµÐ· Ð¿Ñ€Ð¾Ð±ÐµÐ»Ð¾Ð²), Ð¿Ñ€Ð¾Ð±ÑƒÐµÐ¼ Ð¿ÐµÑ€ÐµÐ²ÐµÑÑ‚Ð¸
         if (title && !title.includes(' ') && !title.includes('<')) {
             const translated = t(title);
-            // Проверяем, вернулся ли ключ или перевод
+            // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼, Ð²ÐµÑ€Ð½ÑƒÐ»ÑÑ Ð»Ð¸ ÐºÐ»ÑŽÑ‡ Ð¸Ð»Ð¸ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´
             if (!translated || translated === title) {
-                // Если перевод не найден (вернулся ключ), используем дефолт
+                // Ð•ÑÐ»Ð¸ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½ (Ð²ÐµÑ€Ð½ÑƒÐ»ÑÑ ÐºÐ»ÑŽÑ‡), Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÐ¼ Ð´ÐµÑ„Ð¾Ð»Ñ‚
                 displayTitle = t('inputRequired');
             } else {
                 displayTitle = translated;
@@ -2381,9 +2379,9 @@ class UIController {
                 </div>
             `,
             actions: [
-                { text: t('cancel') || 'Отмена', class: 'btn-ghost', onClick: () => { } },
+                { text: t('cancel') || 'Cancel', class: 'btn-ghost', onClick: () => { } },
                 {
-                    text: 'Сохранить', // Save
+                    text: t('save') || 'Save',
                     class: 'btn-primary',
                     closeAfter: false,
                     onClick: () => {
@@ -2453,19 +2451,20 @@ class UIController {
             }, 50);
         } else {
             console.error('TestSelectionView not loaded. Make sure js/ui/views/TestSelectionView.js is included.');
-            this.showError('Test selection view failed to load. Please refresh the page.');
+            this.showError(this.i18n.t('testSelectionViewError') || 'Test selection view failed to load. Please refresh the page.');
         }
     }
 
     showError(message) {
         const container = document.getElementById('app');
         if (container) {
+            const t = this.i18n.t.bind(this.i18n);
             container.innerHTML = `
-            < div class="error-screen" >
-                    <h1>Ошибка</h1>
+                <div class="error-screen">
+                    <h1>${t('error') || 'Error'}</h1>
                     <p class="error-message">${message}</p>
-                    <button class="btn btn-primary" onclick="location.reload()">Обновить</button>
-                </div >
+                    <button class="btn btn-primary" onclick="location.reload()">${t('reloadPage') || 'Reload page'}</button>
+                </div>
             `;
         }
     }
@@ -2478,3 +2477,4 @@ if (typeof module !== 'undefined' && module.exports) {
 if (typeof window !== 'undefined') {
     window.UIController = UIController;
 }
+

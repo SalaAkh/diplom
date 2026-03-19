@@ -112,18 +112,19 @@ class EvolutionTracker {
      */
     trackEvolution(userId) {
         const history = this.getEvolutionHistory(userId);
+        const t = (window.i18n && window.i18n.t) ? window.i18n.t.bind(window.i18n) : ((key) => key);
 
         if (history.sessions.length < 2) {
             return {
                 hasEvolution: false,
-                message: 'Недостаточно данных для анализа эволюции. Пройдите тест ещё раз.'
+                message: t('noEvolutionData') || 'At least 2 sessions are required for evolution analysis'
             };
         }
 
         const sessions = history.sessions;
         const comparisons = [];
 
-        // Сравниваем каждую сессию с предыдущей
+        // ?????????? ?????? ?????? ? ??????????
         for (let i = 1; i < sessions.length; i++) {
             const comparison = this.compareSessions(sessions[i - 1], sessions[i]);
             comparisons.push({
@@ -133,7 +134,6 @@ class EvolutionTracker {
             });
         }
 
-        // Сравниваем первую и последнюю сессию
         const overallComparison = this.compareSessions(sessions[0], sessions[sessions.length - 1]);
 
         return {
@@ -145,12 +145,6 @@ class EvolutionTracker {
             evolutionSummary: this.generateEvolutionSummary(comparisons, overallComparison)
         };
     }
-
-    /**
-     * Генерация отчёта об эволюции
-     * @param {string} userId - ID пользователя
-     * @returns {Object} Отчёт об эволюции
-     */
     generateEvolutionReport(userId) {
         const evolution = this.trackEvolution(userId);
 
@@ -324,98 +318,72 @@ class EvolutionTracker {
      */
     generateEvolutionRecommendations(evolution) {
         const recommendations = [];
-        // Direct translations with fallbacks
-        const translations = {
-            recGrowth: 'Продолжайте развивать {dim}. Ваш рост в этой области стабилен и перспективен.',
-            recDecline: 'Обратите внимание на {dim}. Наблюдается снижение, возможно, стоит вернуться к практике в этой области.',
-            recStable: 'Ваш профиль стабилен. Это отличная основа для дальнейшего развития.',
-            strategicName: 'Стратегическое мышление',
-            explorerName: 'Исследовательский интерес',
-            individualismName: 'Индивидуализм',
-            rationalityName: 'Рациональность',
-            adaptationName: 'Адаптивность',
-            meaningName: 'Поиск смысла',
-            intuitionName: 'Интуиция',
-            utilityName: 'Практичность'
-        };
-        const t = (key) => {
-            if (window.t) {
-                const val = window.t(key);
-                if (val && val !== key) return val;
+        const t = (key, params = {}) => {
+            if (window.i18n && window.i18n.t) {
+                const value = window.i18n.t(key, params);
+                if (value && value !== key) return value;
             }
-            return translations[key] || key;
+            return key;
         };
 
         if (evolution.trends) {
             Object.keys(evolution.trends).forEach(dimension => {
                 const trend = evolution.trends[dimension];
+                const dimensionName = t(`${dimension}Name`) || dimension;
 
-                // Lowered threshold from 0.05 to 0.02 to show more insights
                 if (trend.direction === 'increasing' && trend.rate > 0.02) {
                     recommendations.push({
                         dimension: dimension,
                         type: 'leverage',
-                        text: (t('recGrowth') || 'Продолжайте развивать {dim}. Ваш рост в этой области стабилен и перспективен.').replace('{dim}', t(`${dimension}Name`) || dimension)
+                        text: t('recGrowth', { dim: dimensionName }) || `Continue developing ${dimensionName}.`
                     });
                 } else if (trend.direction === 'decreasing' && Math.abs(trend.rate) > 0.02) {
                     recommendations.push({
                         dimension: dimension,
                         type: 'attention',
-                        text: (t('recDecline') || 'Обратите внимание на {dim}. Наблюдается снижение, возможно, стоит вернуться к практике в этой области.').replace('{dim}', t(`${dimension}Name`) || dimension)
+                        text: t('recDecline', { dim: dimensionName }) || `Pay attention to ${dimensionName}.`
                     });
                 }
             });
         }
 
-        // Add a default recommendation if nothing else triggered but we have data
         if (recommendations.length === 0 && evolution.overallComparison) {
             recommendations.push({
                 type: 'leverage',
-                text: 'Ваш профиль стабилен. Это отличная основа для дальнейшего развития.'
+                text: t('recStable') || 'Your profile is stable. This is an excellent foundation for further growth.'
             });
         }
 
         return recommendations;
     }
-
-    /**
-     * Генерация временной линии изменений
-     * @param {Object} evolution - Данные об эволюции
-     * @returns {Array} Временная линия
-     */
     generateTimeline(evolution) {
         if (!evolution.comparisons) return [];
 
-        return evolution.comparisons.map((comp, index) => {
+        const t = (window.i18n && window.i18n.t) ? window.i18n.t.bind(window.i18n) : ((key) => key);
+
+        return evolution.comparisons.map((comp) => {
             return {
-                period: `Сессия ${comp.fromSession + 1} → ${comp.toSession + 1}`,
+                period: `${t('sessionLabel')} ${comp.fromSession + 1} -> ${comp.toSession + 1}` ,
                 changes: comp.comparison.significantChanges || [],
                 summary: this.generatePeriodSummary(comp.comparison)
             };
         });
     }
-
-    /**
-     * Генерация сводки по периоду
-     * @param {Object} comparison - Сравнение
-     * @returns {string} Сводка
-     */
     generatePeriodSummary(comparison) {
-        if (comparison.improvements && comparison.improvements.length > 0) {
-            return `Рост в ${comparison.improvements.length} измерении(ях)`;
-        } else if (comparison.regressions && comparison.regressions.length > 0) {
-            return `Изменения в ${comparison.regressions.length} измерении(ях)`;
-        } else {
-            return 'Стабильный период';
-        }
-    }
+        const t = (window.i18n && window.i18n.t) ? window.i18n.t.bind(window.i18n) : ((key) => key);
 
-    /**
-     * Вычисление времени между сессиями
-     * @param {string} date1 - Дата первой сессии (ISO string)
-     * @param {string} date2 - Дата второй сессии (ISO string)
-     * @returns {Object} Информация о времени
-     */
+        if (comparison.improvements && comparison.improvements.length > 0) {
+            return t('growthInDimensions', { count: comparison.improvements.length }) ||
+                `Growth in ${comparison.improvements.length} dimension(s)`;
+        }
+
+        if (comparison.regressions && comparison.regressions.length > 0) {
+            return t('changesInDimensions', { count: comparison.regressions.length }) ||
+                `Changes in ${comparison.regressions.length} dimension(s)`;
+        }
+
+        return t('stablePeriod') || 'Stable period';
+    }
     calculateTimeBetween(date1, date2) {
         const d1 = new Date(date1);
         const d2 = new Date(date2);

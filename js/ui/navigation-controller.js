@@ -140,21 +140,25 @@ class NavigationController {
     translatePage() {
         if (!window.i18n) return;
 
-        const elements = document.querySelectorAll('[data-i18n]');
-        elements.forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (key) {
-                el.innerHTML = window.i18n.t(key);
-            }
-        });
+        if (typeof window.applyLocalizedAttributes === 'function') {
+            window.applyLocalizedAttributes(document);
+        } else {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (key) {
+                    el.textContent = window.i18n.t(key);
+                }
+            });
 
-        const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
-        placeholders.forEach(el => {
-            const key = el.getAttribute('data-i18n-placeholder');
-            if (key) {
-                el.setAttribute('placeholder', window.i18n.t(key));
-            }
-        });
+            const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
+            placeholders.forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (key) {
+                    el.setAttribute('placeholder', window.i18n.t(key));
+                }
+            });
+        }
 
         // Update footer date if needed
         const footerText = document.getElementById('footerText');
@@ -162,6 +166,8 @@ class NavigationController {
         if (footerText && window.i18n) {
             footerText.innerHTML = `${window.i18n.t('project')} &copy; 2026`;
         }
+
+        document.documentElement.lang = window.i18n.getLanguage();
     }
 
     setupEventListeners() {

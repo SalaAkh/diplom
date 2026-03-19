@@ -72,20 +72,21 @@
 
 
     <!-- Skip Link -->
-    <a href="#main-content" class="skip-link visually-hidden-focusable">Негізгі мазмұнға өту</a>
+    <a href="#main-content" class="skip-link visually-hidden-focusable" data-i18n="skipToContent">Негізгі мазмұнға өту</a>
 
     <!-- Cosmic Navigation -->
-    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Басты навигация">
+    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Басты навигация"
+        data-i18n-aria-label="navMainAria">
         <!-- Desktop Collapse Button -->
         <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Навигацияны жию"
-            title="Панельді жайю">
+            title="Панельді жайю" data-i18n-aria-label="collapseNavigation" data-i18n-title="collapseNavigation">
             <span class="material-symbols-rounded">chevron_left</span>
         </button>
 
         <div class="nav-header">
             <div class="nav-logo" id="navLogo" aria-hidden="true"><span class="material-symbols-rounded">hub</span>
             </div>
-            <div class="nav-tagline" id="navTagline">Neural Constellation</div>
+            <div class="nav-tagline" id="navTagline" data-i18n="navTagline">Neural Constellation</div>
         </div>
 
         <div class="nav-items" id="navItems" role="menubar">
@@ -117,17 +118,20 @@
                         <p class="tagline" id="tagline">Жеке қалауларды және даму бағыттарын талдау</p>
                     </div>
                     <div class="header-controls">
-                        <div class="language-selector" id="languageSelector" aria-label="Тіл таңдау"></div>
+                        <div class="language-selector" id="languageSelector" aria-label="Тіл таңдау"
+                            data-i18n-aria-label="languageSelect"></div>
 
                         <!-- Accessibility Button -->
                         <button class="btn-icon header-btn accessibility-trigger" id="accessBtn"
                             aria-label="Қолжетімділік параметрлері" title="Қолжетімділік"
+                            data-i18n-aria-label="accessTitle" data-i18n-title="accessibilityShort"
                             onclick="window.accessibilityService.toggleModal(true)">
                             <span class="material-symbols-rounded">accessibility_new</span>
                         </button>
 
                         <!-- Navigation Toggle (Now in controls) -->
-                        <button class="nav-toggle" id="navToggle" aria-label="Навигация мәзірін ашу">
+                        <button class="nav-toggle" id="navToggle" aria-label="Навигация мәзірін ашу"
+                            data-i18n-aria-label="openNavigationMenu">
                             <div class="nav-toggle-icon">
                                 <span></span>
                                 <span></span>
@@ -139,7 +143,8 @@
             </div>
         </header>
 
-        <main class="app-main" id="main-content" role="main" aria-label="Профиль мазмұны">
+        <main class="app-main" id="main-content" role="main" aria-label="Профиль мазмұны"
+            data-i18n-aria-label="profileContentAria">
             <div class="container">
                 <div id="app" aria-live="polite" aria-atomic="true">
                     <!-- Profile content will be injected here -->
@@ -157,6 +162,7 @@
 
     <!-- Theme Toggle (Floating) -->
     <div class="theme-toggle" id="themeToggle" data-i18n-title="theme" title="Тақырып" role="button" tabindex="0"
+        data-i18n-aria-label="toggleTheme"
         aria-label="Тақырыпты ауыстыру" onkeypress="if(event.key==='Enter') this.click();">
         <span class="theme-icon material-symbols-rounded" aria-hidden="true">light_mode</span>
     </div>
@@ -168,7 +174,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="accessTitle" data-i18n="accessTitle">Қолжетімділік параметрлері</h3>
-                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)" aria-label="Жабу">
+                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)" aria-label="Жабу"
+                    data-i18n-aria-label="close">
                     <span class="material-symbols-rounded">close</span>
                 </button>
             </div>

@@ -102,7 +102,10 @@ class FeedbackSystem {
      * Создаёт HTML формы обратной связи (заглушка)
      */
     createFeedbackForm() {
-        return '<div class="p-4 text-center">Feedback form placeholder</div>';
+        const placeholder = (typeof window !== 'undefined' && window.t)
+            ? window.t('featureComingSoon')
+            : 'Feature coming soon';
+        return `<div class="p-4 text-center">${placeholder}</div>`;
     }
 }
 
@@ -135,7 +138,7 @@ class FeedbackService {
             this._initRatingHandlers(container);
         } catch (e) {
             console.error('Error showing feedback form:', e);
-            container.innerHTML = '<p>Error loading feedback form</p>';
+            container.innerHTML = `<p>${this.i18n.t('feedbackFormError') || 'Failed to load the feedback form'}</p>`;
         }
     }
 

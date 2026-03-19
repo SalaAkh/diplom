@@ -26,6 +26,88 @@ class ProfileExtensions {
         }
     }
 
+    escapeHtml(value) {
+        return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
+    getCelebrityInitials(name) {
+        const parts = String(name || '')
+            .split(/\s+/)
+            .filter(Boolean)
+            .slice(0, 2);
+
+        return parts.map(part => part.charAt(0).toUpperCase()).join('') || '?';
+    }
+
+    getCelebrityAvatarColors(category) {
+        const palettes = {
+            business: ['#0f766e', '#2dd4bf'],
+            science: ['#1d4ed8', '#60a5fa'],
+            actors: ['#b45309', '#f59e0b'],
+            athletes: ['#b91c1c', '#fb7185'],
+            musicians: ['#0f766e', '#f97316'],
+            leaders: ['#166534', '#4ade80']
+        };
+
+        return palettes[category] || ['#334155', '#94a3b8'];
+    }
+
+    getSafeCelebrityPhotoUrl(photoUrl) {
+        if (!photoUrl || typeof photoUrl !== 'string') {
+            return null;
+        }
+
+        try {
+            const resolvedUrl = new URL(photoUrl, window.location.href);
+            if (resolvedUrl.origin === window.location.origin || resolvedUrl.protocol === 'data:') {
+                return resolvedUrl.href;
+            }
+        } catch (e) {
+            if (!/^[a-z]+:/i.test(photoUrl)) {
+                return photoUrl;
+            }
+        }
+
+        return null;
+    }
+
+    buildCelebrityAvatarUrl(celebrity) {
+        const name = String(celebrity?.name || 'Celebrity');
+        const initials = this.getCelebrityInitials(name);
+        const [startColor, endColor] = this.getCelebrityAvatarColors(celebrity?.category);
+        const safeName = this.escapeHtml(name);
+        const safeInitials = this.escapeHtml(initials);
+        const svg = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="${safeName}">
+                <defs>
+                    <linearGradient id="celebrityAvatarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="${startColor}" />
+                        <stop offset="100%" stop-color="${endColor}" />
+                    </linearGradient>
+                </defs>
+                <rect width="120" height="120" rx="60" fill="url(#celebrityAvatarGradient)" />
+                <circle cx="60" cy="44" r="22" fill="rgba(255,255,255,0.18)" />
+                <path d="M24 104c6-20 22-30 36-30s30 10 36 30" fill="rgba(255,255,255,0.2)" />
+                <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="1">${safeInitials}</text>
+            </svg>
+        `.trim();
+
+        return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+    }
+
+    getCelebrityImageMarkup(celebrity) {
+        const safeName = this.escapeHtml(celebrity?.name || 'Celebrity');
+        const fallbackUrl = this.buildCelebrityAvatarUrl(celebrity);
+        const src = this.getSafeCelebrityPhotoUrl(celebrity?.photoUrl) || fallbackUrl;
+
+        return `<img src="${src}" alt="${safeName}" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='${fallbackUrl}';">`;
+    }
+
     /**
      * Получить последние результаты пользователя
      */
@@ -519,10 +601,7 @@ class ProfileExtensions {
                         overflow: hidden;
                         border: 2px solid rgba(255,255,255,0.2);
                     ">
-                        ${celeb.photoUrl
-                    ? `<img src="${celeb.photoUrl}" alt="${celeb.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\\'material-symbols-rounded\\' style=\\'font-size: 28px; color: white;\\'>person</span>';">`
-                    : `<span class="material-symbols-rounded" style="font-size: 28px; color: white;">person</span>`
-                }
+                        ${this.getCelebrityImageMarkup(celeb)}
                     </div>
                     <div style="flex: 1; min-width: 0;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
@@ -623,10 +702,7 @@ class ProfileExtensions {
                         overflow: hidden;
                         border: 2px solid rgba(255,255,255,0.2);
                     ">
-                        ${celeb.photoUrl
-                    ? `<img src="${celeb.photoUrl}" alt="${celeb.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\\'material-symbols-rounded\\' style=\\'font-size: 28px; color: white;\\'>person</span>';">`
-                    : `<span class="material-symbols-rounded" style="font-size: 28px; color: white;">person</span>`
-                }
+                        ${this.getCelebrityImageMarkup(celeb)}
                     </div>
                     <div style="flex: 1; min-width: 0;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
@@ -705,10 +781,7 @@ class ProfileExtensions {
                     overflow: hidden;
                     border: 3px solid rgba(255,255,255,0.2);
                 ">
-                    ${celeb.photoUrl
-                ? `<img src="${celeb.photoUrl}" alt="${celeb.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<span style=\\'font-size: 36px; color: white;\\'>👤</span>';">`
-                : '<span style="font-size: 36px; color: white;">👤</span>'
-            }
+                    ${this.getCelebrityImageMarkup(celeb)}
                 </div>
                 <div>
                     <h3 style="margin: 0 0 4px 0;">${celeb.name}</h3>

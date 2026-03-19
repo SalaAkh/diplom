@@ -59,20 +59,21 @@
 
 
     <!-- Skip Link -->
-    <a href="#main-content" class="skip-link visually-hidden-focusable">Негізгі мазмұнға өту</a>
+    <a href="#main-content" class="skip-link visually-hidden-focusable" data-i18n="skipToContent">Негізгі мазмұнға өту</a>
 
     <!-- Cosmic Navigation -->
-    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Басты навигация">
+    <nav class="cosmic-nav" id="cosmicNav" role="navigation" aria-label="Басты навигация"
+        data-i18n-aria-label="navMainAria">
         <!-- Desktop Collapse Button -->
         <button class="nav-collapse-btn hide-mobile" id="navCollapseBtn" aria-label="Навигацияны жию"
-            title="Панельді жайю">
+            title="Панельді жайю" data-i18n-aria-label="collapseNavigation" data-i18n-title="collapseNavigation">
             <span class="material-symbols-rounded">chevron_left</span>
         </button>
 
         <div class="nav-header">
             <div class="nav-logo" id="navLogo" aria-hidden="true"><span class="material-symbols-rounded">hub</span>
             </div>
-            <div class="nav-tagline" id="navTagline">Neural Constellation</div>
+            <div class="nav-tagline" id="navTagline" data-i18n="navTagline">Neural Constellation</div>
         </div>
 
         <div class="nav-items" id="navItems" role="menubar">
@@ -104,17 +105,20 @@
                         <p class="tagline" id="tagline">Жеке қалауларды және даму бағыттарын талдау</p>
                     </div>
                     <div class="header-controls">
-                        <div class="language-selector" id="languageSelector" aria-label="Тіл таңдау"></div>
+                        <div class="language-selector" id="languageSelector" aria-label="Тіл таңдау"
+                            data-i18n-aria-label="languageSelect"></div>
 
                         <!-- Accessibility Button -->
                         <button class="btn-icon header-btn accessibility-trigger" id="accessBtn"
                             aria-label="Қолжетімділік параметрлері" title="Қолжетімділік"
+                            data-i18n-aria-label="accessTitle" data-i18n-title="accessibilityShort"
                             onclick="window.accessibilityService.toggleModal(true)">
                             <span class="material-symbols-rounded">accessibility_new</span>
                         </button>
 
                         <!-- Navigation Toggle (Now in controls) -->
-                        <button class="nav-toggle" id="navToggle" aria-label="Навигация мәзірін ашу">
+                        <button class="nav-toggle" id="navToggle" aria-label="Навигация мәзірін ашу"
+                            data-i18n-aria-label="openNavigationMenu">
                             <div class="nav-toggle-icon">
                                 <span></span>
                                 <span></span>
@@ -126,7 +130,8 @@
             </div>
         </header>
 
-        <main class="app-main" id="main-content" role="main" aria-label="Жоба туралы" aria-labelledby="page-title">
+        <main class="app-main" id="main-content" role="main" aria-label="Жоба туралы"
+            data-i18n-aria-label="aboutContentAria" aria-labelledby="page-title">
             <div class="container">
                 <div class="about-content">
                     <!-- Page Header -->
@@ -205,7 +210,8 @@
 
                     <!-- Features Grid -->
                     <h2 class="text-2xl font-bold mb-6 gradient-text" data-i18n="featuresTitle">Сізді не күтеді</h2>
-                    <div class="feature-grid mb-8" role="list" aria-label="Жүйе мүмкіндіктері">
+                    <div class="feature-grid mb-8" role="list" aria-label="Жүйе мүмкіндіктері"
+                        data-i18n-aria-label="systemFeaturesAria">
                         <div class="feature-card" role="listitem">
                             <span class="feature-icon material-symbols-rounded" aria-hidden="true">theater_comedy</span>
                             <h3 data-i18n="featInteractive">Интерактивные сценарии</h3>
@@ -231,7 +237,8 @@
                             <h2 class="card-title gradient-text" data-i18n="dimensionsTitle">Измерения анализа</h2>
                         </div>
                         <div class="card-body">
-                            <div class="dimension-grid" role="list" aria-label="Талдау өлшемдері">
+                            <div class="dimension-grid" role="list" aria-label="Талдау өлшемдері"
+                                data-i18n-aria-label="analysisDimensionsAria">
                                 <div class="dimension-card" role="listitem">
                                     <div class="dim-icon" aria-hidden="true"><span
                                             class="material-symbols-rounded">rocket_launch</span>
@@ -350,7 +357,7 @@
 
                                     <!-- Kaspi Card -->
                                     <div class="kaspi-card-wrap" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); padding: 2.5rem 2rem; border-radius: 24px; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);"
-                                        onclick="navigator.clipboard.writeText('4400430320985507'); const b=this.querySelector('.copy-indicator'); const t=this.querySelector('.kaspi-number'); b.innerHTML='<span class=\'material-symbols-rounded\' style=\'color:#10b981; font-size:1.2rem;\'>check_circle</span> Көшірілді!'; b.style.background='rgba(16,185,129,0.1)'; b.style.color='#10b981'; t.style.color='#10b981'; setTimeout(()=>{b.innerHTML='<span class=\'material-symbols-rounded\' style=\'font-size:1rem;\'>content_copy</span> Басып көшіру'; b.style.background='rgba(0,0,0,0.2)'; b.style.color='var(--text-secondary)'; t.style.color='#fff';}, 2500);"
+                                        onclick="window.handleLocalizedCopy(this, '4400430320985507')"
                                         onmouseover="this.style.background='rgba(241, 70, 53, 0.03)'; this.style.borderColor='rgba(241, 70, 53, 0.2)'; this.style.transform='translateY(-6px)'; this.style.boxShadow='0 16px 32px rgba(241, 70, 53, 0.08)';"
                                         onmouseout="this.style.background=''; this.style.borderColor=''; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
                                         <div
@@ -368,7 +375,8 @@
                                             <div class="copy-indicator"
                                                 style="display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-secondary); font-size: 0.85rem; padding: 0.5rem 1rem; background: rgba(0,0,0,0.2); border-radius: 30px; font-weight: 500; transition: all 0.3s;">
                                                 <span class="material-symbols-rounded"
-                                                    style="font-size: 1rem;">content_copy</span> Басып көшіру
+                                                    style="font-size: 1rem;">content_copy</span>
+                                                <span data-i18n="copyCard">Басып көшіру</span>
                                             </div>
                                         </div>
                                     </div>
@@ -605,7 +613,7 @@
                                             <div>
                                                 <span
                                                     style="display: block; font-size:0.8rem; color: var(--text-secondary); margin-bottom:2px;">Kwork</span>
-                                                <span style="font-weight: 500;">Freelance Profile</span>
+                                                <span style="font-weight: 500;" data-i18n="freelanceProfile">Freelance Profile</span>
                                             </div>
                                         </a>
                                         <div class="contact-item" style="pointer-events: none;">
@@ -674,6 +682,7 @@
 
     <!-- Theme Toggle (Floating) -->
     <div class="theme-toggle" id="themeToggle" title="Тақырып" role="button" tabindex="0"
+        data-i18n-title="theme" data-i18n-aria-label="toggleTheme"
         aria-label="Тақырыпты ауыстыру" onkeypress="if(event.key==='Enter') this.click();">
         <span class="theme-icon material-symbols-rounded" aria-hidden="true">light_mode</span>
     </div>
@@ -685,7 +694,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="accessTitle" data-i18n="accessTitle">Қолжетімділік параметрлері</h3>
-                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)" aria-label="Жабу">
+                <button class="modal-close" onclick="window.accessibilityService.toggleModal(false)" aria-label="Жабу"
+                    data-i18n-aria-label="close">
                     <span class="material-symbols-rounded">close</span>
                 </button>
             </div>
