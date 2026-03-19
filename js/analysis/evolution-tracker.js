@@ -396,9 +396,19 @@ class EvolutionTracker {
             days: diffDays,
             months: diffMonths,
             years: diffYears,
-            formatted: diffYears > 0 ? `${diffYears} год(а/лет)` :
-                diffMonths > 0 ? `${diffMonths} месяц(ев)` :
-                    `${diffDays} день(дней)`
+            formatted: (() => {
+                const lang = window.i18n?.getLanguage ? window.i18n.getLanguage() : 'en';
+                const labels = {
+                    kk: { year: 'жыл', month: 'ай', day: 'күн' },
+                    ru: { year: 'г.', month: 'мес.', day: 'дн.' },
+                    en: { year: 'yr', month: 'mo', day: 'day' }
+                };
+                const units = labels[lang] || labels.en;
+
+                if (diffYears > 0) return `${diffYears} ${units.year}`;
+                if (diffMonths > 0) return `${diffMonths} ${units.month}`;
+                return `${diffDays} ${units.day}`;
+            })()
         };
     }
 

@@ -400,13 +400,13 @@ class PersonalityTestApp {
                 criticalError('ÐœÐÒ¢Ð«Ð—Ð”Ð« ÒšÐÐ¢Ð•: ÐšÑ–Ñ€Ñ–ÑÑ‚Ñ–Ñ€Ñ–Ð»Ð³ÐµÐ½ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€ Ò›Ð¾Ð»Ð¶ÐµÑ‚Ñ–Ð¼ÑÑ–Ð· (CRITICAL ERROR: Embedded data unavailable)');
                 criticalError('SCENARIOS_DATA:', typeof SCENARIOS_DATA);
                 criticalError('window.SCENARIOS_DATA:', typeof window !== 'undefined' ? typeof window.SCENARIOS_DATA : 'N/A');
-                throw new Error('Ð’ÑÑ‚Ñ€Ð¾ÐµÐ½Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ² Ð½ÐµÐ´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹. Ð£Ð±ÐµÐ´Ð¸Ñ‚ÐµÑÑŒ, Ñ‡Ñ‚Ð¾ scenarios-data.js Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½ Ð¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ð¾.');
+                throw new Error(this.i18n.t('scenarioDataMissing') || 'Scenario data is unavailable. Make sure scenarios-data.js is loaded correctly.');
             }
 
             // Ð’Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸Ñ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ…
             if (!this.validateScenariosData(data)) {
                 criticalError('ÐœÐÒ¢Ð«Ð—Ð”Ð« ÒšÐÐ¢Ð•: Ð¡Ñ†ÐµÐ½Ð°Ñ€Ð¸Ð¹ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€Ñ–Ð½Ñ–Ò£ Ò›Ò±Ñ€Ñ‹Ð»Ñ‹Ð¼Ñ‹ Ð¶Ð°Ñ€Ð°Ð¼ÑÑ‹Ð· (CRITICAL ERROR: Invalid scenario data structure)');
-                throw new Error('Ð¡Ñ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ð° Ð´Ð°Ð½Ð½Ñ‹Ñ… ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ² Ð½ÐµÐ²Ð°Ð»Ð¸Ð´Ð½Ð°. ÐŸÑ€Ð¾Ð²ÐµÑ€ÑŒÑ‚Ðµ Ñ„Ð¾Ñ€Ð¼Ð°Ñ‚ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð² scenarios-data.js Ð¸Ð»Ð¸ scenarios.json.');
+                throw new Error(this.i18n.t('scenarioDataInvalid') || 'Scenario data structure is invalid. Check scenarios-data.js or scenarios.json.');
             }
 
             // ÐžÐ¿Ñ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾: Ð¿Ñ‹Ñ‚Ð°ÐµÐ¼ÑÑ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ Ð¸Ð· Ñ„Ð°Ð¹Ð»Ð° Ð´Ð»Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ (Ð½Ð¾ Ð½Ðµ ÐºÑ€Ð¸Ñ‚Ð¸Ñ‡Ð½Ð¾)
@@ -491,7 +491,7 @@ class PersonalityTestApp {
 
         } catch (error) {
             criticalError('Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ò›Ð°Ñ‚ÐµÑÑ– (Initialization error):', error);
-            const errorMessage = error.message || 'ÐÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½Ð°Ñ Ð¾ÑˆÐ¸Ð±ÐºÐ°';
+            const errorMessage = error.message || this.i18n.t('unknownError') || 'Unknown error';
             criticalError('ÒšÐ°Ñ‚Ðµ Ð¼Ó™Ð»Ñ–Ð¼ÐµÑ‚Ñ‚ÐµÑ€Ñ– (Error details):', errorMessage);
 
             // Ð”Ð¾Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð°Ñ Ð´Ð¸Ð°Ð³Ð½Ð¾ÑÑ‚Ð¸ÐºÐ°
@@ -534,14 +534,14 @@ class PersonalityTestApp {
 
                 } catch (error) {
                     criticalError('Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ò›Ð°Ñ‚ÐµÑÑ– (Initialization error):', error);
-                    const errorMessage = error.message || 'ÐÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½Ð°Ñ Ð¾ÑˆÐ¸Ð±ÐºÐ°';
+                    const errorMessage = error.message || this.i18n.t('unknownError') || 'Unknown error';
                     criticalError('ÒšÐ°Ñ‚Ðµ Ð¼Ó™Ð»Ñ–Ð¼ÐµÑ‚Ñ‚ÐµÑ€Ñ– (Error details):', errorMessage);
                     this.showError(errorMessage);
                 }
             }
 
             // Restore general error handling if recovery failed
-            this.showError('ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ². ÐŸÐ¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð¿ÐµÑ€ÐµÐ·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚Ðµ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ.');
+            this.showError(this.i18n.t('appDataErrorDescription') || 'Failed to load scenario data. Make sure scenarios-data.js is loaded.');
         }
     }
 
@@ -824,22 +824,22 @@ class PersonalityTestApp {
                 try {
                     const response = await fetch('data/advanced-scenarios.json');
                     if (!response.ok) {
-                        throw new Error(`ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°: ${response.status} ${response.statusText}`);
+                        throw new Error(`${this.i18n.t('failedToLoadAdvancedTestData') || 'Failed to load advanced test data'}: ${response.status} ${response.statusText}`);
                     }
                     data = await response.json();
                 } catch (fetchError) {
                     criticalError('Fetch ÑÓ™Ñ‚ÑÑ–Ð· Ð°ÑÒ›Ñ‚Ð°Ð»Ð´Ñ‹ (Ð¼Ò¯Ð¼ÐºÑ–Ð½ file:// Ñ…Ð°Ñ‚Ñ‚Ð°Ð¼Ð°ÑÑ‹) (Fetch failed, possibly file:// protocol):', fetchError.message);
-                    throw new Error('Ð”Ð°Ð½Ð½Ñ‹Ðµ ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð° Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ñ‹. Ð£Ð±ÐµÐ´Ð¸Ñ‚ÐµÑÑŒ, Ñ‡Ñ‚Ð¾ Ñ„Ð°Ð¹Ð» advanced-scenarios-data.js Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½.');
+                    throw new Error(this.i18n.t('advancedTestDataMissing') || 'Advanced test data was not found. Make sure advanced-scenarios-data.js is loaded.');
                 }
             }
 
             // Ð’Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸Ñ Ð´Ð°Ð½Ð½Ñ‹Ñ…
             if (!data.questions || !Array.isArray(data.questions) || data.questions.length === 0) {
-                throw new Error('ÐÐµÐ²Ð°Ð»Ð¸Ð´Ð½Ð°Ñ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ð° Ð´Ð°Ð½Ð½Ñ‹Ñ… ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°: Ð¾Ñ‚ÑÑƒÑ‚ÑÑ‚Ð²ÑƒÐµÑ‚ Ð¼Ð°ÑÑÐ¸Ð² questions');
+                throw new Error(this.i18n.t('advancedTestInvalidQuestions') || 'Invalid advanced test data structure: questions array is missing.');
             }
 
             if (!data.dimensions || typeof data.dimensions !== 'object') {
-                throw new Error('ÐžÑ‚ÑÑƒÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‚ Ð¸Ð·Ð¼ÐµÑ€ÐµÐ½Ð¸Ñ Ð² Ð´Ð°Ð½Ð½Ñ‹Ñ… ÑƒÐ³Ð»ÑƒÐ±Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ñ‚ÐµÑÑ‚Ð°');
+                throw new Error(this.i18n.t('advancedTestMissingDimensions') || 'Advanced test data is missing dimension definitions.');
             }
 
             this.advancedQuestions = data.questions;
@@ -1419,11 +1419,11 @@ class PersonalityTestApp {
         const currentTitle = currentResults.title || currentResults.dominant || this.i18n.t('cognitiveTest');
         const t = this.i18n.t.bind(this.i18n);
 
-        const newTitle = prompt(t('enterTestName') || 'Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ Ñ‚ÐµÑÑ‚Ð°:', currentTitle);
+        const newTitle = prompt(t('enterTestName') || 'Enter test name:', currentTitle);
 
         if (newTitle && newTitle.trim() !== '') {
             if (this.storage.updateCognitiveTestTitle(newTitle.trim())) {
-                if (this.toast) this.toast.show(t('testRenamed') || 'Ð¢ÐµÑÑ‚ Ð¿ÐµÑ€ÐµÐ¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ð½', 'success');
+                if (this.toast) this.toast.show(t('testRenamed') || 'Test renamed', 'success');
                 this.showProfile();
             }
         }
@@ -1450,7 +1450,7 @@ class PersonalityTestApp {
                 <div class="social-unavailable">
                     <p>${comparison.message}</p>
                     <p style="font-size: 0.9em; color: #666; margin-top: 0.5rem;">
-                        ÐŸÑ€Ð¾Ð¹Ð´Ð¸Ñ‚Ðµ Ñ‚ÐµÑÑ‚ ÐµÑ‰Ðµ Ñ€Ð°Ð·, Ñ‡Ñ‚Ð¾Ð±Ñ‹ ÑƒÐ²Ð¸Ð´ÐµÑ‚ÑŒ ÑÑ€Ð°Ð²Ð½ÐµÐ½Ð¸Ðµ Ñ Ð´Ñ€ÑƒÐ³Ð¸Ð¼Ð¸ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑÐ¼Ð¸
+                        ${this.i18n.t('socialComparisonHint') || 'Take the test again to compare yourself with other users.'}
                     </p>
                 </div>
             `;
@@ -1463,7 +1463,7 @@ class PersonalityTestApp {
                     <h3>${this.i18n.t('yourGroup')} ${userGroup.name}</h3>
                     <p>${userGroup.description}</p>
                     <div class="match-score">
-                        ${this.i18n.t('match') || 'Ð¡Ð¾Ð¾Ñ‚Ð²ÐµÑ‚ÑÑ‚Ð²Ð¸Ðµ'}: ${Math.round(userGroup.matchScore * 100)}%
+                        ${this.i18n.t('match') || 'Match'}: ${Math.round(userGroup.matchScore * 100)}%
                     </div>
                 </div>
                 
@@ -1561,7 +1561,7 @@ class PersonalityTestApp {
             const text = textarea.value.trim();
             // Basic validation
             if (!text) {
-                this.ui.showAlert(this.i18n.t('pleaseEnterAnswer') || 'ÐŸÐ¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð²Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¾Ñ‚Ð²ÐµÑ‚');
+                this.ui.showAlert(this.i18n.t('pleaseEnterAnswer') || 'Please enter an answer');
                 return;
             }
             this.testManager.recordOpenAnswer(questionId, text);
@@ -1593,11 +1593,11 @@ class PersonalityTestApp {
         const currentTitle = test.title || `Test`;
         const t = this.i18n.t.bind(this.i18n);
 
-        const newTitle = prompt(t('enterTestName') || 'Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ Ñ‚ÐµÑÑ‚Ð°:', currentTitle);
+        const newTitle = prompt(t('enterTestName') || 'Enter test name:', currentTitle);
 
         if (newTitle && newTitle.trim() !== '') {
             if (this.auth.updateTestTitle(testId, newTitle.trim())) {
-                if (this.toast) this.toast.show(t('testRenamed') || 'Ð¢ÐµÑÑ‚ Ð¿ÐµÑ€ÐµÐ¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ð½', 'success');
+                if (this.toast) this.toast.show(t('testRenamed') || 'Test renamed', 'success');
                 this.showProfile();
             }
         }
@@ -1836,21 +1836,30 @@ class PersonalityTestApp {
 
                 <div class="breakdown-grid">
                     <div class="breakdown-item ${results.dominant === 'visual' ? 'dominant' : ''}">
-                        <div class="breakdown-label">ðŸ‘ï¸ Visual</div>
+                        <div class="breakdown-label">
+                            <span class="material-symbols-rounded">visibility</span>
+                            ${t('cognitiveVisual') || 'Visual'}
+                        </div>
                         <div class="breakdown-value">${results.breakdown.visual}%</div>
                         <div class="breakdown-bar">
                             <div class="breakdown-bar-fill" style="width: ${results.breakdown.visual}%"></div>
                         </div>
                     </div>
                     <div class="breakdown-item ${results.dominant === 'auditory' ? 'dominant' : ''}">
-                        <div class="breakdown-label">ðŸŽ§ Auditory</div>
+                        <div class="breakdown-label">
+                            <span class="material-symbols-rounded">hearing</span>
+                            ${t('cognitiveAuditory') || 'Auditory'}
+                        </div>
                         <div class="breakdown-value">${results.breakdown.auditory}%</div>
                         <div class="breakdown-bar">
                             <div class="breakdown-bar-fill" style="width: ${results.breakdown.auditory}%"></div>
                         </div>
                     </div>
                     <div class="breakdown-item ${results.dominant === 'kinesthetic' ? 'dominant' : ''}">
-                        <div class="breakdown-label">ðŸ¤¸ Kinesthetic</div>
+                        <div class="breakdown-label">
+                            <span class="material-symbols-rounded">directions_run</span>
+                            ${t('cognitiveKinesthetic') || 'Kinesthetic'}
+                        </div>
                         <div class="breakdown-value">${results.breakdown.kinesthetic}%</div>
                         <div class="breakdown-bar">
                             <div class="breakdown-bar-fill" style="width: ${results.breakdown.kinesthetic}%"></div>
@@ -1869,15 +1878,15 @@ class PersonalityTestApp {
                 <div class="action-buttons">
                     <button class="btn-primary-gradient" onclick="app.downloadResults('html')">
                         <span class="material-symbols-rounded">download</span>
-                        ${t('downloadResults') || 'ÐÓ™Ñ‚Ð¸Ð¶ÐµÐ»ÐµÑ€Ð´Ñ– Ð¶Ò¯ÐºÑ‚ÐµÑƒ (HTML)'}
+                        ${t('downloadResults') || 'Download results'}
                     </button>
                     <button class="btn-secondary-outline" onclick="app.showProfile()">
                         <span class="material-symbols-rounded">person</span>
-                        ${t('goToProfile') || 'ÐŸÑ€Ð¾Ñ„Ð¸Ð»ÑŒÐ³Ðµ Ó©Ñ‚Ñƒ'}
+                        ${t('goToProfile') || 'Go to profile'}
                     </button>
                     <button class="btn-secondary-outline" onclick="app.showTestTypeSelection()">
                         <span class="material-symbols-rounded">refresh</span>
-                        ${t('takeAnotherTest') || 'Ð‘Ð°ÑÒ›Ð° Ñ‚ÐµÑÑ‚ Ñ‚Ð°Ð¿ÑÑ‹Ñ€Ñƒ'}
+                        ${t('takeAnotherTest') || 'Take another test'}
                     </button>
                 </div>
             </div>
@@ -1888,14 +1897,14 @@ class PersonalityTestApp {
      * Delete Test by ID
      */
     deleteTest(testId, targetElement = null) {
-        if (!confirm(this.i18n.t('confirmDelete') || 'Ð’Ñ‹ ÑƒÐ²ÐµÑ€ÐµÐ½Ñ‹, Ñ‡Ñ‚Ð¾ Ñ…Ð¾Ñ‚Ð¸Ñ‚Ðµ ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ ÑÑ‚Ð¾Ñ‚ Ñ‚ÐµÑÑ‚?')) return;
+        if (!confirm(this.i18n.t('confirmDelete') || 'Are you sure you want to delete this test?')) return;
 
         if (testId === 'cognitive') {
             this.storage.removeCognitiveResults();
-            if (this.toast) this.toast.show(this.i18n.t('testDeleted') || 'Ð¢ÐµÑÑ‚ ÑƒÐ´Ð°Ð»ÐµÐ½', 'success');
+            if (this.toast) this.toast.show(this.i18n.t('testDeleted') || 'Test deleted', 'success');
             this.showProfile();
         } else if (this.auth.deleteTest(testId)) {
-            if (this.toast) this.toast.show(this.i18n.t('testDeleted') || 'Ð¢ÐµÑÑ‚ ÑƒÐ´Ð°Ð»ÐµÐ½', 'success');
+            if (this.toast) this.toast.show(this.i18n.t('testDeleted') || 'Test deleted', 'success');
             this.showProfile();
         }
     }
@@ -1908,7 +1917,7 @@ class PersonalityTestApp {
     deleteSelectedTests(ids, targetElement = null) {
         if (!ids || ids.length === 0) return;
 
-        if (!confirm(this.i18n.t('confirmDeleteSelected', { count: ids.length }) || `Ð’Ñ‹ ÑƒÐ²ÐµÑ€ÐµÐ½Ñ‹, Ñ‡Ñ‚Ð¾ Ñ…Ð¾Ñ‚Ð¸Ñ‚Ðµ ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð½Ñ‹Ðµ Ñ‚ÐµÑÑ‚Ñ‹ (${ids.length})?`)) return;
+        if (!confirm(this.i18n.t('confirmDeleteSelected', { count: ids.length }) || `Are you sure you want to delete the selected tests (${ids.length})?`)) return;
 
         let deleted = false;
 
@@ -1926,7 +1935,7 @@ class PersonalityTestApp {
         }
 
         if (deleted) {
-            if (this.toast) this.toast.show(this.i18n.t('testsDeleted') || 'Ð¢ÐµÑÑ‚Ñ‹ ÑƒÐ´Ð°Ð»ÐµÐ½Ñ‹', 'success');
+            if (this.toast) this.toast.show(this.i18n.t('testsDeleted', { count: ids.length }) || `Tests deleted: ${ids.length}`, 'success');
             this.showProfile();
         }
     }
@@ -2059,11 +2068,11 @@ class PersonalityTestApp {
      */
     getQualityLabel(quality) {
         const labels = {
-            'excellent': 'ÐžÑ‚Ð»Ð¸Ñ‡Ð½Ð¾Ðµ',
-            'good': 'Ð¥Ð¾Ñ€Ð¾ÑˆÐµÐµ',
-            'acceptable': 'ÐŸÑ€Ð¸ÐµÐ¼Ð»ÐµÐ¼Ð¾Ðµ',
-            'questionable': 'Ð¡Ð¾Ð¼Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾Ðµ',
-            'poor': 'ÐŸÐ»Ð¾Ñ…Ð¾Ðµ'
+            excellent: this.i18n.t('qualityExcellent') || 'Excellent',
+            good: this.i18n.t('qualityGood') || 'Good',
+            acceptable: this.i18n.t('qualityAcceptable') || 'Acceptable',
+            questionable: this.i18n.t('qualityQuestionable') || 'Questionable',
+            poor: this.i18n.t('qualityPoor') || 'Poor'
         };
         return labels[quality] || quality;
     }
@@ -2075,9 +2084,9 @@ class PersonalityTestApp {
      */
     getValidityLabel(validity) {
         const labels = {
-            'good': 'Ð¥Ð¾Ñ€Ð¾ÑˆÐ°Ñ',
-            'questionable': 'Ð¡Ð¾Ð¼Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð°Ñ',
-            'poor': 'ÐŸÐ»Ð¾Ñ…Ð°Ñ'
+            good: this.i18n.t('validityGood') || 'Good',
+            questionable: this.i18n.t('validityQuestionable') || 'Questionable',
+            poor: this.i18n.t('validityPoor') || 'Poor'
         };
         return labels[validity] || validity;
     }
@@ -2114,8 +2123,8 @@ class PersonalityTestApp {
         const container = document.getElementById('app');
         if (!container) return;
 
-        const errorTitle = this.i18n ? this.i18n.t('error') : 'ÐžÑˆÐ¸Ð±ÐºÐ°';
-        const reloadText = this.i18n ? this.i18n.t('reloadPage') || 'ÐŸÐµÑ€ÐµÐ·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ' : 'ÐŸÐµÑ€ÐµÐ·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ';
+        const errorTitle = this.i18n ? this.i18n.t('error') : 'Error';
+        const reloadText = this.i18n ? this.i18n.t('reloadPage') || 'Reload page' : 'Reload page';
 
         container.innerHTML = `
             <div class="error-message">
@@ -2136,6 +2145,19 @@ const MAX_INIT_ATTEMPTS = 50; // ÐœÐ°ÐºÑÐ¸Ð¼ÑƒÐ¼ 10 ÑÐµÐ�
 
 function initializeApp() {
     initAttempts++;
+
+    const translate = (key, fallback, params = {}) => {
+        if (typeof window !== 'undefined' && window.i18n && typeof window.i18n.t === 'function') {
+            const translated = window.i18n.t(key, params);
+            if (translated && translated !== key) {
+                return translated;
+            }
+        }
+
+        return Object.keys(params).reduce((text, param) => {
+            return text.replace(`{${param}}`, params[param]);
+        }, fallback);
+    };
 
     // ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼, Ñ‡Ñ‚Ð¾ Ð²ÑÐµ Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ñ‹Ðµ ÐºÐ»Ð°ÑÑÑ‹ Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½Ñ‹
     if (typeof PersonalityTestApp === 'undefined') {
@@ -2208,10 +2230,10 @@ function initializeApp() {
             if (container) {
                 container.innerHTML = `
                     <div class="error-message">
-                        <h2>ÐœÐ¾Ð´ÑƒÐ»ÑŒÐ´ÐµÑ€Ð´Ñ– Ð¶Ò¯ÐºÑ‚ÐµÑƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error loading modules)</h2>
-                        <p>ÐœÐ°Ò£Ñ‹Ð·Ð´Ñ‹ Ð¼Ð¾Ð´ÑƒÐ»ÑŒÐ´ÐµÑ€Ð´Ñ– Ð¶Ò¯ÐºÑ‚ÐµÑƒ Ð¼Ò¯Ð¼ÐºÑ–Ð½ Ð±Ð¾Ð»Ð¼Ð°Ð´Ñ‹ (Failed to load critical modules): ${missingModules.join(', ')}</p>
-                        <p style="font-size: 0.9em; color: #666;">ÐœÓ™Ð»Ñ–Ð¼ÐµÑ‚Ñ‚ÐµÑ€Ð´Ñ– Ð±Ñ€Ð°ÑƒÐ·ÐµÑ€ ÐºÐ¾Ð½ÑÐ¾Ð»Ñ–Ð½ÐµÐ½ (F12) Ñ‚ÐµÐºÑÐµÑ€Ñ–Ò£Ñ–Ð· (Check browser console for details).</p>
-                        <button class="btn btn-primary" onclick="location.reload()">Ð‘ÐµÑ‚Ñ‚Ñ– Ò›Ð°Ð¹Ñ‚Ð° Ð¶Ò¯ÐºÑ‚ÐµÑƒ (Reload page)</button>
+                        <h2>${translate('appModulesErrorTitle', 'Error loading modules')}</h2>
+                        <p>${translate('appModulesErrorDescription', 'Failed to load critical modules: {components}', { components: missingModules.join(', ') })}</p>
+                        <p style="font-size: 0.9em; color: #666;">${translate('checkConsoleDetails', 'Check browser console for details.')}</p>
+                        <button class="btn btn-primary" onclick="location.reload()">${translate('reloadPage', 'Reload page')}</button>
                     </div>
                 `;
             }
@@ -2247,10 +2269,10 @@ function initializeApp() {
             if (container) {
                 container.innerHTML = `
                     <div class="error-message">
-                        <h2>Ð”ÐµÑ€ÐµÐºÑ‚ÐµÑ€Ð´Ñ– Ð¶Ò¯ÐºÑ‚ÐµÑƒ Ò›Ð°Ñ‚ÐµÑÑ– (Error loading data)</h2>
-                        <p>Ð¡Ñ†ÐµÐ½Ð°Ñ€Ð¸Ð¹ Ð´ÐµÑ€ÐµÐºÑ‚ÐµÑ€Ñ–Ð½ Ð¶Ò¯ÐºÑ‚ÐµÑƒ Ð¼Ò¯Ð¼ÐºÑ–Ð½ Ð±Ð¾Ð»Ð¼Ð°Ð´Ñ‹ (Failed to load scenario data). Ð£Ð±ÐµÐ´Ð¸Ñ‚ÐµÑÑŒ, Ñ‡Ñ‚Ð¾ Ñ„Ð°Ð¹Ð» scenarios-data.js Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½.</p>
-                        <p style="font-size: 0.9em; color: #666;">ÐœÓ™Ð»Ñ–Ð¼ÐµÑ‚Ñ‚ÐµÑ€Ð´Ñ– Ð±Ñ€Ð°ÑƒÐ·ÐµÑ€ ÐºÐ¾Ð½ÑÐ¾Ð»Ñ–Ð½ÐµÐ½ (F12) Ñ‚ÐµÐºÑÐµÑ€Ñ–Ò£Ñ–Ð· (Check browser console for details).</p>
-                        <button class="btn btn-primary" onclick="location.reload()">Ð‘ÐµÑ‚Ñ‚Ñ– Ò›Ð°Ð¹Ñ‚Ð° Ð¶Ò¯ÐºÑ‚ÐµÑƒ (Reload page)</button>
+                        <h2>${translate('appDataErrorTitle', 'Error loading data')}</h2>
+                        <p>${translate('appDataErrorDescription', 'Failed to load scenario data. Make sure scenarios-data.js is loaded.')}</p>
+                        <p style="font-size: 0.9em; color: #666;">${translate('checkConsoleDetails', 'Check browser console for details.')}</p>
+                        <button class="btn btn-primary" onclick="location.reload()">${translate('reloadPage', 'Reload page')}</button>
                     </div>
                 `;
             }
@@ -2293,9 +2315,9 @@ function initializeApp() {
         if (container) {
             container.innerHTML = `
                 <div class="error-message">
-                    <h2>Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ò›Ð°Ñ‚ÐµÑÑ– (Initialization error)</h2>
-                    <p>${error.message || 'ÐÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½Ð°Ñ Ð¾ÑˆÐ¸Ð±ÐºÐ°'}</p>
-                    <button class="btn btn-primary" onclick="location.reload()">Ð‘ÐµÑ‚Ñ‚Ñ– Ò›Ð°Ð¹Ñ‚Ð° Ð¶Ò¯ÐºÑ‚ÐµÑƒ (Reload page)</button>
+                    <h2>${translate('initializationError', 'Initialization error')}</h2>
+                    <p>${error.message || translate('unknownError', 'Unknown error')}</p>
+                    <button class="btn btn-primary" onclick="location.reload()">${translate('reloadPage', 'Reload page')}</button>
                 </div>
             `;
         }

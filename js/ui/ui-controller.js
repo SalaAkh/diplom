@@ -635,7 +635,7 @@ class UIController {
                 const currentTime = new Date().getTime();
                 if (currentTime - lastClickTime < 500) {
                     // Double click detected
-                    this.showAuthSuccess('Developed by ÐÑ…Ð¼ÐµÐ´ÑŒÑÐ½Ð¾Ð² Ð¡Ð°Ð»Ð°Ð¼Ð°Ñ‚ ÐšÐŸÐž 9/22-2 ðŸš€');
+                    this.showAuthSuccess('Developed by Akhmedyanov Salamat, KPO 9/22-2');
                     clickCount = 0;
                 } else {
                     clickCount = 1;
@@ -813,7 +813,7 @@ class UIController {
         const username = usernameInput.value.trim();
 
         if (!username) {
-            this.showAuthError(this.i18n.t('usernameRequired') || 'Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¸Ð¼Ñ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ');
+            this.showAuthError(this.i18n.t('usernameRequired') || 'Enter a username');
             return;
         }
 
@@ -929,12 +929,12 @@ class UIController {
                     <h2 id="features-title" class="section-title" data-i18n="landingFeaturesTitle">Ð¢ÐµÑ…Ð½Ð¾Ð»Ð¾Ð³Ð¸Ð¸ ÑÐ°Ð¼Ð¾Ð¿Ð¾Ð·Ð½Ð°Ð½Ð¸Ñ</h2>
                     <div class="features-grid">
                         <div class="feature-card">
-                            <span class="feature-icon" aria-hidden="true">ðŸŽ­</span>
+                            <span class="feature-icon material-symbols-rounded" aria-hidden="true">theater_comedy</span>
                             <h3 data-i18n="featInteractive">Ð˜Ð½Ñ‚ÐµÑ€Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ðµ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸Ð¸</h3>
                             <p data-i18n="featInteractiveDesc">12 Ð³Ð»ÑƒÐ±Ð¾ÐºÐ¸Ñ… Ð¸Ð½Ñ‚ÐµÑ€Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ñ… ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ² Ñ Ð¼Ð½Ð¾Ð¶ÐµÑÑ‚Ð²Ð¾Ð¼ Ð¿ÑƒÑ‚ÐµÐ¹ Ñ€Ð°Ð·Ð²Ð¸Ñ‚Ð¸Ñ</p>
                         </div>
                         <div class="feature-card">
-                            <span class="feature-icon" aria-hidden="true">ðŸ§ </span>
+                            <span class="feature-icon material-symbols-rounded" aria-hidden="true">psychology</span>
                             <h3 data-i18n="featPattern">ÐÐ½Ð°Ð»Ð¸Ð· Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½Ð¾Ð²</h3>
                             <p data-i18n="featPatternDesc">ÐšÐ¾Ð¼Ð¿Ð»ÐµÐºÑÐ½Ñ‹Ð¹ Ð°Ð½Ð°Ð»Ð¸Ð· ÐºÐ¾Ð³Ð½Ð¸Ñ‚Ð¸Ð²Ð½Ñ‹Ñ… Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½Ð¾Ð² Ð¸ ÑÑ‚Ð¸Ð»ÐµÐ¹ Ð¿Ñ€Ð¸Ð½ÑÑ‚Ð¸Ñ Ñ€ÐµÑˆÐµÐ½Ð¸Ð¹</p>
                         </div>
@@ -980,17 +980,17 @@ class UIController {
                     <h2 class="section-title" data-i18n="valueTitle">Ð—Ð°Ñ‡ÐµÐ¼ ÑÑ‚Ð¾ Ð²Ð°Ð¼?</h2>
                     <div class="value-grid">
                         <div class="value-card">
-                            <div class="value-icon">ðŸš€</div>
+                            <div class="value-icon"><span class="material-symbols-rounded" aria-hidden="true">rocket_launch</span></div>
                             <h3 data-i18n="valueCareerTitle">ÐšÐ°Ñ€ÑŒÐµÑ€Ð½Ñ‹Ð¹ Ð½Ð°Ð²Ð¸Ð³Ð°Ñ‚Ð¾Ñ€</h3>
                             <p data-i18n="valueCareerText">ÐŸÐ¾Ð¹Ð¼Ð¸Ñ‚Ðµ, Ð³Ð´Ðµ Ð²Ð°ÑˆÐ¸ Ð¿Ñ€Ð¸Ñ€Ð¾Ð´Ð½Ñ‹Ðµ Ñ‚Ð°Ð»Ð°Ð½Ñ‚Ñ‹ Ñ€Ð°ÑÐºÑ€Ð¾ÑŽÑ‚ÑÑ Ð¼Ð°ÐºÑÐ¸Ð¼Ð°Ð»ÑŒÐ½Ð¾: Ð² ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ð¸, Ñ‚Ð²Ð¾Ñ€Ñ‡ÐµÑÑ‚Ð²Ðµ, Ð°Ð½Ð°Ð»Ð¸Ñ‚Ð¸ÐºÐµ Ð¸Ð»Ð¸ Ð¿Ñ€ÐµÐ´Ð¿Ñ€Ð¸Ð½Ð¸Ð¼Ð°Ñ‚ÐµÐ»ÑŒÑÑ‚Ð²Ðµ.</p>
                         </div>
                         <div class="value-card">
-                            <div class="value-icon">ðŸ’¡</div>
+                            <div class="value-icon"><span class="material-symbols-rounded" aria-hidden="true">lightbulb</span></div>
                             <h3 data-i18n="valueRelTitle">ÐŸÐ¾Ð½Ð¸Ð¼Ð°Ð½Ð¸Ðµ ÑÐµÐ±Ñ</h3>
                             <p data-i18n="valueRelText">Ð£Ð·Ð½Ð°Ð¹Ñ‚Ðµ ÑÐ²Ð¾Ð¸ Ð¸ÑÑ‚Ð¸Ð½Ð½Ñ‹Ðµ Ð´Ñ€Ð°Ð¹Ð²ÐµÑ€Ñ‹: Ð¿Ð¾Ñ‡ÐµÐ¼Ñƒ Ð²Ñ‹ Ð´ÐµÐ¹ÑÑ‚Ð²ÑƒÐµÑ‚Ðµ Ð¸Ð¼ÐµÐ½Ð½Ð¾ Ñ‚Ð°Ðº? Ð§Ñ‚Ð¾ Ð²Ð°Ñ Ð¼Ð¾Ñ‚Ð¸Ð²Ð¸Ñ€ÑƒÐµÑ‚, Ð° Ñ‡Ñ‚Ð¾ Ð·Ð°Ð±Ð¸Ñ€Ð°ÐµÑ‚ ÑÐ½ÐµÑ€Ð³Ð¸ÑŽ?</p>
                         </div>
                         <div class="value-card">
-                            <div class="value-icon">ðŸ“ˆ</div>
+                            <div class="value-icon"><span class="material-symbols-rounded" aria-hidden="true">trending_up</span></div>
                             <h3 data-i18n="valueGrowthTitle">Ð¢Ð¾Ñ‡ÐºÐ¸ Ñ€Ð¾ÑÑ‚Ð°</h3>
                             <p data-i18n="valueGrowthText">ÐŸÐ¾Ð»ÑƒÑ‡Ð¸Ñ‚Ðµ Ð¿ÐµÑ€ÑÐ¾Ð½Ð°Ð»ÑŒÐ½ÑƒÑŽ ÐºÐ°Ñ€Ñ‚Ñƒ Ñ€Ð°Ð·Ð²Ð¸Ñ‚Ð¸Ñ Ñ ÐºÐ¾Ð½ÐºÑ€ÐµÑ‚Ð½Ñ‹Ð¼Ð¸ Ñ€ÐµÐºÐ¾Ð¼ÐµÐ½Ð´Ð°Ñ†Ð¸ÑÐ¼Ð¸ Ð¿Ð¾ soft skills, ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ ÑƒÑÐ¸Ð»ÑÑ‚ Ð²Ð°ÑˆÑƒ Ð»Ð¸Ñ‡Ð½Ð¾ÑÑ‚ÑŒ.</p>
                         </div>
@@ -1005,13 +1005,13 @@ class UIController {
                             <h3 data-i18n="step1Title">ÐŸÑ€Ð¾Ñ…Ð¾Ð´Ð¸Ñ‚Ðµ Ñ‚ÐµÑÑ‚</h3>
                             <p data-i18n="step1Desc">ÐžÑ‚Ð²ÐµÑ‚ÑŒÑ‚Ðµ Ð½Ð° 12 ÑÑ†ÐµÐ½Ð°Ñ€Ð½Ñ‹Ñ… Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ¾Ð², Ð²Ñ‹Ð±Ð¸Ñ€Ð°Ñ Ð±Ð»Ð¸Ð·ÐºÐ¸Ðµ Ð²Ð°Ð¼ Ð²Ð°Ñ€Ð¸Ð°Ð½Ñ‚Ñ‹ Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ð¹.</p>
                         </div>
-                        <div class="step-arrow" aria-hidden="true">â†’</div>
+                        <div class="step-arrow" aria-hidden="true">&rarr;</div>
                         <div class="step">
                             <div class="step-number" aria-hidden="true">2</div>
                             <h3 data-i18n="step2Title">ÐÐ»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼ ÑÑ‡Ð¸Ñ‚Ð°ÐµÑ‚</h3>
                             <p data-i18n="step2Desc">Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð° Ð°Ð½Ð°Ð»Ð¸Ð·Ð¸Ñ€ÑƒÐµÑ‚ Ð²Ð°ÑˆÐ¸ Ð¾Ñ‚Ð²ÐµÑ‚Ñ‹ Ð¿Ð¾ 6 ÐºÐ»ÑŽÑ‡ÐµÐ²Ñ‹Ð¼ Ð¸Ð·Ð¼ÐµÑ€ÐµÐ½Ð¸ÑÐ¼ Ð»Ð¸Ñ‡Ð½Ð¾ÑÑ‚Ð¸.</p>
                         </div>
-                        <div class="step-arrow" aria-hidden="true">â†’</div>
+                        <div class="step-arrow" aria-hidden="true">&rarr;</div>
                         <div class="step">
                             <div class="step-number" aria-hidden="true">3</div>
                             <h3 data-i18n="step3Title">ÐŸÐ¾Ð»ÑƒÑ‡Ð°ÐµÑ‚Ðµ Ð¿Ñ€Ð¾Ñ„Ð¸Ð»ÑŒ</h3>
@@ -1020,7 +1020,7 @@ class UIController {
                     </div>
                 </section>
 
-                <section class="cta-section" aria-label="ÐŸÑ€Ð¸Ð·Ñ‹Ð² Ðº Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸ÑŽ">
+                <section class="cta-section" aria-label="${this.i18n.t('ctaTitle') || 'Call to action'}">
                     <div class="cta-content">
                         <h2 data-i18n="ctaTitle">ÐžÑ‚ÐºÑ€Ð¾Ð¹Ñ‚Ðµ ÑÐ²Ð¾Ð¹ Ð²Ð½ÑƒÑ‚Ñ€ÐµÐ½Ð½Ð¸Ð¹ Ð¼Ð¸Ñ€</h2>
                         <p data-i18n="ctaText">ÐŸÑ€Ð¾Ð¹Ð´Ð¸Ñ‚Ðµ Ñ‚ÐµÑÑ‚ Ð·Ð° 5-7 Ð¼Ð¸Ð½ÑƒÑ‚ Ð¸ Ð¿Ð¾Ð»ÑƒÑ‡Ð¸Ñ‚Ðµ Ð´ÐµÑ‚Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð°Ð½Ð°Ð»Ð¸Ð· Ð²Ð°ÑˆÐµÐ¹ Ð»Ð¸Ñ‡Ð½Ð¾ÑÑ‚Ð¸ Ñ Ð¿ÐµÑ€ÑÐ¾Ð½Ð°Ð»ÑŒÐ½Ñ‹Ð¼Ð¸ Ñ€ÐµÐºÐ¾Ð¼ÐµÐ½Ð´Ð°Ñ†Ð¸ÑÐ¼Ð¸.</p>
@@ -1468,17 +1468,18 @@ class UIController {
         };
 
         const missingList = missing.map(name => missingNames[name] || name).join(', ');
+        const t = this.i18n.t.bind(this.i18n);
 
         container.innerHTML = `
             <div class="error-screen">
-                <h1>ÐžÑˆÐ¸Ð±ÐºÐ° Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ</h1>
+                <h1>${t('appLoadErrorTitle') || 'Application load error'}</h1>
                 <p class="error-message">
-                    ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ñ‹Ðµ ÐºÐ¾Ð¼Ð¿Ð¾Ð½ÐµÐ½Ñ‚Ñ‹: <strong>${missingList}</strong>
+                    ${t('appLoadErrorMissing', { components: missingList }) || `Failed to load the required components: ${missingList}`}
                 </p>
                 <p class="error-description">
-                    ÐŸÐ¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð¾Ð±Ð½Ð¾Ð²Ð¸Ñ‚Ðµ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ. Ð•ÑÐ»Ð¸ Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼Ð° ÑÐ¾Ñ…Ñ€Ð°Ð½ÑÐµÑ‚ÑÑ, ÑƒÐ±ÐµÐ´Ð¸Ñ‚ÐµÑÑŒ, Ñ‡Ñ‚Ð¾ Ð²ÑÐµ Ñ„Ð°Ð¹Ð»Ñ‹ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½Ñ‹ Ð¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ð¾.
+                    ${t('appLoadErrorDescription') || 'Please refresh the page. If the problem persists, make sure all files loaded correctly.'}
                 </p>
-                <button class="btn btn-primary" onclick="location.reload()">ÐžÐ±Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ</button>
+                <button class="btn btn-primary" onclick="location.reload()">${t('reloadPage') || 'Reload page'}</button>
             </div>
     `;
     }

@@ -216,7 +216,7 @@ class ResultsManager {
 
                 // Toast notification
                 if (this.app.toast) {
-                    this.app.toast.show(window.t ? window.t('resultsDownloaded') || 'Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ñ‹ ÑÐºÐ°Ñ‡Ð°Ð½Ñ‹' : 'Result downloaded', 'success');
+                    this.app.toast.show(window.t ? window.t('resultsDownloaded') || 'Results downloaded' : 'Results downloaded', 'success');
                 }
             } else {
                 console.error('ReportGenerator not available');
@@ -319,7 +319,7 @@ class ResultsManager {
         </div>
         <div class="footer">
             <p>${t('reportGeneratedBy')}</p>
-            <p>ÐÑ…Ð¼ÐµÐ´ÑŒÑÐ½Ð¾Ð² Ð¡Ð°Ð»Ð°Ð¼Ð°Ñ‚ ÐšÐŸÐž 9/22-2 &nbsp;&bull;&nbsp; ${t('project')}</p>
+            <p>Akhmedyanov Salamat, KPO 9/22-2 &nbsp;&bull;&nbsp; ${t('project')}</p>
             <p class="brand">&copy; 2026 ${t('appName')}</p>
         </div>
     </div>
@@ -338,7 +338,7 @@ class ResultsManager {
 
             // Toast notification
             if (this.app.toast) {
-                this.app.toast.show(t('resultsDownloaded') || 'Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ñ‹ ÑÐºÐ°Ñ‡Ð°Ð½Ñ‹', 'success');
+                this.app.toast.show(t('resultsDownloaded') || 'Results downloaded', 'success');
             }
 
         } catch (error) {
