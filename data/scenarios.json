@@ -1,0 +1,1322 @@
+{
+  "scenarios": [
+    {
+      "id": 1,
+      "metadata": {
+        "difficulty": "medium",
+        "category": "work",
+        "contextType": "crisis_management",
+        "primaryDimensions": [
+          "rationality",
+          "control",
+          "strategic"
+        ],
+        "estimatedTime": 60
+      },
+      "title": {
+        "kk": "Жобадағы дағдарыс",
+        "ru": "Кризис в проекте",
+        "en": "Project Crisis"
+      },
+      "description": {
+        "kk": "Сіздің жобаңыз күтпеген қиындықтарға тап болды. Мерзімдер қысымда, бюджет шектеулі, команда мотивациясын жоғалтқан.",
+        "ru": "Ваш проект столкнулся с неожиданными трудностями. Сроки поджимают, бюджет ограничен, команда демотивирована.",
+        "en": "Your project has encountered unexpected difficulties. Deadlines are tight, budget is limited, team is demotivated."
+      },
+      "context": {
+        "kk": "Жағдай жобаның одан әрі дамуына және сіздің беделіңізге әсер ететін жылдам шешім қабылдауды талап етеді.",
+        "ru": "Ситуация требует быстрого решения, которое повлияет на дальнейшее развитие проекта и вашу репутацию.",
+        "en": "The situation requires a quick decision that will affect the further development of the project and your reputation."
+      },
+      "optionA": {
+        "text": {
+          "kk": "Жобаны тоқтатып, барлық қателерді талдап, түзету бойынша егжей-тегжейлі жоспар құру",
+          "ru": "Остановить проект, проанализировать все ошибки, составить детальный план исправления",
+          "en": "Stop the project, analyze all errors, create a detailed correction plan"
+        },
+        "weights": {
+          "rationality": 0.8,
+          "control": 0.7,
+          "strategic": 0.6,
+          "explorer": 0.3,
+          "individualism": 0.2,
+          "meaning": 0.1
+        }
+      },
+      "optionB": {
+        "text": {
+          "kk": "Жағдайға тез бейімделу, тәсілді өзгерту, жаңа әдістерді қолдану",
+          "ru": "Быстро адаптироваться к ситуации, изменить подход, использовать новые методы",
+          "en": "Quickly adapt to the situation, change approach, use new methods"
+        },
+        "weights": {
+          "adaptation": 0.9,
+          "tactical": 0.7,
+          "intuition": 0.6,
+          "explorer": 0.4,
+          "utility": 0.3,
+          "collectivism": 0.2
+        }
+      },
+      "optionC": {
+        "text": {
+          "kk": "Командадан көмек сұрау, миға шабуыл жасау, ұжымдық шешім табу",
+          "ru": "Обратиться за помощью к команде, провести мозговой штурм, найти коллективное решение",
+          "en": "Ask the team for help, brainstorm, find a collective solution"
+        },
+        "weights": {
+          "collectivism": 0.9,
+          "tactical": 0.6,
+          "adaptation": 0.5,
+          "meaning": 0.4,
+          "intuition": 0.3,
+          "executor": 0.2
+        }
+      },
+      "optionD": {
+        "text": {
+          "kk": "Жобаның мағынасын қайта қарау, мүмкін мақсаттарды өзгерту, тереңірек мән табу",
+          "ru": "Пересмотреть смысл проекта, возможно, изменить цели, найти более глубокое значение",
+          "en": "Reconsider the meaning of the project, possibly change goals, find deeper significance"
+        },
+        "weights": {
+          "meaning": 0.9,
+          "strategic": 0.7,
+          "explorer": 0.6,
+          "rationality": 0.4,
+          "control": 0.3,
+          "individualism": 0.2
+        }
+      }
+    },
+    {
+      "id": 2,
+      "metadata": {
+        "difficulty": "medium",
+        "category": "career",
+        "contextType": "decision_making",
+        "primaryDimensions": [
+          "strategic",
+          "explorer",
+          "individualism"
+        ],
+        "estimatedTime": 90
+      },
+      "title": {
+        "kk": "Мансап жолын таңдау",
+        "ru": "Выбор карьерного пути",
+        "en": "Career Path Choice"
+      },
+      "description": {
+        "kk": "Сізге мансапты дамытудың үш қызықты мүмкіндігі ұсынылды, әрқайсысының әртүрлі перспективалары бар.",
+        "ru": "Вам предложили три интересные возможности развития карьеры, каждая с разными перспективами.",
+        "en": "You have been offered three interesting career development opportunities, each with different prospects."
+      },
+      "context": {
+        "kk": "Бұл шешім сіздің кәсіби траекторияңызды алдағы жылдарға анықтайды.",
+        "ru": "Это решение определит вашу профессиональную траекторию на ближайшие годы.",
+        "en": "This decision will determine your professional trajectory for the coming years."
+      },
+      "optionA": {
+        "text": {
+          "kk": "Ғылыми институттағы зерттеу позициясы, қызықтыратын саланы терең зерттеу мүмкіндігімен",
+          "ru": "Исследовательская позиция в научном институте с возможностью глубокого изучения интересующей области",
+          "en": "Research position at a scientific institute with the opportunity for in-depth study of an area of interest"
+        },
+        "weights": {
+          "explorer": 0.9,
+          "rationality": 0.8,
+          "meaning": 0.7,
+          "strategic": 0.6,
+          "control": 0.4,
+          "individualism": 0.3
+        }
+      },
+      "optionB": {
+        "text": {
+          "kk": "Ірі компаниядағы басшылық позициясы, команда мен стратегиялық міндеттермен",
+          "ru": "Руководящая позиция в крупной компании с командой и стратегическими задачами",
+          "en": "Leadership position in a large company with a team and strategic tasks"
+        },
+        "weights": {
+          "collectivism": 0.9,
+          "strategic": 0.8,
+          "control": 0.7,
+          "rationality": 0.5,
+          "utility": 0.4,
+          "executor": 0.3
+        }
+      },
+      "optionC": {
+        "text": {
+          "kk": "Болашағы белгісіз стартап, бірақ жаңа нәрсе жасап, жоғары қайтарым алу мүмкіндігімен",
+          "ru": "Стартап с неопределённым будущим, но возможностью создать что-то новое и получить высокую отдачу",
+          "en": "Startup with uncertain future, but opportunity to create something new and get high returns"
+        },
+        "weights": {
+          "adaptation": 0.9,
+          "individualism": 0.8,
+          "explorer": 0.7,
+          "intuition": 0.6,
+          "tactical": 0.5,
+          "utility": 0.4
+        }
+      },
+      "optionD": {
+        "text": {
+          "kk": "Тексерілген ұйымдағы тұрақты позиция, нақты процестер мен кепілдендірілген өсіммен",
+          "ru": "Стабильная позиция в проверенной организации с чёткими процессами и гарантированным ростом",
+          "en": "Stable position in a proven organization with clear processes and guaranteed growth"
+        },
+        "weights": {
+          "executor": 0.9,
+          "control": 0.8,
+          "rationality": 0.6,
+          "tactical": 0.5,
+          "utility": 0.4,
+          "collectivism": 0.3
+        }
+      }
+    },
+    {
+      "id": 3,
+      "metadata": {
+        "difficulty": "high",
+        "category": "work",
+        "contextType": "conflict_resolution",
+        "primaryDimensions": [
+          "collectivism",
+          "rationality",
+          "meaning"
+        ],
+        "estimatedTime": 75
+      },
+      "title": {
+        "kk": "Командадағы жанжал",
+        "ru": "Конфликт в команде",
+        "en": "Team Conflict"
+      },
+      "description": {
+        "kk": "Сіздің командаңызда екі негізгі қатысушы арасында елеулі жанжал туындады. Жоба қауіп астында.",
+        "ru": "В вашей команде возник серьёзный конфликт между двумя ключевыми участниками. Проект под угрозой.",
+        "en": "A serious conflict has arisen in your team between two key participants. The project is at risk."
+      },
+      "context": {
+        "kk": "Сіздің шешіміңізге тек ағымдағы жоба ғана емес, команданың болашағы да байланысты.",
+        "ru": "От вашего решения зависит не только текущий проект, но и будущее команды.",
+        "en": "Not only the current project but also the future of the team depends on your decision."
+      },
+      "optionA": {
+        "text": {
+          "kk": "Жанжалдың себептерін егжей-тегжейлі талдау, барлық фактілерді зерттеу, жүйелі шешім әзірлеу",
+          "ru": "Провести детальный анализ причин конфликта, изучить все факты, разработать системное решение",
+          "en": "Conduct a detailed analysis of the causes of the conflict, study all the facts, develop a systematic solution"
+        },
+        "weights": {
+          "rationality": 0.9,
+          "control": 0.8,
+          "strategic": 0.6,
+          "meaning": 0.4,
+          "individualism": 0.3,
+          "explorer": 0.2
+        }
+      },
+      "optionB": {
+        "text": {
+          "kk": "Жылдам араласу, интуицияға сүйеніп шешім қабылдау, процесті жағдайға бейімдеу",
+          "ru": "Быстро вмешаться, принять решение на основе интуиции, адаптировать процесс под ситуацию",
+          "en": "Intervene quickly, make a decision based on intuition, adapt the process to the situation"
+        },
+        "weights": {
+          "adaptation": 0.9,
+          "intuition": 0.8,
+          "tactical": 0.7,
+          "utility": 0.5,
+          "individualism": 0.4,
+          "executor": 0.3
+        }
+      },
+      "optionC": {
+        "text": {
+          "kk": "Бүкіл команданың ашық диалогын ұйымдастыру, ымыраға келу арқылы ұжымдық шешім табу",
+          "ru": "Организовать открытый диалог всей команды, найти коллективное решение через компромисс",
+          "en": "Organize an open dialogue of the whole team, find a collective solution through compromise"
+        },
+        "weights": {
+          "collectivism": 0.9,
+          "meaning": 0.7,
+          "adaptation": 0.6,
+          "tactical": 0.5,
+          "intuition": 0.4,
+          "explorer": 0.2
+        }
+      },
+      "optionD": {
+        "text": {
+          "kk": "Команда құрылымын қайта қарау, мүмкін рөлдерді өзгерту және жұмыста тереңірек мағына табу",
+          "ru": "Переосмыслить структуру команды, возможно, изменить роли и найти более глубокий смысл в работе",
+          "en": "Rethink the team structure, possibly change roles and find deeper meaning in the work"
+        },
+        "weights": {
+          "meaning": 0.9,
+          "strategic": 0.7,
+          "explorer": 0.6,
+          "rationality": 0.5,
+          "control": 0.4,
+          "individualism": 0.3
+        }
+      }
+    },
+    {
+      "id": 4,
+      "metadata": {
+        "difficulty": "medium",
+        "category": "innovation",
+        "contextType": "opportunity_evaluation",
+        "primaryDimensions": [
+          "explorer",
+          "adaptation",
+          "individualism"
+        ],
+        "estimatedTime": 80
+      },
+      "title": {
+        "kk": "Инновациялық идея",
+        "ru": "Инновационная идея",
+        "en": "Innovative Idea"
+      },
+      "description": {
+        "kk": "Сізде индустрияны өзгерте алатын революциялық идея пайда болды, бірақ ол маңызды ресурстар мен тәуекелдерді талап етеді.",
+        "ru": "У вас появилась революционная идея, которая может изменить индустрию, но требует значительных ресурсов и рисков.",
+        "en": "You have a revolutionary idea that could change the industry, but it requires significant resources and risks."
+      },
+      "context": {
+        "kk": "Бұл маңызды нәрсе жасау мүмкіндігі, бірақ жол қиын және болжау мүмкін емес.",
+        "ru": "Это шанс создать что-то значимое, но путь будет непростым и непредсказуемым.",
+        "en": "This is a chance to create something significant, but the path will be difficult and unpredictable."
+      },
+      "optionA": {
+        "text": {
+          "kk": "Терең зерттеу жүргізу, нарықты талдау, егжей-тегжейлі бизнес-жоспар құру",
+          "ru": "Провести глубокое исследование, проанализировать рынок, создать детальный бизнес-план",
+          "en": "Conduct in-depth research, analyze the market, create a detailed business plan"
+        },
+        "weights": {
+          "explorer": 0.9,
+          "rationality": 0.8,
+          "strategic": 0.7,
+          "control": 0.6,
+          "meaning": 0.5,
+          "individualism": 0.4
+        }
+      },
+      "optionB": {
+        "text": {
+          "kk": "Тез эксперимент жасай бастау, идеяны нақты жағдайларда сынау, барысында бейімделу",
+          "ru": "Быстро начать экспериментировать, тестировать идею в реальных условиях, адаптироваться по ходу",
+          "en": "Start experimenting quickly, test the idea in real conditions, adapt along the way"
+        },
+        "weights": {
+          "adaptation": 0.9,
+          "intuition": 0.8,
+          "explorer": 0.7,
+          "tactical": 0.6,
+          "individualism": 0.5,
+          "utility": 0.4
+        }
+      },
+      "optionC": {
+        "text": {
+          "kk": "Пікірлестер табу, команда құру, тәуекелдер мен табыстарды бөлісе отырып идеяны бірге дамыту",
+          "ru": "Найти единомышленников, создать команду, развивать идею вместе, разделяя риски и успехи",
+          "en": "Find like-minded people, create a team, develop the idea together, sharing risks and successes"
+        },
+        "weights": {
+          "collectivism": 0.9,
+          "meaning": 0.7,
+          "adaptation": 0.6,
+          "explorer": 0.5,
+          "tactical": 0.4,
+          "intuition": 0.3
+        }
+      },
+      "optionD": {
+        "text": {
+          "kk": "Практикалық пайдаға назар аудару, жылдам монетизация жолын табу, тәуекелдерді азайту",
+          "ru": "Сфокусироваться на практической выгоде, найти быстрый способ монетизации, минимизировать риски",
+          "en": "Focus on practical benefits, find a quick way to monetize, minimize risks"
+        },
+        "weights": {
+          "utility": 0.9,
+          "executor": 0.8,
+          "tactical": 0.7,
+          "control": 0.6,
+          "rationality": 0.5,
+          "collectivism": 0.3
+        }
+      }
+    },
+    {
+      "id": 5,
+      "metadata": {
+        "difficulty": "high",
+        "category": "ethics",
+        "contextType": "moral_decision",
+        "primaryDimensions": [
+          "meaning",
+          "rationality",
+          "collectivism"
+        ],
+        "estimatedTime": 100
+      },
+      "title": {
+        "kk": "Этикалық дилемма",
+        "ru": "Этическая дилемма",
+        "en": "Ethical Dilemma"
+      },
+      "description": {
+        "kk": "Сіз дұрыс шешім анық емес жағдайға тап болдыңыз. Бірнеше нұсқа бар, әрқайсысының әртүрлі салдары бар.",
+        "ru": "Вы столкнулись с ситуацией, где правильное решение неочевидно. Есть несколько вариантов, каждый с разными последствиями.",
+        "en": "You are faced with a situation where the right decision is not obvious. There are several options, each with different consequences."
+      },
+      "context": {
+        "kk": "Сіздің таңдауыңыз басқа адамдарға әсер етеді және сіздің құндылықтарыңызды анықтауы мүмкін.",
+        "ru": "Ваш выбор повлияет на других людей и может определить ваши ценности.",
+        "en": "Your choice will affect other people and may define your values."
+      },
+      "optionA": {
+        "text": {
+          "kk": "Логика мен этика тұрғысынан барлық нұсқаларды талдау, ең дұрыс шешімді табу",
+          "ru": "Проанализировать все варианты с точки зрения логики и этики, найти наиболее правильное решение",
+          "en": "Analyze all options from the point of view of logic and ethics, find the most correct solution"
+        },
+        "weights": {
+          "rationality": 0.9,
+          "meaning": 0.8,
+          "strategic": 0.7,
+          "control": 0.5,
+          "explorer": 0.4,
+          "individualism": 0.3
+        }
+      },
+      "optionB": {
+        "text": {
+          "kk": "Интуиция мен сезімге сену, осы сәтте дұрыс көрінетін нәрсені таңдау",
+          "ru": "Довериться интуиции и чувствам, выбрать то, что кажется правильным в данный момент",
+          "en": "Trust intuition and feelings, choose what seems right at the moment"
+        },
+        "weights": {
+          "intuition": 0.9,
+          "adaptation": 0.7,
+          "tactical": 0.6,
+          "meaning": 0.5,
+          "individualism": 0.4,
+          "explorer": 0.3
+        }
+      },
+      "optionC": {
+        "text": {
+          "kk": "Басқалармен кеңесу, команданың пікірін ескеру, көпшілікке сай келетін шешім табу",
+          "ru": "Посоветоваться с другими, учесть мнение команды, найти решение, которое устроит большинство",
+          "en": "Consult with others, consider the team's opinion, find a solution that suits the majority"
+        },
+        "weights": {
+          "collectivism": 0.9,
+          "meaning": 0.7,
+          "adaptation": 0.6,
+          "tactical": 0.5,
+          "intuition": 0.4,
+          "executor": 0.3
+        }
+      },
+      "optionD": {
+        "text": {
+          "kk": "Минималды шығынмен максималды пайда әкелетін ең практикалық нұсқаны таңдау",
+          "ru": "Выбрать наиболее практичный вариант, который принесёт максимальную пользу с минимальными потерями",
+          "en": "Choose the most practical option that will bring maximum benefit with minimum losses"
+        },
+        "weights": {
+          "utility": 0.9,
+          "rationality": 0.7,
+          "tactical": 0.6,
+          "control": 0.5,
+          "executor": 0.4,
+          "individualism": 0.3
+        }
+      }
+    },
+    {
+      "id": 6,
+      "metadata": {
+        "difficulty": "low",
+        "category": "learning",
+        "contextType": "skill_development",
+        "primaryDimensions": [
+          "explorer",
+          "adaptation",
+          "meaning"
+        ],
+        "estimatedTime": 70
+      },
+      "title": {
+        "kk": "Оқу және даму",
+        "ru": "Обучение и развитие",
+        "en": "Learning and Development"
+      },
+      "description": {
+        "kk": "Сізге кәсіби даму бағытын таңдау керек. Бірнеше жол бар, әрқайсысы әртүрлі тәсілдерді талап етеді.",
+        "ru": "Вам нужно выбрать направление для профессионального развития. Есть несколько путей, каждый требует разных подходов.",
+        "en": "You need to choose a direction for professional development. There are several paths, each requires different approaches."
+      },
+      "context": {
+        "kk": "Бұл таңдау сіздің құзыреттеріңіз бен болашақтағы мүмкіндіктеріңізді анықтайды.",
+        "ru": "Этот выбор определит ваши компетенции и возможности в будущем.",
+        "en": "This choice will determine your competencies and opportunities in the future."
+      },
+      "optionA": {
+        "text": {
+          "kk": "Бір тар салаға терең үңілу, сарапшы болу, барлық аспектілерді зерттеу",
+          "ru": "Глубоко изучить одну узкую область, стать экспертом, исследовать все аспекты",
+          "en": "Study one narrow area deeply, become an expert, explore all aspects"
+        },
+        "weights": {
+          "explorer": 0.9,
+          "rationality": 0.8,
+          "meaning": 0.7,
+          "strategic": 0.6,
+          "control": 0.4,
+          "individualism": 0.3
+        }
+      },
+      "optionB": {
+        "text": {
+          "kk": "Бірнеше іргелес салаларды зерттеу, өзгерістерге бейімделу, икемді болу",
+          "ru": "Изучить несколько смежных областей, адаптироваться к изменениям, быть гибким",
+          "en": "Study several related areas, adapt to changes, be flexible"
+        },
+        "weights": {
+          "adaptation": 0.9,
+          "intuition": 0.7,
+          "tactical": 0.6,
+          "explorer": 0.5,
+          "utility": 0.4,
+          "collectivism": 0.3
+        }
+      },
+      "optionC": {
+        "text": {
+          "kk": "Командада оқу, тәжірибе алмасу, әріптестермен бірге дамуу",
+          "ru": "Учиться в команде, обмениваться опытом, развиваться вместе с коллегами",
+          "en": "Learn in a team, exchange experience, develop together with colleagues"
+        },
+        "weights": {
+          "collectivism": 0.9,
+          "meaning": 0.7,
+          "adaptation": 0.6,
+          "tactical": 0.5,
+          "executor": 0.4,
+          "intuition": 0.3
+        }
+      },
+      "optionD": {
+        "text": {
+          "kk": "Жылдам нәтиже беретін және бірден қолданылатын практикалық дағдыларға назар аудару",
+          "ru": "Сфокусироваться на практических навыках, которые дадут быстрый результат и применимы сразу",
+          "en": "Focus on practical skills that will give quick results and are applicable immediately"
+        },
+        "weights": {
+          "utility": 0.9,
+          "executor": 0.8,
+          "tactical": 0.7,
+          "control": 0.6,
+          "rationality": 0.5,
+          "individualism": 0.3
+        }
+      }
+    },
+    {
+      "id": 7,
+      "metadata": {
+        "difficulty": "medium",
+        "category": "work",
+        "contextType": "resource_management",
+        "primaryDimensions": [
+          "rationality",
+          "control",
+          "strategic"
+        ],
+        "estimatedTime": 65
+      },
+      "title": {
+        "kk": "Ресурстар мен басымдықтар",
+        "ru": "Ресурсы и приоритеты",
+        "en": "Resources and Priorities"
+      },
+      "description": {
+        "kk": "Сіздің ресурстарыңыз шектеулі, бірақ маңызды міндеттер көп. Оларды қалай бөлу керектігін шешу керек.",
+        "ru": "У вас ограниченные ресурсы, но много важных задач. Нужно решить, как их распределить.",
+        "en": "You have limited resources but many important tasks. You need to decide how to distribute them."
+      },
+      "context": {
+        "kk": "Сіздің шешіміңізге жұмыстың тиімділігі мен мақсаттарға жету байланысты.",
+        "ru": "От вашего решения зависит эффективность работы и достижение целей.",
+        "en": "The efficiency of work and achievement of goals depends on your decision."
+      },
+      "optionA": {
+        "text": {
+          "kk": "Егжей-тегжейлі бөлу жоспарын құру, барлық тапсырмаларды талдау, процестерді оңтайландыру",
+          "ru": "Создать детальный план распределения, проанализировать все задачи, оптимизировать процессы",
+          "en": "Create a detailed distribution plan, analyze all tasks, optimize processes"
+        },
+        "weights": {
+          "rationality": 0.9,
+          "control": 0.8,
+          "strategic": 0.7,
+          "meaning": 0.4,
+          "individualism": 0.3,
+          "executor": 0.2
+        }
+      },
+      "optionB": {
+        "text": {
+          "kk": "Жағдайға қарай ресурстарды икемді бөлу, өзгерістерге бейімделу, интуитивті әрекет ету",
+          "ru": "Гибко распределять ресурсы по ситуации, адаптироваться к изменениям, действовать интуитивно",
+          "en": "Flexibly distribute resources according to the situation, adapt to changes, act intuitively"
+        },
+        "weights": {
+          "adaptation": 0.9,
+          "intuition": 0.8,
+          "tactical": 0.7,
+          "utility": 0.5,
+          "individualism": 0.4,
+          "explorer": 0.3
+        }
+      },
+      "optionC": {
+        "text": {
+          "kk": "Командамен талқылау, ұжымдық шешім табу, тапсырмаларды бірлесіп бөлу",
+          "ru": "Обсудить с командой, найти коллективное решение, распределить задачи совместно",
+          "en": "Discuss with the team, find a collective solution, distribute tasks together"
+        },
+        "weights": {
+          "collectivism": 0.9,
+          "meaning": 0.7,
+          "adaptation": 0.6,
+          "tactical": 0.5,
+          "intuition": 0.4,
+          "executor": 0.3
+        }
+      },
+      "optionD": {
+        "text": {
+          "kk": "Максималды практикалық қайтарымы бар тапсырмаларға назар аудару, шығындарды азайту",
+          "ru": "Сфокусироваться на задачах с максимальной практической отдачей, минимизировать затраты",
+          "en": "Focus on tasks with maximum practical return, minimize costs"
+        },
+        "weights": {
+          "utility": 0.9,
+          "executor": 0.8,
+          "tactical": 0.7,
+          "control": 0.6,
+          "rationality": 0.5,
+          "individualism": 0.3
+        }
+      }
+    },
+    {
+      "id": 8,
+      "metadata": {
+        "difficulty": "high",
+        "category": "life",
+        "contextType": "uncertainty_management",
+        "primaryDimensions": [
+          "adaptation",
+          "intuition",
+          "strategic"
+        ],
+        "estimatedTime": 85
+      },
+      "title": {
+        "kk": "Белгісіз болашақ",
+        "ru": "Неопределённое будущее",
+        "en": "Uncertain Future"
+      },
+      "description": {
+        "kk": "Сіз салдары болжауға келмейтін таңдау алдында тұрсыз. Әр нұсқаның өз артықшылықтары мен кемшіліктері бар.",
+        "ru": "Вы стоите перед выбором, где последствия непредсказуемы. Каждый вариант имеет свои плюсы и минусы.",
+        "en": "You are facing a choice where the consequences are unpredictable. Each option has its pros and cons."
+      },
+      "context": {
+        "kk": "Бұл шешім сіздің өміріңізді өзгертуі мүмкін, бірақ нәтиже кепілдендірілмеген.",
+        "ru": "Это решение может изменить вашу жизнь, но результат не гарантирован.",
+        "en": "This decision can change your life, but the result is not guaranteed."
+      },
+      "optionA": {
+        "text": {
+          "kk": "Барлық нұсқаларды мұқият талдау, максимум ақпарат жинау, әр қадамды жоспарлау",
+          "ru": "Тщательно проанализировать все варианты, собрать максимум информации, спланировать каждый шаг",
+          "en": "Carefully analyze all options, collect maximum information, plan each step"
+        },
+        "weights": {
+          "rationality": 0.9,
+          "control": 0.8,
+          "strategic": 0.7,
+          "meaning": 0.5,
+          "explorer": 0.4,
+          "individualism": 0.3
+        }
+      },
+      "optionB": {
+        "text": {
+          "kk": "Интуицияға сену, бейімделуге дайын болу, стихиялы әрекет ету",
+          "ru": "Довериться интуиции, быть готовым адаптироваться, действовать спонтанно",
+          "en": "Trust intuition, be ready to adapt, act spontaneously"
+        },
+        "weights": {
+          "intuition": 0.9,
+          "adaptation": 0.8,
+          "tactical": 0.7,
+          "explorer": 0.5,
+          "individualism": 0.4,
+          "meaning": 0.3
+        }
+      },
+      "optionC": {
+        "text": {
+          "kk": "Жақындарымен кеңесу, басқалардың пікірін ескеру, ұжымда қолдау табу",
+          "ru": "Посоветоваться с близкими, учесть мнение других, найти поддержку в коллективе",
+          "en": "Consult with loved ones, consider the opinions of others, find support in the team"
+        },
+        "weights": {
+          "collectivism": 0.9,
+          "meaning": 0.7,
+          "adaptation": 0.6,
+          "tactical": 0.5,
+          "intuition": 0.4,
+          "executor": 0.3
+        }
+      },
+      "optionD": {
+        "text": {
+          "kk": "Болжамды нәтижесі бар ең қауіпсіз және практикалық нұсқаны таңдау",
+          "ru": "Выбрать наиболее безопасный и практичный вариант с предсказуемым результатом",
+          "en": "Choose the safest and most practical option with a predictable result"
+        },
+        "weights": {
+          "utility": 0.9,
+          "executor": 0.8,
+          "control": 0.7,
+          "tactical": 0.6,
+          "rationality": 0.5,
+          "collectivism": 0.3
+        }
+      }
+    },
+    {
+      "id": 9,
+      "metadata": {
+        "difficulty": "medium",
+        "category": "creativity",
+        "contextType": "creative_problem_solving",
+        "primaryDimensions": [
+          "explorer",
+          "adaptation",
+          "intuition"
+        ],
+        "estimatedTime": 75
+      },
+      "title": {
+        "kk": "Шығармашылық сынақ",
+        "ru": "Творческий вызов",
+        "en": "Creative Challenge"
+      },
+      "description": {
+        "kk": "Сізге жаңа нәрсе жасау керек, бірақ нақты нұсқаулар жоқ. Шешімнің бірнеше тәсілі бар.",
+        "ru": "Вам нужно создать что-то новое, но нет чётких инструкций. Есть несколько подходов к решению.",
+        "en": "You need to create something new, but there are no clear instructions. There are several approaches to the solution."
+      },
+      "context": {
+        "kk": "Бұл өзіңізді көрсету мүмкіндігі, бірақ табыс таңдалған әдіске байланысты.",
+        "ru": "Это возможность проявить себя, но успех зависит от выбранного метода.",
+        "en": "This is an opportunity to express yourself, but success depends on the chosen method."
+      },
+      "optionA": {
+        "text": {
+          "kk": "Қолданыстағы тәсілдерді зерттеу, үздік тәжірибелерді талдау, жүйелі шешім жасау",
+          "ru": "Изучить существующие подходы, проанализировать лучшие практики, создать системное решение",
+          "en": "Study existing approaches, analyze best practices, create a systematic solution"
+        },
+        "weights": {
+          "explorer": 0.9,
+          "rationality": 0.8,
+          "strategic": 0.7,
+          "control": 0.6,
+          "meaning": 0.5,
+          "individualism": 0.4
+        }
+      },
+      "optionB": {
+        "text": {
+          "kk": "Эксперимент жасау, әртүрлі идеяларды сынап көру, нәтижелерге бейімделу, интуицияға сену",
+          "ru": "Экспериментировать, пробовать разные идеи, адаптироваться к результатам, доверять интуиции",
+          "en": "Experiment, try different ideas, adapt to results, trust intuition"
+        },
+        "weights": {
+          "adaptation": 0.9,
+          "intuition": 0.8,
+          "explorer": 0.7,
+          "tactical": 0.6,
+          "individualism": 0.5,
+          "meaning": 0.4
+        }
+      },
+      "optionC": {
+        "text": {
+          "kk": "Командада жұмыс істеу, бірге идеялар генерациялау, ұжымдық шығармашылық жасау",
+          "ru": "Работать в команде, генерировать идеи вместе, создавать коллективное творчество",
+          "en": "Work in a team, generate ideas together, create collective creativity"
+        },
+        "weights": {
+          "collectivism": 0.9,
+          "meaning": 0.7,
+          "adaptation": 0.6,
+          "explorer": 0.5,
+          "intuition": 0.4,
+          "tactical": 0.3
+        }
+      },
+      "optionD": {
+        "text": {
+          "kk": "Тексерілген әдістерді қолдану, табысты мысалдарды ұстану, тәуекелдерді азайту",
+          "ru": "Использовать проверенные методы, следовать успешным примерам, минимизировать риски",
+          "en": "Use proven methods, follow successful examples, minimize risks"
+        },
+        "weights": {
+          "utility": 0.9,
+          "executor": 0.8,
+          "control": 0.7,
+          "rationality": 0.6,
+          "tactical": 0.5,
+          "collectivism": 0.3
+        }
+      }
+    },
+    {
+      "id": 10,
+      "metadata": {
+        "difficulty": "high",
+        "category": "leadership",
+        "contextType": "influence_and_leadership",
+        "primaryDimensions": [
+          "collectivism",
+          "strategic",
+          "meaning"
+        ],
+        "estimatedTime": 90
+      },
+      "title": {
+        "kk": "Көшбасшылық және ықпал",
+        "ru": "Лидерство и влияние",
+        "en": "Leadership and Influence"
+      },
+      "description": {
+        "kk": "Маңызды мақсатқа жету үшін басқа адамдарға ықпал ету қажет. Көшбасшылықтың әртүрлі стильдері бар.",
+        "ru": "Вам нужно повлиять на других людей, чтобы достичь важной цели. Есть разные стили лидерства.",
+        "en": "You need to influence other people to achieve an important goal. There are different leadership styles."
+      },
+      "context": {
+        "kk": "Сіздің тәсіліңіз сізді қалай қабылдайтынын және нәтиженің қаншалықты тиімді болатынын анықтайды.",
+        "ru": "Ваш подход определит, как вас воспримут и насколько эффективным будет результат.",
+        "en": "Your approach will determine how you are perceived and how effective the result will be."
+      },
+      "optionA": {
+        "text": {
+          "kk": "Жағдайды талдау, нақты стратегия әзірлеу, процесті бақылау",
+          "ru": "Проанализировать ситуацию, разработать чёткую стратегию, контролировать процесс",
+          "en": "Analyze the situation, develop a clear strategy, control the process"
+        },
+        "weights": {
+          "rationality": 0.9,
+          "control": 0.8,
+          "strategic": 0.7,
+          "meaning": 0.5,
+          "individualism": 0.4,
+          "executor": 0.3
+        }
+      },
+      "optionB": {
+        "text": {
+          "kk": "Жағдайға бейімделу, икемді әрекет ету, интуиция мен стихиялылықты қолдану",
+          "ru": "Адаптироваться к ситуации, действовать гибко, использовать интуицию и спонтанность",
+          "en": "Adapt to the situation, act flexibly, use intuition and spontaneity"
+        },
+        "weights": {
+          "adaptation": 0.9,
+          "intuition": 0.8,
+          "tactical": 0.7,
+          "individualism": 0.5,
+          "explorer": 0.4,
+          "utility": 0.3
+        }
+      },
+      "optionC": {
+        "text": {
+          "kk": "Адамдарды ортақ идеяның айналасына біріктіру, ұжымдық көзқарас қалыптастыру, команданы шабыттандыру",
+          "ru": "Объединить людей вокруг общей идеи, создать коллективное видение, вдохновить команду",
+          "en": "Unite people around a common idea, create a collective vision, inspire the team"
+        },
+        "weights": {
+          "collectivism": 0.9,
+          "meaning": 0.8,
+          "strategic": 0.7,
+          "adaptation": 0.6,
+          "intuition": 0.4,
+          "explorer": 0.3
+        }
+      },
+      "optionD": {
+        "text": {
+          "kk": "Практикалық нәтижелерге назар аудару, пайда арқылы мотивациялау, тиімді әрекет ету",
+          "ru": "Сфокусироваться на практических результатах, мотивировать через выгоду, действовать эффективно",
+          "en": "Focus on practical results, motivate through benefits, act effectively"
+        },
+        "weights": {
+          "utility": 0.9,
+          "executor": 0.8,
+          "tactical": 0.7,
+          "rationality": 0.6,
+          "control": 0.5,
+          "individualism": 0.3
+        }
+      }
+    },
+    {
+      "id": 11,
+      "metadata": {
+        "difficulty": "medium",
+        "category": "life",
+        "contextType": "work_life_balance",
+        "primaryDimensions": [
+          "meaning",
+          "control",
+          "adaptation"
+        ],
+        "estimatedTime": 70
+      },
+      "title": {
+        "kk": "Жұмыс пен өмір балансы",
+        "ru": "Баланс работы и жизни",
+        "en": "Work-Life Balance"
+      },
+      "description": {
+        "kk": "Уақыт пен энергияны кәсіби және жеке басымдықтар арасында қалай бөлу керектігін шешу керек.",
+        "ru": "Вы должны решить, как распределить время и энергию между профессиональными и личными приоритетами.",
+        "en": "You need to decide how to distribute time and energy between professional and personal priorities."
+      },
+      "context": {
+        "kk": "Бұл таңдау сіздің әл-ауқатыңызға және ұзақ мерзімді дамуыңызға әсер етеді.",
+        "ru": "Этот выбор повлияет на ваше благополучие и долгосрочное развитие.",
+        "en": "This choice will affect your well-being and long-term development."
+      },
+      "optionA": {
+        "text": {
+          "kk": "Егжей-тегжейлі баланс жоспарын құру, басымдықтарды талдау, уақытты жүйелі басқару",
+          "ru": "Создать детальный план баланса, проанализировать приоритеты, системно управлять временем",
+          "en": "Create a detailed balance plan, analyze priorities, systematically manage time"
+        },
+        "weights": {
+          "rationality": 0.9,
+          "control": 0.8,
+          "strategic": 0.7,
+          "meaning": 0.5,
+          "individualism": 0.3,
+          "executor": 0.2
+        }
+      },
+      "optionB": {
+        "text": {
+          "kk": "Жағдайға икемді бейімделу, интуицияға сену, балансты стихиялы табу",
+          "ru": "Гибко адаптироваться к ситуации, доверять интуиции, находить баланс спонтанно",
+          "en": "Flexibly adapt to the situation, trust intuition, find balance spontaneously"
+        },
+        "weights": {
+          "adaptation": 0.9,
+          "intuition": 0.8,
+          "tactical": 0.7,
+          "meaning": 0.5,
+          "individualism": 0.4,
+          "explorer": 0.3
+        }
+      },
+      "optionC": {
+        "text": {
+          "kk": "Жақындармен талқылау, ұжымдық шешім табу, барлығының қажеттіліктерін ескеру",
+          "ru": "Обсудить с близкими, найти коллективное решение, учитывать потребности всех",
+          "en": "Discuss with loved ones, find a collective solution, consider everyone's needs"
+        },
+        "weights": {
+          "collectivism": 0.9,
+          "meaning": 0.8,
+          "adaptation": 0.6,
+          "tactical": 0.5,
+          "intuition": 0.4,
+          "executor": 0.3
+        }
+      },
+      "optionD": {
+        "text": {
+          "kk": "Практикалық пайдаға назар аудару, тиімділікті максимизациялау, шығындарды азайту",
+          "ru": "Сфокусироваться на практической выгоде, максимизировать эффективность, минимизировать потери",
+          "en": "Focus on practical benefits, maximize efficiency, minimize losses"
+        },
+        "weights": {
+          "utility": 0.9,
+          "executor": 0.8,
+          "tactical": 0.7,
+          "control": 0.6,
+          "rationality": 0.5,
+          "individualism": 0.3
+        }
+      }
+    },
+    {
+      "id": 12,
+      "metadata": {
+        "difficulty": "low",
+        "category": "work",
+        "contextType": "technical_decision",
+        "primaryDimensions": [
+          "explorer",
+          "rationality",
+          "strategic"
+        ],
+        "estimatedTime": 60
+      },
+      "title": {
+        "kk": "Технологиялық таңдау",
+        "ru": "Технологический выбор",
+        "en": "Technology Choice"
+      },
+      "description": {
+        "kk": "Маңызды жоба үшін технология немесе құрал таңдау керек. Әртүрлі сипаттамалары бар бірнеше нұсқа бар.",
+        "ru": "Вам нужно выбрать технологию или инструмент для важного проекта. Есть несколько вариантов с разными характеристиками.",
+        "en": "You need to choose a technology or tool for an important project. There are several options with different characteristics."
+      },
+      "context": {
+        "kk": "Бұл таңдау жобаның ұзақ мерзімді дамуына және сіздің сарапшылығыңызға әсер етеді.",
+        "ru": "Этот выбор повлияет на долгосрочное развитие проекта и вашу экспертизу.",
+        "en": "This choice will affect the long-term development of the project and your expertise."
+      },
+      "optionA": {
+        "text": {
+          "kk": "Барлық нұсқаларды терең зерттеу, техникалық сипаттамаларды талдау, оңтайлы шешімді таңдау",
+          "ru": "Глубоко изучить все варианты, проанализировать технические характеристики, выбрать оптимальное решение",
+          "en": "Study all options deeply, analyze technical characteristics, choose the optimal solution"
+        },
+        "weights": {
+          "explorer": 0.9,
+          "rationality": 0.8,
+          "strategic": 0.7,
+          "control": 0.6,
+          "meaning": 0.4,
+          "individualism": 0.3
+        }
+      },
+      "optionB": {
+        "text": {
+          "kk": "Бірнеше нұсқаны тез тексеру, интуитивті таңдау, барысында бейімделу",
+          "ru": "Быстро протестировать несколько вариантов, выбрать интуитивно, адаптироваться по ходу",
+          "en": "Quickly test several options, choose intuitively, adapt along the way"
+        },
+        "weights": {
+          "adaptation": 0.9,
+          "intuition": 0.8,
+          "tactical": 0.7,
+          "explorer": 0.5,
+          "utility": 0.4,
+          "individualism": 0.3
+        }
+      },
+      "optionC": {
+        "text": {
+          "kk": "Командамен кеңесу, барлық қатысушылардың тәжірибесін ескере отырып ұжымдық таңдау",
+          "ru": "Посоветоваться с командой, выбрать коллективно, учитывая опыт всех участников",
+          "en": "Consult with the team, choose collectively, considering the experience of all participants"
+        },
+        "weights": {
+          "collectivism": 0.9,
+          "meaning": 0.7,
+          "adaptation": 0.6,
+          "tactical": 0.5,
+          "executor": 0.4,
+          "intuition": 0.3
+        }
+      },
+      "optionD": {
+        "text": {
+          "kk": "Кепілдендірілген нәтижесі мен минималды тәуекелдері бар тексерілген шешімді таңдау",
+          "ru": "Выбрать проверенное решение с гарантированным результатом и минимальными рисками",
+          "en": "Choose a proven solution with guaranteed results and minimal risks"
+        },
+        "weights": {
+          "utility": 0.9,
+          "executor": 0.8,
+          "control": 0.7,
+          "rationality": 0.6,
+          "tactical": 0.5,
+          "collectivism": 0.3
+        }
+      }
+    }
+  ],
+  "dimensions": {
+    "strategic": {
+      "name": {
+        "kk": "Стратегиялық ойлау",
+        "ru": "Стратегическое мышление",
+        "en": "Strategic Thinking"
+      },
+      "description": {
+        "kk": "Ұзақ мерзімді мақсаттар мен перспективаларға назар аудару",
+        "ru": "Фокус на долгосрочных целях и перспективах",
+        "en": "Focus on long-term goals and prospects"
+      },
+      "opposite": {
+        "kk": "Тактикалық ойлау",
+        "ru": "Тактическое мышление",
+        "en": "Tactical Thinking"
+      },
+      "range": [
+        -1,
+        1
+      ],
+      "negativeLabel": {
+        "kk": "Тактикалық",
+        "ru": "Тактическое",
+        "en": "Tactical"
+      },
+      "positiveLabel": {
+        "kk": "Стратегиялық",
+        "ru": "Стратегическое",
+        "en": "Strategic"
+      }
+    },
+    "explorer": {
+      "name": {
+        "kk": "Зерттеуші",
+        "ru": "Исследователь",
+        "en": "Explorer"
+      },
+      "description": {
+        "kk": "Жаңа білімге және терең түсінуге ұмтылу",
+        "ru": "Стремление к новым знаниям и глубокому пониманию",
+        "en": "Striving for new knowledge and deep understanding"
+      },
+      "opposite": {
+        "kk": "Орындаушы",
+        "ru": "Исполнитель",
+        "en": "Executor"
+      },
+      "range": [
+        -1,
+        1
+      ],
+      "negativeLabel": {
+        "kk": "Орындаушы",
+        "ru": "Исполнитель",
+        "en": "Executor"
+      },
+      "positiveLabel": {
+        "kk": "Зерттеуші",
+        "ru": "Исследователь",
+        "en": "Explorer"
+      }
+    },
+    "individualism": {
+      "name": {
+        "kk": "Индивидуализм",
+        "ru": "Индивидуализм",
+        "en": "Individualism"
+      },
+      "description": {
+        "kk": "Өздігінен жұмыс істеуге және жеке жауапкершілікке басымдық беру",
+        "ru": "Предпочтение самостоятельной работы и личной ответственности",
+        "en": "Preference for independent work and personal responsibility"
+      },
+      "opposite": {
+        "kk": "Ұжымшылдық",
+        "ru": "Коллективизм",
+        "en": "Collectivism"
+      },
+      "range": [
+        -1,
+        1
+      ],
+      "negativeLabel": {
+        "kk": "Ұжымшылдық",
+        "ru": "Коллективизм",
+        "en": "Collectivism"
+      },
+      "positiveLabel": {
+        "kk": "Индивидуализм",
+        "ru": "Индивидуализм",
+        "en": "Individualism"
+      }
+    },
+    "rationality": {
+      "name": {
+        "kk": "Рационалдылық",
+        "ru": "Рациональность",
+        "en": "Rationality"
+      },
+      "description": {
+        "kk": "Мәселелерді шешуге логикалық, құрылымдық тәсіл",
+        "ru": "Логический, структурированный подход к решению задач",
+        "en": "Logical, structured approach to problem solving"
+      },
+      "opposite": {
+        "kk": "Интуиция",
+        "ru": "Интуиция",
+        "en": "Intuition"
+      },
+      "range": [
+        -1,
+        1
+      ],
+      "negativeLabel": {
+        "kk": "Интуиция",
+        "ru": "Интуиция",
+        "en": "Intuition"
+      },
+      "positiveLabel": {
+        "kk": "Рационалдылық",
+        "ru": "Рациональность",
+        "en": "Rationality"
+      }
+    },
+    "adaptation": {
+      "name": {
+        "kk": "Бейімделгіштік",
+        "ru": "Адаптивность",
+        "en": "Adaptability"
+      },
+      "description": {
+        "kk": "Өзгерістерге тез бейімделу және икемділік",
+        "ru": "Гибкость и способность быстро подстраиваться под изменения",
+        "en": "Flexibility and ability to quickly adjust to changes"
+      },
+      "opposite": {
+        "kk": "Тұрақтылық",
+        "ru": "Устойчивость",
+        "en": "Stability"
+      },
+      "range": [
+        -1,
+        1
+      ],
+      "negativeLabel": {
+        "kk": "Тұрақтылық",
+        "ru": "Устойчивость",
+        "en": "Stability"
+      },
+      "positiveLabel": {
+        "kk": "Бейімделгіштік",
+        "ru": "Адаптивность",
+        "en": "Adaptability"
+      }
+    },
+    "meaning": {
+      "name": {
+        "kk": "Мағына",
+        "ru": "Смысл",
+        "en": "Purpose"
+      },
+      "description": {
+        "kk": "Әрекеттердің терең мағынасы мен құндылығын іздеу",
+        "ru": "Поиск глубокого смысла и ценности в действиях",
+        "en": "Seeking deep meaning and value in actions"
+      },
+      "opposite": {
+        "kk": "Прагматизм",
+        "ru": "Прагматизм",
+        "en": "Pragmatism"
+      },
+      "range": [
+        -1,
+        1
+      ],
+      "negativeLabel": {
+        "kk": "Прагматизм",
+        "ru": "Прагматизм",
+        "en": "Pragmatism"
+      },
+      "positiveLabel": {
+        "kk": "Мағына",
+        "ru": "Смысл",
+        "en": "Purpose"
+      }
+    },
+    "intuition": {
+      "name": {
+        "kk": "Интуиция",
+        "ru": "Интуиция",
+        "en": "Intuition"
+      },
+      "description": {
+        "kk": "Шешім қабылдауда сезімдер мен ішкі дауысқа сүйену",
+        "ru": "Опора на чувства и внутренний голос при принятии решений",
+        "en": "Relying on feelings and inner voice when making decisions"
+      },
+      "opposite": {
+        "kk": "Логика",
+        "ru": "Логика",
+        "en": "Logic"
+      },
+      "range": [
+        -1,
+        1
+      ],
+      "negativeLabel": {
+        "kk": "Логика",
+        "ru": "Логика",
+        "en": "Logic"
+      },
+      "positiveLabel": {
+        "kk": "Интуиция",
+        "ru": "Интуиция",
+        "en": "Intuition"
+      }
+    },
+    "utility": {
+      "name": {
+        "kk": "Прагматизм",
+        "ru": "Прагматизм",
+        "en": "Pragmatism"
+      },
+      "description": {
+        "kk": "Практикалық пайда мен тиімділікке назар аудару",
+        "ru": "Фокус на практической пользе и эффективности",
+        "en": "Focus on practical benefit and efficiency"
+      },
+      "opposite": {
+        "kk": "Идеализм",
+        "ru": "Идеализм",
+        "en": "Idealism"
+      },
+      "range": [
+        -1,
+        1
+      ],
+      "negativeLabel": {
+        "kk": "Идеализм",
+        "ru": "Идеализм",
+        "en": "Idealism"
+      },
+      "positiveLabel": {
+        "kk": "Прагматизм",
+        "ru": "Прагматизм",
+        "en": "Pragmatism"
+      }
+    }
+  }
+}
