@@ -27,6 +27,7 @@
     <title>Жүйе туралы - Neural Constellation</title>
 
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link rel="icon" type="image/jpeg" href="icons/icon-512x512.jpg">
 
     <!-- Google Fonts - Inter & Space Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -629,20 +630,21 @@
                                                     data-i18n="label_name">Ваше имя</label>
                                                 <input type="text" id="name" name="name" class="glass-input"
                                                     placeholder="Ваше имя" data-i18n-placeholder="placeholder_name"
-                                                    required>
+                                                    autocomplete="name" required>
                                             </div>
                                             <div class="form-group-custom">
                                                 <label for="contact" class="visually-hidden" style="display:none;"
                                                     data-i18n="label_contact">Email</label>
                                                 <input type="email" id="contact" name="email" class="glass-input"
                                                     placeholder="Email" data-i18n-placeholder="placeholder_contact"
-                                                    required>
+                                                    autocomplete="email" required>
                                             </div>
                                             <div class="form-group-custom">
                                                 <label for="message" class="visually-hidden" style="display:none;"
                                                     data-i18n="label_message">Сообщение</label>
                                                 <textarea id="message" name="message" class="glass-input glass-textarea"
                                                     placeholder="Расскажите о вашем проекте"
+                                                    autocomplete="off"
                                                     data-i18n-placeholder="placeholder_message" required></textarea>
                                             </div>
                                             <button type="submit" class="btn-submit"
