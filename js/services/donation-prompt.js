@@ -19,23 +19,23 @@
         const translations = {
             ru: {
                 title: "Поддержать дипломный проект",
-                text: "Нравится Neural Constellation? Это моя дипломная работа. Вы можете поддержать автора разовым донатом!",
-                btnBMC: "Купить кофе",
-                btnKaspi: "Kaspi Gold",
+                text: "Нравится Neural Constellation? Это моя дипломная работа. Вы можете поддержать автора!",
+                btnBoosty: "Boosty",
+                btnPatreon: "Patreon",
                 copied: "Номер скопирован"
             },
             en: {
                 title: "Support the Thesis Project",
-                text: "Enjoying Neural Constellation? This is my diploma project. You can support the author with a one-time donation!",
-                btnBMC: "Buy a coffee",
-                btnKaspi: "Kaspi Gold",
+                text: "Enjoying Neural Constellation? This is my diploma project. You can support the author!",
+                btnBoosty: "Boosty",
+                btnPatreon: "Patreon",
                 copied: "Card copied"
             },
             kk: {
                 title: "Дипломдық жобаға қолдау көрсету",
                 text: "Neural Constellation ұнай ма? Бұл менің дипломдық жұмысым. Авторға қолдау көрсете аласыз!",
-                btnBMC: "Кофе алып беріңіз",
-                btnKaspi: "Kaspi Gold",
+                btnBoosty: "Boosty",
+                btnPatreon: "Patreon",
                 copied: "Нөмір көшірілді"
             }
         };
@@ -199,47 +199,62 @@
             .donation-btn:hover::after {
                 opacity: 1;
             }
-            .donation-btn-bmc {
+            .donation-btn-boosty {
                 background: rgba(255, 255, 255, 0.05);
                 color: #fff;
                 border: 1px solid rgba(255, 255, 255, 0.1);
                 box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             }
-            .donation-btn-bmc:hover {
+            .donation-btn-boosty:hover {
                 transform: translateY(-3px);
-                background: rgba(255, 221, 0, 0.1);
-                border-color: rgba(255, 221, 0, 0.3);
-                box-shadow: 0 8px 20px rgba(255, 221, 0, 0.15);
-                color: #FFDD00;
+                background: rgba(255, 102, 0, 0.15);
+                border-color: rgba(255, 102, 0, 0.4);
+                box-shadow: 0 8px 20px rgba(255, 102, 0, 0.2);
+                color: #ff7a1a;
             }
-            .donation-btn-bmc .material-symbols-rounded {
-                color: #FFDD00;
-                transition: transform 0.3s;
-            }
-            .donation-btn-kaspi {
+            .donation-btn-patreon {
                 background: rgba(255, 255, 255, 0.05);
                 color: #fff;
                 border: 1px solid rgba(255, 255, 255, 0.1);
                 box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             }
-            .donation-btn-kaspi:hover {
+            .donation-btn-patreon:hover {
                 transform: translateY(-3px);
-                background: rgba(241, 70, 53, 0.1);
-                border-color: rgba(241, 70, 53, 0.3);
-                box-shadow: 0 8px 20px rgba(241, 70, 53, 0.15);
-                color: #ffb7b2;
+                background: rgba(255, 66, 77, 0.15);
+                border-color: rgba(255, 66, 77, 0.4);
+                box-shadow: 0 8px 20px rgba(255, 66, 77, 0.2);
+                color: #ff656f;
             }
-            .kaspi-icon {
+            .boosty-icon {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
                 width: 20px;
                 height: 20px;
-                background: linear-gradient(135deg, #F14635, #C62828);
+                background: linear-gradient(135deg, #ff6600, #ff9900);
+                color: white;
+                border-radius: 6px;
+                font-size: 11px;
+                font-weight: 800;
+                font-style: italic;
+            }
+            .patreon-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 20px;
+                height: 20px;
+                background: linear-gradient(135deg, #FF424D, #C0392B);
                 color: white;
                 border-radius: 50%;
                 font-size: 11px;
                 font-weight: 800;
+            }
+            body:not(.dark-theme) .donation-btn-boosty,
+            body:not(.dark-theme) .donation-btn-patreon {
+                background: rgba(255,255,255,0.3);
+                color: #1a2533;
+                border: 1px solid rgba(0,0,0,0.15);
             }
         `;
         document.head.appendChild(style);
@@ -268,24 +283,14 @@
                 ${t.text}
             </div>
             <div class="donation-prompt-actions">
-                <a href="https://buymeacoffee.com/sala_ah" target="_blank" class="donation-btn donation-btn-bmc">
-                    <span class="material-symbols-rounded" style="font-size: 16px;">local_cafe</span>
-                    ${t.btnBMC}
+                <a href="https://boosty.to/sala_ah" target="_blank" class="donation-btn donation-btn-boosty">
+                    <span class="boosty-icon">B</span>
+                    ${t.btnBoosty}
                 </a>
-                <button class="donation-btn donation-btn-kaspi" onclick="
-                    navigator.clipboard.writeText('4400430320985507'); 
-                    const orig = this.innerHTML; 
-                    this.innerHTML = '<span class=\\'material-symbols-rounded\\' style=\\'font-size:14px; color:#10b981;\\'>check_circle</span> ${t.copied}';
-                    this.style.background = 'rgba(16,185,129,0.15)';
-                    this.style.borderColor = 'rgba(16,185,129,0.4)';
-                    setTimeout(() => {
-                        this.innerHTML = orig;
-                        this.style = '';
-                    }, 2500);
-                ">
-                    <span class="kaspi-icon">K</span>
-                    Kaspi Gold
-                </button>
+                <a href="https://www.patreon.com/c/Sala_ah" target="_blank" class="donation-btn donation-btn-patreon">
+                    <span class="patreon-icon">P</span>
+                    ${t.btnPatreon}
+                </a>
             </div>
         `;
 
