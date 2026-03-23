@@ -16,8 +16,8 @@
 :root,
 body:not(.dark-theme) {
     /* Основные цвета */
-    --theme-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --theme-bg-solid: #ffffff;
+    --theme-bg: linear-gradient(135deg, #e4eaf5 0%, #f0f4fa 100%);
+    --theme-bg-solid: #f2f4f7;
     --theme-text: #1a1a2e;
     --theme-text-light: #666;
     --theme-primary: #4a90e2;
@@ -25,16 +25,16 @@ body:not(.dark-theme) {
     --theme-accent: #00c6fb;
 
     /* Элементы UI */
-    --theme-card: rgba(255, 255, 255, 0.95);
+    --theme-card: rgba(250, 252, 255, 0.90);
     --theme-card-hover: rgba(255, 255, 255, 1);
     --theme-border: rgba(0, 0, 0, 0.1);
     --theme-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
     --theme-shadow-hover: 0 12px 48px 0 rgba(31, 38, 135, 0.25);
 
     /* Header/Footer */
-    --theme-header-bg: rgba(255, 255, 255, 0.1);
-    --theme-header-border: rgba(255, 255, 255, 0.2);
-    --theme-footer-bg: rgba(255, 255, 255, 0.95);
+    --theme-header-bg: rgba(250, 252, 255, 0.8);
+    --theme-header-border: rgba(255, 255, 255, 0.5);
+    --theme-footer-bg: rgba(250, 252, 255, 0.95);
 
     /* Навигация */
     --theme-nav-bg: rgba(255, 255, 255, 0.08);
@@ -61,8 +61,8 @@ body:not(.dark-theme) {
 /* Dark Theme */
 .dark-theme {
     /* Основные цвета */
-    --theme-bg: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
-    --theme-bg-solid: #0f0f23;
+    --theme-bg: linear-gradient(135deg, #131326 0%, #1c1c3d 100%);
+    --theme-bg-solid: #131326;
     --theme-text: #e0e0e0;
     --theme-text-light: #a0a0a0;
     --theme-primary: #00c6fb;
@@ -70,16 +70,16 @@ body:not(.dark-theme) {
     --theme-accent: #00e5ff;
 
     /* Элементы UI */
-    --theme-card: rgba(20, 20, 40, 0.9);
-    --theme-card-hover: rgba(30, 30, 50, 0.95);
+    --theme-card: rgba(28, 30, 48, 0.9);
+    --theme-card-hover: rgba(38, 40, 60, 0.95);
     --theme-border: rgba(255, 255, 255, 0.1);
     --theme-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
     --theme-shadow-hover: 0 12px 48px 0 rgba(0, 0, 0, 0.7);
 
     /* Header/Footer */
-    --theme-header-bg: rgba(15, 15, 35, 0.8);
+    --theme-header-bg: rgba(18, 18, 38, 0.8);
     --theme-header-border: rgba(255, 255, 255, 0.1);
-    --theme-footer-bg: rgba(15, 15, 35, 0.95);
+    --theme-footer-bg: rgba(18, 18, 38, 0.95);
 
     /* Навигация */
     --theme-nav-bg: rgba(0, 0, 0, 0.3);

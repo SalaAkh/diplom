@@ -34,15 +34,15 @@
    --color-info: var(--color-galaxy-cyan);
 
    /* Dark Theme (Default) */
-   --color-space-void: #050510;
-   --color-space-deep: #0a0a1a;
-   --color-space-mid: #141428;
+   --color-space-void: #0b0c15;
+   --color-space-deep: #111222;
+   --color-space-mid: #181a30;
    --color-space-light: #1e1e3c;
 
    /* Light Theme Overrides */
-   --color-light-bg: #f0f2f5;
-   --color-light-surface: #ffffff;
-   --color-light-text: #2c3e50;
+   --color-light-bg: #f2f4f7;
+   --color-light-surface: #fafbfd;
+   --color-light-text: #334155;
 
    /* ============================================
        SPACING SYSTEM - 4px base unit
@@ -190,7 +190,7 @@ body {
    --bg-surface: var(--color-space-deep);
    --bg-elevated: var(--color-space-mid);
 
-   --card-bg: rgba(20, 20, 35, 0.2);
+   --card-bg: rgba(28, 30, 45, 0.4);
    --card-hover: rgba(30, 30, 50, 0.8);
 
    --border-color: rgba(255, 255, 255, 0.1);
@@ -215,13 +215,13 @@ body:not(.dark-theme) {
    --text-disabled: #b0b8c1;
    --text-light: var(--text-secondary);
 
-   --bg-color: #f8f9fa;
+   --bg-color: #f2f4f7;
    /* Softer background for light theme */
    --bg-surface: var(--color-light-surface);
    --bg-elevated: #ffffff;
 
    /* Enhance cards in light mode with subtle depth instead of pure white */
-   --card-bg: rgba(255, 255, 255, 0.85);
+   --card-bg: rgba(248, 250, 252, 0.85);
    --card-hover: rgba(255, 255, 255, 1);
 
    /* Stronger borders for light mode visibility */
