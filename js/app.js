@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ÒšÐ¾ÑÑ‹Ð¼ÑˆÐ°Ð½Ñ‹Ò£ Ð½ÐµÐ³Ñ–Ð·Ð³Ñ– Ð¼Ð¾Ð´ÑƒÐ»Ñ– (Main application module)
  * Ð‘Ð°Ñ€Ð»Ñ‹Ò› ÐºÐ¾Ð¼Ð¿Ð¾Ð½ÐµÐ½Ñ‚Ñ‚ÐµÑ€Ð´Ñ–Ò£ ÐºÒ¯Ð¹Ñ– Ð¼ÐµÐ½ Ó©Ð·Ð°Ñ€Ð° Ó™Ñ€ÐµÐºÐµÑ‚Ñ‚ÐµÑÑƒÑ–Ð½ Ð±Ð°ÑÒ›Ð°Ñ€Ð°Ð´Ñ‹ (Manages state and interaction of all components)
  * 
@@ -25,7 +25,7 @@ const criticalError = console.error.bind(console);
 const criticalLog = console.log.bind(console);
 
 // Easter Egg Signature
-console.log('%c Ó˜Ð·Ñ–Ñ€Ð»ÐµÐ³ÐµÐ½ ÐÑ…Ð¼ÐµÐ´ÑŒÑÐ½Ð¾Ð² Ð¡Ð°Ð»Ð°Ð¼Ð°Ñ‚ ÐšÐŸÐž 9/22-2 (Developed by Akhmedyanov Salamat) ', 'background: #222; color: #bada55; font-size: 12px; padding: 4px; border-radius: 4px;');
+console.log('%c Әзірлеген Ахмедьянов Саламат КПО 9/22-2 ', 'background: #222; color: #bada55; font-size: 12px; padding: 4px; border-radius: 4px;');
 
 /**
  * Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ debounce Ð´Ð»Ñ Ð·Ð°Ð´ÐµÑ€Ð¶ÐºÐ¸ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ

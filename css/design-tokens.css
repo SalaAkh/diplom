@@ -40,9 +40,9 @@
    --color-space-light: #1e1e3c;
 
    /* Light Theme Overrides */
-   --color-light-bg: #f2f4f7;
-   --color-light-surface: #fafbfd;
-   --color-light-text: #334155;
+   --color-light-bg: #d0d8e2;
+   --color-light-surface: #d8e0ea;
+   --color-light-text: #1e2d3d;
 
    /* ============================================
        SPACING SYSTEM - 4px base unit
@@ -210,36 +210,35 @@ body:not(.dark-theme) {
    --accent-color: var(--color-nebula-bright);
 
    --text-color: var(--color-light-text);
-   --text-secondary: #5a6c7d;
-   --text-tertiary: #7f8c9c;
-   --text-disabled: #b0b8c1;
+   --text-secondary: #4a5c6d;
+   --text-tertiary: #70808f;
+   --text-disabled: #a8b4be;
    --text-light: var(--text-secondary);
 
-   --bg-color: #f2f4f7;
-   /* Softer background for light theme */
-   --bg-surface: var(--color-light-surface);
-   --bg-elevated: #ffffff;
+   --bg-color: #d0d8e2;
+   --bg-surface: #d8e0ea;
+   --bg-elevated: #e2e8f0;
 
-   /* Enhance cards in light mode with subtle depth instead of pure white */
-   --card-bg: rgba(248, 250, 252, 0.85);
-   --card-hover: rgba(255, 255, 255, 1);
+   /* Cards — noticeable gray-blue tint */
+   --card-bg: rgba(200, 212, 228, 0.92);
+   --card-hover: rgba(192, 206, 222, 1);
 
    /* Stronger borders for light mode visibility */
-   --border-color: rgba(0, 0, 0, 0.08);
-   --border-hover: rgba(0, 0, 0, 0.15);
+   --border-color: rgba(0, 0, 0, 0.1);
+   --border-hover: rgba(0, 0, 0, 0.18);
    --border-focus: var(--color-nebula-deep);
 
-   --input-bg: rgba(0, 0, 0, 0.03);
-   --input-focus: rgba(0, 0, 0, 0.06);
+   --input-bg: rgba(0, 0, 0, 0.04);
+   --input-focus: rgba(0, 0, 0, 0.08);
 
    /* Override shadows for better depth on light background */
-   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
 
    /* Glass effects specifically for light theme */
-   --glass-medium: rgba(255, 255, 255, 0.7);
-   --glass-light: rgba(255, 255, 255, 0.5);
-   --glass-heavy: rgba(255, 255, 255, 0.9);
+   --glass-medium: rgba(228, 234, 242, 0.8);
+   --glass-light: rgba(228, 234, 242, 0.6);
+   --glass-heavy: rgba(236, 241, 246, 0.95);
 }
 
 /* ============================================

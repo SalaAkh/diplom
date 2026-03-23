@@ -43,11 +43,16 @@
     box-sizing: border-box;
 }
 
+html {
+    background: var(--theme-bg);
+    min-height: 100vh;
+}
+
 body {
     /* Typography handled by typography.css */
     color: var(--text-color);
     background: transparent;
-    /* Changed from var(--bg-color) to show canvas */
+    /* Required to show canvas and html background */
     min-height: 100vh;
     overflow-x: hidden;
 }
@@ -61,6 +66,11 @@ body {
     position: relative;
     z-index: 1;
     min-height: 100vh;
+}
+
+#background-canvas {
+    background: transparent;
+    transition: opacity 0.4s ease;
 }
 
 .dark-theme #app {
@@ -213,14 +223,13 @@ body:not(.dark-theme) #background-canvas {
 body:not(.dark-theme) .intro-screen .cosmic-card,
 body:not(.dark-theme) .feature-card,
 body:not(.dark-theme) .dimension-card {
-    background-color: rgba(255, 255, 255, 0.5) !important;
-    /* 50% opacity */
+    background-color: rgba(185, 200, 220, 0.7) !important;
 }
 
 body:not(.dark-theme) .user-info,
 body:not(.dark-theme) .auth-container,
 body:not(.dark-theme) .google-signin-container {
-    background-color: rgba(255, 255, 255, 0.2) !important;
+    background-color: rgba(185, 200, 220, 0.3) !important;
 }
 
 .intro-actions {

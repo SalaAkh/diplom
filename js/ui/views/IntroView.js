@@ -185,7 +185,7 @@ class IntroView extends BaseView {
                 </style>
                 <div class="cta-content">
                     <div class="cta-decorative-icons">
-                        <span class="material-symbols-rounded icon-1">psychology</span>
+                        <span class="material-symbols-rounded icon-1">neurology</span>
                         <span class="material-symbols-rounded icon-2">auto_awesome</span>
                         <span class="material-symbols-rounded icon-3">insights</span>
                         <span class="material-symbols-rounded icon-4">stars</span>
@@ -231,7 +231,7 @@ class IntroView extends BaseView {
      */
     getFeaturesHTML() {
         const features = [
-            { icon: 'psychology', key: 'featInteractive', descKey: 'featInteractiveDesc' },
+            { icon: 'neurology', key: 'featInteractive', descKey: 'featInteractiveDesc' },
             { icon: 'analytics', key: 'featPattern', descKey: 'featPatternDesc' },
             { icon: 'hub', key: 'feat3D', descKey: 'feat3DDesc' }
         ];
@@ -279,7 +279,7 @@ class IntroView extends BaseView {
             { icon: 'timeline', nameKey: 'strategicThinking', descKey: 'strategicDesc' },
             { icon: 'explore', nameKey: 'explorerThinking', descKey: 'explorerDesc' },
             { icon: 'person', nameKey: 'individualismThinking', descKey: 'individualismDesc' },
-            { icon: 'psychology', nameKey: 'rationalityThinking', descKey: 'rationalityDesc' },
+            { icon: 'neurology', nameKey: 'rationalityThinking', descKey: 'rationalityDesc' },
             { icon: 'tune', nameKey: 'controlThinking', descKey: 'controlDesc' },
             { icon: 'lightbulb', nameKey: 'meaningThinking', descKey: 'meaningDesc' }
         ];

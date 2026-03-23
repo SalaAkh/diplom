@@ -1,4 +1,4 @@
-﻿/**
+/**
  * UI Controller
  * Manages all UI interactions, rendering, and event handling
  */
@@ -919,7 +919,7 @@ class UIController {
                         </div>
                     </div>
                     <div class="hero-visual fade-in delay-3" aria-hidden="true">
-                        <span class="material-symbols-rounded floating-icon">psychology</span>
+                        <span class="material-symbols-rounded floating-icon">neurology</span>
                         <span class="material-symbols-rounded floating-icon delay-1">fingerprint</span>
                         <span class="material-symbols-rounded floating-icon delay-2">auto_graph</span>
                     </div>
@@ -934,7 +934,7 @@ class UIController {
                             <p data-i18n="featInteractiveDesc">12 Ð³Ð»ÑƒÐ±Ð¾ÐºÐ¸Ñ… Ð¸Ð½Ñ‚ÐµÑ€Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ñ… ÑÑ†ÐµÐ½Ð°Ñ€Ð¸ÐµÐ² Ñ Ð¼Ð½Ð¾Ð¶ÐµÑÑ‚Ð²Ð¾Ð¼ Ð¿ÑƒÑ‚ÐµÐ¹ Ñ€Ð°Ð·Ð²Ð¸Ñ‚Ð¸Ñ</p>
                         </div>
                         <div class="feature-card">
-                            <span class="feature-icon material-symbols-rounded" aria-hidden="true">psychology</span>
+                            <span class="feature-icon material-symbols-rounded" aria-hidden="true">neurology</span>
                             <h3 data-i18n="featPattern">ÐÐ½Ð°Ð»Ð¸Ð· Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½Ð¾Ð²</h3>
                             <p data-i18n="featPatternDesc">ÐšÐ¾Ð¼Ð¿Ð»ÐµÐºÑÐ½Ñ‹Ð¹ Ð°Ð½Ð°Ð»Ð¸Ð· ÐºÐ¾Ð³Ð½Ð¸Ñ‚Ð¸Ð²Ð½Ñ‹Ñ… Ð¿Ð°Ñ‚Ñ‚ÐµÑ€Ð½Ð¾Ð² Ð¸ ÑÑ‚Ð¸Ð»ÐµÐ¹ Ð¿Ñ€Ð¸Ð½ÑÑ‚Ð¸Ñ Ñ€ÐµÑˆÐµÐ½Ð¸Ð¹</p>
                         </div>

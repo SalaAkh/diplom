@@ -6,8 +6,8 @@
  * Мерзімі (Date): 2026
  */
 
-const CACHE_NAME = 'self-knowledge-v1.2';
-const RUNTIME_CACHE = 'runtime-cache-v1.2';
+const CACHE_NAME = 'self-knowledge-v1.5';
+const RUNTIME_CACHE = 'runtime-cache-v1.5';
 
 // Файлы для кэширования при установке
 const STATIC_CACHE_URLS = [

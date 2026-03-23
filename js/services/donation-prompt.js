@@ -71,6 +71,27 @@
                 transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease;
                 opacity: 0;
             }
+            body:not(.dark-theme) .global-donation-prompt {
+                background: linear-gradient(145deg, rgba(165, 185, 210, 0.95), rgba(145, 168, 198, 0.9));
+                border: 1px solid rgba(100, 140, 190, 0.3);
+                border-top: 1px solid rgba(74, 144, 226, 0.5);
+                box-shadow: 0 20px 50px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.3);
+                color: #1a2533;
+            }
+            body:not(.dark-theme) .donation-prompt-text {
+                color: #2c3e50;
+            }
+            body:not(.dark-theme) .donation-prompt-close {
+                background: rgba(0,0,0,0.08);
+                border-color: rgba(0,0,0,0.15);
+                color: #2c3e50;
+            }
+            body:not(.dark-theme) .donation-btn-bmc,
+            body:not(.dark-theme) .donation-btn-kaspi {
+                background: rgba(255,255,255,0.3);
+                color: #1a2533;
+                border: 1px solid rgba(0,0,0,0.15);
+            }
             .global-donation-prompt::before {
                 content: '';
                 position: absolute;

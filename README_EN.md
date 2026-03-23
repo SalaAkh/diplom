@@ -52,7 +52,7 @@ To create an interactive system serving as a tool for user self-discovery:
 
 ## 📁 Project Structure
 
-```
+```text
 diplom-main/
 ├── index.html                   # Main page (landing + test)
 ├── about.html                   # About system page
@@ -197,6 +197,8 @@ Translations are stored in `js/services/localization.js` and `js/services/locali
 - **Read Aloud** — using Text-to-Speech (TTS) for results
 - **Keyboard Navigation** — full navigation without a mouse
 - **ARIA Attributes** — full compatibility with Screen Readers
+- **Forms Accessibility** — `autocomplete` attributes and associated `<label>` tags for all input fields
+- **Eye Strain Reduction** — optimized color balance for light and dark themes
 
 Full guide: [ACCESSIBILITY.md](ACCESSIBILITY.md)
 
