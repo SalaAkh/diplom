@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Локализация модулі (Localization module)
  * Қазақ (негізгі), орыс және ағылшын тілдерін қолдау (Support for Kazakh (primary), Russian and English)
  * 
@@ -106,6 +106,7 @@ class LocalizationManager {
                 patternAnalysis: "Ойлау үлгілері мен когнитивті стильдерді терең талдау",
                 visualProfile: "Нейрондық шоқжұлдыз түріндегі динамикалық 3D-профиль",
                 aiAnalysis: "🤖 Жасанды интеллект негізіндегі жекеленген терең есеп",
+                aiDevelopmentNote: "Аталған жобадағы психологиялық сценарийлер мен есептеу алгоритмдері жасанды интеллект (ЖИ) көмегімен әзірленді.",
                 personalizedRecommendations: "Даму бағыттары бойынша практикалық ұсыныстар",
                 analysisDimensions: "Талдау бағыттары:",
                 strategicThinking: "Стратегия ↔ Тактика",
@@ -577,6 +578,7 @@ class LocalizationManager {
                 patternAnalysis: "Комплексный анализ когнитивных паттернов и стилей принятия решений",
                 visualProfile: "Динамический 3D-профиль личности в виде нейронного созвездия",
                 aiAnalysis: "🤖 Персонализированный ИИ-отчет с глубокой интерпретацией результатов",
+                aiDevelopmentNote: "Психологические сценарии и алгоритмы расчета в данном проекте были разработаны с помощью искусственного интеллекта (ИИ).",
                 personalizedRecommendations: "Индивидуальная стратегия развития и практические советы",
                 analysisDimensions: "Ключевые грани вашего разума:",
                 dimensionsTitle: "Ключевые грани вашего разума",
@@ -1426,6 +1428,7 @@ class LocalizationManager {
                 summaryIntro: "Your profile is characterized by:",
                 summaryStrengths: "Your strengths:",
                 summaryBalanced: "Your profile demonstrates a balanced approach across all dimensions.",
+                aiDevelopmentNote: "The psychological scenarios and calculation algorithms in this project were developed using artificial intelligence (AI).",
                 analyzerLevelHigh: "high",
                 analyzerLevelModerate: "moderate",
                 analyzerLevelLow: "low",
