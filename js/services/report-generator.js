@@ -398,13 +398,16 @@ class ReportGenerator {
      * @param {string} content - Содержимое
      */
     download(filename, content) {
+        const blob = new Blob([content], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
         const element = document.createElement('a');
-        element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(content));
+        element.setAttribute('href', url);
         element.setAttribute('download', filename);
         element.style.display = 'none';
         document.body.appendChild(element);
         element.click();
         document.body.removeChild(element);
+        URL.revokeObjectURL(url);
     }
 }
 

@@ -1198,7 +1198,16 @@ class PersonalityTestApp {
      * Ð¡ÐºÐ°Ñ‡Ð¸Ð²Ð°Ð½Ð¸Ðµ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð¾Ð²
      */
     downloadResults(format = 'html') {
-        if (this.testMode === 'cognitive' && this.resultsManager) {
+        let isCognitive = this.testMode === 'cognitive';
+        if (this.activeResults) {
+            if (this.activeResults.scores || this.activeResults.profile) {
+                isCognitive = false;
+            } else if (this.activeResults.breakdown || this.activeResults.dominant) {
+                isCognitive = true;
+            }
+        }
+        
+        if (isCognitive && this.resultsManager) {
             const results = this.activeResults || (this.storage ? this.storage.loadCognitiveResults() : null);
             return this.resultsManager.downloadCognitiveResults(results);
         }
