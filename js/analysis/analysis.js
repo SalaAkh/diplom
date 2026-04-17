@@ -308,11 +308,10 @@ class PersonalityAnalyzer {
             // Используем фактическое количество вопросов для этого измерения, а не общее
             const effectiveCount = Math.max(1, dimCoverage.count);
 
-            // Нормализация: делим на эффективное количество и ограничиваем [-1, 1]
-            let normalizedScore = rawScore / effectiveCount;
+            // Нормализация: используем гиперболический тангенс (tanh) согласно математической модели диплома
+            let normalizedScore = Math.tanh(rawScore / effectiveCount);
 
             // Дополнительная коррекция на полноту покрытия
-            // Если измерение покрыто недостаточно, уменьшаем уверенность
             if (dimCoverage.coverage < 0.3) {
                 normalizedScore *= dimCoverage.coverage / 0.3; // Масштабируем при низком покрытии
             }
