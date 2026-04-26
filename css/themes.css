@@ -15,47 +15,47 @@
 /* Light Theme (По умолчанию) */
 :root,
 body:not(.dark-theme) {
-    /* Основные цвета (умеренно тёмные, матовые нейтральные) */
-    --theme-bg: linear-gradient(135deg, #b8c4d4 0%, #c8d4e2 100%);
-    --theme-bg-solid: #c0cad8;
-    --theme-text: #1a2533;
-    --theme-text-light: #3a4e62;
-    --theme-primary: #2d6fb8;
-    --theme-secondary: #5e4bb5;
-    --theme-accent: #009abd;
+    /* Основные цвета — чистый светлый стиль */
+    --theme-bg: linear-gradient(160deg, #f0f4ff 0%, #e8edf8 50%, #f5f0ff 100%);
+    --theme-bg-solid: #f0f4ff;
+    --theme-text: #0f1f3d;
+    --theme-text-light: #4a5568;
+    --theme-primary: #2563eb;
+    --theme-secondary: #7c3aed;
+    --theme-accent: #0891b2;
 
-    /* Карточки */
-    --theme-card: rgba(185, 200, 218, 0.85);
-    --theme-card-hover: rgba(195, 210, 228, 0.95);
-    --theme-border: rgba(0, 0, 0, 0.15);
-    --theme-shadow: 0 8px 32px 0 rgba(10, 20, 40, 0.18);
-    --theme-shadow-hover: 0 12px 48px 0 rgba(10, 20, 40, 0.28);
+    /* Карточки — белые/светлые с чёткой тенью для глубины */
+    --theme-card: rgba(255, 255, 255, 0.90);
+    --theme-card-hover: rgba(255, 255, 255, 1);
+    --theme-border: rgba(37, 99, 235, 0.12);
+    --theme-shadow: 0 4px 24px rgba(15, 31, 61, 0.10), 0 1px 4px rgba(15, 31, 61, 0.06);
+    --theme-shadow-hover: 0 12px 48px rgba(15, 31, 61, 0.16), 0 2px 8px rgba(15, 31, 61, 0.08);
 
     /* Header/Footer */
-    --theme-header-bg: rgba(170, 185, 205, 0.88);
-    --theme-header-border: rgba(255, 255, 255, 0.25);
-    --theme-footer-bg: rgba(170, 185, 205, 0.95);
+    --theme-header-bg: rgba(255, 255, 255, 0.82);
+    --theme-header-border: rgba(37, 99, 235, 0.15);
+    --theme-footer-bg: rgba(240, 244, 255, 0.95);
 
     /* Навигация */
-    --theme-nav-bg: rgba(255, 255, 255, 0.08);
-    --theme-nav-item-hover: rgba(255, 255, 255, 0.15);
-    --theme-nav-active: rgba(74, 144, 226, 0.2);
+    --theme-nav-bg: rgba(255, 255, 255, 0.95);
+    --theme-nav-item-hover: rgba(37, 99, 235, 0.08);
+    --theme-nav-active: rgba(37, 99, 235, 0.12);
 
     /* Кнопки */
-    --theme-btn-primary-bg: linear-gradient(135deg, #00c6fb, #005bea);
-    --theme-btn-primary-shadow: 0 4px 15px rgba(0, 91, 234, 0.4);
-    --theme-btn-secondary-bg: var(--theme-card);
+    --theme-btn-primary-bg: linear-gradient(135deg, #2563eb, #7c3aed);
+    --theme-btn-primary-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);
+    --theme-btn-secondary-bg: rgba(255, 255, 255, 0.95);
     --theme-btn-secondary-border: var(--theme-primary);
 
     /* Прогресс */
-    --theme-progress-bg: var(--theme-card);
-    --theme-progress-fill: linear-gradient(90deg, #00c6fb, #005bea);
+    --theme-progress-bg: rgba(37, 99, 235, 0.08);
+    --theme-progress-fill: linear-gradient(90deg, #2563eb, #7c3aed);
 
     /* Специфичные */
-    --theme-success: #50c878;
-    --theme-warning: #f39c12;
-    --theme-danger: #e74c3c;
-    --theme-info: #3498db;
+    --theme-success: #059669;
+    --theme-warning: #d97706;
+    --theme-danger: #dc2626;
+    --theme-info: #0891b2;
 }
 
 /* Dark Theme */

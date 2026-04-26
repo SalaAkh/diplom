@@ -922,3 +922,72 @@
         transform: translateY(0);
     }
 }
+
+/* ============================================
+   PAGES — 480px (маленькие телефоны)
+   ============================================ */
+@media (max-width: 480px) {
+    .profile-hero {
+        padding: var(--space-5) var(--space-3);
+    }
+
+    .profile-avatar,
+    .user-avatar-lg {
+        width: 80px;
+        height: 80px;
+        font-size: 32px;
+    }
+
+    .profile-name {
+        font-size: var(--text-xl);
+    }
+
+    .profile-stats {
+        gap: var(--space-3);
+    }
+
+    .stat-value {
+        font-size: var(--text-2xl);
+    }
+
+    .about-hero {
+        padding: var(--space-6) var(--space-3);
+    }
+
+    .about-hero h1 {
+        font-size: var(--text-2xl);
+    }
+
+    .intro-screen {
+        padding: var(--space-5) var(--space-3);
+        min-height: 50vh;
+    }
+
+    .intro-screen h1 {
+        font-size: clamp(1.8rem, 7vw, 2.5rem);
+    }
+
+    .intro-screen .actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .intro-screen .btn-primary {
+        width: 100%;
+        padding: 1rem 2rem;
+        font-size: var(--text-base);
+    }
+
+    .continue-test-banner {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .history-item {
+        padding: var(--space-3);
+    }
+
+    .history-list {
+        padding-left: 0;
+    }
+}

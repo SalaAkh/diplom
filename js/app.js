@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ÒšÐ¾ÑÑ‹Ð¼ÑˆÐ°Ð½Ñ‹Ò£ Ð½ÐµÐ³Ñ–Ð·Ð³Ñ– Ð¼Ð¾Ð´ÑƒÐ»Ñ– (Main application module)
  * Ð‘Ð°Ñ€Ð»Ñ‹Ò› ÐºÐ¾Ð¼Ð¿Ð¾Ð½ÐµÐ½Ñ‚Ñ‚ÐµÑ€Ð´Ñ–Ò£ ÐºÒ¯Ð¹Ñ– Ð¼ÐµÐ½ Ó©Ð·Ð°Ñ€Ð° Ó™Ñ€ÐµÐºÐµÑ‚Ñ‚ÐµÑÑƒÑ–Ð½ Ð±Ð°ÑÒ›Ð°Ñ€Ð°Ð´Ñ‹ (Manages state and interaction of all components)
  * 
@@ -632,7 +632,7 @@ class PersonalityTestApp {
             else if (savedProgress.testMode === 'cognitive' || savedProgress.mode === 'cognitive') {
                 this.testMode = 'cognitive';
                 if (this.testManager) this.testManager.testMode = 'cognitive';
-                console.log('âœ… Cognitive test progress detected');
+                console.log('[OK] Cognitive test progress detected');
             }
         }
     }
@@ -1017,7 +1017,7 @@ class PersonalityTestApp {
                             // Validate and Init Advanced Analyzer
                             if (data && typeof AdvancedPersonalityAnalyzer !== 'undefined') {
                                 this.analyzer = new AdvancedPersonalityAnalyzer(data);
-                                console.log('âœ… Ð–Ð°Ð»Ò“Ð°ÑÑ‚Ñ‹Ñ€Ñƒ Ò¯ÑˆÑ–Ð½ ÐºÐµÒ£ÐµÐ¹Ñ‚Ñ–Ð»Ð³ÐµÐ½ Ð°Ð½Ð°Ð»Ð¸Ð·Ð°Ñ‚Ð¾Ñ€ Ð¸Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸ÑÐ»Ð°Ð½Ð´Ñ‹ (âœ… Advanced Analyzer initialized for continuation)');
+                                console.log('[OK] Advanced Analyzer initialized for continuation');
                             }
 
                             // Restore question index
@@ -1095,7 +1095,7 @@ class PersonalityTestApp {
                             scenarios: this.scenarios,
                             dimensions: this.dimensions
                         });
-                        console.log('âœ… Basic Analyzer initialized for continuation');
+                        console.log('[OK] Basic Analyzer initialized for continuation');
                     }
 
                     // Restore choices to analyzer
@@ -2309,9 +2309,9 @@ function initializeApp() {
     try {
         app = new PersonalityTestApp();
         window.app = app; // Expose to global scope for onclick handlers
-        console.log('âœ… window.app initialized:', window.app);
-        console.log('âœ… app.renameTest exists:', typeof app.renameTest);
-        console.log('âœ… app.deleteTest exists:', typeof app.deleteTest);
+        console.log('[OK] window.app initialized:', window.app);
+        console.log('[OK] app.renameTest exists:', typeof app.renameTest);
+        console.log('[OK] app.deleteTest exists:', typeof app.deleteTest);
         // Ð’Ñ‹Ð·Ñ‹Ð²Ð°ÐµÐ¼ init() Ð¿Ð¾ÑÐ»Ðµ ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ñ ÑÐºÐ·ÐµÐ¼Ð¿Ð»ÑÑ€Ð°
         if (app && typeof app.init === 'function') {
             app.init().catch(error => {

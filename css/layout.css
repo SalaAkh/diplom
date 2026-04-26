@@ -21,6 +21,7 @@
     max-width: 900px;
     margin: 0 auto;
     width: 100%;
+    padding: 0 var(--space-4);
 }
 
 .container-lg {
@@ -66,7 +67,7 @@
 
 @media (max-width: 768px) {
     .container {
-        padding: 0 var(--space-4);
+        padding: 0 var(--space-3);
     }
 
     .card-grid,
@@ -75,6 +76,17 @@
     .card-grid-4 {
         grid-template-columns: 1fr;
         gap: var(--space-4);
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 var(--space-2);
+    }
+
+    .cosmic-card {
+        padding: var(--space-4);
+        border-radius: var(--radius-lg);
     }
 }
 

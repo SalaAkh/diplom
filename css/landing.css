@@ -21,11 +21,8 @@
     gap: 4rem;
     padding: 8rem 4rem;
     margin: 1rem;
-    /* Margin to make corners visible */
     border-radius: 48px;
-    /* Rounded corners */
     border: 1px solid rgba(255, 255, 255, 0.05);
-    /* Transparent background to show canvas */
     background: radial-gradient(circle at top right, rgba(102, 126, 234, 0.05) 0%, transparent 60%),
         radial-gradient(circle at bottom left, rgba(118, 75, 162, 0.05) 0%, transparent 60%);
     backdrop-filter: blur(5px);
@@ -37,20 +34,18 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-
-/* Glassmorphism card for content if needed, or just clean typography */
+/* Glassmorphism card for content */
 .hero-content {
     flex: 1;
     max-width: 1000px;
     z-index: 2;
     padding: 3.5rem 4rem;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--glass-light);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
-    /* Increased border-radius for "rounded sides" capsule effect */
     border-radius: 64px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
 }
 
 .hero-title {
@@ -286,7 +281,7 @@ body:not(.dark-theme) .hero-visual {
 
 body:not(.dark-theme) .floating-icon {
     color: var(--primary-color);
-    background: rgba(180, 198, 220, 0.85);
+    background: rgba(255, 255, 255, 0.90);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     width: 110px;
@@ -295,10 +290,10 @@ body:not(.dark-theme) .floating-icon {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    border: 1px solid rgba(120, 150, 190, 0.4);
+    border: 1px solid var(--border-color);
     box-shadow:
-        0 15px 35px rgba(0, 0, 0, 0.1),
-        0 5px 15px rgba(74, 144, 226, 0.15);
+        0 8px 24px rgba(37, 99, 235, 0.12),
+        0 2px 8px rgba(37, 99, 235, 0.08);
     font-size: 3.5rem;
     text-shadow: none;
 }
@@ -327,7 +322,6 @@ body:not(.dark-theme) .floating-icon {
 .how-it-works-section,
 .dimensions-section,
 .cta-section {
-    /* Increased padding for bigger gaps between "screens" */
     padding: 8rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -335,9 +329,9 @@ body:not(.dark-theme) .floating-icon {
 
 .section-title {
     text-align: center;
-    font-size: 3rem;
+    font-size: clamp(1.75rem, 5vw, 3rem);
     font-weight: 800;
-    margin-bottom: 5rem;
+    margin-bottom: 4rem;
     color: var(--text-color);
     letter-spacing: -0.02em;
 }
@@ -349,9 +343,8 @@ body:not(.dark-theme) .section-title {
 /* Features Grid */
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    /* Increased gap between cards */
-    gap: 4rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
 }
 
 .feature-card {
@@ -389,17 +382,17 @@ body:not(.dark-theme) .section-title {
 
 /* Light Theme Visibility for Features */
 body:not(.dark-theme) .feature-card {
-    background: rgba(185, 200, 220, 0.9);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border-color: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 4px 20px rgba(15, 31, 61, 0.08);
+    border-color: rgba(37, 99, 235, 0.12);
 }
 
 body:not(.dark-theme) .feature-card:hover {
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 32px rgba(15, 31, 61, 0.12);
 }
 
 body:not(.dark-theme) .feature-card h3 {
-    color: #0f172a;
+    color: var(--theme-primary);
 }
 
 /* How It Works */
@@ -454,21 +447,21 @@ body:not(.dark-theme) .feature-card h3 {
 
 /* Light Theme Visibility Enhancements for How It Works */
 body:not(.dark-theme) .step {
-    background: rgba(185, 200, 220, 0.9);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.92);
+    border: 2px solid var(--theme-primary);
+    box-shadow: 0 4px 20px rgba(15, 31, 61, 0.08);
 }
 
 body:not(.dark-theme) .step h3 {
-    color: #0f172a;
+    color: var(--theme-text);
 }
 
 body:not(.dark-theme) .step p {
-    color: #475569;
+    color: var(--theme-text-light);
 }
 
 body:not(.dark-theme) .step-arrow {
-    color: #cbd5e1;
+    color: var(--theme-primary);
     text-shadow: none;
 }
 
@@ -587,20 +580,32 @@ body:not(.dark-theme) .step-arrow {
     opacity: 0.7;
 }
 
-/* Responsive */
+/* ============================================
+   RESPONSIVE — 768px (tablet/large phone)
+   ============================================ */
 @media (max-width: 768px) {
     .hero-section {
         flex-direction: column;
         text-align: center;
-        padding: 4rem 1.5rem;
+        padding: 5rem 1.5rem 3rem;
+        margin: 0;
+        border-radius: 0;
+        min-height: auto;
+        gap: 2rem;
+    }
+
+    .hero-content {
+        padding: 2rem 1.5rem;
+        border-radius: 24px;
+        max-width: 100%;
     }
 
     .hero-title {
-        font-size: 2.5rem;
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
     }
 
     .hero-subtitle {
-        font-size: 1.125rem;
+        font-size: 1rem;
     }
 
     .hero-cta {
@@ -608,15 +613,18 @@ body:not(.dark-theme) .step-arrow {
     }
 
     .hero-visual {
-        height: 300px;
+        height: 240px;
+        width: 100%;
     }
 
     .section-title {
-        font-size: 2rem;
+        font-size: 1.75rem;
+        margin-bottom: 2.5rem;
     }
 
     .features-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 
     .steps-container {
@@ -634,6 +642,48 @@ body:not(.dark-theme) .step-arrow {
     .user-info-banner {
         flex-direction: column;
         text-align: center;
+    }
+
+    /* Sections padding */
+    .features-section,
+    .how-it-works-section,
+    .dimensions-section {
+        padding: 4rem 1.5rem;
+    }
+
+    .mission-section {
+        padding: 4rem 1.5rem;
+    }
+
+    .methodology-section {
+        padding: 4rem 1.5rem;
+    }
+
+    .value-section {
+        padding: 4rem 1.5rem;
+    }
+
+    .cta-section {
+        padding: 4rem 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .cta-content {
+        padding: 2.5rem 1.5rem;
+        border-radius: 20px;
+    }
+
+    .cta-content h2 {
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+    }
+
+    .mission-content {
+        padding: 2rem 1.25rem;
+        border-radius: 20px;
+    }
+
+    .mission-text {
+        font-size: 1.1rem;
     }
 }
 
@@ -655,7 +705,9 @@ body:not(.dark-theme) .step-arrow {
     gap: 0.75rem;
 }
 
-/* Mobile adjustments for CTA buttons */
+/* ============================================
+   RESPONSIVE — 600px
+   ============================================ */
 @media (max-width: 600px) {
     .cta-actions-group {
         flex-direction: column;
@@ -666,6 +718,25 @@ body:not(.dark-theme) .step-arrow {
     .cta-actions-group .btn {
         width: 100%;
         min-width: unset;
+    }
+
+    /* Скрываем floating icons — перекрывают контент */
+    .floating-icon {
+        display: none !important;
+    }
+
+    .hero-visual {
+        height: 160px;
+    }
+
+    .btn-lg {
+        padding: 0.9rem 1.8rem;
+        font-size: 0.95rem;
+    }
+
+    .btn-xl {
+        padding: 1rem 2rem;
+        font-size: 1rem;
     }
 }
 
@@ -781,9 +852,9 @@ body:not(.dark-theme) .step-arrow {
 }
 
 body:not(.dark-theme) .cta-content {
-    background: rgba(180, 198, 220, 0.85);
-    border-color: rgba(0, 0, 0, 0.1);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.90);
+    border-color: rgba(37, 99, 235, 0.12);
+    box-shadow: 0 12px 40px rgba(15, 31, 61, 0.10);
 }
 
 .cta-content h2 {
@@ -932,8 +1003,8 @@ body:not(.dark-theme) .cta-content h2 {
 
 .holo-circle {
     position: absolute;
-    width: 380px;
-    height: 380px;
+    width: min(380px, 70vw);
+    height: min(380px, 70vw);
     border-radius: 50%;
     border: 1px solid rgba(var(--primary-rgb), 0.3);
     box-shadow: 0 0 40px rgba(var(--primary-rgb), 0.1), inset 0 0 40px rgba(var(--primary-rgb), 0.05);
@@ -954,8 +1025,8 @@ body:not(.dark-theme) .cta-content h2 {
 }
 
 .holo-circle.delayed {
-    width: 280px;
-    height: 280px;
+    width: min(280px, 55vw);
+    height: min(280px, 55vw);
     border-color: rgba(var(--accent-rgb), 0.3);
     animation-direction: reverse;
     animation-duration: 25s;
@@ -1010,16 +1081,17 @@ body:not(.dark-theme) .cta-content h2 {
     text-align: justify;
 }
 
-/* Mobile Adjustments */
+/* ============================================
+   RESPONSIVE — 900px (methodology)
+   ============================================ */
 @media (max-width: 900px) {
     .methodology-wrapper {
         grid-template-columns: 1fr;
-        /* Stack on mobile */
         text-align: center;
-        gap: 3rem;
+        gap: 2rem;
     }
 
-    .methodology-text>p {
+    .methodology-text > p {
         border-left: none;
         border-top: 3px solid rgba(var(--primary-rgb), 0.5);
         padding-top: 1rem;
@@ -1027,7 +1099,6 @@ body:not(.dark-theme) .cta-content h2 {
     }
 
     .science-grid {
-        /* Force 1 column on very small screens if needed, but auto-fit handles it */
         text-align: left;
     }
 
@@ -1037,5 +1108,95 @@ body:not(.dark-theme) .cta-content h2 {
 
     .mission-content {
         padding: 2.5rem 1.5rem;
+    }
+
+    .methodology-visual {
+        height: 300px;
+    }
+
+    .value-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-top: 2.5rem;
+    }
+}
+
+/* ============================================
+   RESPONSIVE — 480px (маленькие телефоны)
+   ============================================ */
+@media (max-width: 480px) {
+    .hero-section {
+        padding: 3.5rem 1rem 2.5rem;
+    }
+
+    .hero-content {
+        padding: 1.5rem 1rem;
+        border-radius: 16px;
+    }
+
+    .hero-title {
+        font-size: 1.7rem;
+        letter-spacing: -0.01em;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .features-section,
+    .how-it-works-section,
+    .dimensions-section,
+    .mission-section,
+    .methodology-section,
+    .value-section {
+        padding: 3rem 1rem;
+    }
+
+    .cta-section {
+        padding: 3rem 1rem;
+    }
+
+    .cta-content {
+        padding: 2rem 1rem;
+        border-radius: 16px;
+    }
+
+    .cta-content h2 {
+        font-size: 1.4rem;
+    }
+
+    .cta-content p {
+        font-size: 1rem;
+    }
+
+    .mission-content {
+        padding: 1.5rem 1rem;
+        border-radius: 16px;
+    }
+
+    .mission-text {
+        font-size: 1rem;
+    }
+
+    .feature-card h3 {
+        font-size: 1.25rem;
+    }
+
+    .feature-card p {
+        font-size: 1rem;
+    }
+
+    .step {
+        max-width: 100%;
+        padding: 1.5rem 1rem;
+    }
+
+    .methodology-visual {
+        display: none;
     }
 }

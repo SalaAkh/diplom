@@ -110,7 +110,7 @@
 
 .nav-logo {
     font-family: var(--font-display);
-    font-size: var(--text-4xl);
+    font-size: clamp(1.75rem, 5vw, var(--text-4xl));
     font-weight: var(--weight-bold);
     background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
     -webkit-background-clip: text;
@@ -121,7 +121,6 @@
     display: flex;
     align-items: center;
     padding-right: var(--space-2);
-    /* Prevent icon clipping */
 }
 
 .nav-logo .material-symbols-rounded {
@@ -465,8 +464,8 @@
     width: 36px;
     height: 36px;
     border-radius: var(--radius-md);
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
     color: var(--text-color);
     display: flex;
     align-items: center;
@@ -480,7 +479,7 @@
 }
 
 .nav-close-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--input-focus);
 }
 
 .nav-mobile-controls {
@@ -509,7 +508,9 @@
         padding: var(--space-4);
         border-right: none;
         border-top: none;
-        background: rgba(15, 23, 42, 0.98);
+        background: var(--glass-heavy);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         overflow-y: auto;
@@ -590,7 +591,36 @@
         flex-shrink: 0;
         width: 100%;
         display: block;
-        /* Ensure visibility */
+    }
+}
+
+/* ============================================
+   MOBILE — 480px (маленькие телефоны)
+   ============================================ */
+@media (max-width: 480px) {
+    .cosmic-nav,
+    .cosmic-nav.collapsed {
+        padding: var(--space-3);
+    }
+
+    .nav-item {
+        padding: var(--space-3) var(--space-3);
+        font-size: var(--text-base);
+        min-height: 48px; /* минимум touch target */
+    }
+
+    .nav-text {
+        font-size: var(--text-base);
+    }
+
+    .nav-toggle {
+        width: 40px;
+        height: 40px;
+    }
+
+    .nav-close-btn {
+        width: 40px;
+        height: 40px;
     }
 }
 

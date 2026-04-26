@@ -346,9 +346,16 @@ class ProfileExtensions {
         const userData = Object.values(comparison.dimensions).map(d => Math.round((d.user + 1) * 50));
         const roleData = Object.values(comparison.dimensions).map(d => Math.round((d.role + 1) * 50));
 
+
         if (this.comparisonChart) {
             this.comparisonChart.destroy();
         }
+
+        // Detect current theme for chart colors
+        const isLight = !document.body.classList.contains('dark-theme');
+        const gridColor = isLight ? 'rgba(37, 99, 235, 0.12)' : 'rgba(255, 255, 255, 0.1)';
+        const tickColor = isLight ? '#4b5563' : '#94a3b8';
+        const labelColor = isLight ? '#0f1f3d' : '#e2e8f0';
 
         this.comparisonChart = new Chart(ctx, {
             type: 'radar',
@@ -389,18 +396,18 @@ class ProfileExtensions {
                         max: 100,
                         ticks: {
                             stepSize: 25,
-                            color: '#94a3b8',
+                            color: tickColor,
                             backdropColor: 'transparent',
                             font: { size: 10 }
                         },
                         grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
+                            color: gridColor
                         },
                         angleLines: {
-                            color: 'rgba(255, 255, 255, 0.1)'
+                            color: gridColor
                         },
                         pointLabels: {
-                            color: '#e2e8f0',
+                            color: labelColor,
                             font: { size: 12, weight: '500' }
                         }
                     }
@@ -409,7 +416,7 @@ class ProfileExtensions {
                     legend: {
                         position: 'bottom',
                         labels: {
-                            color: '#e2e8f0',
+                            color: labelColor,
                             usePointStyle: true,
                             padding: 20,
                             font: { size: 13 }
@@ -419,6 +426,7 @@ class ProfileExtensions {
             }
         });
     }
+
 
     /**
      * Рендер деталей сравнения
