@@ -3807,11 +3807,17 @@ body:not(.dark-theme) .profile-summary-card {
     box-shadow: var(--shadow-md);
 }
 
-/* tag-чипы в казахских блоках */
-body:not(.dark-theme) .skill-tag {
+/* tag-чипы в казахских блоках и about */
+body:not(.dark-theme) .skill-tag,
+body:not(.dark-theme) .tag {
     background: rgba(37, 99, 235, 0.06);
     border-color: rgba(37, 99, 235, 0.2);
     color: var(--primary-color);
+}
+
+body:not(.dark-theme) .tag:hover {
+    background: rgba(37, 99, 235, 0.15);
+    border-color: rgba(37, 99, 235, 0.3);
 }
 
 /* Кнопки в results-actions */

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ReportGenerator - Служба генерации отчетов
  * Формирует HTML файл с результатами теста для скачивания
  * 
@@ -41,7 +41,7 @@ class ReportGenerator {
                 const imgData = liveCanvas.toDataURL('image/png');
                 content = content.replace(
                     /<div[^>]*id="radarChartContainer"[^>]*>[\s\S]*?<\/div>/i,
-                    `<div class="chart-container" id="radarChartContainer" style="text-align: center; padding: 20px 0; background: linear-gradient(135deg, #10111e 0%, #050510 100%); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 20px 0;">
+                    `<div class="chart-container" id="radarChartContainer" style="text-align: center; padding: 20px 0; background: var(--chart-bg); border-radius: 20px; box-shadow: var(--chart-shadow); margin: 20px 0;">
                         <img src="${imgData}" alt="Visual Profile" style="max-width: 100%; width: 450px; height: auto; display: inline-block;">
                      </div>`
                 );
@@ -86,6 +86,8 @@ class ReportGenerator {
             --btn-theme-bg: rgba(255,255,255,0.1);
             --btn-theme-border: rgba(255,255,255,0.2);
             --btn-theme-color: #e0e0e0;
+            --chart-bg: linear-gradient(135deg, #10111e 0%, #050510 100%);
+            --chart-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         /* ── LIGHT THEME ── */
@@ -102,6 +104,8 @@ class ReportGenerator {
             --btn-theme-bg: rgba(37,99,235,0.08);
             --btn-theme-border: rgba(37,99,235,0.2);
             --btn-theme-color: #2563eb;
+            --chart-bg: linear-gradient(135deg, #e8effe 0%, #f0f4ff 100%);
+            --chart-shadow: 0 10px 30px rgba(37,99,235,0.08);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }

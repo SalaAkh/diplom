@@ -2069,13 +2069,22 @@ class UIController {
                     borderWidth: 3,
                     pointRadius: 6,
                     pointHoverRadius: 9,
-                    pointBackgroundColor: '#1a1a2e',
+                    pointBackgroundColor: document.body.classList.contains('dark-theme') ? '#1a1a2e' : '#ffffff',
                     pointBorderWidth: 2,
                     fill: false
                 });
                 colorIndex++;
             }
         });
+
+        // Theme colors
+        const isLight = !document.body.classList.contains('dark-theme');
+        const textColor = isLight ? '#4b5563' : '#e2e8f0';
+        const tickColor = isLight ? '#6b7280' : '#94a3b8';
+        const gridColor = isLight ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.05)';
+        const tooltipBg = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(15, 23, 42, 0.95)';
+        const tooltipTitle = isLight ? '#111827' : '#fff';
+        const tooltipBody = isLight ? '#374151' : '#e2e8f0';
 
         // Destroy existing chart
         if (this.evolutionChartInstance) {
@@ -2104,16 +2113,16 @@ class UIController {
                     legend: {
                         position: 'bottom',
                         labels: {
-                            color: '#e2e8f0',
+                            color: textColor,
                             usePointStyle: true,
                             padding: 20,
                             font: { size: 13, family: "'Inter', sans-serif" }
                         }
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                        titleColor: '#fff',
-                        bodyColor: '#e2e8f0',
+                        backgroundColor: tooltipBg,
+                        titleColor: tooltipTitle,
+                        bodyColor: tooltipBody,
                         padding: 12,
                         cornerRadius: 8,
                         titleFont: { size: 14, weight: 'bold' },
@@ -2130,10 +2139,10 @@ class UIController {
                         min: -100,
                         max: 100,
                         grid: {
-                            color: 'rgba(255, 255, 255, 0.05)',
+                            color: gridColor,
                         },
                         ticks: {
-                            color: '#94a3b8',
+                            color: tickColor,
                             font: { size: 12 },
                             stepSize: 50
                         },
@@ -2144,7 +2153,7 @@ class UIController {
                             display: false
                         },
                         ticks: {
-                            color: '#94a3b8',
+                            color: tickColor,
                             font: { size: 12 },
                             maxRotation: 45,
                             minRotation: 0
