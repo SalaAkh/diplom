@@ -216,10 +216,10 @@ class AccessibilityService {
         const badge = document.getElementById('ttsStatusBadge');
         if (!badge) return;
         if (this.settings.reading) {
-            badge.textContent = '🔊 Активен';
+            badge.textContent = window.i18n ? window.i18n.t('ttsActive') : '🔊 Активен';
             badge.style.color = '#10b981';
         } else {
-            badge.textContent = '🔇 Выключен';
+            badge.textContent = window.i18n ? window.i18n.t('ttsInactive') : '🔇 Выключен';
             badge.style.color = 'var(--text-secondary)';
         }
     }
@@ -251,7 +251,10 @@ class AccessibilityService {
 
         // Update status during playback
         const badge = document.getElementById('ttsStatusBadge');
-        if (badge) { badge.textContent = '🔊 Говорит...'; badge.style.color = '#3b82f6'; }
+        if (badge) { 
+            badge.textContent = window.i18n ? window.i18n.t('ttsSpeaking') : '🔊 Говорит...'; 
+            badge.style.color = '#3b82f6'; 
+        }
         utterance.onend = () => this._updateTtsStatus();
         utterance.onerror = () => this._updateTtsStatus();
 

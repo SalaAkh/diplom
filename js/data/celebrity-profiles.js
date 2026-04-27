@@ -14,7 +14,6 @@ const CELEBRITY_PROFILES = {
         science: { ru: 'Учёные', kk: 'Ғалымдар', en: 'Scientists' },
         actors: { ru: 'Актёры', kk: 'Актёрлер', en: 'Actors' },
         athletes: { ru: 'Спортсмены', kk: 'Спортшылар', en: 'Athletes' },
-        musicians: { ru: 'Музыканты', kk: 'Музыканттар', en: 'Musicians' },
         leaders: { ru: 'Политики и Лидеры', kk: 'Саясаткерлер мен Көшбасшылар', en: 'Politicians & Leaders' }
     },
 
@@ -429,79 +428,6 @@ const CELEBRITY_PROFILES = {
                 ru: ['8 Олимпийских золота', 'Мировой рекорд 100м', 'Мировой рекорд 200м'],
                 kk: ['8 Олимпиада алтыны', '100м әлем рекорды', '200м әлем рекорды'],
                 en: ['8 Olympic Golds', '100m World Record', '200m World Record']
-            }
-        },
-
-        // === МУЗЫКАНТЫ ===
-        {
-            id: 'freddie_mercury',
-            name: { ru: 'Фредди Меркьюри', kk: 'Фредди Меркьюри', en: 'Freddie Mercury' },
-            category: 'musicians',
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Freddie_Mercury_performing_in_New_Haven%2C_CT%2C_November_1977.jpg/220px-Freddie_Mercury_performing_in_New_Haven%2C_CT%2C_November_1977.jpg',
-            scores: {
-                rationality: 0.55,
-                strategic: 0.60,
-                explorer: 0.85,
-                individualism: 0.95,
-                adaptation: 0.70,
-                intuition: 0.95
-            },
-            bio: {
-                ru: 'Вокалист Queen, один из величайших голосов рок-музыки.',
-                kk: 'Queen вокалисі, рок-музыканың ең ұлы дауыстарының бірі.',
-                en: 'Vocalist of Queen, one of the greatest voices in rock music.'
-            },
-            achievements: {
-                ru: ['Queen', 'Bohemian Rhapsody', 'Live Aid 1985'],
-                kk: ['Queen', 'Bohemian Rhapsody', 'Live Aid 1985'],
-                en: ['Queen', 'Bohemian Rhapsody', 'Live Aid 1985']
-            }
-        },
-        {
-            id: 'beyonce',
-            name: { ru: 'Бейонсе', kk: 'Бейонсе', en: 'Beyoncé' },
-            category: 'musicians',
-            scores: {
-                rationality: 0.70,
-                strategic: 0.85,
-                explorer: 0.70,
-                individualism: 0.80,
-                adaptation: 0.75,
-                intuition: 0.80
-            },
-            bio: {
-                ru: 'Королева поп-музыки, икона стиля и женской силы.',
-                kk: 'Поп-музыка патшайымы, стиль және әйелдер күшінің иконасы.',
-                en: 'Queen of pop music, icon of style and female empowerment.'
-            },
-            achievements: {
-                ru: ['32 Грэмми', 'Destiny\'s Child', 'Lemonade'],
-                kk: ['32 Грэмми', 'Destiny\'s Child', 'Lemonade'],
-                en: ['32 Grammys', 'Destiny\'s Child', 'Lemonade']
-            }
-        },
-        {
-            id: 'eminem',
-            name: { ru: 'Эминем', kk: 'Эминем', en: 'Eminem' },
-            category: 'musicians',
-            photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Eminem_live_at_D.C._2014_%28cropped%29.jpg/220px-Eminem_live_at_D.C._2014_%28cropped%29.jpg',
-            scores: {
-                rationality: 0.75,
-                strategic: 0.65,
-                explorer: 0.70,
-                individualism: 0.90,
-                adaptation: 0.80,
-                intuition: 0.85
-            },
-            bio: {
-                ru: 'Бог рэпа, мастер слова и самовыражения.',
-                kk: 'Рэп құдайы, сөз және өзін-өзі көрсету шебері.',
-                en: 'God of rap, master of wordplay and self-expression.'
-            },
-            achievements: {
-                ru: ['15 Грэмми', 'Оскар', 'Рекорд продаж'],
-                kk: ['15 Грэмми', 'Оскар', 'Сатылым рекорды'],
-                en: ['15 Grammys', 'Oscar', 'Best-selling artist']
             }
         },
 

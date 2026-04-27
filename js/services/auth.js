@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ÐÑƒÑ‚ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ†Ð¸Ñ Ð¶Ó™Ð½Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‚Ð°Ñ€Ð´Ñ‹ Ð±Ð°ÑÒ›Ð°Ñ€Ñƒ Ð¼Ð¾Ð´ÑƒÐ»Ñ– (Authentication and account management module)
  * Ð¡ÐµÑ€Ð²ÐµÑ€ÑÑ–Ð· Ð¶ÐµÑ€Ð³Ñ–Ð»Ñ–ÐºÑ‚Ñ– Ð¶Ò¯Ð¹Ðµ (Local system without server)
  * 
@@ -164,6 +164,9 @@ class AuthManager {
                 statistics: results.statistics || {}
             };
 
+            if (!user.testHistory) {
+                user.testHistory = [];
+            }
             user.testHistory.push(testResult);
             user.profile = results.profile; // ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ñ‚ÐµÐºÑƒÑ‰Ð¸Ð¹ Ð¿Ñ€Ð¾Ñ„Ð¸Ð»ÑŒ
             this.updateUser(user);
@@ -193,7 +196,7 @@ class AuthManager {
      */
     getTestHistory() {
         const user = this.getCurrentUser();
-        if (!user) return [];
+        if (!user || !user.testHistory) return [];
 
         return user.testHistory.sort((a, b) =>
             new Date(b.date) - new Date(a.date)

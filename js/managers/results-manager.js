@@ -112,12 +112,16 @@ class ResultsManager {
 
                 // Run AI Analysis
                 if (this.aiAnalyzer) {
-                    aiAnalysis = await this.aiAnalyzer.deepAnalyze(
-                        results.normalizedScores,
-                        results.profile,
-                        results.choices
-                    );
-                    results.aiAnalysis = aiAnalysis;
+                    try {
+                        aiAnalysis = await this.aiAnalyzer.deepAnalyze(
+                            results.normalizedScores,
+                            results.profile,
+                            results.choices
+                        );
+                        results.aiAnalysis = aiAnalysis;
+                    } catch (e) {
+                        console.warn('AI Analysis error', e);
+                    }
                 }
 
                 // Save to Local Storage

@@ -50,7 +50,6 @@ class ProfileExtensions {
             science: ['#1d4ed8', '#60a5fa'],
             actors: ['#b45309', '#f59e0b'],
             athletes: ['#b91c1c', '#fb7185'],
-            musicians: ['#0f766e', '#f97316'],
             leaders: ['#166534', '#4ade80']
         };
 
@@ -545,7 +544,6 @@ class ProfileExtensions {
             science: { kk: 'Ғалымдар', ru: 'Учёные', en: 'Scientists' },
             actors: { kk: 'Актёрлер', ru: 'Актёры', en: 'Actors' },
             athletes: { kk: 'Спортшылар', ru: 'Спортсмены', en: 'Athletes' },
-            musicians: { kk: 'Музыканттар', ru: 'Музыканты', en: 'Musicians' },
             leaders: { kk: 'Көшбасшылар', ru: 'Лидеры', en: 'Leaders' }
         };
 
