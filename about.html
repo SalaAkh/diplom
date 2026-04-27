@@ -754,6 +754,26 @@
                         <input type="checkbox" id="readingCheck" onchange="window.accessibilityService.toggleReading()">
                         <span data-i18n="readingLabel">Нәтижелерді дауыстап оқу</span>
                     </label>
+                    <span id="ttsStatusBadge" style="font-size: 0.78rem; color: var(--text-secondary); margin-left: 2px;">🔇 Выключен</span>
+                </div>
+                <div class="form-group">
+                    <label for="speechRateSelect" data-i18n="speechRateLabel">Скорость речи</label>
+                    <div class="select-wrapper">
+                        <select id="speechRateSelect" class="form-select"
+                            onchange="window.accessibilityService.setSpeechRate(this.value)">
+                            <option value="0.75" data-i18n="speechRateSlow">Медленно</option>
+                            <option value="1" selected data-i18n="speechRateNormal">Обычная</option>
+                            <option value="1.25" data-i18n="speechRateFast">Быстро</option>
+                            <option value="1.5" data-i18n="speechRateVeryFast">Очень быстро</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="focusModeCheck" onchange="window.accessibilityService.toggleFocusMode()">
+                        <span data-i18n="focusModeLabel">Режим фокуса (подсветка)</span>
+                    </label>
                 </div>
             </div>
         </div>

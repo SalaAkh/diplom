@@ -579,3 +579,28 @@ html.simplified-mode .text-gradient {
     -webkit-text-fill-color: initial !important;
     color: inherit !important;
 }
+
+/* 9. Focus Mode - highlight paragraph on hover for dyslexia support */
+html.focus-mode p,
+html.focus-mode li,
+html.focus-mode .dimension-description,
+html.focus-mode .summary-text,
+html.focus-mode .rec-text {
+    transition: background-color 0.2s ease;
+    border-radius: 4px;
+    padding: 2px 4px;
+}
+
+html.focus-mode p:hover,
+html.focus-mode li:hover,
+html.focus-mode .dimension-description:hover,
+html.focus-mode .summary-text:hover,
+html.focus-mode .rec-text:hover {
+    background-color: rgba(74, 144, 226, 0.12);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.dark-theme html.focus-mode p:hover,
+.dark-theme html.focus-mode li:hover {
+    background-color: rgba(74, 144, 226, 0.15);
+}
