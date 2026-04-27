@@ -5,12 +5,24 @@ class AccessibilityService {
     constructor() {
         this.settings = {
             contrast: localStorage.getItem('access_contrast') || 'normal', // normal, high
-            textSize: localStorage.getItem('access_textSize') || 'normal', // normal, large, extra-large
+            textSize: localStorage.getItem('access_textSize') || 'normal', // small, normal, large, extra-large
             animations: localStorage.getItem('access_animations') !== 'false', // true by default
             audio: localStorage.getItem('access_audio') === 'true', // false by default
             simplified: localStorage.getItem('access_simplified') === 'true', // false by default
-            reading: localStorage.getItem('access_reading') === 'true' // false by default
+            reading: localStorage.getItem('access_reading') === 'true', // false by default
+            speechRate: parseFloat(localStorage.getItem('access_speechRate') || '1.0'), // 0.5 - 2.0
+            focusMode: localStorage.getItem('access_focusMode') === 'true' // false by default
         };
+
+        // Cache voices once they load (Web Speech API is async on first call)
+        this._voices = [];
+        if (window.speechSynthesis) {
+            const loadVoices = () => {
+                this._voices = window.speechSynthesis.getVoices();
+            };
+            loadVoices();
+            window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
+        }
 
         // Wait for DOM to be ready
         if (document.readyState === 'loading') {
@@ -51,6 +63,12 @@ class AccessibilityService {
 
         const readingCheck = document.getElementById('readingCheck');
         if (readingCheck) readingCheck.checked = this.settings.reading;
+
+        const speechRateSelect = document.getElementById('speechRateSelect');
+        if (speechRateSelect) speechRateSelect.value = this.settings.speechRate;
+
+        const focusModeCheck = document.getElementById('focusModeCheck');
+        if (focusModeCheck) focusModeCheck.checked = this.settings.focusMode;
     }
 
     applySettings() {
@@ -96,8 +114,21 @@ class AccessibilityService {
         const readingCheck = document.getElementById('readingCheck');
         if (readingCheck) readingCheck.checked = this.settings.reading;
 
+        const speechRateSelect = document.getElementById('speechRateSelect');
+        if (speechRateSelect) speechRateSelect.value = this.settings.speechRate;
+
+        const focusModeCheck = document.getElementById('focusModeCheck');
+        if (focusModeCheck) focusModeCheck.checked = this.settings.focusMode;
+
         const voiceCheck = document.getElementById('voiceControlCheck');
         if (voiceCheck && window.voiceControl) voiceCheck.checked = window.voiceControl.enabled;
+
+        // Focus mode CSS class
+        if (this.settings.focusMode) {
+            document.documentElement.classList.add('focus-mode');
+        } else {
+            document.documentElement.classList.remove('focus-mode');
+        }
 
         // Simplified Mode
         if (this.settings.simplified) {
@@ -160,8 +191,36 @@ class AccessibilityService {
 
         if (this.settings.reading) {
             this.speak(msg);
-        } else {
+        } else if (window.speechSynthesis) {
             window.speechSynthesis.cancel();
+        }
+        this._updateTtsStatus();
+    }
+
+    setSpeechRate(rate) {
+        this.settings.speechRate = parseFloat(rate);
+        localStorage.setItem('access_speechRate', this.settings.speechRate);
+        const labels = { '0.5': 'медленно', '0.75': 'чуть медленнее', '1': 'обычная', '1.25': 'быстрее', '1.5': 'быстро', '2': 'очень быстро' };
+        this.announce(`Скорость речи: ${labels[rate] || rate + 'x'}`);
+    }
+
+    toggleFocusMode() {
+        this.settings.focusMode = !this.settings.focusMode;
+        localStorage.setItem('access_focusMode', this.settings.focusMode);
+        this.applySettings();
+        this.announce(this.settings.focusMode ? 'Режим фокуса включен' : 'Режим фокуса выключен');
+    }
+
+    /** Show TTS status badge in modal */
+    _updateTtsStatus() {
+        const badge = document.getElementById('ttsStatusBadge');
+        if (!badge) return;
+        if (this.settings.reading) {
+            badge.textContent = '🔊 Активен';
+            badge.style.color = '#10b981';
+        } else {
+            badge.textContent = '🔇 Выключен';
+            badge.style.color = 'var(--text-secondary)';
         }
     }
 
@@ -173,19 +232,28 @@ class AccessibilityService {
 
         const utterance = new SpeechSynthesisUtterance(text);
 
-        // Try to find a matching voice for the current language
+        // Try to find a matching voice using cached voices (fixes async getVoices() bug)
         const lang = document.documentElement.lang || 'ru';
         utterance.lang = lang;
 
-        const voices = window.speechSynthesis.getVoices();
-        const matchingVoice = voices.find(v => v.lang.startsWith(lang));
+        // Use cached voices; fallback live if cache empty
+        const voices = this._voices.length ? this._voices : window.speechSynthesis.getVoices();
+        const matchingVoice = voices.find(v => v.lang.startsWith(lang))
+            || voices.find(v => v.lang.startsWith('ru'))
+            || voices[0];
         if (matchingVoice) {
             utterance.voice = matchingVoice;
         }
 
-        utterance.rate = 1.0;
+        utterance.rate = this.settings.speechRate || 1.0;
         utterance.pitch = 1.0;
         utterance.volume = 1.0;
+
+        // Update status during playback
+        const badge = document.getElementById('ttsStatusBadge');
+        if (badge) { badge.textContent = '🔊 Говорит...'; badge.style.color = '#3b82f6'; }
+        utterance.onend = () => this._updateTtsStatus();
+        utterance.onerror = () => this._updateTtsStatus();
 
         window.speechSynthesis.speak(utterance);
     }
