@@ -349,7 +349,7 @@ class StorageManager {
         try {
             const data = localStorage.getItem('testProgress');
             if (!data) {
-                console.log('ℹ️ Сақталған прогрес табылмады (ℹ️ Saved progress not found)');
+                // console.log('ℹ️ Сақталған прогрес табылмады (ℹ️ Saved progress not found)');
                 return null;
             }
 

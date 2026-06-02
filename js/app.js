@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ÒšÐ¾ÑÑ‹Ð¼ÑˆÐ°Ð½Ñ‹Ò£ Ð½ÐµÐ³Ñ–Ð·Ð³Ñ– Ð¼Ð¾Ð´ÑƒÐ»Ñ– (Main application module)
  * Ð‘Ð°Ñ€Ð»Ñ‹Ò› ÐºÐ¾Ð¼Ð¿Ð¾Ð½ÐµÐ½Ñ‚Ñ‚ÐµÑ€Ð´Ñ–Ò£ ÐºÒ¯Ð¹Ñ– Ð¼ÐµÐ½ Ó©Ð·Ð°Ñ€Ð° Ó™Ñ€ÐµÐºÐµÑ‚Ñ‚ÐµÑÑƒÑ–Ð½ Ð±Ð°ÑÒ›Ð°Ñ€Ð°Ð´Ñ‹ (Manages state and interaction of all components)
  * 
@@ -2309,9 +2309,9 @@ function initializeApp() {
     try {
         app = new PersonalityTestApp();
         window.app = app; // Expose to global scope for onclick handlers
-        console.log('[OK] window.app initialized:', window.app);
-        console.log('[OK] app.renameTest exists:', typeof app.renameTest);
-        console.log('[OK] app.deleteTest exists:', typeof app.deleteTest);
+        // console.log('[OK] window.app initialized:', window.app);
+        // console.log('[OK] app.renameTest exists:', typeof app.renameTest);
+        // console.log('[OK] app.deleteTest exists:', typeof app.deleteTest);
         // Ð’Ñ‹Ð·Ñ‹Ð²Ð°ÐµÐ¼ init() Ð¿Ð¾ÑÐ»Ðµ ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ñ ÑÐºÐ·ÐµÐ¼Ð¿Ð»ÑÑ€Ð°
         if (app && typeof app.init === 'function') {
             app.init().catch(error => {

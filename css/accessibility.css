@@ -490,7 +490,7 @@ html.reduce-motion *::after {
 }
 
 .accessibility-trigger:hover {
-    background: var(--primary-color, #4a90e2);
+    background: var(--primary-color, #4a90e2) !important;
     color: white !important;
     transform: translateY(-2px) scale(1.1);
     box-shadow: 0 8px 30px rgba(74, 144, 226, 0.5);

@@ -35,7 +35,7 @@ class AccessibilityService {
     init() {
         this.applySettings();
         this.setupUI();
-        console.log('Арнайы мүмкіндіктер қызметі инициализацияланды (Accessibility Service initialized)', this.settings);
+        // console.log('Арнайы мүмкіндіктер қызметі инициализацияланды (Accessibility Service initialized)', this.settings);
     }
 
     setupUI() {
@@ -262,7 +262,7 @@ class AccessibilityService {
     }
 
     toggleModal(show) {
-        console.log('toggleModal called with:', show);
+        // console.log('toggleModal called with:', show);
         const modal = document.getElementById('accessModal');
         if (!modal) {
             console.error('Modal element #accessModal not found!');

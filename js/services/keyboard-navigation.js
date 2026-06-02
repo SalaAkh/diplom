@@ -21,7 +21,7 @@ class KeyboardNavigationService {
     init() {
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
         this.setupFocusStyles();
-        console.log('Пернетақта навигациясы қызметі инициализацияланды (Keyboard Navigation Service initialized)');
+        // console.log('Пернетақта навигациясы қызметі инициализацияланды (Keyboard Navigation Service initialized)');
     }
 
     handleKeyDown(e) {
